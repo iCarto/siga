@@ -1,5 +1,7 @@
 package es.icarto.gvsig.siga.incidencias;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,7 +39,10 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
+import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
+import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import de.micromata.opengis.kml.v_2_2_0.Document;
 import de.micromata.opengis.kml.v_2_2_0.Kml;
@@ -48,6 +53,7 @@ import es.icarto.gvsig.commons.queries.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.DataSource;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.FileDataSource;
+import es.udc.cartolab.gvsig.elle.utils.LoadLegend;
 import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -75,13 +81,15 @@ public class IncidenciasParser {
     private final ConnectionWrapper cw;
 
     private final File file;
+    private final View view;
 
     private final List<String> warnings = new ArrayList<String>();
     private final List<IFeature> featureList = new ArrayList<IFeature>();
     private final List<double[]> coordList = new ArrayList<double[]>();
 
-    public IncidenciasParser(File file) throws IOException,
-	    InvalidFormatException {
+    public IncidenciasParser(View view, File file) throws IOException,
+    InvalidFormatException {
+	this.view = view;
 	collator = Collator.getInstance();
 	collator.setStrength(Collator.PRIMARY);
 
@@ -270,7 +278,7 @@ public class IncidenciasParser {
     /**
      * call parse first
      */
-    public FLyrVect toFLyrVect() {
+    public FLyrVect toFLyrVect(String path, boolean addToView) {
 	String shpPath = FileNameUtils.replaceExtension(file.getAbsolutePath(),
 		"shp");
 	File outfile = new File(shpPath);
@@ -295,9 +303,19 @@ public class IncidenciasParser {
 	FLyrVect layer = null;
 	try {
 	    SHPFactory.createSHP(outfile, fieldsDesc, geometryType, features);
-	    layer = SHPFactory.getFLyrVectFromSHP(outfile, "EPSG:23029");
+	    layer = SHPFactory.getFLyrVectFromSHP(outfile, view.getProjection()
+		    .getAbrev());
 
 	    // applySymbology(layer);
+	    LoadLegend.setLegend(layer, path, true);
+	    applyLabel(layer);
+
+	    if (addToView) {
+		FLayers layers = view.getMapControl().getMapContext()
+			.getLayers();
+		layers.addLayer(layer);
+	    }
+
 	} catch (StartWriterVisitorException e) {
 	    logger.error(e.getStackTrace(), e);
 	} catch (ProcessWriterVisitorException e) {
@@ -309,7 +327,22 @@ public class IncidenciasParser {
 	} catch (InitializeWriterException e) {
 	    logger.error(e.getStackTrace(), e);
 	}
+
 	return layer;
+    }
+
+    private void applyLabel(FLyrVect layer) {
+	AttrInTableLabelingStrategy st = new AttrInTableLabelingStrategy();
+	st.setFixedColor(new Color(100, 0, 0));
+	st.setFixedSize(6);
+	st.setTextField("MOTIVO");
+	st.setFont(new Font("Arial", Font.BOLD, 7));
+	st.setUsesFixedSize(true);
+	st.setUsesFixedColor(true);
+	st.setLayer(layer);
+
+	layer.setLabelingStrategy(st);
+	layer.setIsLabeled(true);
     }
 
     private String kmlAddDescription(Value[] atts, Header h) {
@@ -346,9 +379,9 @@ public class IncidenciasParser {
 	    String name = kmlName(atts);
 
 	    document.createAndAddPlacemark().withName(name)
-		    .withDescription(description)
-		    .withStyleUrl("#m_ylw-pushpin").withOpen(Boolean.TRUE)
-		    .createAndSetPoint().addToCoordinates(coord[0], coord[1]);
+	    .withDescription(description)
+	    .withStyleUrl("#m_ylw-pushpin").withOpen(Boolean.TRUE)
+	    .createAndSetPoint().addToCoordinates(coord[0], coord[1]);
 	}
 
 	KMZPackager kmzPackager = new KMZPackager();

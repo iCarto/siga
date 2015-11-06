@@ -22,9 +22,9 @@
 
 		<extension class-name="es.icarto.gvsig.siga.ImportIncidenciasExtension" active="true">
 			<menu text="SIGA" position="30951" is_separator="true"/>
-			<menu text="SIGA/import-incidencias" icon="import-incidencias" position="30952"/>
+			<menu text="SIGA/es.icarto.gvsig.siga.ImportIncidenciasExtension.menu" icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="30952"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="import-incidencias" position="7" tooltip="import-incidencias" />
+				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="7" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
 			</tool-bar>
 		</extension>
 

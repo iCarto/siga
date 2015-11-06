@@ -1,10 +1,7 @@
 package es.icarto.gvsig.siga;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -13,38 +10,19 @@ import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
-import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.commons.gui.ExcelFileChooser;
 import es.icarto.gvsig.siga.incidencias.IncidenciasParser;
 import es.icarto.gvsig.utils.DesktopApi;
-import es.udc.cartolab.gvsig.elle.utils.LoadLegend;
 
-public class ImportIncidenciasExtension extends Extension {
+public class ImportIncidenciasExtension extends AbstractExtension {
 
     private static final Logger logger = Logger
 	    .getLogger(ImportIncidenciasExtension.class);
 
-    public final static String KEY = "import-incidencias";
-
     // tracks the last folder selected by the user in this session
     private File folder = new File(System.getProperty("user.home"));
-
-    @Override
-    public void initialize() {
-	registerIcon();
-    }
-
-    private void registerIcon() {
-	URL iconResource = getClass().getClassLoader().getResource(
-		"images/import-incidencias.png");
-	PluginServices.getIconTheme().registerDefault(KEY, iconResource);
-    }
 
     @Override
     public void execute(String actionCommand) {
@@ -57,22 +35,22 @@ public class ImportIncidenciasExtension extends Extension {
 	}
 	folder = file.getParentFile();
 	try {
-	    parser = new IncidenciasParser(file);
+	    parser = new IncidenciasParser(getView(), file);
 	} catch (InvalidFormatException e1) {
 	    logger.error(e1.getStackTrace(), e1);
 	    JOptionPane
-		    .showMessageDialog(
-			    null,
-			    "Error abriendo el fichero.\nCompruebe que la ruta sea correcta y es un fichero Excel válido.\nPruebe a abrir y guardar el fichero con otro nombre.",
-			    null, JOptionPane.INFORMATION_MESSAGE, null);
+	    .showMessageDialog(
+		    null,
+		    "Error abriendo el fichero.\nCompruebe que la ruta sea correcta y es un fichero Excel válido.\nPruebe a abrir y guardar el fichero con otro nombre.",
+		    null, JOptionPane.INFORMATION_MESSAGE, null);
 	    return;
 	} catch (IOException e1) {
 	    logger.error(e1.getStackTrace(), e1);
 	    JOptionPane
-		    .showMessageDialog(
-			    null,
-			    "Error abriendo el fichero.\nCompruebe que la ruta sea correcta y es un fichero Excel válido.\nPruebe a abrir y guardar el fichero con otro nombre.",
-			    null, JOptionPane.INFORMATION_MESSAGE, null);
+	    .showMessageDialog(
+		    null,
+		    "Error abriendo el fichero.\nCompruebe que la ruta sea correcta y es un fichero Excel válido.\nPruebe a abrir y guardar el fichero con otro nombre.",
+		    null, JOptionPane.INFORMATION_MESSAGE, null);
 	    return;
 	} catch (RuntimeException e) {
 
@@ -98,23 +76,10 @@ public class ImportIncidenciasExtension extends Extension {
 	try {
 	    PluginServices.getMDIManager().setWaitCursor();
 	    parser.parse();
-	    layer = parser.toFLyrVect();
-	    if (layer != null) {
-		IWindow iwindow = PluginServices.getMDIManager()
-			.getActiveWindow();
-		if (iwindow instanceof View) {
-		    View view = (View) iwindow;
-		    FLayers layers = view.getMapControl().getMapContext()
-			    .getLayers();
-		    layers.addLayer(layer);
-		    String path = getClass().getClassLoader()
-			    .getResource("incidencias.gvl").getPath();
-		    LoadLegend.setLegend(layer, path, true);
-		    applyLabel(layer);
-		}
-
-		kmlWritted = parser.toKml();
-	    }
+	    String path = getClass().getClassLoader()
+		    .getResource("incidencias.gvl").getPath();
+	    layer = parser.toFLyrVect(path, true);
+	    kmlWritted = parser.toKml();
 
 	} catch (RuntimeException e) {
 	    PluginServices.getMDIManager().restoreCursor();
@@ -125,7 +90,7 @@ public class ImportIncidenciasExtension extends Extension {
 			PluginServices.getText(this, "optionPane_no") };
 		int m = JOptionPane.showOptionDialog(null,
 			"Error abriendo el fichero.\n" + msg
-				+ "\n¿Desea abrir el fichero Excel ahora?",
+			+ "\n¿Desea abrir el fichero Excel ahora?",
 			null, JOptionPane.YES_NO_CANCEL_OPTION,
 			JOptionPane.INFORMATION_MESSAGE, null, options,
 			options[0]);
@@ -176,28 +141,9 @@ public class ImportIncidenciasExtension extends Extension {
 
     }
 
-    private void applyLabel(FLyrVect layer) {
-	AttrInTableLabelingStrategy st = new AttrInTableLabelingStrategy();
-	st.setFixedColor(new Color(100, 0, 0));
-	st.setFixedSize(6);
-	st.setTextField("MOTIVO");
-	st.setFont(new Font("Arial", Font.BOLD, 7));
-	st.setUsesFixedSize(true);
-	st.setUsesFixedColor(true);
-	st.setLayer(layer);
-
-	layer.setLabelingStrategy(st);
-	layer.setIsLabeled(true);
-    }
-
     @Override
     public boolean isEnabled() {
-	return PluginServices.getMDIManager().getActiveWindow() instanceof View;
-    }
-
-    @Override
-    public boolean isVisible() {
-	return true;
+	return getView() != null;
     }
 
 }

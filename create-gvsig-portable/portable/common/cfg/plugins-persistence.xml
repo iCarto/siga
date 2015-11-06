@@ -12,7 +12,7 @@
         <property key="ImageFolder" value="../cfg/Symbols"/>
         <property key="FontType" value="Andale Mono"/>
         <property key="FontSize" value="8"/>
-        <property key="DefaultProjection" value="EPSG:23029"/>
+        <property key="DefaultProjection" value="EPSG:25829"/>
         <property key="ZoomInFactor" value="2.0"/>
         <property key="ZoomOutFactor" value="0.5"/>
         <property key="NewLayersInInvisibleMode" value="false"/>

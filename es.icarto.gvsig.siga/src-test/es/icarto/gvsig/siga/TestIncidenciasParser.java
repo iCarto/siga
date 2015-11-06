@@ -31,7 +31,7 @@ public class TestIncidenciasParser {
 
 	IncidenciasParser parser = null;
 	try {
-	    parser = new IncidenciasParser(file);
+	    parser = new IncidenciasParser(null, file);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    NotificationManager
@@ -57,7 +57,7 @@ public class TestIncidenciasParser {
 	for (String w : parser.getWarnings()) {
 	    System.out.println(w);
 	}
-	FLyrVect layer = parser.toFLyrVect();
+	FLyrVect layer = parser.toFLyrVect("", false);
 	if (layer == null) {
 	    System.out.println("Error escribiendo el shape");
 	}
