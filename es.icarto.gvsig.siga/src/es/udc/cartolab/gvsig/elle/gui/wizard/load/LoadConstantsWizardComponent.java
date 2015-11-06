@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.NewStatusBar;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -24,8 +26,13 @@ import es.udc.cartolab.gvsig.elle.utils.ELLEMap;
 import es.udc.cartolab.gvsig.elle.utils.LoadLegend;
 import es.udc.cartolab.gvsig.elle.utils.MapDAO;
 
+
+
 @SuppressWarnings("serial")
 public class LoadConstantsWizardComponent extends WizardComponent {
+
+    private static final Logger logger = Logger
+		.getLogger(LoadConstantsWizardComponent.class);
 
     private boolean reload = false;
 
@@ -128,6 +135,7 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 		ZoomTo zoomTo = new ZoomTo(view.getMapControl());
 		zoomTo.zoom(constantsPanel.getZoomGeometry());
 	    } catch (Exception e) {
+		logger.error(e.getStackTrace(), e);
 		throw new WizardException(e);
 	    }
 

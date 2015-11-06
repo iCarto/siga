@@ -84,7 +84,9 @@ public class Constant {
     }
 
     public Rectangle2D getGeometry() {
-
+	if (layer == null) {
+	    return null;
+	}
 	if (values.isEmpty()) {
 	    try {
 		return layer.getFullExtent();
