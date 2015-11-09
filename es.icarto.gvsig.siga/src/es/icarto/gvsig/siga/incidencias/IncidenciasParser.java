@@ -88,7 +88,7 @@ public class IncidenciasParser {
     private final List<double[]> coordList = new ArrayList<double[]>();
 
     public IncidenciasParser(View view, File file) throws IOException,
-    InvalidFormatException {
+	    InvalidFormatException {
 	this.view = view;
 	collator = Collator.getInstance();
 	collator.setStrength(Collator.PRIMARY);
@@ -289,7 +289,7 @@ public class IncidenciasParser {
 	    String normalizedColumn = Normalizer
 		    .normalize(h, Normalizer.Form.NFD)
 		    .replaceAll("[^\\p{ASCII}]", "").replace(" ", "_")
-		    .toUpperCase();
+		    .replace(".", "").toUpperCase();
 	    if (normalizedColumn.equals("SEGUIMIENT")) {
 		fdf.setDefaultStringLength(250);
 	    }
@@ -379,9 +379,9 @@ public class IncidenciasParser {
 	    String name = kmlName(atts);
 
 	    document.createAndAddPlacemark().withName(name)
-	    .withDescription(description)
-	    .withStyleUrl("#m_ylw-pushpin").withOpen(Boolean.TRUE)
-	    .createAndSetPoint().addToCoordinates(coord[0], coord[1]);
+		    .withDescription(description)
+		    .withStyleUrl("#m_ylw-pushpin").withOpen(Boolean.TRUE)
+		    .createAndSetPoint().addToCoordinates(coord[0], coord[1]);
 	}
 
 	KMZPackager kmzPackager = new KMZPackager();
