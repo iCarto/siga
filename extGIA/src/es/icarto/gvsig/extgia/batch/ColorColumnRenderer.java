@@ -1,5 +1,7 @@
 package es.icarto.gvsig.extgia.batch;
 
+import static es.icarto.gvsig.navtableforms.ormlite.domainvalidator.ValidatorComponent.INVALID_COLOR;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -9,11 +11,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 @SuppressWarnings("serial")
 public class ColorColumnRenderer extends DefaultTableCellRenderer {
-
-    private static final Color notValidColor = Color.RED;
     private final BatchTrabajosTableCalculation validator;
 
-    private final Color nonEditableColumnForegndColor = Color.gray;
+    private final Color notEditableFgColor = Color.gray;
+    private final Color notEditableFgColorSelected = Color.lightGray;
 
     public ColorColumnRenderer(BatchTrabajosTableCalculation validator) {
 	super();
@@ -32,11 +33,15 @@ public class ColorColumnRenderer extends DefaultTableCellRenderer {
 		row, column);
 
 	if (!validator.isValid(row, column)) {
-	    setBackground(notValidColor);
+	    setBackground(INVALID_COLOR);
 	} else if (!table.isCellEditable(row, column)) {
 	    // default font is always recalculated in super
 	    setFont(getFont().deriveFont(Font.ITALIC));
-	    setForeground(nonEditableColumnForegndColor);
+	    if (isSelected) {
+		setForeground(notEditableFgColorSelected);
+	    } else {
+		setForeground(notEditableFgColor);
+	    }
 	}
 
 	return this;
