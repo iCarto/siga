@@ -14,7 +14,6 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public abstract class GIATrabajosSubForm extends GIASubForm {
 
-    boolean editing = false;
     private String orgLongitud = "";
 
     public GIATrabajosSubForm(String basicName) {
@@ -51,7 +50,6 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
 
     @Override
     public void actionCreateRecord() {
-	this.setEditing(false);
 	super.actionCreateRecord();
 	fillForeignValues();
 	for (ForeignValue fv : getForeignValues()) {
@@ -67,7 +65,6 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
 
     @Override
     public void actionUpdateRecord(long position) {
-	this.setEditing(true);
 	super.actionUpdateRecord(position);
 	fillForeignValues();
 	for (ForeignValue fv : getForeignValues()) {
@@ -108,12 +105,4 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
     }
 
     protected abstract ArrayList<ForeignValue> getForeignValues();
-
-    protected void setEditing(boolean editing) {
-	this.editing = editing;
-    }
-
-    protected boolean isEditing() {
-	return editing;
-    }
 }

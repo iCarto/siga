@@ -91,9 +91,7 @@ public abstract class VegetationCalculateMedicion extends Calculation {
 			    DBFieldNames.MEDICION_ULTIMO_TRABAJO)).setText("");
 		    return;
 		}
-		if (!((GIATrabajosSubForm) form).isEditing()) {
-		    updateMedicionValue();
-		}
+		updateMedicionValue();
 		updateMedicionLastJobValue();
 	    }
 	}
