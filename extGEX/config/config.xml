@@ -74,29 +74,31 @@
 		
 		<extension class-name="es.icarto.gvsig.extgex.LocatorByPKExtension" active="true">
 			<menu text="SIGA" position="30699" is_separator="true"/>			
-			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByPKExtension.menu" icon="es.icarto.gvsig.extgex.LocatorByPKExtension" position="30700"/>
+			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByPKExtension.menu" icon="es.icarto.gvsig.extgex.LocatorByPKExtension" position="30710"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.LocatorByPKExtension" tooltip="es.icarto.gvsig.extgex.LocatorByPKExtension.tooltip" position="1"/>
+				<action-tool icon="es.icarto.gvsig.extgex.LocatorByPKExtension" tooltip="es.icarto.gvsig.extgex.LocatorByPKExtension.tooltip" position="2"/>
+			</tool-bar>
+		</extension>
+		
+		<extension class-name="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" active="true">
+			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByMunicipioExtension.menu" icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" position="30720"/>
+			<tool-bar name="SIGA_Tools" position="75">
+				<action-tool icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" tooltip="es.icarto.gvsig.extgex.LocatorByMunicipioExtension.menu" position="3"/>
 			</tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.LocatorByFincaExtension" active="true">
-			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByFincaExtension.menu" position="30720"/>
+			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByFincaExtension.menu" position="30730"/>
 		</extension>
 		
-		<extension class-name="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" active="true">
-			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByMunicipioExtension.menu" icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" position="30710"/>
-			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" tooltip="es.icarto.gvsig.extgex.LocatorByMunicipioExtension.menu" position="2"/>
-			</tool-bar>
-		</extension>
+		
 
 		<!-- WMS EXTENSIONS -->
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasExtension" description="LOAD_FINCAS_WMS" active="true">
 			<menu text="SIGA" position="30799" is_separator="true"/>			
 			<menu text="SIGA/WMS/Planos Expropiaciones" icon="images/planos_wms.png" position="30800"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/planos_wms.png" action-command="LoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="3"/>
+				<action-tool icon="images/planos_wms.png" action-command="LoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="4"/>
 			</tool-bar>
 		</extension>
 		
@@ -107,7 +109,7 @@
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" description="LOAD_PNOA_WMS" active="true">
 			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="LoadPNOAExtension" position="30820"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="4"/>
+				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="5"/>
 			</tool-bar>
 		</extension>
 		

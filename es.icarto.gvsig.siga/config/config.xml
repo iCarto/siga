@@ -28,6 +28,13 @@
 			</tool-bar>
 		</extension>
 
+		<extension class-name="es.icarto.gvsig.siga.ZoomExtension" active="true">
+			<menu text="SIGA/localization/es.icarto.gvsig.siga.ZoomExtension.menu" icon="es.icarto.gvsig.siga.ZoomExtension" position="30700"/>
+			<tool-bar name="SIGA_Tools" position="75">
+				<action-tool icon="es.icarto.gvsig.siga.ZoomExtension" position="1" tooltip="es.icarto.gvsig.siga.ZoomExtension.tooltip" />
+			</tool-bar>
+		</extension>
+		
 		<extension
             class-name="es.udc.cartolab.gvsig.elle.SigaLoadMapExtension" active="true" description="Load map">
             <menu action-command="LoadMap" icon="load-map" text="data_base_menu/Load_map" position="20100"/>
