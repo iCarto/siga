@@ -24,11 +24,12 @@ public abstract class VegetationCalculateMedicion extends Calculation {
 
     public VegetationCalculateMedicion(IValidatableForm form, String idField) {
 	super(form);
+	setCalculateOnlyWhenValid(false);
 	this.idField = idField;
 	if (!form.isFillingValues()) {
 	    unidadHandler = new UnidadListener();
 	    ((JComboBox) form.getWidgets().get(UNIDAD))
-	    .addItemListener(unidadHandler);
+		    .addItemListener(unidadHandler);
 	}
     }
 
@@ -83,6 +84,9 @@ public abstract class VegetationCalculateMedicion extends Calculation {
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+	    if (form.isFillingValues()) {
+		return;
+	    }
 	    if (e.getStateChange() == ItemEvent.SELECTED) {
 		if ((e.getItem() == null)
 			|| (e.getItem().toString().trim().isEmpty())) {

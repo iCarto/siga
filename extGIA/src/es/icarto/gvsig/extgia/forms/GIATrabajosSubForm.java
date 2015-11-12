@@ -28,6 +28,9 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
 	getFormPanel().getComboBox(UNIDAD).addItemListener(new ItemListener() {
 	    @Override
 	    public void itemStateChanged(ItemEvent e) {
+		if (isFillingValues()) {
+		    return;
+		}
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 		    getFormPanel().getTextField(LONGITUD).setText(orgLongitud);
 		    getFormController().setValue(LONGITUD, orgLongitud);
@@ -40,6 +43,9 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
 	getFormPanel().getComboBox(UNIDAD).addItemListener(new ItemListener() {
 	    @Override
 	    public void itemStateChanged(ItemEvent e) {
+		if (isFillingValues()) {
+		    return;
+		}
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 		    getFormPanel().getTextField(ANCHO).setText("");
 		    getFormController().setValue(ANCHO, "");

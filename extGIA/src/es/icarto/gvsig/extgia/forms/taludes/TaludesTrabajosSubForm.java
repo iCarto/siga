@@ -1,7 +1,5 @@
 package es.icarto.gvsig.extgia.forms.taludes;
 
-import static es.icarto.gvsig.extgia.preferences.DBFieldNames.LONGITUD;
-
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -50,8 +48,8 @@ public class TaludesTrabajosSubForm extends GIATrabajosSubForm {
 	.getForeignValue());
 
 	foreignValues
-	.add(new CalculateDBForeignValue(getForeignKey(), LONGITUD,
-		DBFieldNames.TALUDES_LONGITUD,
+	.add(new CalculateDBForeignValue(getForeignKey(),
+			DBFieldNames.LONGITUD, DBFieldNames.TALUDES_LONGITUD,
 		DBFieldNames.TALUDES_DBTABLENAME, taludes.pk)
 	.getForeignValue());
 

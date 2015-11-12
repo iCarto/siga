@@ -42,6 +42,7 @@ public abstract class BatchVegetationTrabajosAbstractSubForm extends
 	saveButton.addActionListener(action);
 	setListeners();
 	fillEmptyValues();
+	validateForm();
 	PluginServices.getMDIManager().addCentredWindow(this);
     }
 
