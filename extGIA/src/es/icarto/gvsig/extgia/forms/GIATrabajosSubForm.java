@@ -52,12 +52,6 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
     public void actionCreateRecord() {
 	super.actionCreateRecord();
 	fillForeignValues();
-	for (ForeignValue fv : getForeignValues()) {
-	    if (fv.getComponent().equals(LONGITUD)) {
-		orgLongitud = fv.getValue();
-		break;
-	    }
-	}
 	fillMedicionValue();
 	validateForm();
 	getWindowInfo().setTitle("Añadir Trabajo");
@@ -66,7 +60,6 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
     @Override
     public void actionUpdateRecord(long position) {
 	super.actionUpdateRecord(position);
-	fillForeignValues();
 	for (ForeignValue fv : getForeignValues()) {
 	    if (fv.getComponent().equals(LONGITUD)) {
 		orgLongitud = fv.getValue();
@@ -82,6 +75,9 @@ public abstract class GIATrabajosSubForm extends GIASubForm {
 	    final String compName = fv.getComponent();
 	    getFormPanel().getTextField(compName).setText(v);
 	    getFormController().setValue(compName, v);
+	    if (fv.getComponent().equals(LONGITUD)) {
+		orgLongitud = fv.getValue();
+	    }
 	}
     }
 
