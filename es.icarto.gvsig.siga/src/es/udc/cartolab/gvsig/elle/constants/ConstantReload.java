@@ -117,7 +117,8 @@ public class ConstantReload {
 
     private void updateLayerConstants(FLyrVect l) {
 	DBLayerDefinition lyrDef = getDBLayerDefinition(l);
-	if (lyrDef.getTableName().equalsIgnoreCase("provincias_galicia_loc")) {
+	if (lyrDef.getTableName().equalsIgnoreCase("provincias_galicia_loc")
+		|| lyrDef.getTableName().equalsIgnoreCase("autopistas_loc")) {
 	    lyrDef.setWhereClause(provWhere);
 	} else {
 	    lyrDef.setWhereClause(where);

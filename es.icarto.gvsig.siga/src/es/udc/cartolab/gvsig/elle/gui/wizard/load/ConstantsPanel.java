@@ -248,7 +248,7 @@ public class ConstantsPanel extends JPanel {
 	return where;
     }
 
-    public String buildWhereForProvinciasLoc() {
+    public String buildWhereForLoc() {
 	List<String> values = getSelectedIds();
 	String where = "WHERE cdprov IN (";
 

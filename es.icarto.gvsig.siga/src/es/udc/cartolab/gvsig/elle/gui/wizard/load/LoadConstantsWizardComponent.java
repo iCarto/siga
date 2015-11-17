@@ -26,13 +26,11 @@ import es.udc.cartolab.gvsig.elle.utils.ELLEMap;
 import es.udc.cartolab.gvsig.elle.utils.LoadLegend;
 import es.udc.cartolab.gvsig.elle.utils.MapDAO;
 
-
-
 @SuppressWarnings("serial")
 public class LoadConstantsWizardComponent extends WizardComponent {
 
     private static final Logger logger = Logger
-		.getLogger(LoadConstantsWizardComponent.class);
+	    .getLogger(LoadConstantsWizardComponent.class);
 
     private boolean reload = false;
 
@@ -109,9 +107,9 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 	    map = map != null ? map : new ELLEMap(null, null);
 	    map.setWhereOnAllLayers(where);
 	    map.setWhereOnAllOverviewLayers(where);
-	    setWhereOnProvinciasLoc(map);
+	    setWhereOnLoc(map);
 	    new ConstantReload(view, where, tablesAffectedByConstant,
-		    constantsPanel.buildWhereForProvinciasLoc());
+		    constantsPanel.buildWhereForLoc());
 	} else {
 	    Object tmp = properties
 		    .get(SigaLoadMapWizardComponent.PROPERTY_MAP_NAME);
@@ -121,7 +119,7 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 		map = MapDAO.getInstance().getMap(view, mapName);
 		map.setWhereOnAllLayers(where);
 		map.setWhereOnAllOverviewLayers(where);
-		setWhereOnProvinciasLoc(map);
+		setWhereOnLoc(map);
 
 		map.load(view.getProjection(), tablesAffectedByConstant);
 
@@ -145,12 +143,17 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 
     }
 
-    private void setWhereOnProvinciasLoc(ELLEMap map) {
-	LayerProperties overviewLayer = map
-		.getOverviewLayer("Provincias_galicia_loc");
-	if (overviewLayer != null) {
-	    String where = constantsPanel.buildWhereForProvinciasLoc();
-	    overviewLayer.setWhere(where);
+    private void setWhereOnLoc(ELLEMap map) {
+	String where = constantsPanel.buildWhereForLoc();
+
+	LayerProperties lp = map.getOverviewLayer("Provincias_galicia_loc");
+	if (lp != null) {
+	    lp.setWhere(where);
+	}
+
+	lp = map.getOverviewLayer("Autopistas_loc");
+	if (lp != null) {
+	    lp.setWhere(where);
 	}
     }
 
