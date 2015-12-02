@@ -62,7 +62,8 @@ public class CalculateDBForeignValue implements CalculateForeignValue {
 
     @Override
     public ForeignValue getForeignValue() {
-	return new ForeignValue(componentName, getValue());
+	final String value = getValue() == null ? "" : getValue();
+	return new ForeignValue(componentName, value);
     }
 
 }
