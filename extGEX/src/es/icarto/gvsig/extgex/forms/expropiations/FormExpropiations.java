@@ -1,6 +1,8 @@
 package es.icarto.gvsig.extgex.forms.expropiations;
 
 import java.awt.event.ActionEvent;
+import static es.icarto.gvsig.extgex.forms.expropiations.ImporteTotalPagadoCalculation.FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO; 
+import static es.icarto.gvsig.extgex.forms.expropiations.ImportePendienteTotalCalculation.FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -94,6 +96,12 @@ public class FormExpropiations extends BasicAbstractForm implements
 	addCalculation(new ImporteTotalPagadoCalculation(this));
 	addCalculation(new ImportePendienteTotalCalculation(this));
 	addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);
+	initTooltips();
+    }
+
+    private void initTooltips() {
+	getFormPanel().getTextField(FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO).setToolTipText("<html>Depósito previo imp. consignado <br> + Depósito previo imp. indemnización <br> + Depósito previo imp. pagado <br> + Mútuo acuerdo importe <br> + Anticipo importe <br> + Mútuo acuerdo parcial importe <br> + Límite acuerdo importe <br> + Imp. pagos varios <br> + Otros pagos imp. indemnización <br> +  Imp. justiprecio <br> - Depósito previo imp. levantamiento</html>");
+	getFormPanel().getTextField(FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO).setToolTipText("Imp. terrenos pendiente + Imp. mejoras pendiente");
     }
 
     private void addButtonsToActionsToolBar() {

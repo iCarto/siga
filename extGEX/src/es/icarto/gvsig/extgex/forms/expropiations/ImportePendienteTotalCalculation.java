@@ -9,7 +9,7 @@ public class ImportePendienteTotalCalculation extends Calculation {
 
     private static final String FINCAS_IMPORTE_PENDIENTE_MEJORAS = "importe_pendiente_mejoras";
     private static final String FINCAS_IMPORTE_PENDIENTE_TERRENOS = "importe_pendiente_terrenos";
-    private static final String FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO = "importe_pendiente_total_autocalculado";
+    public static final String FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO = "importe_pendiente_total_autocalculado";
 
     public ImportePendienteTotalCalculation(IValidatableForm form) {
 	super(form);

@@ -14,7 +14,7 @@ public class ImporteTotalPagadoCalculation extends Calculation {
     private static final String FINCAS_MUTUO_ACUERDO_PARCIAL = "mutuo_acuerdo_parcial_importe";
     private static final String FINCAS_PAGOS_VARIOS = "pagos_varios_importe";
     private static final String FINCAS_DEPOSITO_PREVIO_LEVANTADO = "deposito_previo_levantado_importe";
-    private static final String FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO = "importe_pagado_total_autocalculado";
+    public static final String FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO = "importe_pagado_total_autocalculado";
     private static final String FINCAS_DEPOSITO_PREVIO_CONSIGNADO_INDEMNIZACION = "deposito_previo_consignado_indemnizacion";
     private static final String FINCAS_LIMITE_ACUERDO_IMORTE = "limite_acuerdo_importe";
     private static final String FINCAS_INDEMNIZACION_IMPORTE = "indemnizacion_importe";
