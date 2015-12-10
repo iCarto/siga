@@ -81,7 +81,8 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 	inputProj = new JComboBox();
 	this.add(inputProj, "wrap, growx");
 
-	inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()));
+	inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
+		.toArray(new CoordProvider[0])));
 	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
 	inputProj.setSelectedItem(model.getDefaultInputProj());
 	inputProj.addActionListener(new ActionListener() {
@@ -108,7 +109,8 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 	outputProj = new JComboBox();
 	this.add(outputProj, "wrap, growx");
 
-	outputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()));
+	outputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
+		.toArray(new CoordProvider[0])));
 	outputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
 	outputProj.setSelectedItem(model.getDefaultOuputProj());
 	outputProj.addActionListener(new ActionListener() {

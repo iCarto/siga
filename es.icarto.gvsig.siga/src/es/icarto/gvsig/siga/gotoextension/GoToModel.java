@@ -3,17 +3,21 @@ package es.icarto.gvsig.siga.gotoextension;
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import org.cresques.cts.IProjection;
 
 import es.icarto.gvsig.commons.referencing.GShape;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 public class GoToModel {
 
-    public final static CoordProvider[] projCodes = new CoordProvider[3];
+    public final List<CoordProvider> projCodes = new ArrayList<CoordProvider>();
 
-    private CoordProvider defaultInputProj = projCodes[0];
-    private CoordProvider defaultOuputProj = projCodes[1];
+    private CoordProvider defaultInputProj;
+    private CoordProvider defaultOuputProj;
 
     private ZoomTo zoomTo;
 
@@ -47,9 +51,11 @@ public class GoToModel {
 	epsg25829.setExtent(extent25829);
 	epsg25829.setOuputFormat(fUtm);
 
-	projCodes[0] = epsg4326;
-	projCodes[1] = epsg23029;
-	projCodes[2] = epsg25829;
+	projCodes.add(epsg4326);
+	projCodes.add(epsg23029);
+	projCodes.add(epsg25829);
+	defaultInputProj = projCodes.get(0);
+	defaultOuputProj = projCodes.get(1);
     }
 
     public CoordProvider getDefaultInputProj() {
@@ -68,7 +74,16 @@ public class GoToModel {
 	this.defaultOuputProj = defaultOuputProj;
     }
 
-    public CoordProvider[] getProjCodes() {
+    public void setDefaultOuputProj(IProjection oProj) {
+	for (CoordProvider p : projCodes) {
+	    if (p.getProj().getAbrev().equals(oProj.getAbrev())) {
+		this.defaultOuputProj = p;
+		return;
+	    }
+	}
+    }
+
+    public List<CoordProvider> getProjCodes() {
 	return projCodes;
     }
 
