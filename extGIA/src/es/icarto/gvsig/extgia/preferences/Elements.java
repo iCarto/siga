@@ -58,7 +58,7 @@ public enum Elements {
 	    "id_barrera_rigida",
 	    BarreraRigidaForm.class,
 	    BatchBarreraRigidaTrabajos.class,
-	    "batch_vegetacion_trabajos",
+	    "batch_barrera_rigida_trabajos",
 	    "barrera_rigida_trabajos"),
     Enlaces("id_enlace", EnlacesForm.class, null, null, null),
     Firme(
@@ -71,7 +71,7 @@ public enum Elements {
 	    "id_isleta",
 	    IsletasForm.class,
 	    BatchIsletasTrabajos.class,
-	    "batch_vegetacion_trabajos",
+	    "batch_isletas_trabajos",
 	    "isletas_trabajos"),
     Juntas(
 	    "id_junta",
@@ -131,7 +131,7 @@ public enum Elements {
 	    "id_talud",
 	    TaludesForm.class,
 	    BatchTaludesTrabajos.class,
-	    "batch_vegetacion_trabajos",
+	    "batch_taludes_trabajos",
 	    "taludes_trabajos"),
     Transformadores(
 	    "id_transformador",
