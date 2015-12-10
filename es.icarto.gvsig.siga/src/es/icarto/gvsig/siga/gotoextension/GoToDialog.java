@@ -13,8 +13,6 @@ import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.log4j.Logger;
-
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
@@ -27,9 +25,7 @@ import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 @SuppressWarnings("serial")
 public class GoToDialog extends AbstractIWindow implements DocumentListener {
 
-    private static final Logger logger = Logger.getLogger(GoToDialog.class);
-
-    private final static int WIDGET_SIZE = 21;
+    private final static int WIDGET_SIZE = 23;
     private final GoToModel model;
 
     private JComboBox inputProj;
@@ -83,9 +79,10 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 	this.add(inputY, "growx");
 
 	inputProj = new JComboBox();
-	this.add(inputProj, "wrap");
+	this.add(inputProj, "wrap, growx");
 
 	inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()));
+	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
 	inputProj.setSelectedItem(model.getDefaultInputProj());
 	inputProj.addActionListener(new ActionListener() {
 	    @Override
@@ -109,9 +106,10 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 	this.add(outputY, "growx");
 
 	outputProj = new JComboBox();
-	this.add(outputProj, "wrap");
+	this.add(outputProj, "wrap, growx");
 
 	outputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()));
+	outputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
 	outputProj.setSelectedItem(model.getDefaultOuputProj());
 	outputProj.addActionListener(new ActionListener() {
 	    @Override
