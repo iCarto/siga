@@ -127,9 +127,9 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		ZoomTo zoom = model.getZoomTo();
-		CoordProvider iProv = (CoordProvider) outputProj
+		CoordProvider iProv = (CoordProvider) inputProj
 			.getSelectedItem();
-		zoom.zoom(iProv.toGPoint(outputX.getText(), outputY.getText()),
+		zoom.zoom(iProv.toGPoint(inputX.getText(), inputY.getText()),
 			true);
 	    }
 	});
