@@ -83,7 +83,7 @@
 		<extension class-name="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" active="true">
 			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByMunicipioExtension.menu" icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" position="30720"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" tooltip="es.icarto.gvsig.extgex.LocatorByMunicipioExtension.menu" position="3"/>
+				<action-tool icon="es.icarto.gvsig.extgex.LocatorByMunicipioExtension" tooltip="es.icarto.gvsig.extgex.LocatorByMunicipioExtension.tooltip" position="3"/>
 			</tool-bar>
 		</extension>
 		

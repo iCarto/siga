@@ -40,7 +40,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
 public class LocatorByFinca extends BasicAbstractWindow implements
-	IPositionRetriever {
+IPositionRetriever {
 
     private static final String TABLE_MUNICIPIO_TRAMOS = "municipio_tramos";
     private static final String FIELD_MUNICIPIO_MUNICIPIO_TRAMOS = "municipio";
@@ -79,7 +79,7 @@ public class LocatorByFinca extends BasicAbstractWindow implements
     public LocatorByFinca() {
 	super();
 	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
-	this.setWindowTitle("Localizador por Finca");
+	this.setWindowTitle("Localizar Finca");
 	dbs = DBSession.getCurrentSession();
 	initWidgets();
 	initListeners();

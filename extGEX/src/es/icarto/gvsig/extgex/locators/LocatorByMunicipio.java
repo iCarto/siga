@@ -23,7 +23,7 @@ import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 @SuppressWarnings("serial")
 public class LocatorByMunicipio extends BasicAbstractWindow implements
-	IPositionRetriever, ActionListener {
+IPositionRetriever, ActionListener {
 
     private JComboBox ayuntamiento;
     private JComboBox parroquia;
@@ -32,7 +32,7 @@ public class LocatorByMunicipio extends BasicAbstractWindow implements
     public LocatorByMunicipio() {
 	super();
 	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
-	this.setWindowTitle("Localizador por Municipio o Parroquia");
+	this.setWindowTitle("Localizar Municipio o Parroquia");
 	initWidgets();
     }
 

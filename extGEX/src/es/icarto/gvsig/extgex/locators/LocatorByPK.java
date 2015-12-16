@@ -57,7 +57,7 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener {
 	super();
 	this.pkLayer = pkLayer;
 	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
-	this.setWindowTitle("Localizador por PK");
+	this.setWindowTitle("Localizar PK");
 	initWidgets();
     }
 
