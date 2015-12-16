@@ -28,10 +28,10 @@
 			</tool-bar>
 		</extension>
 
-		<extension class-name="es.icarto.gvsig.siga.GoToExtension" active="true">
-			<menu text="SIGA/localization/es.icarto.gvsig.siga.GoToExtension.menu" icon="es.icarto.gvsig.siga.GoToExtension" position="30700"/>
+		<extension class-name="es.icarto.gvsig.siga.LocatorByCoordsExtension" active="true">
+			<menu text="SIGA/localization/es.icarto.gvsig.siga.LocatorByCoordsExtension.menu" icon="es.icarto.gvsig.siga.LocatorByCoordsExtension" position="30700"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.siga.GoToExtension" position="1" tooltip="es.icarto.gvsig.siga.GoToExtension.tooltip" />
+				<action-tool icon="es.icarto.gvsig.siga.LocatorByCoordsExtension" position="1" tooltip="es.icarto.gvsig.siga.LocatorByCoordsExtension.tooltip" />
 			</tool-bar>
 		</extension>
 		

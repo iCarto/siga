@@ -13,8 +13,8 @@ import com.iver.cit.gvsig.fmap.drivers.DBException;
 
 import es.icarto.gvsig.commons.testutils.Drivers;
 import es.icarto.gvsig.commons.testutils.TestProperties;
-import es.icarto.gvsig.siga.gotoextension.GoToDialog;
-import es.icarto.gvsig.siga.gotoextension.GoToModel;
+import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsDialog;
+import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsModel;
 import es.udc.cartolab.gvsig.testutils.MapControlStub;
 import es.udc.cartolab.gvsig.users.utils.DBSessionPostGIS;
 
@@ -42,7 +42,7 @@ public class TestGoToDialog {
 
 	doSetupBeforeClass();
 
-	GoToModel model = new GoToModel();
+	LocatorByCoordsModel model = new LocatorByCoordsModel();
 	model.setDefaultInputProj(model.getProjCodes().get(0));
 	model.setDefaultOuputProj(model.getProjCodes().get(1));
 
@@ -56,12 +56,12 @@ public class TestGoToDialog {
 
 	// try {
 	// fullExtent = mapContext.getFullExtent();
-	// new GShape(GoToModel.projCodes[0].getProj(), fullExtent);
+	// new GShape(LocatorByCoordsModel.projCodes[0].getProj(), fullExtent);
 	// } catch (ReadDriverException e) {
 	// logger.error(e.getStackTrace(), e);
 	// }
 
-	GoToDialog pane = new GoToDialog(model);
+	LocatorByCoordsDialog pane = new LocatorByCoordsDialog(model);
 
 	// WindowInfo windowInfo = pane.getWindowInfo(new Component() {
 	// @Override

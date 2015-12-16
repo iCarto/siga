@@ -3,15 +3,15 @@ package es.icarto.gvsig.siga;
 import com.iver.cit.gvsig.fmap.MapControl;
 
 import es.icarto.gvsig.commons.referencing.PostgisTransformation;
-import es.icarto.gvsig.siga.gotoextension.GoToDialog;
-import es.icarto.gvsig.siga.gotoextension.GoToModel;
+import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsDialog;
+import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsModel;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
-public class GoToExtension extends AbstractExtension {
+public class LocatorByCoordsExtension extends AbstractExtension {
 
     @Override
     public void execute(String actionCommand) {
-	GoToModel model = new GoToModel();
+	LocatorByCoordsModel model = new LocatorByCoordsModel();
 	final MapControl mapControl = getView().getMapControl();
 
 	final ZoomTo zoomTo = new ZoomTo(mapControl);
@@ -19,7 +19,7 @@ public class GoToExtension extends AbstractExtension {
 	model.setZoomTo(zoomTo);
 	model.setDefaultOuputProj(mapControl.getProjection());
 
-	GoToDialog pane = new GoToDialog(model);
+	LocatorByCoordsDialog pane = new LocatorByCoordsDialog(model);
 	pane.openDialog();
     }
 

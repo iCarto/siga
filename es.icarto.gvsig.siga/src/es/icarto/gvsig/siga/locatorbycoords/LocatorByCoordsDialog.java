@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.gotoextension;
+package es.icarto.gvsig.siga.locatorbycoords;
 
 import static es.icarto.gvsig.navtableforms.ormlite.domainvalidator.ValidatorComponent.INVALID_COLOR;
 
@@ -23,10 +23,10 @@ import es.icarto.gvsig.commons.gui.PlaceholderTextField;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 @SuppressWarnings("serial")
-public class GoToDialog extends AbstractIWindow implements DocumentListener {
+public class LocatorByCoordsDialog extends AbstractIWindow implements DocumentListener {
 
     private final static int WIDGET_SIZE = 23;
-    private final GoToModel model;
+    private final LocatorByCoordsModel model;
 
     private JComboBox inputProj;
     private JTextField inputX;
@@ -38,11 +38,11 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 
     private JButton zoomBt;
 
-    public GoToDialog(GoToModel goToModel) {
+    public LocatorByCoordsDialog(LocatorByCoordsModel locatorByCoordsModel) {
 	super();
-	this.model = goToModel;
+	this.model = locatorByCoordsModel;
 	setupUI();
-	setWindowTitle("Zoom");
+	setWindowTitle("Localizar Coordenadas");
 	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
 	setWindowClosed(new IWindowClosed() {
 	    @Override
@@ -123,6 +123,7 @@ public class GoToDialog extends AbstractIWindow implements DocumentListener {
 
     private void setupZoomBt() {
 	zoomBt = new JButton("Zoom");
+	zoomBt.setEnabled(false);
 	zoomBt.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {

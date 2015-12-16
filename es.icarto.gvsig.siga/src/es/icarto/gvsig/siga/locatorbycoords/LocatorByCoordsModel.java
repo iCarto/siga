@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.gotoextension;
+package es.icarto.gvsig.siga.locatorbycoords;
 
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
@@ -12,7 +12,7 @@ import org.cresques.cts.IProjection;
 import es.icarto.gvsig.commons.referencing.GShape;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
-public class GoToModel {
+public class LocatorByCoordsModel {
 
     public final List<CoordProvider> projCodes = new ArrayList<CoordProvider>();
 
@@ -21,7 +21,7 @@ public class GoToModel {
 
     private ZoomTo zoomTo;
 
-    public GoToModel() {
+    public LocatorByCoordsModel() {
 
 	DecimalFormat fGeo = (DecimalFormat) NumberFormat
 		.getNumberInstance(Locale.getDefault());

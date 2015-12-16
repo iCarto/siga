@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.gotoextension;
+package es.icarto.gvsig.siga.locatorbycoords;
 
 public class GeoCoordProvider extends CoordProvider {
 

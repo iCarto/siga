@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.gotoextension;
+package es.icarto.gvsig.siga.locatorbycoords;
 
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;

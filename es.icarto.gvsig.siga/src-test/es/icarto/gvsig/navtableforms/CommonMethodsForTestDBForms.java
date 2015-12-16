@@ -54,7 +54,7 @@ public abstract class CommonMethodsForTestDBForms {
     public static void doSetupBeforeClass() {
 	Drivers.initgvSIGDrivers(TestProperties.driversPath);
 	try {
-	    DBSessionPostGIS.createConnection("localhost", 5434, "audasa_test",
+	    DBSessionPostGIS.createConnection("localhost", 5432, "audasa_test",
 		    null, "postgres", "postgres");
 	} catch (DBException e) {
 	    e.printStackTrace();
