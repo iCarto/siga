@@ -1,5 +1,6 @@
 package es.icarto.gvsig.extgex.locators;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
@@ -49,7 +50,7 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener {
     private JComboBox pkNumberCB;
 
     public final String ID_GOTOPK = "goToPKButton";
-    private JButton goToPKB;
+    private JButton zoomBt;
 
     private final FLyrVect pkLayer;
 
@@ -72,8 +73,8 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener {
 	tramoCB.addActionListener(this);
 	fillTramo();
 	fillPK();
-	goToPKB = (JButton) formPanel.getComponentByName(ID_GOTOPK);
-	goToPKB.addActionListener(this);
+	zoomBt = (JButton) formPanel.getComponentByName(ID_GOTOPK);
+	zoomBt.addActionListener(this);
     }
 
     private void fillTramo() {
@@ -128,7 +129,7 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener {
 	if (e.getSource() == tramoCB) {
 	    fillPK();
 	}
-	if (e.getSource() == goToPKB) {
+	if (e.getSource() == zoomBt) {
 	    String pkToFind = pkNumberCB.getSelectedItem().toString();
 	    String tramo = tramoCB.getSelectedItem().toString();
 	    if (pkToFind != null) {
@@ -187,6 +188,16 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener {
 	} catch (ReadDriverException e) {
 	    e.printStackTrace();
 	}
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return zoomBt;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package es.icarto.gvsig.extgex.locators;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -54,7 +55,7 @@ IPositionRetriever {
     private JComboBox ayuntamiento;
     private JComboBox parroquiaSubtramo;
     private JComboBox fincaSeccion;
-    private JButton zoom;
+    private JButton zoomBt;
     private JButton openForm;
 
     private final ZoomToHandler zoomToHandler;
@@ -104,7 +105,7 @@ IPositionRetriever {
 	}
 
 	zoomToHandler = new ZoomToHandler(this, true);
-	zoom.addActionListener(zoomToHandler);
+	zoomBt.addActionListener(zoomToHandler);
 
 	formOpener = new FormOpener(this);
 	openForm.addActionListener(formOpener);
@@ -171,7 +172,7 @@ IPositionRetriever {
 	fincaSeccion = (JComboBox) formPanel
 		.getComponentByName("finca_seccion");
 	openForm = (JButton) formPanel.getComponentByName("openform");
-	zoom = (JButton) formPanel.getComponentByName("zoom");
+	zoomBt = (JButton) formPanel.getComponentByName("zoom");
     }
 
     private void initListeners() {
@@ -490,9 +491,19 @@ IPositionRetriever {
 	ayuntamiento.removeActionListener(ayuntamientoListener);
 	parroquiaSubtramo.removeActionListener(parroquiaListener);
 	fincaSeccion.removeActionListener(fincasListener);
-	zoom.removeActionListener(zoomToHandler);
+	zoomBt.removeActionListener(zoomToHandler);
 	openForm.removeActionListener(formOpener);
 	super.closeDialog();
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return zoomBt;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 
 }

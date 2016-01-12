@@ -1,5 +1,6 @@
 package es.icarto.gvsig.extgex.queries;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -562,6 +563,16 @@ public class QueriesPanel extends BasicAbstractWindow implements ActionListener 
     @Override
     protected String getBasicName() {
 	return "consultas";
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return null;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 
 }

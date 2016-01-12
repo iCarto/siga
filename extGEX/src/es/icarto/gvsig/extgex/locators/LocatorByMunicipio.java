@@ -1,5 +1,6 @@
 package es.icarto.gvsig.extgex.locators;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ IPositionRetriever, ActionListener {
 
     private JComboBox ayuntamiento;
     private JComboBox parroquia;
-    private JButton zoom;
+    private JButton zoomBt;
 
     public LocatorByMunicipio() {
 	super();
@@ -47,9 +48,9 @@ IPositionRetriever, ActionListener {
 	fillAyuntamiento();
 	ayuntamiento.addActionListener(this);
 	fillParroquia();
-	zoom = (JButton) formPanel.getComponentByName("zoom");
+	zoomBt = (JButton) formPanel.getComponentByName("zoom");
 	ZoomToHandler zoomToHandler = new ZoomToHandler(this, false);
-	zoom.addActionListener(zoomToHandler);
+	zoomBt.addActionListener(zoomToHandler);
     }
 
     private void fillParroquia() {
@@ -135,6 +136,16 @@ IPositionRetriever, ActionListener {
     @Override
     public void actionPerformed(ActionEvent arg0) {
 	fillParroquia();
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return zoomBt;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 
 }

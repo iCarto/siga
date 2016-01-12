@@ -1,6 +1,7 @@
 package es.icarto.gvsig.extgia.consultas;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import com.jeta.forms.components.image.ImageComponent;
@@ -30,7 +32,7 @@ import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 
 @SuppressWarnings("serial")
 public abstract class ValidatableForm extends AbstractIWindow implements
-IValidatableForm {
+	IValidatableForm {
 
     private final ORMLite ormlite;
     private final FillHandler fillHandler;
@@ -64,15 +66,15 @@ IValidatableForm {
 	    }
 	}
     }
-    
+
     private void initDateChooser(JDateChooser c) {
 	SimpleDateFormat dateFormat = DateFormatNT.getDateFormat();
 	c.setDateFormatString(dateFormat.toPattern());
 	c.getDateEditor().setEnabled(false);
 	c.getDateEditor().getUiComponent()
-	.setBackground(new Color(255, 255, 255));
+		.setBackground(new Color(255, 255, 255));
 	c.getDateEditor().getUiComponent()
-	.setFont(new Font("Arial", Font.PLAIN, 11));
+		.setFont(new Font("Arial", Font.PLAIN, 11));
 	c.getDateEditor().getUiComponent().setToolTipText(null);
     }
 
@@ -86,6 +88,7 @@ IValidatableForm {
 
     protected abstract String getBasicName();
 
+    @Override
     public FormPanel getFormPanel() {
 	if (formPanel == null) {
 	    InputStream stream = getClass().getClassLoader()
@@ -131,17 +134,18 @@ IValidatableForm {
     public Map<String, JComponent> getWidgets() {
 	return widgets;
     }
-    
+
     @Override
     public void windowClosed() {
 	removeListeners();
-        super.windowClosed();
+	super.windowClosed();
     }
 
     protected void setListeners() {
 	dependencyHandler.setListeners();
 	chainedHandler.setListeners();
     }
+
     protected void removeListeners() {
 	dependencyHandler.removeListeners();
 	chainedHandler.removeListeners();
@@ -168,8 +172,10 @@ IValidatableForm {
     }
 
     /**
-     * Instead of create an implementation of ImageHandler that only sets a path (FixedImageHandler) this utiliy method
-     * sets the image without doing anything more
+     * Instead of create an implementation of ImageHandler that only sets a path
+     * (FixedImageHandler) this utiliy method sets the image without doing
+     * anything more
+     * 
      * @param imgComponent
      *            . Name of the abeille widget
      * @param absPath
@@ -180,6 +186,16 @@ IValidatableForm {
 		.getComponentByName(imgComponent);
 	ImageIcon icon = new ImageIcon(absPath);
 	image.setIcon(icon);
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return null;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 
 }

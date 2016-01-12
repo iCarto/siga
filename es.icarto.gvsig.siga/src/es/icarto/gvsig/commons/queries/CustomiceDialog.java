@@ -1,10 +1,12 @@
 package es.icarto.gvsig.commons.queries;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
@@ -31,13 +33,14 @@ public class CustomiceDialog<E> extends AbstractIWindow implements
 
     private final List<JComboBox> order;
 
-    private final DualListBox<E> dualListBox;;
+    private final DualListBox<E> dualListBox;
+    private final OkCancelPanel okPanel;;
 
     public CustomiceDialog() {
 	super(new MigLayout("wrap 1, insets 10", "[center]", ""));
 	setWindowTitle("Personalizar consulta");
 	setWindowInfoProperties(WindowInfo.MODALDIALOG);
-	WidgetFactory.okCancelPanel(this, this, this);
+	okPanel = WidgetFactory.okCancelPanel(this, this, this);
 
 	dualListBox = new DualListBox<E>();
 	dualListBox.addDestListDataListener(new UpdateOrderBy());
@@ -142,5 +145,15 @@ public class CustomiceDialog<E> extends AbstractIWindow implements
 	}
 
 	return list;
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return okPanel.getOkButton();
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 }

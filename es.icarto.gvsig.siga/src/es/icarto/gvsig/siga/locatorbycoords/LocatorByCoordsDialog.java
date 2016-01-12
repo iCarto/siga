@@ -2,6 +2,7 @@ package es.icarto.gvsig.siga.locatorbycoords;
 
 import static es.icarto.gvsig.navtableforms.ormlite.domainvalidator.ValidatorComponent.INVALID_COLOR;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,7 +14,6 @@ import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
@@ -23,7 +23,8 @@ import es.icarto.gvsig.commons.gui.PlaceholderTextField;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 @SuppressWarnings("serial")
-public class LocatorByCoordsDialog extends AbstractIWindow implements DocumentListener {
+public class LocatorByCoordsDialog extends AbstractIWindow implements
+	DocumentListener {
 
     private final static int WIDGET_SIZE = 23;
     private final LocatorByCoordsModel model;
@@ -184,20 +185,13 @@ public class LocatorByCoordsDialog extends AbstractIWindow implements DocumentLi
     }
 
     @Override
-    public void openDialog() {
-	if (getWindowInfo().isModeless()) {
-	    PluginServices.getMDIManager().addCentredWindow(this);
-	    getRootPane().setDefaultButton(zoomBt);
-	    setFocusCycleRoot(true);
-	    zoomBt.requestFocusInWindow();
-	} else {
-	    // Si la ventana es modal el código se queda bloqueado tras añadir
-	    // la ventana hasta que el usuario la cierra, y antes de que la
-	    // ventana sea añadida el JRootPane no es creado, por lo que con
-	    // ventanas modales no se puede user un default button. A no ser que
-	    // se haga algo un poco distinto
-	    PluginServices.getMDIManager().addCentredWindow(this);
-	}
+    protected JButton getDefaultButton() {
+	return zoomBt;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return zoomBt;
     }
 
 }
