@@ -83,7 +83,7 @@ public class LocatorByCoordsDialog extends AbstractIWindow implements DocumentLi
 
 	inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
 		.toArray(new CoordProvider[0])));
-	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
+	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXXX");
 	inputProj.setSelectedItem(model.getDefaultInputProj());
 	inputProj.addActionListener(new ActionListener() {
 	    @Override

@@ -22,12 +22,12 @@ public class CoordProvider {
     private GShape extent;
     private NumberFormat outputformat;
 
-    public CoordProvider(String name) {
+    public CoordProvider(String name, String proj) {
 	this.name = name;
 	this.format = DoubleFormatNT.getDisplayingFormat();
 	this.outputformat = this.format;
 	this.transform = new PostgisTransformation();
-	this.proj = CRSFactory.getCRS(name);
+	this.proj = CRSFactory.getCRS(proj);
 
 	// https://www.maptools.com/tutorials/utm/details
 	// https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
