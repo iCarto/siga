@@ -187,6 +187,7 @@ public class LocatorByCoordsDialog extends AbstractIWindow implements DocumentLi
     public void openDialog() {
 	if (getWindowInfo().isModeless()) {
 	    PluginServices.getMDIManager().addCentredWindow(this);
+	    getRootPane().setDefaultButton(zoomBt);
 	    setFocusCycleRoot(true);
 	    zoomBt.requestFocusInWindow();
 	} else {
