@@ -3,7 +3,7 @@
  <property key="className" value="org.gvsig.mapsheets.print.series.fmap.MapSheetGrid"/>
  <property key="name" value="Rejilla - A4_5000_AP9F"/>
  <property key="msid" value="1361644124207"/>
- <property key="srs" value="EPSG:23029"/>
+ <property key="srs" value="EPSG:25829"/>
  <xml-tag>
   <xml-tag>
    <property key="name" value="CODE"/>
