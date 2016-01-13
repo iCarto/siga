@@ -99,7 +99,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
     private ComboBoxModel templatesDimensiones;
     private ComboBoxModel templatesConsultas;
     private ComboBoxModel templatesPolicia;
-    private JRadioButton templateCustom;
+//    private JRadioButton templateCustom;
     private JTextField templateFile;
     private JButton templateFileButton;
     private JFileChooser templateFileChooser;
@@ -292,84 +292,84 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 		    new Font("Dialog", Font.BOLD, 12),
 		    new Color(51, 51, 51)));
 
-	    templateDimensiones = new JRadioButton(AudasaPreferences.DIMENSIONES);
+	    templateDimensiones = new JRadioButton("Audasa");
 	    templateDimensiones.setBounds(new Rectangle(15, 21, 200-15-15, 21));
 	    templateDimensiones.setSelected(true);
 	    templateDimensiones.addActionListener(this);
-	    templateConsultas = new JRadioButton(AudasaPreferences.CONSULTAS);
+	    templateConsultas = new JRadioButton("Autoestradas");
 	    templateConsultas.setBounds(new Rectangle(15+200, 21, 200-15-15, 21));
 	    templateConsultas.setSelected(false);
 	    templateConsultas.addActionListener(this);
-	    templatePolicia = new JRadioButton(AudasaPreferences.POLICIA_MARGENES);
-	    templatePolicia.setBounds(new Rectangle(15+200+200, 21, 200-15-15, 21));
-	    templatePolicia.setSelected(false);
-	    templatePolicia.addActionListener(this);
-	    String[] plantillas = new String[4];
+//	    templatePolicia = new JRadioButton(AudasaPreferences.POLICIA_MARGENES);
+//	    templatePolicia.setBounds(new Rectangle(15+200+200, 21, 200-15-15, 21));
+//	    templatePolicia.setSelected(false);
+//	    templatePolicia.addActionListener(this);
+	    String[] plantillas = new String[10];
 	    plantillas[0] = AudasaPreferences.A4_CONSULTAS;
 	    plantillas[1] = AudasaPreferences.A4_CONSULTAS_LOCALIZADOR;
 	    plantillas[2] = AudasaPreferences.A3_CONSULTAS;
 	    plantillas[3] = AudasaPreferences.A3_CONSULTAS_LOCALIZADOR;
-	    templatesConsultas = new DefaultComboBoxModel(plantillas);
-	    plantillas = new String[2];
-	    plantillas[0] = AudasaPreferences.A3_DIMENSIONES;
-	    plantillas[1] = AudasaPreferences.A3_DIMENSIONES_LOCALIZADOR;
-	    templatesDimensiones = new DefaultComboBoxModel(plantillas);
-	    plantillas = new String[4];
-	    plantillas[0] = AudasaPreferences.A4_POLICIA_MARGENES;
-	    plantillas[1] = AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA;
-	    plantillas[2] = AudasaPreferences.A3_POLICIA_MARGENES;
-	    plantillas[3] = AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA;
+//	    templatesConsultas = new DefaultComboBoxModel(plantillas);
+//	    plantillas = new String[2];
+	    plantillas[4] = AudasaPreferences.A3_DIMENSIONES;
+	    plantillas[5] = AudasaPreferences.A3_DIMENSIONES_LOCALIZADOR;
+//	    templatesDimensiones = new DefaultComboBoxModel(plantillas);
+//	    plantillas = new String[4];
+	    plantillas[6] = AudasaPreferences.A4_POLICIA_MARGENES;
+	    plantillas[7] = AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA;
+	    plantillas[8] = AudasaPreferences.A3_POLICIA_MARGENES;
+	    plantillas[9] = AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA;
 	    templatesPolicia = new DefaultComboBoxModel(plantillas);
 	    templateSpecificLabel = new JLabel(PluginServices.getText(this, "Choose_template"));
 	    templateSpecificLabel.setBounds(new Rectangle(95, 21+25, 150, 21));
 	    templateSpecific = new JComboBox();
 	    templateSpecific.addActionListener(this);
-	    templateSpecific.setModel(templatesDimensiones);
+	    templateSpecific.setModel(templatesPolicia);
 	    templateSpecific.setBounds(new Rectangle(200, 21+25, 300, 21));
-	    templateCustom = new JRadioButton(PluginServices.getText(this, "Other_template"));
-	    templateCustom.setBounds(new Rectangle(15, 21+25+28, 110, 21));
-	    templateCustom.setSelected(false);
-	    templateCustom.addActionListener(this);
-	    templateFile = new JTextField(200);
-	    templateFile.setEditable(false);
-	    templateFile.setEnabled(false);
-	    templateFile.setBounds(new Rectangle(125, 21+25+28, 270, 22));
-	    templateFileButton = new JButton("...");
-	    templateFileButton.setBounds(new Rectangle(400, 21+25+28, 50, 21));
-	    templateFileButton.addActionListener(this);
-	    templateFileButton.setEnabled(false);
+//	    templateCustom = new JRadioButton(PluginServices.getText(this, "Other_template"));
+//	    templateCustom.setBounds(new Rectangle(15, 21+25+28, 110, 21));
+//	    templateCustom.setSelected(false);
+//	    templateCustom.addActionListener(this);
+//	    templateFile = new JTextField(200);
+//	    templateFile.setEditable(false);
+//	    templateFile.setEnabled(false);
+//	    templateFile.setBounds(new Rectangle(125, 21+25+28, 270, 22));
+//	    templateFileButton = new JButton("...");
+//	    templateFileButton.setBounds(new Rectangle(400, 21+25+28, 50, 21));
+//	    templateFileButton.addActionListener(this);
+//	    templateFileButton.setEnabled(false);
 
-	    templateFileChooser = new JFileChooser(OPEN_TEMPLATE_FILE_CHOOSER_ID, System.getProperty("user.home"));
-	    templateFileChooser.setAcceptAllFileFilterUsed(false);
-	    templateFileChooser.setFileFilter(new FileNameExtensionFilter("GVT", "gvt"));
-
-	    formatLabel = new JLabel();
-	    formatLabel.setText(PluginServices.getText(this, "Format"));
-	    formatLabel.setBounds(new Rectangle(465, 21+25+28, 60, 21));
-	    formatLabel.setEnabled(false);
-	    formatCombobox = new JComboBox();
-	    formatCombobox.addItem(new String(" "));
-	    formatCombobox.addItem(new String("A4"));
-	    formatCombobox.addItem(new String("A3"));
-	    formatCombobox.setBounds(new Rectangle(525, 21+25+28, 40, 21));
-	    formatCombobox.setEnabled(false);
+//	    templateFileChooser = new JFileChooser(OPEN_TEMPLATE_FILE_CHOOSER_ID, System.getProperty("user.home"));
+//	    templateFileChooser.setAcceptAllFileFilterUsed(false);
+//	    templateFileChooser.setFileFilter(new FileNameExtensionFilter("GVT", "gvt"));
+//
+//	    formatLabel = new JLabel();
+//	    formatLabel.setText(PluginServices.getText(this, "Format"));
+//	    formatLabel.setBounds(new Rectangle(465, 21+25+28, 60, 21));
+//	    formatLabel.setEnabled(false);
+//	    formatCombobox = new JComboBox();
+//	    formatCombobox.addItem(new String(" "));
+//	    formatCombobox.addItem(new String("A4"));
+//	    formatCombobox.addItem(new String("A3"));
+//	    formatCombobox.setBounds(new Rectangle(525, 21+25+28, 40, 21));
+//	    formatCombobox.setEnabled(false);
 
 	    templatesPanel.add(templateDimensiones, null);
 	    templatesPanel.add(templateConsultas, null);
-	    templatesPanel.add(templatePolicia, null);
+//	    templatesPanel.add(templatePolicia, null);
 	    templatesPanel.add(templateSpecificLabel, null);
 	    templatesPanel.add(templateSpecific, null);
-	    templatesPanel.add(templateCustom, null);
-	    templatesPanel.add(templateFile, null);
-	    templatesPanel.add(templateFileButton, null);
-	    templatesPanel.add(formatLabel, null);
-	    templatesPanel.add(formatCombobox, null);
+//	    templatesPanel.add(templateCustom, null);
+//	    templatesPanel.add(templateFile, null);
+//	    templatesPanel.add(templateFileButton, null);
+//	    templatesPanel.add(formatLabel, null);
+//	    templatesPanel.add(formatCombobox, null);
 
 	    ArrayList<JRadioButton> group = new ArrayList<JRadioButton>();
 	    group.add(templateDimensiones);
 	    group.add(templateConsultas);
-	    group.add(templatePolicia);
-	    group.add(templateCustom);
+//	    group.add(templatePolicia);
+//	    group.add(templateCustom);
 	    MapSheetsUtils.joinRadioButtons(group);
 	}
 	return templatesPanel;
@@ -605,6 +605,8 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 
     private boolean hasCancelled = true;
 
+    private String empresa;
+
     private static String selectedTemplate = AudasaPreferences.A3_DIMENSIONES;
 
 
@@ -637,6 +639,11 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 	Object src = e.getSource();
 	if (src == this.getAcceptButton()) {
 	    hasCancelled = false;
+	    if (templateDimensiones.isSelected()) {
+		empresa = "Audasa";		
+	    } else {
+		empresa = "Autoestradas";
+	    }
 	    try {
 		MapSheetGrid newgrid;
 		if (getGridCustomRB().isSelected()) {
@@ -647,9 +654,9 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 		    if(selectedTemplate.equals(AudasaPreferences.A4_CONSULTAS) ||
 			    selectedTemplate.equals(AudasaPreferences.A4_CONSULTAS_LOCALIZADOR) ||
 			    selectedTemplate.equals(AudasaPreferences.A4_POLICIA_MARGENES) ||
-			    selectedTemplate.equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA) ||
-			    (templateCustom.isSelected() &&
-				    formatCombobox.getSelectedItem().equals("A4"))) {
+			    selectedTemplate.equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA) 
+//			    || (templateCustom.isSelected() && formatCombobox.getSelectedItem().equals("A4"))
+			    ) {
 			grid_width = AudasaPreferences.VIEW_WIDTH_A4;
 			grid_height = AudasaPreferences.VIEW_HEIGHT_A4;
 		    } else { // any A3 template
@@ -764,64 +771,64 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 			    getScalePanel().repaint();
 	}
 
-	if(src == templateDimensiones) {
-	    templateSpecific.setEnabled(true);
-	    templateSpecific.setModel(templatesDimensiones);
-	    templateSpecificLabel.setEnabled(true);
-	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
-	    templateFile.setEnabled(false);
-	    templateFileButton.setEnabled(false);
-	    templateFile.setBackground(UIManager.getColor("TextField.inactiveBackground"));
-	}
-
-	if(src == templateConsultas) {
-	    templateSpecific.setEnabled(true);
-	    templateSpecific.setModel(templatesConsultas);
-	    templateSpecificLabel.setEnabled(true);
-	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
-	    templateFile.setEnabled(false);
-	    templateFileButton.setEnabled(false);
-	    templateFile.setBackground(UIManager.getColor("TextField.inactiveBackground"));
-	}
-
-	if(src == templatePolicia) {
-	    templateSpecific.setEnabled(true);
-	    templateSpecific.setModel(templatesPolicia);
-	    templateSpecificLabel.setEnabled(true);
-	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
-	    templateFile.setEnabled(false);
-	    templateFileButton.setEnabled(false);
-	    templateFile.setBackground(UIManager.getColor("TextField.inactiveBackground"));
-	}
-
+//	if(src == templateDimensiones) {
+//	    templateSpecific.setEnabled(true);
+//	    templateSpecific.setModel(templatesDimensiones);
+//	    templateSpecificLabel.setEnabled(true);
+//	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
+//	    templateFile.setEnabled(false);
+//	    templateFileButton.setEnabled(false);
+//	    templateFile.setBackground(UIManager.getColor("TextField.inactiveBackground"));
+//	}
+//
+//	if(src == templateConsultas) {
+//	    templateSpecific.setEnabled(true);
+//	    templateSpecific.setModel(templatesConsultas);
+//	    templateSpecificLabel.setEnabled(true);
+//	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
+//	    templateFile.setEnabled(false);
+//	    templateFileButton.setEnabled(false);
+//	    templateFile.setBackground(UIManager.getColor("TextField.inactiveBackground"));
+//	}
+//
+//	if(src == templatePolicia) {
+//	    templateSpecific.setEnabled(true);
+//	    templateSpecific.setModel(templatesPolicia);
+//	    templateSpecificLabel.setEnabled(true);
+//	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
+//	    templateFile.setEnabled(false);
+//	    templateFileButton.setEnabled(false);
+//	    templateFile.setBackground(UIManager.getColor("TextField.inactiveBackground"));
+//	}
+//
 	if(src == templateSpecific) {
 	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
 	}
-
-	if (src == templateCustom) {
-	    templateSpecificLabel.setEnabled(false);
-	    templateSpecific.setEnabled(false);
-	    selectedTemplate = templateFile.getText();
-	    templateFile.setEnabled(true);
-	    templateFileButton.setEnabled(true);
-	    templateFile.setBackground(UIManager.getColor("TextField.background"));
-	}
-
-	if (src == templateFileButton) {
-	    int returnVal = templateFileChooser.showOpenDialog(this);
-
-	    if (returnVal == JFileChooser.APPROVE_OPTION) {
-		templateFile.setText(templateFileChooser.getSelectedFile().getAbsolutePath());
-		selectedTemplate = templateFile.getText();
-		if (templateFile.getText().toLowerCase().endsWith(".gvt") &&
-			templateFile.getText().contains("A4")) {
-		    formatCombobox.setSelectedItem("A4");
-		} else if (templateFile.getText().toLowerCase().endsWith(".gvt") &&
-			templateFile.getText().contains("A3")) {
-		    formatCombobox.setSelectedItem("A3");
-		}
-	    }
-	}
+//
+//	if (src == templateCustom) {
+//	    templateSpecificLabel.setEnabled(false);
+//	    templateSpecific.setEnabled(false);
+//	    selectedTemplate = templateFile.getText();
+//	    templateFile.setEnabled(true);
+//	    templateFileButton.setEnabled(true);
+//	    templateFile.setBackground(UIManager.getColor("TextField.background"));
+//	}
+//
+//	if (src == templateFileButton) {
+//	    int returnVal = templateFileChooser.showOpenDialog(this);
+//
+//	    if (returnVal == JFileChooser.APPROVE_OPTION) {
+//		templateFile.setText(templateFileChooser.getSelectedFile().getAbsolutePath());
+//		selectedTemplate = templateFile.getText();
+//		if (templateFile.getText().toLowerCase().endsWith(".gvt") &&
+//			templateFile.getText().contains("A4")) {
+//		    formatCombobox.setSelectedItem("A4");
+//		} else if (templateFile.getText().toLowerCase().endsWith(".gvt") &&
+//			templateFile.getText().contains("A3")) {
+//		    formatCombobox.setSelectedItem("A3");
+//		}
+//	    }
+//	}
 
 	if (src == gridFileButton) {
 	    gridFileChooser.setCurrentDirectory(new File(AudasaPreferences.GRIDS_PATH));
@@ -833,7 +840,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 	}
 
 	checkAcceptButtonEnabled();
-	checkFormatComponentsEnabled();
+//	checkFormatComponentsEnabled();
 
     }
 
@@ -842,23 +849,23 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 	if (gridCustom.isSelected()) {
 	    enabled &= gridFile.getText().toLowerCase().endsWith(".grid");
 	}
-	if (this.templateCustom.isSelected()) {
-	    enabled &= templateFile.getText().toLowerCase().endsWith(".gvt");
-	}
+//	if (this.templateCustom.isSelected()) {
+//	    enabled &= templateFile.getText().toLowerCase().endsWith(".gvt");
+//	}
 	getAcceptButton().setEnabled(enabled);
     }
 
-    private void checkFormatComponentsEnabled() {
-	boolean enabled = this.templateCustom.isSelected();
-	if (gridCustom.isSelected()) {
-	    enabled &= false;
-	}
-	if (this.templateCustom.isSelected()) {
-	    enabled &= templateFile.getText().toLowerCase().endsWith(".gvt");
-	}
-	formatLabel.setEnabled(enabled);
-	formatCombobox.setEnabled(enabled);
-    }
+//    private void checkFormatComponentsEnabled() {
+//	boolean enabled = this.templateCustom.isSelected();
+//	if (gridCustom.isSelected()) {
+//	    enabled &= false;
+//	}
+//	if (this.templateCustom.isSelected()) {
+//	    enabled &= templateFile.getText().toLowerCase().endsWith(".gvt");
+//	}
+//	formatLabel.setEnabled(enabled);
+//	formatCombobox.setEnabled(enabled);
+//    }
 
     public boolean hasCancelled() {
 	return hasCancelled;
@@ -988,9 +995,9 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 	return selectedTemplate;
     }
 
-    public static String getFormatComboBox() {
-	return formatCombobox.getSelectedItem().toString();
-    }
+//    public static String getFormatComboBox() {
+//	return formatCombobox.getSelectedItem().toString();
+//    }
 
 
 }  //  @jve:decl-index=0:visual-constraint="0,-2"
