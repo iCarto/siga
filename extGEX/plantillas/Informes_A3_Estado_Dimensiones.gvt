@@ -1133,7 +1133,7 @@
         <property key="m_rotation" value="0.0"/>
         <property key="level" value="286"/>
         <property key="num" value="17"/>
-        <property key="s" value="AUTOPISTA DEL ATLÁNTICO  ,Estado de Dimensiones y  ,Características de la Obra ejecutada"/>
+        <property key="s" value="Estado de Dimensiones y  ,Características de la Obra ejecutada"/>
         <property key="m_isFixed" value="false"/>
         <property key="m_pos" value="1"/>
         <property key="fontName" value="Arial Negrita"/>
