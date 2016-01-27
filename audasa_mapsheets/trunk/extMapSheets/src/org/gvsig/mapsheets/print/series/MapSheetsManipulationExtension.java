@@ -122,7 +122,8 @@ public class MapSheetsManipulationExtension extends Extension {
 		    //					 double top_cm = 0.1 * dlg.getTopMargin();
 		    double left_cm = AudasaPreferences.VIEW_X_POSITION;
 		    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
-		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4") || MapSheetsSettingsPanel.getFormatComboBox().equals("A4")) {
+		    // if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4") || MapSheetsSettingsPanel.getFormatComboBox().equals("A4")) {
+		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4")) {
 			left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
 			top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
 		    }

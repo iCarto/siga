@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -61,6 +62,7 @@ import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.SimpleFileFilter;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xml.XMLEncodingUtils;
@@ -894,8 +896,11 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 	    Reader reader = XMLEncodingUtils.getReader(is);
 
 	    XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
+	    System.out.println(empresa);
 	    try {
 		XMLEntity xml=new XMLEntity(tag);
+		fixLogosAndLabels(xml);
+		
 		if (xml.contains("followHeaderEncoding")) {
 		    layout = Layout.createLayout(xml,project);
 		}
@@ -923,6 +928,68 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow, ActionLis
 	    return null;
 	}
     }
+    
+    private XMLEntity find(XMLEntity xml, String key, String value) {
+	for (int i = 0 ; i < xml.getChildrenCount(); i++ ) {
+	    XMLEntity child = xml.getChild(i);
+	    try {
+		String stringProperty = child.getStringProperty(key);
+		if (stringProperty.contains(value)) {
+		    return child;
+		} else {
+		    XMLEntity c = find(child, key, value);
+			if (c!=null) {
+			    return c;
+			}
+		}
+	    } catch (NotExistInXMLEntity ne) {
+		XMLEntity c = find(child, key, value);
+		if (c!=null) {
+		    return c;
+		}
+	    }
+	}
+	return null;
+    }
+    private void fixLogosAndLabels(XMLEntity xml) {
+	File a = PluginServices.getPluginServices("es.icarto.gvsig.siga").getPluginDirectory();
+	String strA = a.getAbsolutePath() + File.separator + "images" + File.separator;
+	System.out.println(strA);
+
+	if (empresa.equalsIgnoreCase("autoestradas")) {
+	    // AUTOESTRADAS DE GALICIA Concesionaria Xunta Galicia, S.A.
+	    XMLEntity b = find(xml, "m_name", "Fomento.png");
+	    b.remove("m_path");
+	    b.putProperty("m_path", strA + "logo_xunta_map.png");
+	    
+	    XMLEntity c = find(xml, "m_name", "Audasa.JPG");
+	    c.remove("m_path");
+	    c.putProperty("m_path", strA + "logo_autoestradas_map.png");
+	    
+	    XMLEntity d = find(xml, "s", "AUTOPISTAS DEL ATL");
+	    d.remove("s");
+	    d.putProperty("s", new String[] {"AUTOESTRADAS DE GALICIA", "Concesionaria Xunta Galicia, S.A."});
+	    
+	    
+	} else {
+	    // AUTOPISTAS DEL ATLÁNTICO Concesionaria Española, S.A. 
+	    XMLEntity b = find(xml, "m_name", "Fomento.png");
+	    b.remove("m_path");
+	    b.putProperty("m_path", strA + "logo_fomento_map.png");
+	    
+	    XMLEntity c = find(xml, "m_name", "Audasa.JPG");
+	    c.remove("m_path");
+	    c.putProperty("m_path", strA + "logo_audasa_report.png");
+	    
+//	    XMLEntity d = find(xml, "s", "AUTOPISTAS DEL ATL");
+	    //d.remove("s");
+	    //d.putProperty("s", "AUTOPISTAS DEL ATLÁNTICO\nConcesionaria Española, S.A. ");
+	    
+	    
+	}
+	
+    }
+
 
     public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
