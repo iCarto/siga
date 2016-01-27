@@ -23,6 +23,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.MurosCaracteris
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ObrasDesagueCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ObrasPasoCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.PasosMedianaCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.RamalesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.SenhalizacionVariableCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.SenhalizacionVerticalCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.TaludesCaracteristicasReport;
@@ -145,6 +146,8 @@ public class ConsultasFieldNames {
 	    return "id_transformador, tr.item, tv.item, nv.item, pk, denominacion, titularidad, "
 	    + "estado, referencia, fabricante, tipo, ubicacion, "
 	    + "potencia, observaciones";
+	case Ramales:
+	    return "tr.item, tv.item, nv.item, pk, ramal, st.item, direccion, mu.item, longitud, observaciones";
 	}
 	return null;
     }
@@ -593,6 +596,15 @@ public class ConsultasFieldNames {
 		+ "observaciones as \"Observaciones\"";
     }
 
+    public static String ramalesCSVFieldNames() {
+	return "gid, fecha_actualizacion as \"Fecha Actualización\","
+		+ localizationCSVFieldNames() + "pk as \"PK\","
+		+ "ramal as \"Ramal\"," + "st.item as \"Sentido\","
+		+ "direccion as \"Dirección\"," + "mu.item as \"Municipio\","
+		+ "longitud as \"Longitud\","
+		+ "observaciones as \"Observaciones\"";
+    }
+
     public static void createCaracteristicasReport(String[] element,
 	    String outputFile, DefaultTableModel tableModel,
 	    ConsultasFilters<Field> filters, QueryType tipo) {
@@ -677,6 +689,10 @@ public class ConsultasFieldNames {
 	case Transformadores:
 	    new TransformadoresCaracteristicasReport(element, outputFile,
 		    tableModel, filters, tipo);
+	    break;
+	case Ramales:
+	    new RamalesCaracteristicasReport(element, outputFile, tableModel,
+		    filters, tipo);
 	    break;
 	}
     }
