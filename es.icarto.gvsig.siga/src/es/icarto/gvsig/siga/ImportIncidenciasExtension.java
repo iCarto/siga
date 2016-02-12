@@ -12,6 +12,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.commons.gui.ExcelFileChooser;
 import es.icarto.gvsig.siga.incidencias.IncidenciasParser;
 import es.icarto.gvsig.utils.DesktopApi;

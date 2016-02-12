@@ -4,10 +4,10 @@ import javax.swing.JOptionPane;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extgia.forms.LaunchGIAForms;
 import es.icarto.gvsig.extgia.forms.SIGAFormFactory;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.icarto.gvsig.siga.AbstractExtension;
 
 public class FormLauncherExtension extends AbstractExtension {
 

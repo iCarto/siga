@@ -2,9 +2,9 @@ package es.icarto.gvsig.extgex;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extgex.locators.LocatorByPK;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.icarto.gvsig.siga.AbstractExtension;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class LocatorByPKExtension extends AbstractExtension {

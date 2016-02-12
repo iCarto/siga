@@ -1,7 +1,7 @@
 package es.icarto.gvsig.extgex;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extgex.queries.QueriesPanel;
-import es.icarto.gvsig.siga.AbstractExtension;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class QueriesExtension extends AbstractExtension {

@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.udc.cartolab.gvsig.elle.constants.ConstantReload;
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardComponent;
 import es.udc.cartolab.gvsig.elle.gui.wizard.load.LoadConstantsWizardComponent;

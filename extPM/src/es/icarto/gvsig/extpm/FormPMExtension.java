@@ -4,9 +4,9 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extpm.forms.FormPM;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.icarto.gvsig.siga.AbstractExtension;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class FormPMExtension extends AbstractExtension {

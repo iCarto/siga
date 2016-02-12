@@ -1,9 +1,9 @@
 package es.icarto.gvsig.extgex;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extgex.locators.LocatorByFinca;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.icarto.gvsig.siga.AbstractExtension;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class LocatorByFincaExtension extends AbstractExtension {

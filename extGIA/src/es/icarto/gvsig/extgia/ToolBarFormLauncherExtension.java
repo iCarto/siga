@@ -6,10 +6,10 @@ import java.util.List;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extgia.forms.LaunchGIAForms;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.icarto.gvsig.siga.AbstractExtension;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ToolBarFormLauncherExtension extends AbstractExtension {
