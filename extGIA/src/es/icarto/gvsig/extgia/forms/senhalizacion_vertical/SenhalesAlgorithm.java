@@ -15,7 +15,7 @@ public class SenhalesAlgorithm {
     private final Dimension BOUNDARY;
     private final String folderPath;
     private final ImageIcon emptyImage;
-    private final String extension = ".gif";
+    private final String extension = ".png";
     private final String emptyImagePath;
 
     public SenhalesAlgorithm(String folderPath, Dimension boundary) {
@@ -32,47 +32,45 @@ public class SenhalesAlgorithm {
 	}
     }
 
-    public ImageIcon getIcon(String tipo, String codigo) {
-	String imgPath = getPath(tipo, codigo);
+    public ImageIcon getIcon(String tipo, String codigo, String id) {
+	String imgPath = getPath(tipo, codigo, id);
 	if (imgPath.equals(emptyImagePath)) {
 	    return emptyImage;
 	}
 	return ImageUtils.getScaled(imgPath, BOUNDARY);
     }
 
-    public String getPath(String tipo, String codigo) {
+    // id = id_senhal_vertical
+    public String getPath(String tipo, String codigo, String id) {
 	String path = emptyImagePath;
-	if (tipo.equals("Cartel")) {
+	if (tipo.equals("Panel direccional")) {
+	    path = "Panel_direccional_azul.png";
+	    // el código no tiene sentido por tanto habría que ponerlo en blanco
+	    // o desactivarlo
+	} else if (tipo.equals("Contenido fijo")) {
 	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		path = "0_cartel.png";
+		path = emptyImagePath;
 	    } else {
 		path = codigo + extension;
 	    }
-	} else if (tipo.equals("Placa")) {
-	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		path = "0_placa.png";
-	    } else {
-		path = codigo + extension;
+	} else if (tipo.equals("Cartel")) {
+	    path = id + extension;
+	    File ifi = new File(folderPath + path);
+	    if (!ifi.isFile()) {
+		path = "0_cartel.png";
 	    }
 	} else {
-	    // This condition is the same as "Placa" but this approach is more
-	    // readable
-	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		path = "0_placa.png";
-	    } else {
-		path = codigo + extension;
-	    }
+	    // esto no puede pasar
+	    // hay que poner el campo como obligatorio o quitar la opción de
+	    // blanco
+	    path = "0_cartel.png";
 	}
 	return folderPath + path;
     }
 
     public int getSize(String tipo, String codigo) {
 	if (tipo.equals("Cartel")) {
-	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		return PICTURE_SIZE;
-	    } else {
-		return CARTEL_PICTURE_SIZE;
-	    }
+	    return CARTEL_PICTURE_SIZE;
 	}
 	return PICTURE_SIZE;
     }

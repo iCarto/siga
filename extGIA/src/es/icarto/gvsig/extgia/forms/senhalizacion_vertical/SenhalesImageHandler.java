@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JComboBox;
+import javax.swing.JTextField;
 
 import com.jeta.forms.components.image.ImageComponent;
 
@@ -14,7 +15,7 @@ import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandler;
 
 public class SenhalesImageHandler implements ImageHandler, KeyListener,
-ActionListener {
+	ActionListener {
 
     private final String imgComp;
     private final IValidatableForm form;
@@ -23,6 +24,7 @@ ActionListener {
     private final JComboBox tipo;
     private final JComboBox codigo;
     private final SenhalesAlgorithm alg;
+    private final JTextField idSenhal;
 
     public SenhalesImageHandler(String imgComp, String tipoName,
 	    String codigoName, String folderPath, IValidatableForm form) {
@@ -34,6 +36,7 @@ ActionListener {
 
 	tipo = (JComboBox) form.getWidgets().get(tipoName);
 	codigo = (JComboBox) form.getWidgets().get(codigoName);
+	idSenhal = (JTextField) form.getWidgets().get("id_senhal_vertical");
 
     }
 
@@ -66,7 +69,7 @@ ActionListener {
     public void fillValues() {
 	String tipoValue = getComboValue(tipo);
 	String codigoValue = getComboValue(codigo);
-	image.setIcon(alg.getIcon(tipoValue, codigoValue));
+	image.setIcon(alg.getIcon(tipoValue, codigoValue, idSenhal.getText()));
 	image.repaint();
     }
 

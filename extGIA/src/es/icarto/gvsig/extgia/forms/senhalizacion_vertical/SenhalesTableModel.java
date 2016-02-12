@@ -48,7 +48,8 @@ public class SenhalesTableModel extends AlphanumericTableModel {
     private ImageIcon getIcon(int row) {
 	String tipoValue = stringValue(getValueAt(row, 1));
 	String codigoValue = stringValue(getValueAt(row, 2));
-	return this.alg.getIcon(tipoValue, codigoValue);
+	String idSenhalValue = stringValue(getValueAt(row, 0));
+	return this.alg.getIcon(tipoValue, codigoValue, idSenhalValue);
     }
 
     @Override

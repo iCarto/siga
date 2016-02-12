@@ -95,6 +95,7 @@ public class ApplySignalSimbology {
 	int idIndex = getIdx(senhales, "id_elemento_senhalizacion");
 	int tipoIdx = getIdx(senhales, "tipo_senhal");
 	int codigoIdx = getIdx(senhales, "codigo_senhal");
+	int idSenhalIdx = getIdx(senhales, "id_senhal_vertical");
 
 	ReadableVectorial source = senhales.getSource();
 
@@ -105,9 +106,10 @@ public class ApplySignalSimbology {
 	    Value tipo = attributes[tipoIdx];
 	    Value codigo = attributes[codigoIdx];
 	    Value id = attributes[idIndex];
+	    Value idSenhal = attributes[idSenhalIdx];
 	    final Integer count = list.get(id);
 	    if (count == null) {
-		ISymbol symbol = setPictureSymbol(0, tipo, codigo);
+		ISymbol symbol = setPictureSymbol(0, tipo, codigo, idSenhal);
 		legend.addSymbol(id, symbol);
 		list.put(id, 0);
 	    } else {
@@ -122,7 +124,8 @@ public class ApplySignalSimbology {
 		    multi.addLayer(symbolByValue);
 		}
 
-		ISymbol symbol = setPictureSymbol((count + 1), tipo, codigo);
+		ISymbol symbol = setPictureSymbol((count + 1), tipo, codigo,
+			idSenhal);
 		multi.addLayer(symbol);
 		legend.delSymbol(id);
 		legend.addSymbol(id, multi);
@@ -132,11 +135,12 @@ public class ApplySignalSimbology {
     }
 
     private ISymbol setPictureSymbol(int offset, Value tipoValue,
-	    Value codigoValue) {
+	    Value codigoValue, Value idSenhalValue) {
 
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
-	String file = this.alg.getPath(tipo, codigo);
+	String idSenhal = stringValue(idSenhalValue);
+	String file = this.alg.getPath(tipo, codigo, idSenhal);
 	int size = this.alg.getSize(tipo, codigo);
 
 	PictureMarkerSymbol symbol = new PictureMarkerSymbol();
