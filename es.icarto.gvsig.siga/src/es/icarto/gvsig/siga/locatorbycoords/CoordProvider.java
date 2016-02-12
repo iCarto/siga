@@ -46,6 +46,10 @@ public class CoordProvider {
 	this.outputformat = format;
     }
 
+    public NumberFormat getOutputformat() {
+	return outputformat;
+    }
+
     @Override
     public String toString() {
 	return name;
@@ -89,8 +93,10 @@ public class CoordProvider {
     public String[] transform(String inputX, String inputY, Object selectedItem) {
 	IProjection oProj = null;
 
+	NumberFormat oFormat = outputformat;
 	if ((selectedItem instanceof CoordProvider)) {
 	    oProj = ((CoordProvider) selectedItem).getProj();
+	    oFormat = ((CoordProvider) selectedItem).getOutputformat();
 	} else if (selectedItem instanceof IProjection) {
 	    oProj = (IProjection) selectedItem;
 	}
@@ -107,8 +113,8 @@ public class CoordProvider {
 	double y = normalize(inputY).doubleValue();
 	GPoint point = new GPoint(this.getProj(), x, y);
 	GPoint oPoint = transform.transform(point, oProj);
-	return new String[] { outputformat.format(oPoint.getX()),
-		outputformat.format(oPoint.getY()) };
+	return new String[] { oFormat.format(oPoint.getX()),
+		oFormat.format(oPoint.getY()) };
     }
 
     public GPoint toGPoint(String inputX, String inputY) {

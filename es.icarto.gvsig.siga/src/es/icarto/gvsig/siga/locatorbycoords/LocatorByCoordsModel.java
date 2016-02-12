@@ -25,8 +25,8 @@ public class LocatorByCoordsModel {
 
 	DecimalFormat fGeo = (DecimalFormat) NumberFormat
 		.getNumberInstance(Locale.getDefault());
-	fGeo.applyPattern("0.#######");
-	CoordProvider epsg4326 = new CoordProvider("WGS 84", "EPSG:4326");
+	fGeo.applyPattern("0.#####");
+	CoordProvider epsg4326 = new CoordProvider("WGS84", "EPSG:4326");
 	GShape extent4326 = new GShape(epsg4326.getProj(),
 		new Rectangle2D.Double(Math.abs(-6.734324529), 41.8072541522,
 			Math.abs(-9.29885967 - -6.734324529),
@@ -37,15 +37,14 @@ public class LocatorByCoordsModel {
 	DecimalFormat fUtm = (DecimalFormat) NumberFormat
 		.getNumberInstance(Locale.getDefault());
 	fUtm.applyPattern("0.###");
-	CoordProvider epsg23029 = new CoordProvider("UTM 29 ED 50",
-		"EPSG:23029");
+	CoordProvider epsg23029 = new CoordProvider("ED50 UTM29", "EPSG:23029");
 	GShape extent23029 = new GShape(epsg23029.getProj(),
 		new Rectangle2D.Double(472175.48, 4751978.58,
 			691493.78 - 472175.48, 4851029.48 - 600280.42));
 	epsg23029.setExtent(extent23029);
 	epsg23029.setOuputFormat(fUtm);
 
-	CoordProvider epsg25829 = new CoordProvider("UTM 29 ETRS 89",
+	CoordProvider epsg25829 = new CoordProvider("ETRS89 UTM29",
 		"EPSG:25829");
 	GShape extent25829 = new GShape(epsg25829.getProj(),
 		new Rectangle2D.Double(472637.79, 4626294.5,

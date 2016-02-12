@@ -24,7 +24,7 @@ import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 @SuppressWarnings("serial")
 public class LocatorByCoordsDialog extends AbstractIWindow implements
-	DocumentListener {
+DocumentListener {
 
     private final static int WIDGET_SIZE = 23;
     private final LocatorByCoordsModel model;
@@ -84,7 +84,7 @@ public class LocatorByCoordsDialog extends AbstractIWindow implements
 
 	inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
 		.toArray(new CoordProvider[0])));
-	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXXX");
+	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXXXX");
 	inputProj.setSelectedItem(model.getDefaultInputProj());
 	inputProj.addActionListener(new ActionListener() {
 	    @Override

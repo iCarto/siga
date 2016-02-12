@@ -2,6 +2,7 @@ package es.icarto.gvsig.siga;
 
 import com.iver.cit.gvsig.fmap.MapControl;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.commons.referencing.PostgisTransformation;
 import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsDialog;
 import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsModel;
