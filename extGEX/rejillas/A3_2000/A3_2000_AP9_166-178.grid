@@ -90,8 +90,8 @@
   <xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529221.5480633487"/>
-    <property key="bbox_y" value="4667420.92254275"/>
+    <property key="bbox_x" value="529096.323562"/>
+    <property key="bbox_y" value="4667205.6346"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -100,8 +100,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529221.5480633487"/>
-    <property key="bbox_y" value="4666900.92254275"/>
+    <property key="bbox_x" value="529096.324861"/>
+    <property key="bbox_y" value="4666685.62848"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -110,8 +110,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529468.5422149112"/>
-    <property key="bbox_y" value="4666380.92254275"/>
+    <property key="bbox_x" value="529343.324135"/>
+    <property key="bbox_y" value="4666165.62133"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -120,8 +120,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="530208.5422149112"/>
-    <property key="bbox_y" value="4666214.523133566"/>
+    <property key="bbox_x" value="530083.336159"/>
+    <property key="bbox_y" value="4665999.21701"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -130,8 +130,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="530948.5422149112"/>
-    <property key="bbox_y" value="4666318.837165625"/>
+    <property key="bbox_x" value="530823.347144"/>
+    <property key="bbox_y" value="4666103.52963"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -140,8 +140,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529468.5422149112"/>
-    <property key="bbox_y" value="4665860.92254275"/>
+    <property key="bbox_x" value="529343.325553"/>
+    <property key="bbox_y" value="4665645.61528"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -150,8 +150,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529705.0491028985"/>
-    <property key="bbox_y" value="4665340.92254275"/>
+    <property key="bbox_x" value="529579.837748"/>
+    <property key="bbox_y" value="4665125.60842"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -160,8 +160,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529705.0491028985"/>
-    <property key="bbox_y" value="4664820.92254275"/>
+    <property key="bbox_x" value="529579.83928"/>
+    <property key="bbox_y" value="4664605.60245"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -170,8 +170,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529705.0491028985"/>
-    <property key="bbox_y" value="4664300.92254275"/>
+    <property key="bbox_x" value="529579.840812"/>
+    <property key="bbox_y" value="4664085.59647"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -180,8 +180,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529479.6887961922"/>
-    <property key="bbox_y" value="4663780.92254275"/>
+    <property key="bbox_x" value="529354.478008"/>
+    <property key="bbox_y" value="4663565.59104"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -190,8 +190,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529479.6887961922"/>
-    <property key="bbox_y" value="4663260.92254275"/>
+    <property key="bbox_x" value="529354.479433"/>
+    <property key="bbox_y" value="4663045.58498"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -200,8 +200,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529109.6887961922"/>
-    <property key="bbox_y" value="4662740.92254275"/>
+    <property key="bbox_x" value="528984.473888"/>
+    <property key="bbox_y" value="4662525.57955"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -210,8 +210,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="528739.6887961922"/>
-    <property key="bbox_y" value="4662220.92254275"/>
+    <property key="bbox_x" value="528614.468064"/>
+    <property key="bbox_y" value="4662005.57383"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -220,8 +220,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="528739.6887961922"/>
-    <property key="bbox_y" value="4661700.92254275"/>
+    <property key="bbox_x" value="528614.470307"/>
+    <property key="bbox_y" value="4661485.56691"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -230,8 +230,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529013.8884942045"/>
-    <property key="bbox_y" value="4661180.92254275"/>
+    <property key="bbox_x" value="528888.677512"/>
+    <property key="bbox_y" value="4660965.55974"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -240,8 +240,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529274.8656638598"/>
-    <property key="bbox_y" value="4660660.92254275"/>
+    <property key="bbox_x" value="529149.66191"/>
+    <property key="bbox_y" value="4660445.5527"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -250,8 +250,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529274.8656638598"/>
-    <property key="bbox_y" value="4660140.92254275"/>
+    <property key="bbox_x" value="529149.664134"/>
+    <property key="bbox_y" value="4659925.5459"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -260,8 +260,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529398.9045529959"/>
-    <property key="bbox_y" value="4659620.92254275"/>
+    <property key="bbox_x" value="529273.707609"/>
+    <property key="bbox_y" value="4659405.53908"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -270,8 +270,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529495.5975923573"/>
-    <property key="bbox_y" value="4659100.92254275"/>
+    <property key="bbox_x" value="529370.404706"/>
+    <property key="bbox_y" value="4658885.53231"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -280,8 +280,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529495.5975923573"/>
-    <property key="bbox_y" value="4658580.92254275"/>
+    <property key="bbox_x" value="529370.406927"/>
+    <property key="bbox_y" value="4658365.52555"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -290,8 +290,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529495.5975923573"/>
-    <property key="bbox_y" value="4658060.92254275"/>
+    <property key="bbox_x" value="529370.40915"/>
+    <property key="bbox_y" value="4657845.51879"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -300,8 +300,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="529545.3149777537"/>
-    <property key="bbox_y" value="4657540.92254275"/>
+    <property key="bbox_x" value="529420.129697"/>
+    <property key="bbox_y" value="4657325.51207"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>

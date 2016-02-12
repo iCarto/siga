@@ -90,8 +90,8 @@
   <xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="525706.330236729"/>
-    <property key="bbox_y" value="4677969.964616156"/>
+    <property key="bbox_x" value="525581.008671"/>
+    <property key="bbox_y" value="4677754.76903"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -100,8 +100,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="525412.7880287615"/>
-    <property key="bbox_y" value="4677449.964616156"/>
+    <property key="bbox_x" value="525287.464953"/>
+    <property key="bbox_y" value="4677234.76681"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -110,8 +110,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="524672.7880287615"/>
-    <property key="bbox_y" value="4677189.964616156"/>
+    <property key="bbox_x" value="524547.45748"/>
+    <property key="bbox_y" value="4676974.76816"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -120,8 +120,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="524302.7880287615"/>
-    <property key="bbox_y" value="4676669.964616156"/>
+    <property key="bbox_x" value="524177.454388"/>
+    <property key="bbox_y" value="4676454.76575"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
@@ -130,8 +130,8 @@
    </xml-tag>
    <xml-tag>
     <property key="idsym" value="0"/>
-    <property key="bbox_x" value="523932.7880287615"/>
-    <property key="bbox_y" value="4676149.964616156"/>
+    <property key="bbox_x" value="523807.450949"/>
+    <property key="bbox_y" value="4675934.76308"/>
     <property key="bbox_w" value="740.0"/>
     <property key="bbox_h" value="520.0"/>
     <property key="att_n" value="7"/>
