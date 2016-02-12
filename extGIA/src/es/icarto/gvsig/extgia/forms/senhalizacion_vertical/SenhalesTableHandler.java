@@ -1,6 +1,5 @@
 package es.icarto.gvsig.extgia.forms.senhalizacion_vertical;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -43,7 +42,7 @@ public class SenhalesTableHandler extends GIAAlphanumericTableHandler {
     public static SenhalesTableModel createFromTableWithFilterSenhales(
 	    String sourceTable, String rowFilterName, String rowFilterValue,
 	    String[] columnNames, String[] columnAliases)
-	    throws ReadDriverException {
+		    throws ReadDriverException {
 
 	TOCTableManager toc = new TOCTableManager();
 	IEditableSource model = toc.getTableModelByName(sourceTable);

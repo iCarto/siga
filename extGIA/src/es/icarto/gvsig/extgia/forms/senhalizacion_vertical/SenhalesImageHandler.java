@@ -5,36 +5,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 
 import com.jeta.forms.components.image.ImageComponent;
 
-import es.icarto.gvsig.commons.utils.ImageUtils;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandler;
 
 public class SenhalesImageHandler implements ImageHandler, KeyListener,
 ActionListener {
 
-    private static final Dimension BOUNDARY = new Dimension(115, 115);
     private final String imgComp;
     private final IValidatableForm form;
-    private final String folderPath;
     private final ImageComponent image;
 
-    private String extension = ".gif";
-    private ImageIcon emptyImage;
     private final JComboBox tipo;
     private final JComboBox codigo;
+    private final SenhalesAlgorithm alg;
 
     public SenhalesImageHandler(String imgComp, String tipoName,
 	    String codigoName, String folderPath, IValidatableForm form) {
 	this.imgComp = imgComp;
-	this.folderPath = folderPath.endsWith(File.separator) ? folderPath
-		: folderPath + File.separator;
+	this.alg = new SenhalesAlgorithm(folderPath, new Dimension(115, 115));
 	this.form = form;
 	this.image = (ImageComponent) form.getFormPanel().getComponentByName(
 		imgComp);
@@ -42,16 +35,6 @@ ActionListener {
 	tipo = (JComboBox) form.getWidgets().get(tipoName);
 	codigo = (JComboBox) form.getWidgets().get(codigoName);
 
-	String emptyImagePath = folderPath + "0_placa.png";
-	emptyImage = ImageUtils.getScaled(emptyImagePath, BOUNDARY);
-    }
-
-    public void setEmptyImage(String imgPath) {
-	emptyImage = ImageUtils.getScaled(imgPath, BOUNDARY);
-    }
-
-    public void setExtension(String ext) {
-	extension = ext.startsWith(".") ? ext : "." + ext;
     }
 
     @Override
@@ -81,44 +64,10 @@ ActionListener {
 
     @Override
     public void fillValues() {
-
 	String tipoValue = getComboValue(tipo);
 	String codigoValue = getComboValue(codigo);
-
-	ImageIcon icon = emptyImage;
-
-	if (tipoValue.equals("Cartel")) {
-	    if (codigoValue.isEmpty() || (codigoValue.equals("Otro"))) {
-		icon = ImageUtils.getScaled(folderPath + "0_cartel.png",
-			BOUNDARY);
-	    } else {
-		String imgPath = folderPath + codigoValue + extension;
-		icon = ImageUtils.getScaled(imgPath, BOUNDARY);
-	    }
-
-	} else if (tipoValue.equals("Placa")) {
-	    if (codigoValue.isEmpty() || (codigoValue.equals("Otro"))) {
-		icon = ImageUtils.getScaled(folderPath + "0_placa.png",
-			BOUNDARY);
-	    } else {
-		String imgPath = folderPath + codigoValue + extension;
-		icon = ImageUtils.getScaled(imgPath, BOUNDARY);
-	    }
-	} else {
-	    // This condition is the same as "Placa" but this approach is more
-	    // readable
-	    if (codigoValue.isEmpty() || (codigoValue.equals("Otro"))) {
-		icon = ImageUtils.getScaled(folderPath + "0_placa.png",
-			BOUNDARY);
-	    } else {
-		String imgPath = folderPath + codigoValue + extension;
-		icon = ImageUtils.getScaled(imgPath, BOUNDARY);
-	    }
-	}
-
-	image.setIcon(icon);
+	image.setIcon(alg.getIcon(tipoValue, codigoValue));
 	image.repaint();
-
     }
 
     @Override

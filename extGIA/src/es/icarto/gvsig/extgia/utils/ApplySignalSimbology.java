@@ -25,24 +25,21 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 
 import es.icarto.gvsig.commons.utils.FileNameUtils;
+import es.icarto.gvsig.extgia.forms.senhalizacion_vertical.SenhalesAlgorithm;
 
 public class ApplySignalSimbology {
 
-    private static final int PICTURE_SIZE = 20;
-    private static final int CARTEL_PICTURE_SIZE = 50;
     private static final Point NOFFSET = new Point(0, 0);
 
     private static final Logger logger = Logger
 	    .getLogger(ApplySignalSimbology.class);
 
     private final FLyrVect senhales;
-
-    private final String extension = ".gif";
-
-    private final String emptyImagePath = "0_placa.png";
+    private final SenhalesAlgorithm alg;
 
     public ApplySignalSimbology(FLyrVect postes, FLyrVect signals) {
 	this.senhales = signals;
+	this.alg = new SenhalesAlgorithm("", null);
 	applySymbology(postes);
     }
 
@@ -136,35 +133,11 @@ public class ApplySignalSimbology {
 
     private ISymbol setPictureSymbol(int offset, Value tipoValue,
 	    Value codigoValue) {
-	String file = emptyImagePath;
-	int size = PICTURE_SIZE;
 
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
-
-	if (tipo.equals("Cartel")) {
-	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		file = "0_cartel.png";
-	    } else {
-		file = codigo + extension;
-		size = CARTEL_PICTURE_SIZE;
-	    }
-
-	} else if (tipo.equals("Placa")) {
-	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		file = "0_placa.png";
-	    } else {
-		file = codigo + extension;
-	    }
-	} else {
-	    // This condition is the same as "Placa" but this approach is more
-	    // readable
-	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
-		file = "0_placa.png";
-	    } else {
-		file = codigo + extension;
-	    }
-	}
+	String file = this.alg.getPath(tipo, codigo);
+	int size = this.alg.getSize(tipo, codigo);
 
 	PictureMarkerSymbol symbol = new PictureMarkerSymbol();
 	symbol.setDescription(FileNameUtils.removeExtension(file));
