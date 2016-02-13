@@ -31,15 +31,14 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * This extension deals with grid manipulation (except printing). Deals with
  * export to shapefile, adjustment tool and creation of layout template from
  * current grid.
- * 
- * 
+ *
+ *
  * @author jldominguez
  *
  */
 public class MapSheetsManipulationExtension extends Extension {
 
-    // private static MapSheetsDragger dragBBhvr = new MapSheetsDragger();
-
+    @Override
     public void execute(String comm) {
 
 	// =============================================================================
@@ -49,23 +48,26 @@ public class MapSheetsManipulationExtension extends Extension {
 	    try {
 		IWindow w = PluginServices.getMDIManager().getActiveWindow();
 
-
 		if (w instanceof View) {
 		    View v = (View) w;
 		    MapControl mc = v.getMapControl();
 		    MapContext mx = mc.getMapContext();
-		    ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx.getLayers());
-		    if ((act_lyrs.size() == 1) && (act_lyrs.get(0) instanceof MapSheetGrid)) {
+		    ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx
+			    .getLayers());
+		    if ((act_lyrs.size() == 1)
+			    && (act_lyrs.get(0) instanceof MapSheetGrid)) {
 
 			MapSheetGrid msg = (MapSheetGrid) act_lyrs.get(0);
 			MapSheetsUtils.toSHP(msg, mx);
 
 		    } else {
-			throw new Exception("Did not find a MapSheetsGrid layer.");
+			throw new Exception(
+				"Did not find a MapSheetsGrid layer.");
 		    }
 		}
 	    } catch (Exception ex) {
-		NotificationManager.addError("While exporting map sheets grid to SHP. ", ex);
+		NotificationManager.addError(
+			"While exporting map sheets grid to SHP. ", ex);
 	    }
 
 	}
@@ -97,7 +99,6 @@ public class MapSheetsManipulationExtension extends Extension {
 		NotificationManager.addError("While setting adjust tool.", ex);
 	    }
 
-
 	}
 	// =============================================================================
 	// =============================================================================
@@ -109,8 +110,8 @@ public class MapSheetsManipulationExtension extends Extension {
 		MapControl mc = v.getMapControl();
 		MapContext mx = mc.getMapContext();
 
-		MapSheetSelectionDialog dlg = new MapSheetSelectionDialog(mx, null);
-		//				 PluginServices.getMDIManager().addWindow(dlg);
+		MapSheetSelectionDialog dlg = new MapSheetSelectionDialog(mx,
+			null);
 
 		Object[] grid_auxlyt = dlg.getSelectedAndAuxLayout();
 		MapSheetGrid msg = (MapSheetGrid) grid_auxlyt[0];
@@ -118,12 +119,11 @@ public class MapSheetsManipulationExtension extends Extension {
 
 		if (msg != null) {
 
-		    //					 double left_cm = 0.1 * dlg.getLeftMargin();
-		    //					 double top_cm = 0.1 * dlg.getTopMargin();
 		    double left_cm = AudasaPreferences.VIEW_X_POSITION;
 		    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
-		    // if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4") || MapSheetsSettingsPanel.getFormatComboBox().equals("A4")) {
-		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4")) {
+
+		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains(
+			    "A4")) {
 			left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
 			top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
 		    }
@@ -131,19 +131,16 @@ public class MapSheetsManipulationExtension extends Extension {
 		    ArrayList act_flds_tem = dlg.getActiveFieldsTemplateList();
 		    ArrayList act_flds_idx = dlg.getActiveFieldsIndexList();
 
-		    // x
-		    // MapSheetsLayoutTemplate
-		    // msg.setVisible(false);
 		    Project p = v.getModel().getProject();
 
 		    ProjectView _pv = (ProjectView) v.getModel();
 		    MapContext _mc = _pv.getMapContext();
 		    MapContext _omc = _pv.getMapOverViewContext();
 
-		    MapContext clo_mc =
-			    MapSheetsUtils.cloneMapContextRemoveGrids(_mc);
-		    MapContext clo_omc =
-			    MapSheetsUtils.cloneMapContextRemoveGrids(_omc);
+		    MapContext clo_mc = MapSheetsUtils
+			    .cloneMapContextRemoveGrids(_mc);
+		    MapContext clo_omc = MapSheetsUtils
+			    .cloneMapContextRemoveGrids(_omc);
 
 		    Dimension aux_dim = _mc.getViewPort().getImageSize();
 		    clo_mc.getViewPort().setImageSize(aux_dim);
@@ -151,12 +148,10 @@ public class MapSheetsManipulationExtension extends Extension {
 		    ProjectView cloned_pv = new ProjectView();
 
 		    cloned_pv.setName("");
-		    cloned_pv.setProjectDocumentFactory(new ProjectViewFactory());
+		    cloned_pv
+		    .setProjectDocumentFactory(new ProjectViewFactory());
 		    cloned_pv.setMapContext(clo_mc);
 		    cloned_pv.setMapOverViewContext(clo_omc);
-
-		    // FLayers ll = cloned_pv.getMapContext().getLayers();
-		    // MapSheetsUtils.setGridsToVisible(ll, false);
 
 		    double wh_ratio = 1;
 
@@ -168,25 +163,23 @@ public class MapSheetsManipulationExtension extends Extension {
 
 		    MapSheetsUtils.initViewPort(cloned_pv, wh_ratio);
 
-		    MapSheetsLayoutTemplate mslt =
-			    new MapSheetsLayoutTemplate(msg, cloned_pv, auxlayout, null);
-		    // mslt.setGrid(msg);
-		    ProjectMap _pmap = ProjectFactory.createMap("Sheets layout");
+		    MapSheetsLayoutTemplate mslt = new MapSheetsLayoutTemplate(
+			    msg, cloned_pv, auxlayout, null);
+		    ProjectMap _pmap = ProjectFactory
+			    .createMap("Sheets layout");
 
 		    MapSheetsProjectMap mspm = new MapSheetsProjectMap();
-		    mspm.setName("Layout Template " + MapSheetsLayoutTemplate.nextId());
-		    mspm.setProjectDocumentFactory(_pmap.getProjectDocumentFactory());
+		    mspm.setName("Layout Template "
+			    + MapSheetsLayoutTemplate.nextId());
+		    mspm.setProjectDocumentFactory(_pmap
+			    .getProjectDocumentFactory());
 
 		    mspm.setModel(mslt);
 		    mslt.setProjectMap(mspm);
 		    p.addDocument(mspm);
 
-		    mslt.init(act_flds,
-			    act_flds_idx,
-			    act_flds_tem,
-			    left_cm,
-			    top_cm,
-			    false);
+		    mslt.init(act_flds, act_flds_idx, act_flds_tem, left_cm,
+			    top_cm, false);
 
 		    PluginServices.getMDIManager().addWindow(mslt);
 		    try {
@@ -202,11 +195,11 @@ public class MapSheetsManipulationExtension extends Extension {
 	// =============================================================================
     }
 
+    @Override
     public void initialize() {
-	// TODO Auto-generated method stub
-
     }
 
+    @Override
     public boolean isEnabled() {
 	try {
 	    IWindow w = PluginServices.getMDIManager().getActiveWindow();
@@ -215,8 +208,10 @@ public class MapSheetsManipulationExtension extends Extension {
 		View v = (View) w;
 		MapControl mc = v.getMapControl();
 		MapContext mx = mc.getMapContext();
-		ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx.getLayers());
-		return (act_lyrs.size() == 1) && (act_lyrs.get(0) instanceof MapSheetGrid);
+		ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx
+			.getLayers());
+		return (act_lyrs.size() == 1)
+			&& (act_lyrs.get(0) instanceof MapSheetGrid);
 	    }
 	} catch (Exception ex) {
 	    return false;
@@ -225,16 +220,15 @@ public class MapSheetsManipulationExtension extends Extension {
 	return false;
     }
 
+    @Override
     public boolean isVisible() {
 	return true;
     }
 
-
     public static String setGridTool(MapControl mc, MapSheetsDragger drag_beha) {
-
-	// remove
 	if (mc.hasTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID)) {
-	    mc.getNamesMapTools().remove(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID);
+	    mc.getNamesMapTools().remove(
+		    MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID);
 	}
 
 	Behavior[] behs = { drag_beha };

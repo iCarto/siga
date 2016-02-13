@@ -43,13 +43,14 @@ import com.iver.utiles.SimpleFileFilter;
 /**
  * This extension deals with gris creation (based on a view/layer or from a
  * shapefile)
- * 
+ *
  * @author jldominguez
  *
  */
 public class MapSheetsCreationExtension extends Extension {
 
-    private static Logger logger = Logger.getLogger(MapSheetsCreationExtension.class);
+    private static Logger logger = Logger
+	    .getLogger(MapSheetsCreationExtension.class);
 
     public static Properties extensionProperties = new Properties();
 
@@ -57,63 +58,68 @@ public class MapSheetsCreationExtension extends Extension {
     public static int MAX_PRINTAB_MAPS = 200;
 
     public static Color GRID_COLOR_BORDER = Color.BLACK;
-    public static Color GRID_COLOR_FILL = new Color(0,0,0,35);
-    public static Color GRID_COLOR_SEL_BORDER = new Color(200,200,0);
-    public static Color GRID_COLOR_SEL_FILL = new Color(255,255,0,35);
-    public static Color GRID_COLOR_EDIT_BORDER = new Color(192,0,0);
-    public static Color GRID_COLOR_EDIT_FILL = new Color(255,0,0,35);
+    public static Color GRID_COLOR_FILL = new Color(0, 0, 0, 35);
+    public static Color GRID_COLOR_SEL_BORDER = new Color(200, 200, 0);
+    public static Color GRID_COLOR_SEL_FILL = new Color(255, 255, 0, 35);
+    public static Color GRID_COLOR_EDIT_BORDER = new Color(192, 0, 0);
+    public static Color GRID_COLOR_EDIT_FILL = new Color(255, 0, 0, 35);
 
     public MapSheetsCreationExtension() {
 
     }
 
+    @Override
     public void initialize() {
-	URL prop_file = getClass().getClassLoader().getResource("properties"
-		+ File.separator + "mapsheets.properties");
+	URL prop_file = getClass().getClassLoader().getResource(
+		"properties" + File.separator + "mapsheets.properties");
 	// ResourceRead
 	try {
 	    loadProperties(prop_file);
 	} catch (Exception ex) {
-	    logger.error("While loading props: " + ex.getMessage() + ". Defaults will be used.");
+	    logger.error("While loading props: " + ex.getMessage()
+		    + ". Defaults will be used.");
 	}
 
 	LayerFactory.registerLayerClassForName(
-		MapSheetGrid.class.getCanonicalName(),
-		MapSheetGrid.class);
+		MapSheetGrid.class.getCanonicalName(), MapSheetGrid.class);
 
 	MapSheetsProjectMapFactory.register();
 	MapSheetFrameViewFactory.register();
 	registerIcons();
 
 	// about
-	java.net.URL newurl = createResourceUrl(
-		"about"
-			+ File.separator
-			+ "about.htm");
-	About claseAbout = (About) PluginServices.getExtension(com.iver.cit.gvsig.About.class);
+	java.net.URL newurl = createResourceUrl("about" + File.separator
+		+ "about.htm");
+	About claseAbout = (About) PluginServices
+		.getExtension(com.iver.cit.gvsig.About.class);
 	claseAbout.getAboutPanel().addAboutUrl("Map Sheets", newurl);
-
 
     }
 
     private void registerIcons() {
 	PluginServices.getIconTheme().register(
-		"create-grid", getClass().getClassLoader().getResource(
+		"create-grid",
+		getClass().getClassLoader().getResource(
 			"images" + File.separator + "grid.png"));
 	PluginServices.getIconTheme().register(
-		"to-shp", getClass().getClassLoader().getResource(
+		"to-shp",
+		getClass().getClassLoader().getResource(
 			"images" + File.separator + "toshp.png"));
 	PluginServices.getIconTheme().register(
-		"from-shp", getClass().getClassLoader().getResource(
+		"from-shp",
+		getClass().getClassLoader().getResource(
 			"images" + File.separator + "fromshp.png"));
 	PluginServices.getIconTheme().register(
-		"adjust-grid", getClass().getClassLoader().getResource(
+		"adjust-grid",
+		getClass().getClassLoader().getResource(
 			"images" + File.separator + "adjust.png"));
 	PluginServices.getIconTheme().register(
-		"set-map", getClass().getClassLoader().getResource(
+		"set-map",
+		getClass().getClassLoader().getResource(
 			"images" + File.separator + "configmap.png"));
 	PluginServices.getIconTheme().register(
-		"other-grid", getClass().getClassLoader().getResource(
+		"other-grid",
+		getClass().getClassLoader().getResource(
 			"images" + File.separator + "change.png"));
     }
 
@@ -130,7 +136,8 @@ public class MapSheetsCreationExtension extends Extension {
 	try {
 	    MAX_PRINTAB_MAPS = Integer.parseInt(aux);
 	} catch (Exception ex) {
-	    logger.error("Bad number: " + aux + ", using default = " + MAX_PRINTAB_MAPS);
+	    logger.error("Bad number: " + aux + ", using default = "
+		    + MAX_PRINTAB_MAPS);
 	}
 
 	aux = pp.getProperty("grid.sheet.symbol.border.color");
@@ -148,17 +155,6 @@ public class MapSheetsCreationExtension extends Extension {
     }
 
     @Override
-    public void postInitialize() {
-
-    }
-
-
-    @Override
-    public void terminate() {
-
-    }
-
-
     public void execute(String comm) {
 
 	if (comm.compareToIgnoreCase("MAP_SHEETS_GENERATE_DIALOG") == 0) {
@@ -166,15 +162,13 @@ public class MapSheetsCreationExtension extends Extension {
 
 	    if (w != null && w instanceof View) {
 
-		// FloatingManagerDialog.cancelFromOutside();
-
 		View v = (View) w;
 		MapControl mc = v.getMapControl();
 		MapContext mx = mc.getMapContext();
 
 		MapSheetsSettingsPanel panel = new MapSheetsSettingsPanel(v);
 		PluginServices.getMDIManager().addCentredWindow(panel);
-		if(panel.hasCancelled()) {
+		if (panel.hasCancelled()) {
 		    return;
 		}
 
@@ -183,16 +177,18 @@ public class MapSheetsCreationExtension extends Extension {
 		    variables = new AudasaTemplate();
 		} else {
 		    // ask the user
-		    VariablesTemplatePanel variablesPanel = new VariablesTemplatePanel(panel.getSelectedTemplate());
-		    PluginServices.getMDIManager().addCentredWindow(variablesPanel);
+		    VariablesTemplatePanel variablesPanel = new VariablesTemplatePanel(
+			    panel.getSelectedTemplate());
+		    PluginServices.getMDIManager().addCentredWindow(
+			    variablesPanel);
 		    variables = variablesPanel.getAudasaTemplateVariables();
 		}
 
-		//preload selection dialog variables
+		// preload selection dialog variables
 		Layout layout = panel.getMapLayout();
-		MapSheetSelectionDialog dlg = new MapSheetSelectionDialog(mx, null, layout);
-		//				 PluginServices.getMDIManager().addWindow(dlg);
-
+		MapSheetSelectionDialog dlg = new MapSheetSelectionDialog(mx,
+			null, layout);
+		// PluginServices.getMDIManager().addWindow(dlg);
 
 		Object[] grid_auxlyt = dlg.getSelectedAndAuxLayout();
 		MapSheetGrid msg = (MapSheetGrid) grid_auxlyt[0];
@@ -200,13 +196,10 @@ public class MapSheetsCreationExtension extends Extension {
 
 		if (msg != null) {
 
-		    //double left_cm = 0.1 * dlg.getLeftMargin();
-		    //double top_cm = 0.1 * dlg.getTopMargin();
 		    double left_cm = AudasaPreferences.VIEW_X_POSITION;
 		    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
-//		    String selected = MapSheetsSettingsPanel.getSelectedTemplate();
-//		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4") || MapSheetsSettingsPanel.getFormatComboBox().equals("A4")) {
-		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4")) {
+
+		    if (panel.getSelectedTemplate().contains("A4")) {
 			left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
 			top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
 		    }
@@ -214,19 +207,16 @@ public class MapSheetsCreationExtension extends Extension {
 		    ArrayList act_flds_tem = dlg.getActiveFieldsTemplateList();
 		    ArrayList act_flds_idx = dlg.getActiveFieldsIndexList();
 
-		    // x
-		    // MapSheetsLayoutTemplate
-		    // msg.setVisible(false);
 		    Project p = v.getModel().getProject();
 
 		    ProjectView _pv = (ProjectView) v.getModel();
 		    MapContext _mc = _pv.getMapContext();
 		    MapContext _omc = _pv.getMapOverViewContext();
 
-		    MapContext clo_mc =
-			    MapSheetsUtils.cloneMapContextRemoveGrids(_mc);
-		    MapContext clo_omc =
-			    MapSheetsUtils.cloneMapContextRemoveGrids(_omc);
+		    MapContext clo_mc = MapSheetsUtils
+			    .cloneMapContextRemoveGrids(_mc);
+		    MapContext clo_omc = MapSheetsUtils
+			    .cloneMapContextRemoveGrids(_omc);
 
 		    Dimension aux_dim = _mc.getViewPort().getImageSize();
 		    clo_mc.getViewPort().setImageSize(aux_dim);
@@ -234,12 +224,10 @@ public class MapSheetsCreationExtension extends Extension {
 		    ProjectView cloned_pv = new ProjectView();
 
 		    cloned_pv.setName(_pv.getName());
-		    cloned_pv.setProjectDocumentFactory(new ProjectViewFactory());
+		    cloned_pv
+		    .setProjectDocumentFactory(new ProjectViewFactory());
 		    cloned_pv.setMapContext(clo_mc);
 		    cloned_pv.setMapOverViewContext(clo_omc);
-
-		    // FLayers ll = cloned_pv.getMapContext().getLayers();
-		    // MapSheetsUtils.setGridsToVisible(ll, false);
 
 		    double wh_ratio = 1;
 
@@ -252,27 +240,22 @@ public class MapSheetsCreationExtension extends Extension {
 		    MapSheetsUtils.initViewPort(cloned_pv, wh_ratio);
 
 		    MapSheetsLayoutTemplate mslt = new MapSheetsLayoutTemplate(
-			    msg,
-			    cloned_pv,
-			    auxlayout,
-			    variables);
-		    // mslt.setGrid(msg);
-		    ProjectMap _pmap = ProjectFactory.createMap("Sheets layout");
+			    msg, cloned_pv, auxlayout, variables);
+		    ProjectMap _pmap = ProjectFactory
+			    .createMap("Sheets layout");
 
 		    MapSheetsProjectMap mspm = new MapSheetsProjectMap();
-		    mspm.setName("Layout Template " + MapSheetsLayoutTemplate.nextId());
-		    mspm.setProjectDocumentFactory(_pmap.getProjectDocumentFactory());
+		    mspm.setName("Layout Template "
+			    + MapSheetsLayoutTemplate.nextId());
+		    mspm.setProjectDocumentFactory(_pmap
+			    .getProjectDocumentFactory());
 
 		    mspm.setModel(mslt);
 		    mslt.setProjectMap(mspm);
 		    p.addDocument(mspm);
 
-		    mslt.init(act_flds,
-			    act_flds_idx,
-			    act_flds_tem,
-			    left_cm,
-			    top_cm,
-			    false);
+		    mslt.init(act_flds, act_flds_idx, act_flds_tem, left_cm,
+			    top_cm, false);
 
 		    PluginServices.getMDIManager().addWindow(mslt);
 		    try {
@@ -284,8 +267,8 @@ public class MapSheetsCreationExtension extends Extension {
 
 	    } else {
 		NotificationManager.showMessageError(
-			"Bad window (not a View): " + w,
-			new Exception("Bad window: " + w));
+			"Bad window (not a View): " + w, new Exception(
+				"Bad window: " + w));
 	    }
 	    return;
 	}
@@ -305,17 +288,21 @@ public class MapSheetsCreationExtension extends Extension {
 		    mc = v.getMapControl();
 		    mx = mc.getMapContext();
 		} else {
-		    throw new Exception("Current view is not a view: " + w.getClass().getName());
+		    throw new Exception("Current view is not a view: "
+			    + w.getClass().getName());
 		}
 
 		JFileChooser jfc = new JFileChooser();
 		SimpleFileFilter filterShp = new SimpleFileFilter("shp",
-			PluginServices.getText(MapSheetsUtils.class, "shp_files"));
+			PluginServices.getText(MapSheetsUtils.class,
+				"shp_files"));
 		jfc.setFileFilter(filterShp);
-		if (jfc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+		if (jfc.showOpenDialog((Component) PluginServices
+			.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 		    File openFile = jfc.getSelectedFile();
-		    if (openFile.exists()){
-			String error_cause = MapSheetsUtils.validMapSheetsGridShp(openFile);
+		    if (openFile.exists()) {
+			String error_cause = MapSheetsUtils
+				.validMapSheetsGridShp(openFile);
 			if (error_cause == null) {
 			    // ok
 			    MapSheetsUtils.addMapSheetsGrid2(openFile, mc);
@@ -323,13 +310,14 @@ public class MapSheetsCreationExtension extends Extension {
 			    throw new Exception(error_cause);
 			}
 		    } else {
-			throw new Exception("File does not exist: " + openFile.getAbsolutePath());
+			throw new Exception("File does not exist: "
+				+ openFile.getAbsolutePath());
 		    }
 
 		}
 	    } catch (Exception e) {
-		NotificationManager.addError("While opening grid SHP: " +
-			e.getMessage(),e);
+		NotificationManager.addError(
+			"While opening grid SHP: " + e.getMessage(), e);
 	    }
 
 	}
@@ -337,7 +325,7 @@ public class MapSheetsCreationExtension extends Extension {
 	// =============================================================================
     }
 
-
+    @Override
     public boolean isEnabled() {
 	try {
 	    IWindow w = PluginServices.getMDIManager().getActiveWindow();
@@ -352,12 +340,10 @@ public class MapSheetsCreationExtension extends Extension {
 	return false;
     }
 
-
+    @Override
     public boolean isVisible() {
 	return true;
     }
-
-
 
     private java.net.URL createResourceUrl(String path) {
 	return getClass().getClassLoader().getResource(path);

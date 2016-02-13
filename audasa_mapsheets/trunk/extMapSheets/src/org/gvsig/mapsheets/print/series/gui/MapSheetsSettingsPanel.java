@@ -91,7 +91,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
     private JRadioButton autoestradasRB;
 
     private JLabel templateCBLabel;
-    private JComboBox templateCB;
+    private static JComboBox templateCB;
 
     private JRadioButton coverView = null;
     private JRadioButton basedOnFeatures = null;
@@ -246,8 +246,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		    AudasaPreferences.getTemplates());
 	    templateCBLabel = new JLabel(PluginServices.getText(this,
 		    "Choose_template"));
-	    templateCBLabel
-		    .setBounds(new Rectangle(95, 21 + 25, 150, 21));
+	    templateCBLabel.setBounds(new Rectangle(95, 21 + 25, 150, 21));
 	    templateCB = new JComboBox();
 	    templateCB.addActionListener(this);
 	    templateCB.setModel(templateCBModel);
@@ -392,8 +391,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 
     private boolean hasCancelled = true;
 
-    private String empresa;
-
     @Override
     public WindowInfo getWindowInfo() {
 
@@ -427,11 +424,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	Object src = e.getSource();
 	if (src == this.getAcceptButton()) {
 	    hasCancelled = false;
-	    if (audasaRB.isSelected()) {
-		empresa = "Audasa";
-	    } else {
-		empresa = "Autoestradas";
-	    }
 	    try {
 		MapSheetGrid newgrid;
 		if (getGridCustomRB().isSelected()) {
@@ -440,16 +432,15 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		} else {
 		    double grid_width;
 		    double grid_height;
-		    if (selectedTemplate.equals(AudasaPreferences.A4_CONSULTAS)
-			    || selectedTemplate
+
+		    String selTmpl = templateCB.getSelectedItem().toString();
+		    if (selTmpl.equals(AudasaPreferences.A4_CONSULTAS)
+			    || selTmpl
 				    .equals(AudasaPreferences.A4_CONSULTAS_LOCALIZADOR)
-			    || selectedTemplate
+			    || selTmpl
 				    .equals(AudasaPreferences.A4_POLICIA_MARGENES)
-			    || selectedTemplate
-				    .equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA)
-		    // || (templateCustom.isSelected() &&
-		    // formatCombobox.getSelectedItem().equals("A4"))
-		    ) {
+			    || selTmpl
+				    .equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA)) {
 			grid_width = AudasaPreferences.VIEW_WIDTH_A4;
 			grid_height = AudasaPreferences.VIEW_HEIGHT_A4;
 		    } else { // any A3 template
@@ -560,10 +551,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	    getScalePanel().repaint();
 	}
 
-	if (src == templateCB) {
-	    selectedTemplate = (templateCB.getSelectedItem().toString());
-	}
-
 	if (src == gridFileButton) {
 	    gridFileChooser.setCurrentDirectory(new File(
 		    AudasaPreferences.GRIDS_PATH));
@@ -583,9 +570,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	if (gridCustom.isSelected()) {
 	    enabled &= gridFile.getText().toLowerCase().endsWith(".grid");
 	}
-	// if (this.templateCustom.isSelected()) {
-	// enabled &= templateFile.getText().toLowerCase().endsWith(".gvt");
-	// }
 	getAcceptButton().setEnabled(enabled);
     }
 
@@ -594,13 +578,13 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
     }
 
     public Layout getMapLayout() {
-	if (selectedTemplate.toLowerCase().endsWith(".gvt")) {
-	    File templateFile = new File(selectedTemplate);
+	String selTmpl = templateCB.getSelectedItem().toString();
+	if (selTmpl.toLowerCase().endsWith(".gvt")) {
+	    File templateFile = new File(selTmpl);
 	    PathGenerator.getInstance().setBasePath(templateFile.getParent());
 	    return getLayoutFromFile(templateFile);
 	} else {
-	    return getLayoutFromFile(AudasaPreferences
-		    .getSelectedFile(selectedTemplate));
+	    return getLayoutFromFile(AudasaPreferences.getSelectedFile(selTmpl));
 	}
     }
 
@@ -619,7 +603,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	    Reader reader = XMLEncodingUtils.getReader(is);
 
 	    XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-	    System.out.println(empresa);
 	    try {
 		XMLEntity xml = new XMLEntity(tag);
 		fixLogosAndLabels(xml);
@@ -682,24 +665,8 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		.getPluginDirectory();
 	String strA = a.getAbsolutePath() + File.separator + "images"
 		+ File.separator;
-	System.out.println(strA);
 
-	if (empresa.equalsIgnoreCase("autoestradas")) {
-	    // AUTOESTRADAS DE GALICIA Concesionaria Xunta Galicia, S.A.
-	    XMLEntity b = find(xml, "m_name", "Fomento.png");
-	    b.remove("m_path");
-	    b.putProperty("m_path", strA + "logo_xunta_map.png");
-
-	    XMLEntity c = find(xml, "m_name", "Audasa.JPG");
-	    c.remove("m_path");
-	    c.putProperty("m_path", strA + "logo_autoestradas_map.png");
-
-	    XMLEntity d = find(xml, "s", "AUTOPISTAS DEL ATL");
-	    d.remove("s");
-	    d.putProperty("s", new String[] { "AUTOESTRADAS DE GALICIA",
-		    "Concesionaria Xunta Galicia, S.A." });
-
-	} else {
+	if (audasaRB.isSelected()) {
 	    // AUTOPISTAS DEL ATLÁNTICO Concesionaria Española, S.A.
 	    XMLEntity b = find(xml, "m_name", "Fomento.png");
 	    b.remove("m_path");
@@ -713,7 +680,20 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	    // d.remove("s");
 	    // d.putProperty("s",
 	    // "AUTOPISTAS DEL ATLÁNTICO\nConcesionaria Española, S.A. ");
+	} else {
+	    // AUTOESTRADAS DE GALICIA Concesionaria Xunta Galicia, S.A.
+	    XMLEntity b = find(xml, "m_name", "Fomento.png");
+	    b.remove("m_path");
+	    b.putProperty("m_path", strA + "logo_xunta_map.png");
 
+	    XMLEntity c = find(xml, "m_name", "Audasa.JPG");
+	    c.remove("m_path");
+	    c.putProperty("m_path", strA + "logo_autoestradas_map.png");
+
+	    XMLEntity d = find(xml, "s", "AUTOPISTAS DEL ATL");
+	    d.remove("s");
+	    d.putProperty("s", new String[] { "AUTOESTRADAS DE GALICIA",
+	    "Concesionaria Xunta Galicia, S.A." });
 	}
 
     }
@@ -779,7 +759,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
     }
 
     public static String getSelectedTemplate() {
-	return selectedTemplate;
+	return templateCB.getSelectedItem().toString();
     }
 
 }
