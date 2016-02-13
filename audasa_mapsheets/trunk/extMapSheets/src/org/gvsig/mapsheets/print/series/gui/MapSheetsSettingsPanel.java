@@ -87,13 +87,11 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
     private JPanel scalePanel = null;
 
     private JPanel templatesPanel;
-    private JRadioButton templateDimensiones;
-    private JRadioButton templateConsultas;
+    private JRadioButton audasaRB;
+    private JRadioButton autoestradasRB;
 
-    private JLabel templateSpecificLabel;
-    private JComboBox templateSpecific;
-
-    private ComboBoxModel templatesPolicia;
+    private JLabel templateCBLabel;
+    private JComboBox templateCB;
 
     private JRadioButton coverView = null;
     private JRadioButton basedOnFeatures = null;
@@ -127,7 +125,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
     }
 
     private void initialize() {
-	selectedTemplate = AudasaPreferences.A3_DIMENSIONES;
 	this.setSize(WIDTH, HEIGHT);
 	this.setLayout(null);
 	this.add(getAreaPanel(), null);
@@ -235,48 +232,36 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		    TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 			    Font.BOLD, 12), new Color(51, 51, 51)));
 
-	    templateDimensiones = new JRadioButton("Audasa");
-	    templateDimensiones.setBounds(new Rectangle(15, 21, 200 - 15 - 15,
+	    audasaRB = new JRadioButton("Audasa");
+	    audasaRB.setBounds(new Rectangle(15, 21, 200 - 15 - 15, 21));
+	    audasaRB.setSelected(true);
+	    audasaRB.addActionListener(this);
+	    autoestradasRB = new JRadioButton("Autoestradas");
+	    autoestradasRB.setBounds(new Rectangle(15 + 200, 21, 200 - 15 - 15,
 		    21));
-	    templateDimensiones.setSelected(true);
-	    templateDimensiones.addActionListener(this);
-	    templateConsultas = new JRadioButton("Autoestradas");
-	    templateConsultas.setBounds(new Rectangle(15 + 200, 21,
-		    200 - 15 - 15, 21));
-	    templateConsultas.setSelected(false);
-	    templateConsultas.addActionListener(this);
-	    String[] plantillas = new String[10];
-	    plantillas[0] = AudasaPreferences.A4_CONSULTAS;
-	    plantillas[1] = AudasaPreferences.A4_CONSULTAS_LOCALIZADOR;
-	    plantillas[2] = AudasaPreferences.A3_CONSULTAS;
-	    plantillas[3] = AudasaPreferences.A3_CONSULTAS_LOCALIZADOR;
+	    autoestradasRB.setSelected(false);
+	    autoestradasRB.addActionListener(this);
 
-	    plantillas[4] = AudasaPreferences.A3_DIMENSIONES;
-	    plantillas[5] = AudasaPreferences.A3_DIMENSIONES_LOCALIZADOR;
-
-	    plantillas[6] = AudasaPreferences.A4_POLICIA_MARGENES;
-	    plantillas[7] = AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA;
-	    plantillas[8] = AudasaPreferences.A3_POLICIA_MARGENES;
-	    plantillas[9] = AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA;
-	    templatesPolicia = new DefaultComboBoxModel(plantillas);
-	    templateSpecificLabel = new JLabel(PluginServices.getText(this,
+	    ComboBoxModel templateCBModel = new DefaultComboBoxModel(
+		    AudasaPreferences.getTemplates());
+	    templateCBLabel = new JLabel(PluginServices.getText(this,
 		    "Choose_template"));
-	    templateSpecificLabel
+	    templateCBLabel
 		    .setBounds(new Rectangle(95, 21 + 25, 150, 21));
-	    templateSpecific = new JComboBox();
-	    templateSpecific.addActionListener(this);
-	    templateSpecific.setModel(templatesPolicia);
-	    templateSpecific.setBounds(new Rectangle(200, 21 + 25, 300, 21));
+	    templateCB = new JComboBox();
+	    templateCB.addActionListener(this);
+	    templateCB.setModel(templateCBModel);
+	    templateCB.setBounds(new Rectangle(200, 21 + 25, 300, 21));
 
-	    templatesPanel.add(templateDimensiones, null);
-	    templatesPanel.add(templateConsultas, null);
+	    templatesPanel.add(audasaRB, null);
+	    templatesPanel.add(autoestradasRB, null);
 
-	    templatesPanel.add(templateSpecificLabel, null);
-	    templatesPanel.add(templateSpecific, null);
+	    templatesPanel.add(templateCBLabel, null);
+	    templatesPanel.add(templateCB, null);
 
 	    ArrayList<JRadioButton> group = new ArrayList<JRadioButton>();
-	    group.add(templateDimensiones);
-	    group.add(templateConsultas);
+	    group.add(audasaRB);
+	    group.add(autoestradasRB);
 
 	    MapSheetsUtils.joinRadioButtons(group);
 	}
@@ -409,8 +394,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 
     private String empresa;
 
-    private static String selectedTemplate = AudasaPreferences.A3_DIMENSIONES;
-
     @Override
     public WindowInfo getWindowInfo() {
 
@@ -444,7 +427,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	Object src = e.getSource();
 	if (src == this.getAcceptButton()) {
 	    hasCancelled = false;
-	    if (templateDimensiones.isSelected()) {
+	    if (audasaRB.isSelected()) {
 		empresa = "Audasa";
 	    } else {
 		empresa = "Autoestradas";
@@ -577,8 +560,8 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	    getScalePanel().repaint();
 	}
 
-	if (src == templateSpecific) {
-	    selectedTemplate = (templateSpecific.getSelectedItem().toString());
+	if (src == templateCB) {
+	    selectedTemplate = (templateCB.getSelectedItem().toString());
 	}
 
 	if (src == gridFileButton) {
