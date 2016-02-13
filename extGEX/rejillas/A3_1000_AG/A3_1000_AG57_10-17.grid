@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="org.gvsig.mapsheets.print.series.fmap.MapSheetGrid"/>
+    <property key="name" value="Rejilla - A3_1000_AG57_10-17"/>
+    <property key="msid" value="1454676775214"/>
+    <property key="srs" value="EPSG:25829"/>
+    <xml-tag>
+        <xml-tag>
+            <property key="name" value="CODE"/>
+            <property key="type" value="12"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="0"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="name" value="SCALE"/>
+            <property key="type" value="8"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="6"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="name" value="DIMX_CM"/>
+            <property key="type" value="8"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="6"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="name" value="DIMY_CM"/>
+            <property key="type" value="8"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="6"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="name" value="OVERLAP"/>
+            <property key="type" value="8"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="6"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="name" value="ROT_RAD"/>
+            <property key="type" value="8"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="6"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="name" value="MUNICIPIO"/>
+            <property key="type" value="12"/>
+            <property key="len" value="10"/>
+            <property key="dec" value="0"/>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="extent" value="518327.25817302347;4663017.699709886;4783.259520375985;3911.2828725064173"/>
+        <xml-tag>
+            <xml-tag>
+                <property key="name" value="SCALE"/>
+                <property key="type" value="8"/>
+                <property key="default" value="1.0"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="name" value="DIMX_CM"/>
+                <property key="type" value="8"/>
+                <property key="default" value="1.0"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="name" value="MUNICIPIO"/>
+                <property key="type" value="-1"/>
+                <property key="default" value=""/>
+            </xml-tag>
+            <xml-tag>
+                <property key="name" value="ROT_RAD"/>
+                <property key="type" value="8"/>
+                <property key="default" value="0.0"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="name" value="DIMY_CM"/>
+                <property key="type" value="8"/>
+                <property key="default" value="1.0"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="name" value="OVERLAP"/>
+                <property key="type" value="8"/>
+                <property key="default" value="10.0"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="name" value="CODE"/>
+                <property key="type" value="-1"/>
+                <property key="default" value=""/>
+            </xml-tag>
+        </xml-tag>
+        <xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="518327.25817302347"/>
+                <property key="bbox_y" value="4663277.699709886"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="40 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="518697.25817302347"/>
+                <property key="bbox_y" value="4663277.699709886"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="41 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="518697.25817302347"/>
+                <property key="bbox_y" value="4663017.699709886"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="42 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519067.25817302347"/>
+                <property key="bbox_y" value="4663209.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="43 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519108.6834510678"/>
+                <property key="bbox_y" value="4663469.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="44 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519187.0216722158"/>
+                <property key="bbox_y" value="4663729.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="45 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519141.8481875997"/>
+                <property key="bbox_y" value="4663989.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="46 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519115.36707922653"/>
+                <property key="bbox_y" value="4664249.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="47 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519115.36707922653"/>
+                <property key="bbox_y" value="4664509.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="48 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519187.0216722158"/>
+                <property key="bbox_y" value="4664769.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="49 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519301.62735399534"/>
+                <property key="bbox_y" value="4665029.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="50 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519429.5188147896"/>
+                <property key="bbox_y" value="4665289.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="51 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519429.5188147896"/>
+                <property key="bbox_y" value="4665549.103121522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="52 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519799.5188147896"/>
+                <property key="bbox_y" value="4665598.1938162055"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="53 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="519799.5188147896"/>
+                <property key="bbox_y" value="4665858.1938162055"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="54 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="520169.5188147896"/>
+                <property key="bbox_y" value="4665731.180515237"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="55 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="520169.5188147896"/>
+                <property key="bbox_y" value="4665991.180515237"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="56 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="520539.5188147896"/>
+                <property key="bbox_y" value="4666054.89"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="57 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="520705.51769339945"/>
+                <property key="bbox_y" value="4666314.89"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="58 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="520890.51769339945"/>
+                <property key="bbox_y" value="4666574.89"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="59 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="521260.51769339945"/>
+                <property key="bbox_y" value="4666633.816828528"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="60 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="521630.51769339945"/>
+                <property key="bbox_y" value="4666633.816828528"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="61 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="522000.51769339945"/>
+                <property key="bbox_y" value="4666668.982582392"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="62 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="522370.51769339945"/>
+                <property key="bbox_y" value="4666574.89"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="63 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+            <xml-tag>
+                <property key="idsym" value="0"/>
+                <property key="bbox_x" value="522740.51769339945"/>
+                <property key="bbox_y" value="4666609.641375522"/>
+                <property key="bbox_w" value="370.0"/>
+                <property key="bbox_h" value="260.0"/>
+                <property key="att_n" value="7"/>
+                <property key="att_types" value="-1,8,8,8,8,8,-1"/>
+                <property key="att_vals" value="64 (AG-57)_SEP_1000.0_SEP_37.5_SEP_26.5_SEP_0.0_SEP_0.0_SEP_"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
