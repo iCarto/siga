@@ -680,7 +680,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.4"/>
+        <property key="x" value="27.3"/>
         <property key="y" value="19.58"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.2"/>
@@ -710,7 +710,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.88"/>
+        <property key="x" value="27.78"/>
         <property key="y" value="19.58"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.2"/>

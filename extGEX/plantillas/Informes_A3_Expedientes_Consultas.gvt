@@ -791,7 +791,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="38.7"/>
+        <property key="x" value="38.6"/>
         <property key="y" value="28.28"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.2"/>
@@ -821,7 +821,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="39.18"/>
+        <property key="x" value="39.08"/>
         <property key="y" value="28.28"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.2"/>

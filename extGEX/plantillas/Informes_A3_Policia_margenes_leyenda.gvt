@@ -391,7 +391,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="34.2"/>
+        <property key="x" value="33.9"/>
         <property key="y" value="27.9"/>
         <property key="w" value="1.8"/>
         <property key="h" value="0.7"/>
@@ -421,7 +421,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="34.87"/>
+        <property key="x" value="34.6"/>
         <property key="y" value="27.9"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.7"/>
@@ -556,7 +556,7 @@
         <property key="num" value="7"/>
         <property key="s" value="AUTOPISTAS DEL ATLÁNTICO  ,Concesionaria Española\, S.A."/>
         <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
+        <property key="m_pos" value="1"/>
         <property key="fontName" value="Arial Negrita"/>
         <property key="fontStyle" value="1"/>
         <property key="textColor" value="0,0,0,255"/>
