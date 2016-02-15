@@ -75,21 +75,21 @@
 				<text><![CDATA[Panel complementario]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="125" y="25" width="45" height="15" uuid="b9dbdb6a-43fb-4607-958e-81fab1262956"/>
+				<reportElement x="115" y="25" width="65" height="15" uuid="b9dbdb6a-43fb-4607-958e-81fab1262956"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipo_senhal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="175" y="25" width="35" height="15" forecolor="#666666" uuid="edcca81a-b14c-4c6b-8fc0-ad3791276146"/>
+				<reportElement x="185" y="25" width="25" height="15" forecolor="#666666" uuid="edcca81a-b14c-4c6b-8fc0-ad3791276146"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
 				</textElement>
-				<text><![CDATA[Código:]]></text>
+				<text><![CDATA[Cód:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="90" y="25" width="30" height="15" forecolor="#666666" uuid="3dee82d9-aa5a-4382-a0ed-06a8e36dbc96"/>
+				<reportElement x="90" y="25" width="25" height="15" forecolor="#666666" uuid="3dee82d9-aa5a-4382-a0ed-06a8e36dbc96"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
 				</textElement>
@@ -103,7 +103,7 @@
 				<text><![CDATA[Código:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="215" y="25" width="45" height="15" uuid="0260f8c2-ffe5-4a5f-860a-c4899c022d4a"/>
+				<reportElement x="210" y="25" width="50" height="15" uuid="0260f8c2-ffe5-4a5f-860a-c4899c022d4a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial"/>
 				</textElement>
@@ -409,7 +409,7 @@
 				<graphicElement>
 					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#AAAAAA"/>
 				</graphicElement>
-				<imageExpression><![CDATA[$P{IMAGE_PATH} + ($F{tipo_senhal}.equals("Cartel") ? ($F{codigo_senhal} == null || $F{codigo_senhal}.equals("") || $F{codigo_senhal}.equals("Otro") ? "0_cartel.png" : $F{codigo_senhal} + ".gif") : ($F{codigo_senhal} == null || $F{codigo_senhal}.equals("") || $F{codigo_senhal}.equals("Otro") ? "0_placa.png" : $F{codigo_senhal} + ".gif"))]]></imageExpression>
+				<imageExpression><![CDATA[$P{IMAGE_PATH} + ($F{tipo_senhal}.equals("Panel direccional") ? "Panel_direccional_azul.png" : ($F{tipo_senhal}.equals("Contenido fijo") ?  ($F{codigo_senhal} == null || $F{codigo_senhal}.equals("") || $F{codigo_senhal}.equals("Otro ") ? "0_cartel.png" : $F{codigo_senhal} + ".png") : ($F{tipo_senhal}.equals("Cartel") ? ($F{codigo_senhal} == null || $F{codigo_senhal}.equals("") || $F{codigo_senhal}.equals("Otro") ? "0_cartel.png" : $F{id_senhal_vertical} + ".png") : "0_cartel.png") ) )]]></imageExpression>
 			</image>
 			<rectangle>
 				<reportElement mode="Transparent" x="5" y="5" width="75" height="75" uuid="aed0c265-9404-4a49-9bfe-f337777006b8"/>
