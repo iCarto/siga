@@ -2,6 +2,7 @@
 <LAYER alias="senhalizacion_vertical">
 	<FIELD>
 		<FIELDNAME>tipo_senhal</FIELDNAME>
+		<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
 		<DOMAINREADER>
 			<DRTYPE>db</DRTYPE>
 			<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
@@ -19,8 +20,19 @@
 			<DRDBTABLE>codigo_senhal</DRDBTABLE>
 			<DRDBCOLUMNALIAS>codigo_senhal</DRDBCOLUMNALIAS>
 			<DRDBCOLUMNVALUE>codigo_senhal</DRDBCOLUMNVALUE>
+			<DRDBFOREIGNKEY>tipo_senhal</DRDBFOREIGNKEY>
 			<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
 		</DOMAINREADER>
+		<ENABLEIF>
+			<CONDITION>
+				<COMPONENT>tipo_senhal</COMPONENT>
+				<VALUE>Cartel</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>tipo_senhal</COMPONENT>
+				<VALUE>Contenido fijo</VALUE>
+			</CONDITION>
+		</ENABLEIF>	
 	</FIELD>
 	
 	<FIELD>

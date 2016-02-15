@@ -45,8 +45,6 @@ public class SenhalesAlgorithm {
 	String path = emptyImagePath;
 	if (tipo.equals("Panel direccional")) {
 	    path = "Panel_direccional_azul.png";
-	    // el código no tiene sentido por tanto habría que ponerlo en blanco
-	    // o desactivarlo
 	} else if (tipo.equals("Contenido fijo")) {
 	    if (codigo.isEmpty() || (codigo.equals("Otro"))) {
 		path = emptyImagePath;
@@ -60,9 +58,6 @@ public class SenhalesAlgorithm {
 		path = "0_cartel.png";
 	    }
 	} else {
-	    // esto no puede pasar
-	    // hay que poner el campo como obligatorio o quitar la opción de
-	    // blanco
 	    path = "0_cartel.png";
 	}
 	return folderPath + path;

@@ -13,6 +13,7 @@ public class SenhalizacionVerticalSenhalesSubForm extends GIASubForm {
 
     public SenhalizacionVerticalSenhalesSubForm() {
 	super(TABLENAME);
+	addChained("codigo_senhal", "tipo_senhal");
 	addChained("nombre_senhal", "codigo_senhal");
 
 	String folderPath = SymbologyFactory.SymbolLibraryPath + File.separator
