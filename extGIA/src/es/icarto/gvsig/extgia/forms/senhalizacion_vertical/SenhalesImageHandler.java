@@ -27,9 +27,10 @@ public class SenhalesImageHandler implements ImageHandler, KeyListener,
     private final JTextField idSenhal;
 
     public SenhalesImageHandler(String imgComp, String tipoName,
-	    String codigoName, String folderPath, IValidatableForm form) {
+	    String codigoName, IValidatableForm form) {
 	this.imgComp = imgComp;
-	this.alg = new SenhalesAlgorithm(folderPath, new Dimension(115, 115));
+
+	this.alg = new SenhalesAlgorithm(new Dimension(115, 115));
 	this.form = form;
 	this.image = (ImageComponent) form.getFormPanel().getComponentByName(
 		imgComp);

@@ -13,6 +13,7 @@ import org.gvsig.symbology.fmap.symbols.PictureMarkerSymbol;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.instruction.FieldNotFoundException;
+import com.hardcode.gdbms.engine.values.IntValue;
 import com.hardcode.gdbms.engine.values.StringValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.messages.NotificationManager;
@@ -39,7 +40,7 @@ public class ApplySignalSimbology {
 
     public ApplySignalSimbology(FLyrVect postes, FLyrVect signals) {
 	this.senhales = signals;
-	this.alg = new SenhalesAlgorithm("", null);
+	this.alg = new SenhalesAlgorithm(null);
 	applySymbology(postes);
     }
 
@@ -140,7 +141,7 @@ public class ApplySignalSimbology {
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
 	String idSenhal = stringValue(idSenhalValue);
-	String file = this.alg.getPath(tipo, codigo, idSenhal);
+	String file = this.alg.getFilename(tipo, codigo, idSenhal);
 	int size = this.alg.getSize(tipo, codigo);
 
 	PictureMarkerSymbol symbol = new PictureMarkerSymbol();
@@ -170,9 +171,10 @@ public class ApplySignalSimbology {
     private String stringValue(Value v) {
 	if (v instanceof StringValue) {
 	    return v.toString().trim();
+	} else if (v instanceof IntValue) {
+	    return v.toString();
 	}
 	return "";
 
     }
-
 }

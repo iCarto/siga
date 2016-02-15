@@ -59,7 +59,7 @@ public class SenhalizacionVerticalForm extends AbstractFormWithLocationWidgets {
 	addTableHandler(new SenhalesTableHandler(
 		"senhalizacion_vertical_senhales", getWidgets(),
 		getElementID(), senhalesColNames, senhalesColAlias, new int[] {
-			20, 45, 45, 145, 45, 40, 30 }, this,
+			20, 55, 45, 135, 45, 40, 30 }, this,
 		    SenhalizacionVerticalSenhalesSubForm.class));
     }
 
