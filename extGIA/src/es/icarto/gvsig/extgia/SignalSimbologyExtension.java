@@ -4,6 +4,9 @@ import java.awt.Component;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -11,10 +14,12 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
-import es.icarto.gvsig.extgia.utils.ApplySignalSimbology;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
 public class SignalSimbologyExtension extends Extension {
+
+    private static final Logger logger = Logger
+	    .getLogger(SignalSimbologyExtension.class);
 
     @Override
     public void initialize() {
@@ -31,7 +36,22 @@ public class SignalSimbologyExtension extends Extension {
 	    showWarning("La capas 'Senhalizacion_Vertical' y 'Senhales' deben estar cargadas en el TOC");
 	    return;
 	}
-	new ApplySignalSimbology(postes, signals);
+
+	try {
+	    // Si se intentan cargar más de 1881 pictogramas se produce un Java
+	    // Heap Space
+	    long rowCount = signals.getRecordset().getRowCount();
+	    if (rowCount > 1800) {
+		showWarning("No pueden mostrarse más de 1800 pictogramas de señales");
+		return;
+	    }
+	} catch (ReadDriverException e) {
+	    logger.error(e.getStackTrace(), e);
+	}
+
+	SignalSimbologyDialog dialog = new SignalSimbologyDialog(postes,
+		signals);
+	dialog.openDialog();
     }
 
     private void showWarning(String msg) {

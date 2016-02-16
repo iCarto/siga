@@ -18,6 +18,8 @@ import com.hardcode.gdbms.engine.values.StringValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
+import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.MultiLayerMarkerSymbol;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -36,17 +38,27 @@ public class ApplySignalSimbology {
 	    .getLogger(ApplySignalSimbology.class);
 
     private final FLyrVect senhales;
+    private final FLyrVect postes;
     private final SenhalesAlgorithm alg;
+    private int unitIdx;
+    private int unitRS = CartographicSupport.WORLD;
 
     public ApplySignalSimbology(FLyrVect postes, FLyrVect signals) {
 	this.senhales = signals;
+	this.postes = postes;
+
 	this.alg = new SenhalesAlgorithm(null);
-	applySymbology(postes);
+	String[] distanceNames = MapContext.getDistanceNames();
+	for (int i = 0; i < distanceNames.length; i++) {
+	    if (distanceNames[i].equals("Metros")) {
+		unitIdx = i;
+	    }
+	}
     }
 
-    private void applySymbology(FLyrVect layer) {
+    public void applySymbology() {
 	try {
-	    applyLegend(layer);
+	    applyLegend(postes);
 	} catch (LegendLayerException e) {
 	    logger.error(e.getStackTrace(), e);
 	} catch (ReadDriverException e) {
@@ -135,9 +147,11 @@ public class ApplySignalSimbology {
 	}
     }
 
+    private int counter = 0;
+
     private ISymbol setPictureSymbol(int offset, Value tipoValue,
 	    Value codigoValue, Value idSenhalValue) {
-
+	System.out.println(counter++);
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
 	String idSenhal = stringValue(idSenhalValue);
@@ -159,7 +173,8 @@ public class ApplySignalSimbology {
 	symbol.setOffset(offset == 0 ? NOFFSET : new Point(0, size * offset));
 	symbol.setSize(size);
 
-	// symbol.setUnit(unitIndex);
+	symbol.setUnit(unitIdx);
+	symbol.setReferenceSystem(unitRS);
 	// symbol.setRotation(r);
 	// Por defecto está a true
 	// symbol.setIsShapeVisible(isShapeVisible);
@@ -176,5 +191,21 @@ public class ApplySignalSimbology {
 	}
 	return "";
 
+    }
+
+    public void setUnits(int selectedUnitIndex) {
+	unitIdx = selectedUnitIndex;
+    }
+
+    public void setUnitReferenceSystem(int unitRS) {
+	this.unitRS = unitRS;
+    }
+
+    public void setSize(int parseInt) {
+	this.alg.setPictureSize(parseInt);
+    }
+
+    public void setCartelSize(int parseInt) {
+	this.alg.setPictureSize(parseInt);
     }
 }

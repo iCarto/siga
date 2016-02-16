@@ -11,8 +11,8 @@ import es.icarto.gvsig.commons.utils.ImageUtils;
 
 public class SenhalesAlgorithm {
 
-    private static final int PICTURE_SIZE = 20;
-    private static final int CARTEL_PICTURE_SIZE = 50;
+    public static final int PICTURE_SIZE = 20;
+    public static final int CARTEL_PICTURE_SIZE = 50;
 
     private final Dimension boundary;
     private final String folderPath;
@@ -20,6 +20,9 @@ public class SenhalesAlgorithm {
     private final String extension = ".png";
     private final String emptyImagePath;
     private final String emptyImageFile;
+
+    private int pictureSize = PICTURE_SIZE;
+    private int cartelSize = CARTEL_PICTURE_SIZE;
 
     public SenhalesAlgorithm(Dimension boundary) {
 	this.boundary = boundary;
@@ -52,9 +55,9 @@ public class SenhalesAlgorithm {
 
     public int getSize(String tipo, String codigo) {
 	if (tipo.equals("Cartel")) {
-	    return CARTEL_PICTURE_SIZE;
+	    return cartelSize;
 	}
-	return PICTURE_SIZE;
+	return pictureSize;
     }
 
     public String getFilename(String tipo, String codigo, String idSenhal) {
@@ -77,6 +80,14 @@ public class SenhalesAlgorithm {
 	    path = "0_cartel.png";
 	}
 	return path;
+    }
+
+    public void setPictureSize(int pictureSize) {
+	this.pictureSize = pictureSize;
+    }
+
+    public void setCartelSize(int cartelSize) {
+	this.cartelSize = cartelSize;
     }
 
 }
