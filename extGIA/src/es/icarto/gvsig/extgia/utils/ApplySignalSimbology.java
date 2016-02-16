@@ -53,7 +53,7 @@ public class ApplySignalSimbology {
 	this.alg = new SenhalesAlgorithm(null);
 	String[] distanceNames = MapContext.getDistanceNames();
 	for (int i = 0; i < distanceNames.length; i++) {
-	    if (distanceNames[i].equals("Metros")) {
+	    if (distanceNames[i].equals("Centimetros")) {
 		unitIdx = i;
 	    }
 	}
@@ -88,7 +88,7 @@ public class ApplySignalSimbology {
     }
 
     private void applyLegend(FLyrVect poste) throws ReadDriverException,
-    FieldNotFoundException, LegendLayerException {
+	    FieldNotFoundException, LegendLayerException {
 
 	final String fieldName = "id_elemento_senhalizacion";
 	final String[] classifyingFieldNames = new String[] { fieldName };
