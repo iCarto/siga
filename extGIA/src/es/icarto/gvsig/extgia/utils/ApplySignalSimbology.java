@@ -20,11 +20,14 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
+import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.MultiLayerMarkerSymbol;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
+import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 
 import es.icarto.gvsig.commons.utils.FileNameUtils;
@@ -46,13 +49,26 @@ public class ApplySignalSimbology {
     public ApplySignalSimbology(FLyrVect postes, FLyrVect signals) {
 	this.senhales = signals;
 	this.postes = postes;
-
+	setSimpleLegend();
 	this.alg = new SenhalesAlgorithm(null);
 	String[] distanceNames = MapContext.getDistanceNames();
 	for (int i = 0; i < distanceNames.length; i++) {
 	    if (distanceNames[i].equals("Metros")) {
 		unitIdx = i;
 	    }
+	}
+    }
+
+    // FLayer mantiene durante el proceso de cambio de leyenda referencias a la
+    // antigua leyenda. Si la antigua leyenda ocupa mucha memoria y la nueva
+    // también se puede producir un OutOfMemory
+    private void setSimpleLegend() {
+	IVectorLegend simpleLegend = LegendFactory
+		.createSingleSymbolLegend(FShape.POINT);
+	try {
+	    this.postes.setLegend(simpleLegend);
+	} catch (LegendLayerException e) {
+	    logger.error(e.getStackTrace(), e);
 	}
     }
 
