@@ -135,205 +135,245 @@ import com.iver.utiles.swing.threads.Cancellable;
  * PictureMarkerSymbol allows to use an image file as a definition to be painted
  * instead of a marker symbol.
  *
- * @author   jaume dominguez faus - jaume.dominguez@iver.es
+ * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
 public class PictureMarkerSymbol extends AbstractMarkerSymbol {
-	private static final float SELECTION_OPACITY_FACTOR = .3F;
-//	transient private Image img;
-	private String imagePath;
-	private boolean selected;
-	private PictureMarkerSymbol selectionSym;
-//	transient private Image selImg;
-	private String selImagePath;
+    private static final float SELECTION_OPACITY_FACTOR = .3F;
+    // transient private Image img;
+    private String imagePath;
+    private boolean selected;
+    private PictureMarkerSymbol selectionSym;
+    // transient private Image selImg;
+    private String selImagePath;
 
-	private BackgroundFileStyle bgImage;
-	private BackgroundFileStyle bgSelImage;
-	private PathGenerator pathGenerator=PathGenerator.getInstance();
+    private BackgroundFileStyle bgImage;
+    private BackgroundFileStyle bgSelImage;
+    private final PathGenerator pathGenerator = PathGenerator.getInstance();
 
-	/**
-	 * Constructor method
-	 */
-	public PictureMarkerSymbol() {
-		super();
+    /**
+     * Constructor method
+     */
+    public PictureMarkerSymbol() {
+	super();
+    }
+
+    /**
+     * Constructor method
+     * 
+     * @param imageURL
+     *            , URL of the normal image
+     * @param selImageURL
+     *            , URL of the image when it is selected in the map
+     * @throws IOException
+     */
+    public PictureMarkerSymbol(URL imageURL, URL selImageURL)
+	    throws IOException {
+	setImage(imageURL);
+	if (selImageURL != null) {
+	    setSelImage(selImageURL);
+	} else {
+	    setSelImage(imageURL);
 	}
-	/**
-	 * Constructor method
-	 * @param imageURL, URL of the normal image
-	 * @param selImageURL, URL of the image when it is selected in the map
-	 * @throws IOException
-	 */
-	public PictureMarkerSymbol(URL imageURL, URL selImageURL) throws IOException {
-		setImage(imageURL);
-		if (selImageURL!=null)
-			setSelImage(selImageURL);
-		else setSelImage(imageURL);
-		setSize(bgImage.getBounds().getHeight());
-		setUnit(-1);
-		
+	setSize(bgImage.getBounds().getHeight());
+	setUnit(-1);
+
+    }
+
+    /**
+     * Sets the file for the image to be used as a marker symbol
+     * 
+     * @param imageFile
+     *            , File
+     * @throws IOException
+     */
+    public void setImage(URL imageUrl) throws IOException {
+
+	bgImage = BackgroundFileStyle.createStyleByURL(imageUrl);
+	imagePath = imageUrl.toString();
+    }
+
+    /**
+     * Sets the file for the image to be used as a marker symbol (when it is
+     * selected in the map)
+     * 
+     * @param imageFile
+     *            , File
+     * @throws IOException
+     */
+    public void setSelImage(URL imageFileUrl) throws IOException {
+	selImagePath = imageFileUrl.toString();
+	if (selImagePath.equals(imagePath)) {
+	    bgSelImage = bgImage;
+	} else {
+	    bgSelImage = BackgroundFileStyle.createStyleByURL(imageFileUrl);
 	}
+    }
 
-
-	/**
-	 * Sets the file for the image to be used as a marker symbol
-	 * @param imageFile, File
-	 * @throws IOException
-	 */
-	public void setImage(URL imageUrl) throws IOException{
-
-		bgImage = BackgroundFileStyle.createStyleByURL(imageUrl);
-		imagePath = imageUrl.toString();
+    @Override
+    public ISymbol getSymbolForSelection() {
+	if (selectionSym == null) {
+	    selectionSym = (PictureMarkerSymbol) SymbologyFactory
+		    .createSymbolFromXML(getXMLEntity(), getDescription());
+	    selectionSym.selected = true;
+	    selectionSym.selectionSym = selectionSym; // avoid too much lazy
+						      // creations
 	}
+	return selectionSym;
+    }
 
-	/**
-	 * Sets the file for the image to be used as a  marker symbol (when it is selected in the map)
-	 * @param imageFile, File
-	 * @throws IOException
-	 */
-	public void setSelImage(URL imageFileUrl) throws IOException{
+    @Override
+    public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp,
+	    Cancellable cancel) {
+	FPoint2D p = (FPoint2D) shp;
+	double x, y;
+	int size = (int) Math.round(getSize());
+	double halfSize = getSize() / 2;
+	x = p.getX() - halfSize;
+	y = p.getY() - halfSize;
+	int xOffset = (int) getOffset().getX();
+	int yOffset = (int) getOffset().getY();
 
-		bgSelImage= BackgroundFileStyle.createStyleByURL(imageFileUrl);
-		selImagePath =  imageFileUrl.toString();
-	}
-
-
-	public ISymbol getSymbolForSelection() {
-		if (selectionSym == null) {
-			selectionSym = (PictureMarkerSymbol) SymbologyFactory.createSymbolFromXML(getXMLEntity(), getDescription());
-			selectionSym.selected=true;
-			selectionSym.selectionSym = selectionSym; // avoid too much lazy creations
-		}
-		return selectionSym;
-	}
-
-	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
-		FPoint2D p = (FPoint2D) shp;
-		double x, y;
-		int size = (int) Math.round(getSize());
-		double halfSize = getSize()/2;
-		x = p.getX() - halfSize;
-		y = p.getY() - halfSize;
-		int xOffset = (int) getOffset().getX();
-		int yOffset = (int) getOffset().getY();
-
-		if (size > 0) {
-			BackgroundFileStyle bg = (!selected) ? bgImage : bgSelImage ;
-			Rectangle rect = new Rectangle(	size, size );
-			g.translate(x+xOffset, y+yOffset);
-			g.rotate(getRotation(), halfSize, halfSize);
-			if(bg!=null){
-				try {
-					bg.drawInsideRectangle(g, rect);
-				} catch (SymbolDrawingException e) {
-					Logger.getLogger(getClass()).warn(Messages.getString("label_style_could_not_be_painted")+": "+imagePath, e);
-				}
-			} else {
-				Logger.getLogger(getClass()).warn(Messages.getString("label_style_could_not_be_painted")+": "+imagePath);
-			}
-			g.rotate(-getRotation(), halfSize, halfSize);
-			g.translate(-(x+xOffset), -(y+yOffset));
-
-		}
-
-	}
-
-	public XMLEntity getXMLEntity() {
-		XMLEntity xml = new XMLEntity();
-		xml.putProperty("className", getClassName());
-		xml.putProperty("isShapeVisible", isShapeVisible());
-		xml.putProperty("desc", getDescription());
-		xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
-		xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
-		xml.putProperty("size", getSize());
-		xml.putProperty("offsetX", getOffset().getX());
-		xml.putProperty("offsetY", getOffset().getY());
-		xml.putProperty("rotation", getRotation());
-
-		// measure unit
-		xml.putProperty("unit", getUnit());
-
-		// reference system
-		xml.putProperty("referenceSystem", getReferenceSystem());
-
-		return xml;
-	}
-
-	public String getClassName() {
-		return getClass().getName();
-	}
-
-	public void setXMLEntity(XMLEntity xml) {
-		setDescription(xml.getStringProperty("desc"));
-		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
-		imagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("imagePath"));
-		selImagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("selImagePath"));
-		setSize(xml.getDoubleProperty("size"));
-		double offsetX = 0.0;
-		double offsetY = 0.0;
-		if(xml.contains("offsetX")){
-			offsetX = xml.getDoubleProperty("offsetX");
-		}
-		if(xml.contains("offsetY")){
-			offsetY = xml.getDoubleProperty("offsetY");
-		}
-		setOffset(new Point2D.Double(offsetX,offsetY));
-		setReferenceSystem(xml.getIntProperty("referenceSystem"));
-		setUnit(xml.getIntProperty("unit"));
-		if (xml.contains("rotation"))
-			setRotation(xml.getDoubleProperty("rotation"));
-		File rootDir = new File(SymbologyFactory.SymbolLibraryPath);
+	if (size > 0) {
+	    BackgroundFileStyle bg = (!selected) ? bgImage : bgSelImage;
+	    Rectangle rect = new Rectangle(size, size);
+	    g.translate(x + xOffset, y + yOffset);
+	    g.rotate(getRotation(), halfSize, halfSize);
+	    if (bg != null) {
 		try {
-			try{
-				setImage(new URL(imagePath));
-			} catch (MalformedURLException e) {
-				try{
-					setImage(new URL(pathGenerator.getAbsoluteURLPath(imagePath)));
-				} catch (MalformedURLException e1) {
-					setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
-				}
-			}
-		} catch (MalformedURLException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url")+": "+imagePath);
-		} catch (IOException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url")+": "+imagePath);
+		    bg.drawInsideRectangle(g, rect);
+		} catch (SymbolDrawingException e) {
+		    Logger.getLogger(getClass())
+			    .warn(Messages.getString("label_style_could_not_be_painted")
+				    + ": " + imagePath, e);
 		}
+	    } else {
+		Logger.getLogger(getClass()).warn(
+			Messages.getString("label_style_could_not_be_painted")
+				+ ": " + imagePath);
+	    }
+	    g.rotate(-getRotation(), halfSize, halfSize);
+	    g.translate(-(x + xOffset), -(y + yOffset));
+
+	}
+
+    }
+
+    @Override
+    public XMLEntity getXMLEntity() {
+	XMLEntity xml = new XMLEntity();
+	xml.putProperty("className", getClassName());
+	xml.putProperty("isShapeVisible", isShapeVisible());
+	xml.putProperty("desc", getDescription());
+	xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
+	xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
+	xml.putProperty("size", getSize());
+	xml.putProperty("offsetX", getOffset().getX());
+	xml.putProperty("offsetY", getOffset().getY());
+	xml.putProperty("rotation", getRotation());
+
+	// measure unit
+	xml.putProperty("unit", getUnit());
+
+	// reference system
+	xml.putProperty("referenceSystem", getReferenceSystem());
+
+	return xml;
+    }
+
+    @Override
+    public String getClassName() {
+	return getClass().getName();
+    }
+
+    @Override
+    public void setXMLEntity(XMLEntity xml) {
+	setDescription(xml.getStringProperty("desc"));
+	setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
+	imagePath = pathGenerator.getAbsoluteURLPath(xml
+		.getStringProperty("imagePath"));
+	selImagePath = pathGenerator.getAbsoluteURLPath(xml
+		.getStringProperty("selImagePath"));
+	setSize(xml.getDoubleProperty("size"));
+	double offsetX = 0.0;
+	double offsetY = 0.0;
+	if (xml.contains("offsetX")) {
+	    offsetX = xml.getDoubleProperty("offsetX");
+	}
+	if (xml.contains("offsetY")) {
+	    offsetY = xml.getDoubleProperty("offsetY");
+	}
+	setOffset(new Point2D.Double(offsetX, offsetY));
+	setReferenceSystem(xml.getIntProperty("referenceSystem"));
+	setUnit(xml.getIntProperty("unit"));
+	if (xml.contains("rotation")) {
+	    setRotation(xml.getDoubleProperty("rotation"));
+	}
+	File rootDir = new File(SymbologyFactory.SymbolLibraryPath);
+	try {
+	    try {
+		setImage(new URL(imagePath));
+	    } catch (MalformedURLException e) {
 		try {
-			try{
-				setSelImage(new URL(selImagePath));
-			} catch (MalformedURLException e) {
-				try{
-					setSelImage(new URL(pathGenerator.getAbsoluteURLPath(selImagePath)));
-				} catch (MalformedURLException e1) {
-					setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
-				}
-			}
-		} catch (MalformedURLException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url")+": "+selImagePath);
-		} catch (IOException e) {
-			Logger.getLogger(getClass()).error(Messages.getString("invalid_url")+": "+selImagePath);
+		    setImage(new URL(
+			    pathGenerator.getAbsoluteURLPath(imagePath)));
+		} catch (MalformedURLException e1) {
+		    setImage(new URL("file://" + rootDir.getAbsolutePath()
+			    + File.separator + imagePath));
 		}
-
-
+	    }
+	} catch (MalformedURLException e) {
+	    Logger.getLogger(getClass()).error(
+		    Messages.getString("invalid_url") + ": " + imagePath);
+	} catch (IOException e) {
+	    Logger.getLogger(getClass()).error(
+		    Messages.getString("invalid_url") + ": " + imagePath);
+	}
+	try {
+	    try {
+		setSelImage(new URL(selImagePath));
+	    } catch (MalformedURLException e) {
+		try {
+		    setSelImage(new URL(
+			    pathGenerator.getAbsoluteURLPath(selImagePath)));
+		} catch (MalformedURLException e1) {
+		    setSelImage(new URL("file://" + rootDir.getAbsolutePath()
+			    + File.separator + selImagePath));
+		}
+	    }
+	} catch (MalformedURLException e) {
+	    Logger.getLogger(getClass()).error(
+		    Messages.getString("invalid_url") + ": " + selImagePath);
+	} catch (IOException e) {
+	    Logger.getLogger(getClass()).error(
+		    Messages.getString("invalid_url") + ": " + selImagePath);
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape)
-	throws ReadDriverException {
-		// TODO Implement it
-		throw new Error("Not yet implemented!");
+    }
 
-	}
-	/**
-	 * Returns the path of the image that is used as a marker symbol
-	 * @return imagePath,String
-	 */
-	public String getImagePath() {
-		return imagePath;
-	}
-	/**
-	 * Returns the path of the image that is used as a marker symbol (when it is selected in the map)
-	 * @return selimagePath,String
-	 */
-	public String getSelImagePath() {
-		return selImagePath;
-	}
+    public void print(Graphics2D g, AffineTransform at, FShape shape)
+	    throws ReadDriverException {
+	// TODO Implement it
+	throw new Error("Not yet implemented!");
+
+    }
+
+    /**
+     * Returns the path of the image that is used as a marker symbol
+     * 
+     * @return imagePath,String
+     */
+    public String getImagePath() {
+	return imagePath;
+    }
+
+    /**
+     * Returns the path of the image that is used as a marker symbol (when it is
+     * selected in the map)
+     * 
+     * @return selimagePath,String
+     */
+    public String getSelImagePath() {
+	return selImagePath;
+    }
 
 }
