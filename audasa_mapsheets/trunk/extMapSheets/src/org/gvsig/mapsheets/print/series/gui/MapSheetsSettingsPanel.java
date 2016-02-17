@@ -248,7 +248,6 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		    "Choose_template"));
 	    templateCBLabel.setBounds(new Rectangle(95, 21 + 25, 150, 21));
 	    templateCB = new JComboBox();
-	    templateCB.addActionListener(this);
 	    templateCB.setModel(templateCBModel);
 	    templateCB.setBounds(new Rectangle(200, 21 + 25, 300, 21));
 
@@ -422,6 +421,20 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
     public void actionPerformed(ActionEvent e) {
 
 	Object src = e.getSource();
+	if (src == this.audasaRB) {
+	    ComboBoxModel templateCBModel = new DefaultComboBoxModel(
+		    AudasaPreferences.getTemplates());
+	    templateCB.setModel(templateCBModel);
+	    return;
+	} else if (src == this.autoestradasRB) {
+	    DefaultComboBoxModel templateCBModel = new DefaultComboBoxModel(
+		    AudasaPreferences.getTemplates());
+	    templateCBModel.removeElement(AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA);
+	    templateCBModel.removeElement(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA);
+	    templateCB.setModel(templateCBModel);
+	    return;
+	}
+	
 	if (src == this.getAcceptButton()) {
 	    hasCancelled = false;
 	    try {
