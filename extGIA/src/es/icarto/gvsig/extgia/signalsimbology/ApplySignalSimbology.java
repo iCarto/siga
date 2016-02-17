@@ -2,14 +2,11 @@ package es.icarto.gvsig.extgia.signalsimbology;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.gvsig.symbology.fmap.symbols.PictureMarkerSymbol;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.instruction.FieldNotFoundException;
@@ -129,6 +126,7 @@ public class ApplySignalSimbology {
 	ReadableVectorial source = senhales.getSource();
 
 	Map<Value, Integer> list = new HashMap<Value, Integer>();
+	SignalCache cache = new SignalCache();
 
 	for (int i = 0; i < source.getShapeCount(); i++) {
 	    Value[] attributes = source.getFeature(i).getAttributes();
@@ -139,8 +137,8 @@ public class ApplySignalSimbology {
 	    Value observaciones = attributes[observacionesIdx];
 	    final Integer count = list.get(id);
 	    if (count == null) {
-		ISymbol symbol = setPictureSymbol(0, tipo, codigo, idSenhal,
-			observaciones);
+		ISymbol symbol = setPictureSymbol(cache, 0, tipo, codigo,
+			idSenhal, observaciones);
 		legend.addSymbol(id, symbol);
 		list.put(id, 0);
 	    } else {
@@ -155,8 +153,8 @@ public class ApplySignalSimbology {
 		    multi.addLayer(symbolByValue);
 		}
 
-		ISymbol symbol = setPictureSymbol((count + 1), tipo, codigo,
-			idSenhal, observaciones);
+		ISymbol symbol = setPictureSymbol(cache, (count + 1), tipo,
+			codigo, idSenhal, observaciones);
 		multi.addLayer(symbol);
 		legend.delSymbol(id);
 		legend.addSymbol(id, multi);
@@ -167,8 +165,9 @@ public class ApplySignalSimbology {
 
     private int counter = 0; // TODO
 
-    private ISymbol setPictureSymbol(int offset, Value tipoValue,
-	    Value codigoValue, Value idSenhalValue, Value observacionesValue) {
+    private ISymbol setPictureSymbol(SignalCache cache, int offset,
+	    Value tipoValue, Value codigoValue, Value idSenhalValue,
+	    Value observacionesValue) {
 	System.out.println(counter++); // TODO
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
@@ -177,18 +176,13 @@ public class ApplySignalSimbology {
 	String file = this.alg.getFilename(tipo, codigo, idSenhal);
 	int size = this.alg.getSize(tipo, codigo, observaciones);
 
-	PictureMarkerSymbol symbol = new PictureMarkerSymbol();
-	symbol.setDescription(FileNameUtils.removeExtension(file));
-	URL imageUrl;
+	SignalSymbol symbol = null;
 	try {
-	    imageUrl = new URL("file:senhales/" + file);
-	    symbol.setImage(imageUrl);
-	    symbol.setSelImage(imageUrl);
-	} catch (MalformedURLException e) {
-	    logger.error(e.getStackTrace(), e);
+	    symbol = new SignalSymbol(cache, file);
 	} catch (IOException e) {
 	    logger.error(e.getStackTrace(), e);
 	}
+	symbol.setDescription(FileNameUtils.removeExtension(file));
 	symbol.setOffset(offset == 0 ? NOFFSET : new Point(0, size * offset));
 	symbol.setSize(size);
 
