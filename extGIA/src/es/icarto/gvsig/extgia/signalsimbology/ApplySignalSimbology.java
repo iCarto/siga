@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia.utils;
+package es.icarto.gvsig.extgia.signalsimbology;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -31,7 +31,6 @@ import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 
 import es.icarto.gvsig.commons.utils.FileNameUtils;
-import es.icarto.gvsig.extgia.forms.senhalizacion_vertical.SenhalesAlgorithm;
 
 public class ApplySignalSimbology {
 
@@ -88,7 +87,7 @@ public class ApplySignalSimbology {
     }
 
     private void applyLegend(FLyrVect poste) throws ReadDriverException,
-	    FieldNotFoundException, LegendLayerException {
+    FieldNotFoundException, LegendLayerException {
 
 	final String fieldName = "id_elemento_senhalizacion";
 	final String[] classifyingFieldNames = new String[] { fieldName };
@@ -125,6 +124,7 @@ public class ApplySignalSimbology {
 	int tipoIdx = getIdx(senhales, "tipo_senhal");
 	int codigoIdx = getIdx(senhales, "codigo_senhal");
 	int idSenhalIdx = getIdx(senhales, "id_senhal_vertical");
+	int observacionesIdx = getIdx(senhales, "observaciones");
 
 	ReadableVectorial source = senhales.getSource();
 
@@ -136,9 +136,11 @@ public class ApplySignalSimbology {
 	    Value codigo = attributes[codigoIdx];
 	    Value id = attributes[idIndex];
 	    Value idSenhal = attributes[idSenhalIdx];
+	    Value observaciones = attributes[observacionesIdx];
 	    final Integer count = list.get(id);
 	    if (count == null) {
-		ISymbol symbol = setPictureSymbol(0, tipo, codigo, idSenhal);
+		ISymbol symbol = setPictureSymbol(0, tipo, codigo, idSenhal,
+			observaciones);
 		legend.addSymbol(id, symbol);
 		list.put(id, 0);
 	    } else {
@@ -154,7 +156,7 @@ public class ApplySignalSimbology {
 		}
 
 		ISymbol symbol = setPictureSymbol((count + 1), tipo, codigo,
-			idSenhal);
+			idSenhal, observaciones);
 		multi.addLayer(symbol);
 		legend.delSymbol(id);
 		legend.addSymbol(id, multi);
@@ -163,16 +165,17 @@ public class ApplySignalSimbology {
 	}
     }
 
-    private int counter = 0;
+    private int counter = 0; // TODO
 
     private ISymbol setPictureSymbol(int offset, Value tipoValue,
-	    Value codigoValue, Value idSenhalValue) {
-	System.out.println(counter++);
+	    Value codigoValue, Value idSenhalValue, Value observacionesValue) {
+	System.out.println(counter++); // TODO
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
 	String idSenhal = stringValue(idSenhalValue);
+	String observaciones = stringValue(observacionesValue);
 	String file = this.alg.getFilename(tipo, codigo, idSenhal);
-	int size = this.alg.getSize(tipo, codigo);
+	int size = this.alg.getSize(tipo, codigo, observaciones);
 
 	PictureMarkerSymbol symbol = new PictureMarkerSymbol();
 	symbol.setDescription(FileNameUtils.removeExtension(file));
@@ -191,11 +194,6 @@ public class ApplySignalSimbology {
 
 	symbol.setUnit(unitIdx);
 	symbol.setReferenceSystem(unitRS);
-	// symbol.setRotation(r);
-	// Por defecto está a true
-	// symbol.setIsShapeVisible(isShapeVisible);
-	// Sólo vale para CharacterMarkerSymbol
-	// symbol.setMask(mask);
 	return symbol;
     }
 
@@ -217,11 +215,15 @@ public class ApplySignalSimbology {
 	this.unitRS = unitRS;
     }
 
-    public void setSize(int parseInt) {
-	this.alg.setPictureSize(parseInt);
+    public void setSize(int size) {
+	this.alg.setPictureSize(size);
     }
 
-    public void setCartelSize(int parseInt) {
-	this.alg.setPictureSize(parseInt);
+    public void setCartelSize(int cartelSize) {
+	this.alg.setCartelSize(cartelSize);
+    }
+
+    public void setHitoSize(int hitoSize) {
+	this.alg.setHitoSize(hitoSize);
     }
 }

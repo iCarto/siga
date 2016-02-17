@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia.forms.senhalizacion_vertical;
+package es.icarto.gvsig.extgia.signalsimbology;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -23,6 +23,7 @@ public class SenhalesAlgorithm {
 
     private int pictureSize = PICTURE_SIZE;
     private int cartelSize = CARTEL_PICTURE_SIZE;
+    private int hitoSize;
 
     public SenhalesAlgorithm(Dimension boundary) {
 	this.boundary = boundary;
@@ -53,11 +54,14 @@ public class SenhalesAlgorithm {
 	return folderPath + getFilename(tipo, codigo, idSenhal);
     }
 
-    public int getSize(String tipo, String codigo) {
-	if (tipo.equals("Cartel")) {
+    public int getSize(String tipo, String codigo, String observaciones) {
+	if (observaciones.toLowerCase().contains("hito")) {
+	    return hitoSize;
+	} else if (tipo.equals("Contenido fijo")) {
+	    return pictureSize;
+	} else {
 	    return cartelSize;
 	}
-	return pictureSize;
     }
 
     public String getFilename(String tipo, String codigo, String idSenhal) {
@@ -90,4 +94,7 @@ public class SenhalesAlgorithm {
 	this.cartelSize = cartelSize;
     }
 
+    public void setHitoSize(int hitoSize) {
+	this.hitoSize = hitoSize;
+    }
 }

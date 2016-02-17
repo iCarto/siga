@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 
+import es.icarto.gvsig.extgia.signalsimbology.SenhalesAlgorithm;
 import es.icarto.gvsig.navtableforms.gui.tables.filter.IRowFilter;
 import es.icarto.gvsig.navtableforms.gui.tables.model.AlphanumericTableModel;
 

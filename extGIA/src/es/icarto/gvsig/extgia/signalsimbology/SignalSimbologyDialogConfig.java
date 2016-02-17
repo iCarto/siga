@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia;
+package es.icarto.gvsig.extgia.signalsimbology;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -17,7 +17,6 @@ import com.iver.cit.gvsig.gui.styling.JComboBoxUnitsReferenceSystem;
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
 import es.icarto.gvsig.commons.gui.OkCancelPanel;
 import es.icarto.gvsig.commons.gui.WidgetFactory;
-import es.icarto.gvsig.extgia.utils.ApplySignalSimbology;
 
 @SuppressWarnings("serial")
 public class SignalSimbologyDialogConfig extends AbstractIWindow implements

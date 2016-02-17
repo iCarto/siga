@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 
 import com.jeta.forms.components.image.ImageComponent;
 
+import es.icarto.gvsig.extgia.signalsimbology.SenhalesAlgorithm;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandler;
 

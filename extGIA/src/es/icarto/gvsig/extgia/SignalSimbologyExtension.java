@@ -14,6 +14,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
+import es.icarto.gvsig.extgia.signalsimbology.SignalSimbologyDialog;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
 public class SignalSimbologyExtension extends Extension {
@@ -41,8 +42,8 @@ public class SignalSimbologyExtension extends Extension {
 	    // Si se intentan cargar más de 1881 pictogramas se produce un Java
 	    // Heap Space
 	    long rowCount = signals.getRecordset().getRowCount();
-	    if (rowCount > 1800) {
-		showWarning("No pueden mostrarse más de 1800 pictogramas de señales");
+	    if (rowCount > 1000) {
+		showWarning("No pueden mostrarse más de 1000 pictogramas de señales");
 		return;
 	    }
 	} catch (ReadDriverException e) {

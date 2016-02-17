@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia;
+package es.icarto.gvsig.extgia.signalsimbology;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -16,11 +16,10 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
 import es.icarto.gvsig.commons.gui.OkCancelPanel;
 import es.icarto.gvsig.commons.gui.WidgetFactory;
-import es.icarto.gvsig.extgia.utils.ApplySignalSimbology;
 
 @SuppressWarnings("serial")
 public class SignalSimbologyDialog extends AbstractIWindow implements
-	ActionListener {
+ActionListener {
 
     private final FLyrVect postes;
     private final FLyrVect signals;
@@ -60,14 +59,17 @@ public class SignalSimbologyDialog extends AbstractIWindow implements
 			signals);
 		String sizeStr = combo.getSelectedItem().toString();
 		if (sizeStr.equals("Pequeño")) {
-		    s.setCartelSize(1800);
-		    s.setSize(600);
+		    s.setCartelSize(3000);
+		    s.setSize(1000);
+		    s.setHitoSize(2000);
 		} else if (sizeStr.equals("Mediano")) {
-		    s.setCartelSize(2700);
-		    s.setSize(900);
+		    s.setCartelSize(4500);
+		    s.setSize(1000);
+		    s.setHitoSize(3000);
 		} else {
-		    s.setCartelSize(3600);
-		    s.setSize(1200);
+		    s.setCartelSize(6000);
+		    s.setSize(2000);
+		    s.setHitoSize(4000);
 		}
 		String[] distanceNames = MapContext.getDistanceNames();
 		for (int i = 0; i < distanceNames.length; i++) {
