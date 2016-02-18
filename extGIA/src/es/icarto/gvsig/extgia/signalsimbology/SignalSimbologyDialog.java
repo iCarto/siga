@@ -59,17 +59,20 @@ ActionListener {
 			signals);
 		String sizeStr = combo.getSelectedItem().toString();
 		if (sizeStr.equals("Pequeño")) {
+		    s.setCartelSize(1500);
+		    s.setSize(500);
+		    s.setHitoSize(1000);
+		} else if (sizeStr.equals("Mediano")) {
 		    s.setCartelSize(3000);
 		    s.setSize(1000);
 		    s.setHitoSize(2000);
-		} else if (sizeStr.equals("Mediano")) {
+		} else {
 		    s.setCartelSize(4500);
 		    s.setSize(1000);
 		    s.setHitoSize(3000);
-		} else {
-		    s.setCartelSize(6000);
-		    s.setSize(2000);
-		    s.setHitoSize(4000);
+//		    s.setCartelSize(6000);
+//		    s.setSize(2000);
+//		    s.setHitoSize(4000);
 		}
 		String[] distanceNames = MapContext.getDistanceNames();
 		for (int i = 0; i < distanceNames.length; i++) {

@@ -55,13 +55,13 @@ public class SignalSymbol extends AbstractMarkerSymbol {
 		    bgImage.drawInsideRectangle(g, rect);
 		} catch (SymbolDrawingException e) {
 		    Logger.getLogger(getClass())
-			    .warn(Messages.getString("label_style_could_not_be_painted")
-				    + ": " + bgImage.getSource(), e);
+		    .warn(Messages.getString("label_style_could_not_be_painted")
+			    + ": " + bgImage.getSource(), e);
 		}
 	    } else {
 		Logger.getLogger(getClass()).warn(
 			Messages.getString("label_style_could_not_be_painted")
-				+ ": " + bgImage.getSource());
+			+ ": " + bgImage.getSource());
 	    }
 	    g.rotate(-getRotation(), halfSize, halfSize);
 	    g.translate(-(x + xOffset), -(y + yOffset));

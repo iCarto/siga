@@ -25,7 +25,6 @@ import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
-import com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend;
 
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 
@@ -92,8 +91,7 @@ public class ApplySignalSimbology {
 
 	ReadableVectorial source = poste.getSource();
 
-	VectorialUniqueValueLegend legend = new VectorialUniqueValueLegend(
-		poste.getShapeType());
+	SignalLegend legend = new SignalLegend(poste.getShapeType());
 	legend.setDataSource(source.getRecordset());
 	legend.setClassifyingFieldNames(classifyingFieldNames);
 	legend.setClassifyingFieldTypes(classifyingFieldTypes);
@@ -114,8 +112,8 @@ public class ApplySignalSimbology {
 	}
     }
 
-    private void createLegend(VectorialUniqueValueLegend legend,
-	    FLyrVect senhales) throws ReadDriverException {
+    private void createLegend(SignalLegend legend, FLyrVect senhales)
+	    throws ReadDriverException {
 
 	int idIndex = getIdx(senhales, "id_elemento_senhalizacion");
 	int tipoIdx = getIdx(senhales, "tipo_senhal");
@@ -163,12 +161,11 @@ public class ApplySignalSimbology {
 	}
     }
 
-    private int counter = 0; // TODO
+    // private int counter = 0; // TODO
 
     private ISymbol setPictureSymbol(SignalCache cache, int offset,
 	    Value tipoValue, Value codigoValue, Value idSenhalValue,
 	    Value observacionesValue) {
-	System.out.println(counter++); // TODO
 	String tipo = stringValue(tipoValue);
 	String codigo = stringValue(codigoValue);
 	String idSenhal = stringValue(idSenhalValue);

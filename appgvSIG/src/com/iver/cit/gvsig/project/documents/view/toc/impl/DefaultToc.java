@@ -98,6 +98,7 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.Classifiable;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.IHasImageLegend;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.LayerCollection;
 import com.iver.cit.gvsig.fmap.rendering.IClassifiedLegend;
+import com.iver.cit.gvsig.fmap.rendering.ICustomLegend;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
@@ -410,6 +411,22 @@ public class DefaultToc extends JComponent implements TOC,
 					ILegend legendInfo = aux.getLegend();
 
 					try {
+					    if (legendInfo instanceof ICustomLegend) {
+						TocItemLeaf itemLeaf;
+						itemLeaf = new TocItemLeaf(
+								legendInfo.getDefaultSymbol(), legendInfo
+										.getDefaultSymbol()
+										.getDescription(),
+								aux.getShapeType());
+						itemLeaf.setSize(sizeLeaf);
+
+						DefaultMutableTreeNode nodeValue = new DefaultMutableTreeNode(
+								itemLeaf);
+						m_TreeModel.insertNodeInto(nodeValue, nodeLayer,
+								nodeLayer.getChildCount());
+						continue;
+						
+					    }
 						if (legendInfo instanceof IClassifiedLegend) {
 							IClassifiedLegend cl = (IClassifiedLegend) legendInfo;
 							String[] descriptions = cl.getDescriptions();
