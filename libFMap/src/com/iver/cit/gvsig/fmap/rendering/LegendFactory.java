@@ -41,6 +41,8 @@
 package com.iver.cit.gvsig.fmap.rendering;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.hardcode.gdbms.engine.data.driver.DriverException;
@@ -55,6 +57,13 @@ import com.iver.utiles.XMLEntity;
  * @author Fernando González Cortés
  */
 public class LegendFactory {
+
+    	private static Map<String, Class<? extends IVectorLegend>> customLegends = new HashMap<String, Class<? extends IVectorLegend>>();
+
+    	public static void registerCustomLegend(String classname, Class<? extends IVectorLegend> clasz) {
+    	    customLegends.put(classname, clasz);
+    	}
+
 	/**
 	 * Crea un objeto renderer de símbolo único con las características que se
 	 * pasan como parámetro
@@ -116,40 +125,16 @@ public class LegendFactory {
 	 *
 	 * @throws XMLException
 	 */
-	public static IVectorLegend createFromXML03(XMLEntity xml)
-		throws XMLException {
-		//TODO Implementar bien
-		try {
-			IVectorLegend vl = null;
-			Class clase = Class.forName(xml.getStringProperty("className"));
-			vl = (IVectorLegend) clase.newInstance();
-			vl.setXMLEntity03(xml);
-
-			return vl;
-		} catch (ClassNotFoundException e) {
-			throw new XMLException(e);
-		} catch (InstantiationException e) {
-			throw new XMLException(e);
-		} catch (IllegalAccessException e) {
-			throw new XMLException(e);
-		}
-	}
-
-	/**
-	 * Crea un renderer con la información contenida en el objeto XMLEntity
-	 *
-	 * @param xml XMLEntity.
-	 *
-	 * @return VectorialLegend
-	 *
-	 * @throws XMLException
-	 */
 	public static IVectorLegend createFromXML(XMLEntity xml)
 		throws XMLException {
 		//TODO Implementar bien
 		try {
 			IVectorLegend vl = null;
-			Class clase = Class.forName(xml.getStringProperty("className"));
+			final String className = xml.getStringProperty("className");
+			Class clase = customLegends.get(className);
+			if (clase == null) {
+			   clase = Class.forName(className);
+			}
 			vl = (IVectorLegend) clase.newInstance();
 			vl.setXMLEntity(xml);
 

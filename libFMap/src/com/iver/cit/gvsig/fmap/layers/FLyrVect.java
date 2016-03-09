@@ -1111,28 +1111,6 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         return xml;
     }
 
-    /**
-     * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
-     */
-    public void setXMLEntity03(XMLEntity xml) throws XMLException {
-
-        super.setXMLEntity(xml);
-        legend = LegendFactory.createFromXML03(xml.getChild(0));
-
-        try {
-            setLegend(legend);
-        } catch (LegendLayerException e) {
-            throw new XMLException(e);
-        }
-
-        try {
-            getRecordset().getSelectionSupport()
-                    .setXMLEntity03(xml.getChild(1));
-        } catch (ReadDriverException e) {
-            e.printStackTrace();
-        }
-    }
-
     /*
      * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
      */
