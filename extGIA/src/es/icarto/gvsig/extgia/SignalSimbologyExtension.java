@@ -11,9 +11,11 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
+import es.icarto.gvsig.extgia.signalsimbology.SignalLegend;
 import es.icarto.gvsig.extgia.signalsimbology.SignalSimbologyDialog;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
@@ -24,6 +26,7 @@ public class SignalSimbologyExtension extends Extension {
 
     @Override
     public void initialize() {
+	LegendFactory.registerCustomLegend(SignalLegend.class.getName(), SignalLegend.class);
     }
 
     @Override

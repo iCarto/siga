@@ -1,6 +1,7 @@
 package es.icarto.gvsig.extgia.signalsimbology;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.sql.Types;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -24,7 +25,9 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
+import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
+import com.iver.cit.gvsig.fmap.core.symbols.MultiLayerMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.rendering.AbstractClassifiedVectorLegend;
@@ -405,44 +408,6 @@ public class SignalLegend extends AbstractClassifiedVectorLegend implements
 
     @Override
     public void setXMLEntity03(XMLEntity xml) {
-	clear();
-	setClassifyingFieldNames(new String[] { xml
-		.getStringProperty("fieldName") });
-
-	int useDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
-
-	if (useDefaultSymbol == 1) {
-	    setDefaultSymbol(FSymbol.createFromXML03(xml.getChild(0)));
-	} else {
-	    setDefaultSymbol(null);
-	}
-
-	int numKeys = xml.getIntProperty("numKeys");
-
-	if (numKeys > 0) {
-	    String className = xml.getStringProperty("tipoValueKeys");
-	    String[] sk = xml.getStringArrayProperty("keys");
-	    String[] sv = xml.getStringArrayProperty("values");
-	    Value auxValue;
-	    Value auxValue2;
-
-	    for (int i = 0; i < numKeys; i++) {
-		try {
-		    auxValue = ValueFactory.createValue(sk[i], className);
-		    auxValue2 = ValueFactory.createValue(sv[i], className);
-
-		    ISymbol sym = FSymbol.createFromXML03(xml.getChild(i
-			    + useDefaultSymbol));
-
-		    symbols.put(auxValue2, sym);
-		    keys.add(auxValue);
-
-		} catch (SemanticException e) {
-		    log.error("Exception", e);
-		    e.printStackTrace();
-		}
-	    }
-	}
     }
 
     @Override
@@ -489,6 +454,9 @@ public class SignalLegend extends AbstractClassifiedVectorLegend implements
 	int numKeys = xml.getIntProperty("numKeys");
 
 	if (numKeys > 0) {
+	    
+	    SignalCache cache = new SignalCache();
+	    
 	    String className = xml.getStringProperty("tipoValueKeys");
 	    String[] sk = xml.getStringArrayProperty("keys");
 	    if (sk.length == 0) {
@@ -500,7 +468,7 @@ public class SignalLegend extends AbstractClassifiedVectorLegend implements
 	    }
 	    Value auxValue = null;
 	    Value auxValue2 = null;
-	    ISymbol sym;
+	    ISymbol sym = null;
 	    int[] stk = null;
 	    if (xml.contains("typeKeys")) {
 		stk = xml.getIntArrayProperty("typeKeys");
@@ -532,8 +500,31 @@ public class SignalLegend extends AbstractClassifiedVectorLegend implements
 					xml.getChild(i), null);
 			    }
 			} else {
-			    sym = SymbologyFactory.createSymbolFromXML(
-				    xml.getChild(i + 1), null);
+			    try {
+			    XMLEntity xmlChild = xml.getChild(i + 1);
+			    String childClassName = xmlChild.getStringProperty("className");
+			    if (childClassName.equals(SignalSymbol.class.getName())) {
+				
+				    sym = new SignalSymbol(cache, xmlChild);
+				
+			    } else if (childClassName.equals(MultiLayerMarkerSymbol.class.getName())){
+				MultiLayerMarkerSymbol multi = new MultiLayerMarkerSymbol();
+				multi.setIsShapeVisible(xmlChild.getBooleanProperty("isShapeVisible"));
+				multi.setDescription(xmlChild.getStringProperty("desc"));
+				multi.setSize(xmlChild.getDoubleProperty("size"));
+				multi.setUnit(xmlChild.getIntProperty("unit"));
+				multi.setReferenceSystem(xmlChild.getIntProperty("referenceSystem"));
+				for (int j = 0; j < xmlChild.getChildrenCount(); j++) {
+				    multi.addLayer(new SignalSymbol(cache, xmlChild.getChild(j)));
+				}
+				
+			    } else {
+				sym = SymbologyFactory.createSymbolFromXML(xmlChild, null);
+				
+			    }
+			    } catch (IOException e) {
+				    e.printStackTrace();
+				}
 			}
 		    }
 
