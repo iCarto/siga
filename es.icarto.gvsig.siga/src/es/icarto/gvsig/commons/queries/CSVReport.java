@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.utils.SIGAFormatter;
 
 public class CSVReport {
 
@@ -48,7 +49,7 @@ public class CSVReport {
 	for (int row = 0; row < tableModel.getRowCount(); row++) {
 	    for (int column = 0; column < tableModel.getColumnCount(); column++) {
 		Object value = tableModel.getValueAt(row, column);
-		writer.append(Utils.formatValue(value));
+		writer.append(SIGAFormatter.formatValue(value));
 		writer.append(CSV_SEPARATOR);
 	    }
 	    writer.append("\n");

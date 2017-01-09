@@ -51,11 +51,14 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.Project;
 
+import es.icarto.gvsig.commons.format.Format;
+import es.icarto.gvsig.commons.format.IFormat;
+
 
 public class DBSession {
 
     protected static DBSession instance = null;
-    private static IFormatter formatter = new Formatter();
+    private static IFormat formatter = new Format();
     private final String server, username, password;
     private final int port;
     private final String database;
@@ -200,7 +203,7 @@ public class DBSession {
 	return user;
     }
 
-    public static void setFormatter(IFormatter f) {
+    public static void setFormatter(IFormat f) {
 	formatter = f;
     }
 

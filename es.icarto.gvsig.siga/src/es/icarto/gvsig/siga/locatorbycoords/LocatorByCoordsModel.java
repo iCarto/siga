@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.cresques.cts.IProjection;
 
 import es.icarto.gvsig.commons.referencing.GShape;
+import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 public class LocatorByCoordsModel {
@@ -23,26 +24,21 @@ public class LocatorByCoordsModel {
 
     public LocatorByCoordsModel() {
 
-	DecimalFormat fGeo = (DecimalFormat) NumberFormat
-		.getNumberInstance(Locale.getDefault());
-	fGeo.applyPattern("0.#####");
 	CoordProvider epsg4326 = new CoordProvider("WGS84", "EPSG:4326");
 	GShape extent4326 = new GShape(epsg4326.getProj(),
 		new Rectangle2D.Double(Math.abs(-6.734324529), 41.8072541522,
 			Math.abs(-9.29885967 - -6.734324529),
 			43.7924041112 - 41.8072541522));
 	epsg4326.setExtent(extent4326);
-	epsg4326.setOuputFormat(fGeo);
+	epsg4326.setOuputFormat(SIGAFormatter.latLngFormatter());
 
-	DecimalFormat fUtm = (DecimalFormat) NumberFormat
-		.getNumberInstance(Locale.getDefault());
-	fUtm.applyPattern("0.###");
+
 	CoordProvider epsg23029 = new CoordProvider("ED50 UTM29", "EPSG:23029");
 	GShape extent23029 = new GShape(epsg23029.getProj(),
 		new Rectangle2D.Double(472175.48, 4751978.58,
 			691493.78 - 472175.48, 4851029.48 - 600280.42));
 	epsg23029.setExtent(extent23029);
-	epsg23029.setOuputFormat(fUtm);
+	epsg23029.setOuputFormat(SIGAFormatter.utmFormatter());
 
 	CoordProvider epsg25829 = new CoordProvider("ETRS89 UTM29",
 		"EPSG:25829");
@@ -50,7 +46,7 @@ public class LocatorByCoordsModel {
 		new Rectangle2D.Double(472637.79, 4626294.5,
 			690330.44 - 472637.79, 4850713.62 - 4626294.5));
 	epsg25829.setExtent(extent25829);
-	epsg25829.setOuputFormat(fUtm);
+	epsg25829.setOuputFormat(SIGAFormatter.utmFormatter());
 
 	projCodes.add(epsg4326);
 	projCodes.add(epsg23029);

@@ -19,8 +19,6 @@ import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -53,16 +51,15 @@ import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.DataSource;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.FileDataSource;
+import es.icarto.gvsig.utils.SIGAFormatter;
+import es.icarto.gvsig.utils.XLSFormatUtils;
 import es.udc.cartolab.gvsig.elle.utils.LoadLegend;
-import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class IncidenciasParser {
 
     private static final Logger logger = Logger
 	    .getLogger(IncidenciasParser.class);
-
-    private static final DataFormatter dataFormatter = new DataFormatter();
 
     private final Sheet sheet;
 
@@ -125,32 +122,6 @@ public class IncidenciasParser {
     public void parse() {
 	initHeader();
 	initFeatures();
-    }
-
-    private String formatPkForDisplay(String pk) {
-	if ((pk == null) || (pk.isEmpty())) {
-	    return "";
-	}
-	String str = pk.trim().replace("+", ",").replace(",", ".");
-	try {
-	    return String.format("%3.3f", Double.parseDouble(str)).replace(".",
-		    ",");
-	} catch (NumberFormatException e) {
-	    return "";
-	}
-    }
-
-    private String formatPkForDouble(String pk) {
-	if ((pk == null) || (pk.isEmpty())) {
-	    return "";
-	}
-	String str = pk.trim().replace("+", ",").replace(",", ".");
-	try {
-	    return String.format("%3.3f", Double.parseDouble(str)).replace(",",
-		    ".");
-	} catch (NumberFormatException e) {
-	    return "";
-	}
     }
 
     private void initHeader() {
@@ -243,10 +214,10 @@ public class IncidenciasParser {
 		if ((pushMotivo) && (i == header.size() - 1)) {
 		    str = "ACCIDENTES";
 		} else {
-		    str = getValueAsString(row.getCell(i));
+		    str = XLSFormatUtils.getValueAsString(row.getCell(i));
 
 		    if (Header.PK.getIdx() == i) {
-			str = formatPkForDisplay(str);
+			str = SIGAFormatter.formatPkForDisplay(str);
 		    }
 		}
 		values[i] = ValueFactory.createValue(str);
@@ -268,7 +239,7 @@ public class IncidenciasParser {
     }
 
     private boolean notValidRow(Row row) {
-	String v = getValueAsString(row.getCell(0));
+	String v = XLSFormatUtils.getValueAsString(row.getCell(0));
 	if (v.isEmpty() || v.equals(header.get(0))) {
 	    return true;
 	}
@@ -440,15 +411,15 @@ public class IncidenciasParser {
     }
 
     private TableModel calculateGeom(Row row) {
-	String tramo = getValueAsString(row.getCell(tramoIdx));
-	String tipoVia = getValueAsString(row.getCell(tipoViaIdx));
-	String nombre = getValueAsString(row.getCell(nombreIdx));
+	String tramo = XLSFormatUtils.getValueAsString(row.getCell(tramoIdx));
+	String tipoVia = XLSFormatUtils.getValueAsString(row.getCell(tipoViaIdx));
+	String nombre = XLSFormatUtils.getValueAsString(row.getCell(nombreIdx));
 
-	String pkStr = getValueAsString(row.getCell(pkIdx));
-	String pkformatted = formatPkForDouble(pkStr);
+	String pkStr = XLSFormatUtils.getValueAsString(row.getCell(pkIdx));
+	String pkformatted = SIGAFormatter.formatPkForDouble(pkStr);
 
-	String ramal = getValueAsString(row.getCell(ramalIdx));
-	String sentido = getValueAsString(row.getCell(sentidoIdx));
+	String ramal = XLSFormatUtils.getValueAsString(row.getCell(ramalIdx));
+	String sentido = XLSFormatUtils.getValueAsString(row.getCell(sentidoIdx));
 	sentido = sentido.isEmpty() ? "Ambos" : sentido;
 
 	if (tramo.isEmpty() || tipoVia.isEmpty()) {
@@ -524,7 +495,7 @@ public class IncidenciasParser {
 	tipoVia = tipoVia.isEmpty() ? " - " : tipoVia;
 	nombre = nombre.isEmpty() ? " - " : nombre;
 	pkformatted = pkformatted.isEmpty() ? " - "
-		: formatPkForDisplay(pkformatted);
+		: SIGAFormatter.formatPkForDisplay(pkformatted);
 	ramal = ramal.isEmpty() ? " - " : ramal;
 	sentido = sentido.isEmpty() ? " - " : sentido;
 	addWarning(String
@@ -535,34 +506,6 @@ public class IncidenciasParser {
 
     public List<String> getHeader() {
 	return header;
-    }
-
-    public String getValueAsString(Cell cell) {
-	if (cell == null) {
-	    return "";
-	}
-	switch (cell.getCellType()) {
-	case Cell.CELL_TYPE_STRING:
-	    return cell.getRichStringCellValue().getString();
-	case Cell.CELL_TYPE_NUMERIC:
-	    if (DateUtil.isCellDateFormatted(cell)) {
-		// Date date = cell.getDateCellValue();
-		// return DateFormatNT.getDateFormat().format(date);
-		return dataFormatter.formatCellValue(cell);
-	    } else {
-		double numericCellValue = cell.getNumericCellValue();
-		return DoubleFormatNT.getEditingFormat().format(
-			numericCellValue);
-	    }
-	case Cell.CELL_TYPE_BOOLEAN:
-	    return cell.getBooleanCellValue() ? "Sí" : "No";
-	case Cell.CELL_TYPE_FORMULA:
-	    return cell.getCellFormula();
-	case Cell.CELL_TYPE_BLANK:
-	    return "";
-	default:
-	    return "";
-	}
     }
 
     public List<String> getWarnings() {

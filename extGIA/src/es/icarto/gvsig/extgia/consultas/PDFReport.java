@@ -31,10 +31,10 @@ import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.rtf.style.RtfParagraphStyle;
 
-import es.icarto.gvsig.commons.queries.Utils;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.siga.SIGAConfigExtension;
 import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 
 public abstract class PDFReport {
@@ -256,7 +256,7 @@ public abstract class PDFReport {
 	for (int row = 0; row < tableModel.getRowCount(); row++) {
 	    for (int column = startColumn; column <= endColumn; column++) {
 		Object value = tableModel.getValueAt(row, column);
-		paragraph = new Paragraph(Utils.formatValue(value),
+		paragraph = new Paragraph(SIGAFormatter.formatValue(value),
 			cellBoldStyle);
 		PdfPCell valueCell = new PdfPCell(paragraph);
 		valueCell.setHorizontalAlignment(Element.ALIGN_CENTER);

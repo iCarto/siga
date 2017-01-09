@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="src" path="/libGDBMS"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/formsrt.jar"/>
+	<classpathentry kind="src" path="/es.icarto.gvsig.commons"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

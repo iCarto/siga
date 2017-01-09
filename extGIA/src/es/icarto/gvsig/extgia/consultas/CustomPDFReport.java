@@ -15,8 +15,8 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
-import es.icarto.gvsig.commons.queries.Utils;
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.utils.SIGAFormatter;
 
 public class CustomPDFReport extends PDFReport {
 
@@ -72,7 +72,7 @@ public class CustomPDFReport extends PDFReport {
 	for (int row = 0; row < tableModel.getRowCount(); row++) {
 	    for (int column = 0; column < getColumnNames().length; column++) {
 		Object value = tableModel.getValueAt(row, column);
-		paragraph = new Paragraph(Utils.formatValue(value),
+		paragraph = new Paragraph(SIGAFormatter.formatValue(value),
 			cellBoldStyle);
 		PdfPCell valueCell = new PdfPCell(paragraph);
 		valueCell.setHorizontalAlignment(Element.ALIGN_CENTER);

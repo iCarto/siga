@@ -18,11 +18,11 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
-import es.icarto.gvsig.commons.queries.Utils;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
 import es.icarto.gvsig.extgia.consultas.PDFReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
+import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class TrabajosAgregadosReport extends PDFReport {
@@ -220,7 +220,7 @@ public class TrabajosAgregadosReport extends PDFReport {
 	while (resultMap.next()) {
 	    for (int column = 1; column <= getColumnNames().length; column++) {
 		if (resultMap.getString(column) != null) {
-		    String valueFormatted = Utils.writeDBValueFormatted(
+		    String valueFormatted = SIGAFormatter.writeDBValueFormatted(
 			    resultMap, column);
 		    value = new Paragraph(valueFormatted, cellBoldStyle);
 		} else {
