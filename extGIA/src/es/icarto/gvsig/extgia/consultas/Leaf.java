@@ -6,8 +6,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.iver.andami.PluginServices;
 
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.queries.Component;
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
 import es.icarto.gvsig.commons.queries.FinalActions;
 import es.icarto.gvsig.commons.queries.XLSReport;
 import es.icarto.gvsig.commons.utils.Field;

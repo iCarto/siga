@@ -11,7 +11,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class PostgisTransformation {

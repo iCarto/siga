@@ -2,7 +2,7 @@ package es.icarto.gvsig.siga.models;
 
 import javax.swing.table.DefaultTableModel;
 
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;

@@ -1,7 +1,7 @@
 package es.icarto.gvsig.siga.models;
 
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.gui.tables.NotEditableTableModel;
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class CurrentUser {

@@ -13,8 +13,8 @@ import java.util.Date;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.queries.CSVReport;
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
 import es.icarto.gvsig.commons.testutils.Drivers;
 import es.icarto.gvsig.commons.testutils.TestProperties;
 import es.icarto.gvsig.commons.utils.Field;

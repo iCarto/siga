@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import javax.swing.table.TableModel;
 
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.Field;
 import es.udc.cartolab.gvsig.elle.gui.wizard.load.MunicipiosTableModel;
 import es.udc.cartolab.gvsig.users.utils.DBSession;

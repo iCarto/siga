@@ -49,7 +49,7 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
 import es.icarto.gvsig.commons.datasources.FieldDescriptionFactory;
 import es.icarto.gvsig.commons.datasources.SHPFactory;
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.DataSource;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.FileDataSource;
