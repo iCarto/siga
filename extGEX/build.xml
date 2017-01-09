@@ -47,23 +47,9 @@
 			<fileset dir="plantillas" includes="*" />
 		</copy>
 		<copy todir="${dist}/rejillas">
-			<fileset dir="rejillas" includes="*" />
+			<fileset dir="rejillas" includes="**" />
 		</copy>
-		<copy todir="${dist}/rejillas/A3_1000">
-			<fileset dir="rejillas/A3_1000" includes="*" />
-		</copy>
-		<copy todir="${dist}/rejillas/A3_2000">
-			<fileset dir="rejillas/A3_2000" includes="*" />
-		</copy>
-		<copy todir="${dist}/rejillas/A3_5000">
-			<fileset dir="rejillas/A3_5000" includes="*" />
-		</copy>
-		<copy todir="${dist}/rejillas/A4_2000">
-			<fileset dir="rejillas/A4_2000" includes="*" />
-		</copy>
-		<copy todir="${dist}/rejillas/A4_5000">
-			<fileset dir="rejillas/A4_5000" includes="*" />
-		</copy>
+		
 		<copy todir="${dist}/reports">
 			<fileset dir="reports" includes="*" />
 		</copy>
