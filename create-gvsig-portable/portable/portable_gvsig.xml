@@ -1,15 +1,8 @@
 <launch4jConfig>
-<!-- 
-Put in the root of the workspace and execute as:
-
-./launch4j PATH_TO_WORKSPACE/portable_gvsig.xml
-
-Copy PATH_TO_WORKSPACE/_fwAndami/gvsig-desktop.exe to create-gvsig-portable/portable/win/bin
--->
-  <dontWrapJar>false</dontWrapJar>
+  <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>./_fwAndami/andami.jar</jar>
-  <outfile>./_fwAndami/gvsig-desktop.exe</outfile>
+  <jar>./andami.jar</jar>
+  <outfile>./win/bin/gvsig-desktop.exe</outfile>
   <errTitle>gvSIG launch error</errTitle>
   <cmdLine>gvSIG gvSIG/extensiones</cmdLine>
   <chdir>.</chdir>
@@ -19,7 +12,7 @@ Copy PATH_TO_WORKSPACE/_fwAndami/gvsig-desktop.exe to create-gvsig-portable/port
   <customProcName>true</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>./create-gvsig-portable/portable/common/bin/theme/SIGA_32_transparente_escritorio.ico</icon>
+  <icon>./SIGA_32_transparente_escritorio.ico</icon>
   <var>PROJ_LIB=./gvSIG/extensiones/org.gvsig.crs/data</var>
   <var>GDAL_DATA=./data/gdal</var>
   <classPath>
