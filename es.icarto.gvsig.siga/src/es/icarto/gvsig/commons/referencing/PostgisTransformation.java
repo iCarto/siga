@@ -39,6 +39,14 @@ public class PostgisTransformation {
 	String query = String
 		.format("select st_x(a.geom), st_y(a.geom) from (select st_transform(st_geomfromtext('POINT( %s %s)',%s), %s) as geom) a",
 			p.getX(), p.getY(), orgProjCode, projCode);
+
+	// workaround. #846
+	if (orgProjCode.equals("25829")) {
+	    query = String
+		    .format("select st_x(a.geom), st_y(a.geom) from (select st_transform(st_setsrid(st_transform(st_geomfromtext('POINT( %s %s)',25829), 23029), 111222), 4326) as geom) a;",
+			    p.getX(), p.getY(), orgProjCode, projCode);
+	}
+
 	ConnectionWrapper cw = new ConnectionWrapper(DBSession
 		.getCurrentSession().getJavaConnection());
 	DefaultTableModel table = cw.execute(query);
