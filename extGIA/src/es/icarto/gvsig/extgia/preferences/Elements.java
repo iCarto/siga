@@ -11,6 +11,7 @@ import es.icarto.gvsig.extgia.forms.areas_peaje.AreasPeajeForm;
 import es.icarto.gvsig.extgia.forms.areas_servicio.AreasServicioForm;
 import es.icarto.gvsig.extgia.forms.barrera_rigida.BarreraRigidaForm;
 import es.icarto.gvsig.extgia.forms.competencias.CompetenciasForm;
+import es.icarto.gvsig.extgia.forms.comunicaciones.ComunicacionesForm;
 import es.icarto.gvsig.extgia.forms.enlaces.EnlacesForm;
 import es.icarto.gvsig.extgia.forms.firme.FirmeForm;
 import es.icarto.gvsig.extgia.forms.isletas.IsletasForm;
@@ -146,7 +147,8 @@ public enum Elements {
 	    "valla_cierre_trabajos",
 	    "valla_cierre_trabajos"),
     Ramales("gid", RamalesForm.class, null, null, null),
-    Competencias("gid", CompetenciasForm.class, null, null, null);
+    Competencias("gid", CompetenciasForm.class, null, null, null),
+    Comunicaciones("gid", ComunicacionesForm.class, null, null, null);
 
     public final String pk;
     public final Class<? extends AbstractForm> form;

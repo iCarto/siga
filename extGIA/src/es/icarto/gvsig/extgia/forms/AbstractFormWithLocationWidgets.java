@@ -103,13 +103,17 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
 	    addChained(PK, TIPO_VIA, NOMBRE_VIA);
 	}
 	if (widgets.get(PK_INICIAL) != null) {
-	    addChained(PK_INICIAL, TIPO_VIA, NOMBRE_VIA);
+	    if ((widgets.get(TIPO_VIA)!= null) && (widgets.get(NOMBRE_VIA)!=null)) {
+		addChained(PK_INICIAL, TIPO_VIA, NOMBRE_VIA);		
+	    }
 	}
 	if (widgets.get(PK_FINAL) != null) {
 	    if (widgets.get(NOMBRE_VIA_PF) != null) {
 		addChained(PK_FINAL, TIPO_VIA_PF, NOMBRE_VIA_PF);
 	    } else {
-		addChained(PK_FINAL, TIPO_VIA, NOMBRE_VIA);
+		if ((widgets.get(TIPO_VIA)!= null) && (widgets.get(NOMBRE_VIA)!=null)) {
+		    addChained(PK_FINAL, TIPO_VIA, NOMBRE_VIA);
+		}
 	    }
 	}
 	if (widgets.get(DIRECCION) != null) {

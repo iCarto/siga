@@ -121,6 +121,8 @@ public class CaracteristicasQueries {
 	case Lineas_Suministro:
 	    return getLocalizationTablesWithSentidoAndPF();
 
+	case Comunicaciones:
+	    return getJoinedArea() + getJoinedBase() + getJoinedTramo() + getJoinedMunicipio();
 	case Enlaces:
 	default:
 	    return getLocalizationTables();
@@ -203,6 +205,8 @@ public class CaracteristicasQueries {
 	case Ramales:
 	    query = ConsultasFieldNames.ramalesCSVFieldNames();
 	    break;
+	case Comunicaciones:
+	    query = ConsultasFieldNames.comunicacionesCSVFieldNames();
 	}
 	return "SELECT " + query + getFromClauseCaracteristicas(element)
 		+ filters.getWhereClauseByLocationWidgets() + " ORDER BY gid";

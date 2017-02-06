@@ -31,9 +31,10 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/taludes" action-command="Taludes" position="30416"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/transformadores" action-command="Transformadores" position="30417"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/valla_cierre" action-command="Valla_Cierre" position="30418"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/separator" position="30419" is_separator="true"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/ramales" action-command="Ramales" position="30420"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/competencias" action-command="Competencias" position="30421"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/comunicaciones" action-command="Comunicaciones" position="30419"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/separator" position="30420" is_separator="true"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/ramales" action-command="Ramales" position="30421"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/competencias" action-command="Competencias" position="30422"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgia.ToolBarFormLauncherExtension" active="true">

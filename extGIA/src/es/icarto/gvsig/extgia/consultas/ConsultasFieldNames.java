@@ -13,6 +13,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasMantenimie
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasPeajeCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasServicioCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BarreraRigidaCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ComunicacionesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.EnlacesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.FirmeCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.IsletasCaracteristicasReport;
@@ -148,6 +149,8 @@ public class ConsultasFieldNames {
 	    + "potencia, observaciones";
 	case Ramales:
 	    return "tr.item, tv.item, nv.item, pk, ramal, st.item, direccion, mu.item, longitud, observaciones";
+	case Comunicaciones:
+	    return "gid, fecha_actualizacion, am.item, bc.item, tr.item, tramo_constructivo, pk_inicial, pk_final, mu.item, tipo, seccion, longitud, n_elementos, descripcion";
 	}
 	return null;
     }
@@ -604,6 +607,21 @@ public class ConsultasFieldNames {
 		+ "longitud as \"Longitud\","
 		+ "observaciones as \"Observaciones\"";
     }
+    
+    public static String comunicacionesCSVFieldNames() {
+	return "gid, fecha_actualizacion as \"Fecha Actualización\","
+		+ "am.item as \"Area Mantenimiento\","
+		+ "bc.item as \"Base Contratista\","
+		+ "tr.item as \"Tramo\","
+		+ "pk_inicial as \"PK Inicial\","
+		+ "pk_final as \"PK Final\","
+		+ "mu.item as \"Municipio\","
+		+ "tipo as \"Tipo\","
+		+ "seccion as \"Seccion\","
+		+ "longitud as \"Longitud\","
+		+ "n_elementos as \"Número de elementos\","
+		+ "descripcion as \"Descripción\"";
+    }
 
     public static void createCaracteristicasReport(String[] element,
 	    String outputFile, DefaultTableModel tableModel,
@@ -694,6 +712,8 @@ public class ConsultasFieldNames {
 	    new RamalesCaracteristicasReport(element, outputFile, tableModel,
 		    filters, tipo);
 	    break;
+	case Comunicaciones:
+	    new ComunicacionesCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
 	}
     }
 
