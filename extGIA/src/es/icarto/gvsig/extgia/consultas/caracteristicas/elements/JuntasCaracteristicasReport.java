@@ -21,11 +21,6 @@ public class JuntasCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Junta", "Tramo", "Tipo Vía", "Nombre Vía",
 		"PK", "Número Junta", "Ancho", "Módulo", "Elemento",

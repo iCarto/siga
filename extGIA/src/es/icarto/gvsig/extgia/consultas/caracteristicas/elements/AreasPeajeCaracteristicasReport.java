@@ -21,11 +21,6 @@ public class AreasPeajeCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Área", "Nombre", "Tramo", "PK",
 		"Puesta en Servicio", "Longitud bordillos (m)", "Nº Bumpers",

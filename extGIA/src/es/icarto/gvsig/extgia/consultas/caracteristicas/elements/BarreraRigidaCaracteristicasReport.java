@@ -21,11 +21,6 @@ public class BarreraRigidaCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Barrera Rígida", "Tramo", "Tipo Vía",
 		"Nombre Vía", "PK Inicial", "PK Final", "Obstáculo Protegido",

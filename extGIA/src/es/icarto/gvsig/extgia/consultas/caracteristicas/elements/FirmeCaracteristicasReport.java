@@ -20,10 +20,6 @@ public class FirmeCaracteristicasReport extends PDFReport {
 	super(element, fileName, tableModel, filters, tipo);
     }
 
-    @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
 
     @Override
     protected String[] getColumnNames() {

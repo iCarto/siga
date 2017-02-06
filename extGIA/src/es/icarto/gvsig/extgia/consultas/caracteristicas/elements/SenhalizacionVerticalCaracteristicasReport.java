@@ -21,11 +21,6 @@ public class SenhalizacionVerticalCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Elemento", "Tramo", "Tipo Vía",
 		"Nombre Vía", "PK", "Tipo Señal", "Código Señal", "Leyenda",

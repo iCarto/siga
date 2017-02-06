@@ -21,11 +21,6 @@ public class TaludesCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Talud", "Tramo", "PK Inicial", "PK Final",
 		"Tipo Talud", "Roca", "Árboles", "Gunita", "Escollera",

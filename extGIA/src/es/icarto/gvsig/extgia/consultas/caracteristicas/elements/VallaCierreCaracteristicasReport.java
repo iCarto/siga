@@ -21,11 +21,6 @@ public class VallaCierreCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Valla", "Tramo", "PK Inicial", "PK Final",
 		"Tipo Valla", "Longitud", "Altura", "Número Paños",

@@ -21,11 +21,6 @@ public class MurosCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Muro", "Tramo", "Tipo Vía", "Nombre Vía",
 		"PK Inicial", "PK Final", "Material", "Longitud (m)",

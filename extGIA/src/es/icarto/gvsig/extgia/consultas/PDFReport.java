@@ -22,6 +22,7 @@ import com.lowagie.text.Element;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
@@ -70,7 +71,9 @@ public abstract class PDFReport {
 	return reportType.title();
     }
 
-    protected abstract Rectangle setPageSize();
+    protected Rectangle setPageSize() {
+	return PageSize.A4.rotate();
+    }
 
     protected abstract String[] getColumnNames();
 

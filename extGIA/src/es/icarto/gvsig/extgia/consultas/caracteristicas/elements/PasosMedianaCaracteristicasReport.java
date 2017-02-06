@@ -21,11 +21,6 @@ public class PasosMedianaCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Paso", "Tramo", "Tipo Vía", "Nombre Vía",
 		"PK", "Longitud", "Número Postes", "Cierre", "Longitud Cierre",

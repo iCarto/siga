@@ -58,11 +58,6 @@ public class AreasDescansoCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected void writeDatesRange(Document document,
 	    ConsultasFilters<Field> filters) {
 

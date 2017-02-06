@@ -21,11 +21,6 @@ public class RamalesCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "Tramo", "Tipo Vía", "Nombre Vía", "PK",
 		"Ramal", "Sentido", "Dirección", "Municipio", "Longitud",

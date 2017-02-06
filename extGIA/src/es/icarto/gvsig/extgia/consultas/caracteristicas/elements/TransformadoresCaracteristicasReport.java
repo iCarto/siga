@@ -21,11 +21,6 @@ public class TransformadoresCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Transformador", "Tramo", "Tipo Vía",
 		"Nombre Vía", "PK", "Denominación", "Titularidad", "Estado",

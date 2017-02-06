@@ -28,11 +28,6 @@ public class AreasMantenimientoCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Área", "Nombre", "Tramo", "PK",
 		"Centro de operaciones", "Centro de comunicaciones",

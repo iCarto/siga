@@ -21,11 +21,6 @@ public class LineasSuministroCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Línea", "Tramo", "Tipo Vía", "Nombre Vía",
 		"PK Inicial", "PK Final", "Denominación", "Titularidad",

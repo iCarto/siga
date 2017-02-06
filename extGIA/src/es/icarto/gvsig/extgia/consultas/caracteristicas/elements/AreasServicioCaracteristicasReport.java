@@ -28,11 +28,6 @@ public class AreasServicioCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected Rectangle setPageSize() {
-	return PageSize.A4.rotate();
-    }
-
-    @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Área", "Nombre", "Tramo", "PK",
 		"Puesta en Servicio", "Superficie Total", "Riego", "Cafetería",
