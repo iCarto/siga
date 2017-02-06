@@ -124,11 +124,6 @@ public class TransformadoresForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "transformadores_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

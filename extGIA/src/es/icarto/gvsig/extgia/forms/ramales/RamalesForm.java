@@ -49,11 +49,6 @@ public class RamalesForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return getBasicName() + "_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

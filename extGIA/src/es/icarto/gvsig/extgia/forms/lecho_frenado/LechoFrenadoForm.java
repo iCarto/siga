@@ -120,11 +120,6 @@ public class LechoFrenadoForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "lecho_frenado_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

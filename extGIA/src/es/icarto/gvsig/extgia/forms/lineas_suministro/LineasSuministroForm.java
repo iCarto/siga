@@ -133,11 +133,6 @@ public class LineasSuministroForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "lineas_suministro_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

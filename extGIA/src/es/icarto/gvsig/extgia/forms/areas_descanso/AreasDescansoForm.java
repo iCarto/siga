@@ -137,9 +137,4 @@ public class AreasDescansoForm extends AbstractFormWithLocationWidgets {
 	return areaDescansoIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "areas_descanso_imagenes";
-    }
-
 }

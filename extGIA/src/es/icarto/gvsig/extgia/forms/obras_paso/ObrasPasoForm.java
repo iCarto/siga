@@ -89,9 +89,4 @@ public class ObrasPasoForm extends AbstractFormWithLocationWidgets {
 	return obraPasoIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "obras_paso_imagenes";
-    }
-
 }

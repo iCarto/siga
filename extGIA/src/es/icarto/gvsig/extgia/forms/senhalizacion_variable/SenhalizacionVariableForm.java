@@ -121,11 +121,6 @@ public class SenhalizacionVariableForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "senhalizacion_variable_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

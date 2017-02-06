@@ -162,9 +162,4 @@ public class PasosMedianaForm extends AbstractFormWithLocationWidgets {
 	return pasoMedianaIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "pasos_mediana_imagenes";
-    }
-
 }

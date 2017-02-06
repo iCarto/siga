@@ -84,11 +84,6 @@ public class MurosForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "muros_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

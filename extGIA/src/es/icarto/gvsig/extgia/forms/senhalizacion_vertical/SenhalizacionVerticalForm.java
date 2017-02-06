@@ -158,9 +158,4 @@ public class SenhalizacionVerticalForm extends AbstractFormWithLocationWidgets {
     public String getElementIDValue() {
 	return elementoSenhalizacionIDWidget.getText();
     }
-
-    @Override
-    public String getImagesDBTableName() {
-	return "senhalizacion_vertical_imagenes";
-    }
 }

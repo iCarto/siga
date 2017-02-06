@@ -466,7 +466,9 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
 
     public abstract JTable getTrabajosJTable();
 
-    public abstract String getImagesDBTableName();
+    public String getImagesDBTableName() {
+	return getBasicName() + "_imagenes";
+    }
 
     public String getReconocimientosIDField() {
 	return "n_inspeccion";

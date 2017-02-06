@@ -107,9 +107,4 @@ public class FirmeForm extends AbstractFormWithLocationWidgets {
 	return firmeIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "firme_imagenes";
-    }
-
 }

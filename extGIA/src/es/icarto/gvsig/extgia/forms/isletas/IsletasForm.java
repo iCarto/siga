@@ -134,9 +134,4 @@ public class IsletasForm extends AbstractFormWithLocationWidgets {
 	return isletaIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "isletas_imagenes";
-    }
-
 }

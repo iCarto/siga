@@ -162,9 +162,4 @@ public class TaludesForm extends AbstractFormWithLocationWidgets {
 	return taludIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "taludes_imagenes";
-    }
-
 }

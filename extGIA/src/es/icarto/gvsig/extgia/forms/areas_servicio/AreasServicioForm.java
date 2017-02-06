@@ -135,9 +135,4 @@ public class AreasServicioForm extends AbstractFormWithLocationWidgets {
 	return areaServicioIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "areas_servicio_imagenes";
-    }
-
 }

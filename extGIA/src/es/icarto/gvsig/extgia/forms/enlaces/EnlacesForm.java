@@ -176,9 +176,4 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
 	return enlaceIDWidget.getText();
     }
 
-    @Override
-    public String getImagesDBTableName() {
-	return "enlaces_imagenes";
-    }
-
 }

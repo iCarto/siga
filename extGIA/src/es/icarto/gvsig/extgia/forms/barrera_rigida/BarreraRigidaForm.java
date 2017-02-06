@@ -131,9 +131,4 @@ public class BarreraRigidaForm extends AbstractFormWithLocationWidgets {
     public String getElementIDValue() {
 	return barreraRigidaIDWidget.getText();
     }
-
-    @Override
-    public String getImagesDBTableName() {
-	return "barrera_rigida_imagenes";
-    }
 }

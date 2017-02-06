@@ -128,11 +128,6 @@ public class AreasPeajeForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "areas_peaje_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }

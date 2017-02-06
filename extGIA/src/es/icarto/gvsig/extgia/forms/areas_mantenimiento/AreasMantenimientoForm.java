@@ -114,11 +114,6 @@ public class AreasMantenimientoForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
-    public String getImagesDBTableName() {
-	return "areas_mantenimiento_imagenes";
-    }
-
-    @Override
     public String getBasicName() {
 	return TABLENAME;
     }
