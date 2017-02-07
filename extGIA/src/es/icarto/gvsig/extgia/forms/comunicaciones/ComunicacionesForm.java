@@ -1,16 +1,20 @@
 package es.icarto.gvsig.extgia.forms.comunicaciones;
 
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
+import es.icarto.gvsig.extgia.forms.FilesLinkDataImp;
 import es.icarto.gvsig.extgia.preferences.Elements;
+import es.icarto.gvsig.navtableforms.AbstractForm;
+import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkButton;
 
 @SuppressWarnings("serial")
 public class ComunicacionesForm extends AbstractFormWithLocationWidgets {
-    
+
     public static final String TABLENAME = "comunicaciones";
 
     public ComunicacionesForm(FLyrVect layer) {
@@ -51,6 +55,27 @@ public class ComunicacionesForm extends AbstractFormWithLocationWidgets {
     @Override
     protected boolean hasSentido() {
 	return false;
+    }
+
+    private final class FilesLinkDataImpCom extends FilesLinkDataImp {
+
+	public FilesLinkDataImpCom(Elements element) {
+	    super(element);
+	}
+
+	@Override
+	public String getFolder(AbstractForm form) {
+	    return getBaseDirectory();
+	};
+    }
+
+    @Override
+    protected void addNewButtonsToActionsToolBar(final Elements element) {
+	JPanel actionsToolBar = this.getActionsToolBar();
+
+	filesLinkButton = new FilesLinkButton(this, new FilesLinkDataImpCom(
+		getElement()));
+	actionsToolBar.add(filesLinkButton);
     }
 
 }

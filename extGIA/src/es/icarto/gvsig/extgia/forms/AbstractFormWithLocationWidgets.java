@@ -337,32 +337,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
 	    final Elements element) {
 	JPanel actionsToolBar = this.getActionsToolBar();
 
-	filesLinkButton = new FilesLinkButton(this, new FilesLinkData() {
-
-	    @Override
-	    public String getRegisterField() {
-		return element.pk;
-	    }
-
-	    @Override
-	    public String getBaseDirectory() {
-		String baseDirectory = null;
-		try {
-		    baseDirectory = PreferencesPage.getBaseDirectory();
-		} catch (Exception e) {
-		}
-
-		if (baseDirectory == null || baseDirectory.isEmpty()) {
-		    baseDirectory = Launcher.getAppHomeDir();
-		}
-
-		baseDirectory = baseDirectory + File.separator + "FILES"
-			+ File.separator + "inventario" + File.separator
-			+ element;
-
-		return baseDirectory;
-	    }
-	});
+	filesLinkButton = new FilesLinkButton(this, new FilesLinkDataImp(element));
 	actionsToolBar.add(filesLinkButton);
     }
 
