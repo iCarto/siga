@@ -23,8 +23,8 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.gui.BasicAbstractWindow;
-import es.icarto.gvsig.commons.queries.ConnectionWrapper;
 import es.icarto.gvsig.commons.queries.CustomiceDialog;
 import es.icarto.gvsig.commons.queries.FinalActions;
 import es.icarto.gvsig.commons.queries.QueriesWidget;

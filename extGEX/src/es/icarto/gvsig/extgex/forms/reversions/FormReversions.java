@@ -35,6 +35,7 @@ import es.icarto.gvsig.extgex.navtable.NavTableComponentsFactory;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.CustomTableModel;
+import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.navtable.contextualmenu.ChooseSortFieldDialog;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -178,32 +179,32 @@ public class FormReversions extends BasicAbstractForm {
 	    ResultSet rs = getFincasByExpReversion();
 
 	    while (rs.next()) {
-		reversionData[0] = Utils.formatValue(rs.getObject(1));
+		reversionData[0] = SIGAFormatter.formatValue(rs.getObject(1));
 		reversionData[1] = getExpedientesPMByFinca(rs.getString(1));
-		reversionData[2] = Utils.formatValue(rs.getObject(2));
+		reversionData[2] = SIGAFormatter.formatValue(rs.getObject(2));
 		if (rs.getObject(2) != null) {
 		    totalSuperficie += rs.getDouble(2);
 		}
-		reversionData[3] = Utils.formatValue(rs.getObject(3));
+		reversionData[3] = SIGAFormatter.formatValue(rs.getObject(3));
 		if (rs.getObject(3) != null) {
 		    totalImporteEuros += rs.getDouble(3);
 		}
-		reversionData[4] = Utils.formatValue(rs.getObject(4));
+		reversionData[4] = SIGAFormatter.formatValue(rs.getObject(4));
 		if (rs.getObject(4) != null) {
 		    totalImportePtas += rs.getDouble(4);
 		}
-		reversionData[5] = Utils.formatValue(rs.getObject(5));
+		reversionData[5] = SIGAFormatter.formatValue(rs.getObject(5));
 
 		tableModel.addRow(reversionData);
 	    }
 	    reversionData[0] = "<html><b>" + "TOTAL" + "</b></html>";
 	    reversionData[1] = "";
-	    reversionData[2] = "<html><b>" + Utils.formatValue(totalSuperficie)
+	    reversionData[2] = "<html><b>" + SIGAFormatter.formatValue(totalSuperficie)
 		    + "</b></html>";
 	    reversionData[3] = "<html><b>"
-		    + Utils.formatValue(totalImporteEuros) + "</b></html>";
+		    + SIGAFormatter.formatValue(totalImporteEuros) + "</b></html>";
 	    reversionData[4] = "<html><b>"
-		    + Utils.formatValue(totalImportePtas) + "</b></html>";
+		    + SIGAFormatter.formatValue(totalImportePtas) + "</b></html>";
 	    reversionData[5] = "";
 	    tableModel.addRow(reversionData);
 	    repaint();
