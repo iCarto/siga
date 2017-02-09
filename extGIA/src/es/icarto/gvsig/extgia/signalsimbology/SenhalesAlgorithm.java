@@ -59,6 +59,8 @@ public class SenhalesAlgorithm {
 	    return hitoSize;
 	} else if (tipo.equals("Contenido fijo")) {
 	    return pictureSize;
+	} else if (tipo.equals("Panel direccional")) {
+	    return pictureSize;
 	} else {
 	    return cartelSize;
 	}
