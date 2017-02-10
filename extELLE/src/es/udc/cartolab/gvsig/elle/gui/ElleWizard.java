@@ -55,14 +55,15 @@ public class ElleWizard extends WizardPanel {
     private DBSession dbs;
     private String[][] layers;
     private final String wizardTitle;
-    private MapFilter mapFilter;
+    private final MapFilter mapFilter;
 
     public ElleWizard() {
-	ConfigExtension configExt = (ConfigExtension) PluginServices.getExtension(ConfigExtension.class);
+	ConfigExtension configExt = (ConfigExtension) PluginServices
+		.getExtension(ConfigExtension.class);
 	this.wizardTitle = configExt.getWizardTitle();
 	this.mapFilter = configExt.getMapFilter();
     }
-    
+
     @Override
     public void execute() {
 
@@ -75,7 +76,7 @@ public class ElleWizard extends WizardPanel {
 	FLayer layer = null;
 	if (dbs != null) {
 	    PluginServices.getMDIManager().setWaitCursor();
-	    //load layer
+	    // load layer
 	    IProjection proj = crsPanel.getCurProj();
 	    int[] selectedPos = layerList.getSelectedIndices();
 	    if (selectedPos.length > 1) {
@@ -85,12 +86,11 @@ public class ElleWizard extends WizardPanel {
 
 		try {
 		    for (int pos : selectedPos) {
-			((FLayers)layer).addLayer(getLayer(pos, proj));
+			((FLayers) layer).addLayer(getLayer(pos, proj));
 		    }
 		} catch (SQLException e) {
 		    JOptionPane.showMessageDialog(this,
-			    "SQLException: " + e.getMessage(),
-			    "SQL Error",
+			    "SQLException: " + e.getMessage(), "SQL Error",
 			    JOptionPane.ERROR_MESSAGE);
 		    try {
 			dbs = DBSession.reconnect();
@@ -99,8 +99,7 @@ public class ElleWizard extends WizardPanel {
 		    }
 		} catch (DBException e) {
 		    JOptionPane.showMessageDialog(this,
-			    "SQLException: " + e.getMessage(),
-			    "DB Error",
+			    "SQLException: " + e.getMessage(), "DB Error",
 			    JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -110,8 +109,7 @@ public class ElleWizard extends WizardPanel {
 		    layer = getLayer(pos, proj);
 		} catch (SQLException e) {
 		    JOptionPane.showMessageDialog(this,
-			    "SQLException: " + e.getMessage(),
-			    "SQL Error",
+			    "SQLException: " + e.getMessage(), "SQL Error",
 			    JOptionPane.ERROR_MESSAGE);
 		    try {
 			dbs = DBSession.reconnect();
@@ -120,14 +118,13 @@ public class ElleWizard extends WizardPanel {
 		    }
 		} catch (DBException e) {
 		    JOptionPane.showMessageDialog(this,
-			    "SQLException: " + e.getMessage(),
-			    "DB Error",
+			    "SQLException: " + e.getMessage(), "DB Error",
 			    JOptionPane.ERROR_MESSAGE);
 		}
 	    }
 	    PluginServices.getMDIManager().restoreCursor();
 	} else {
-	    //Show no connection error
+	    // Show no connection error
 	    JOptionPane.showMessageDialog(this,
 		    PluginServices.getText(this, "notConnectedError"),
 		    PluginServices.getText(this, "notConnected"),
@@ -141,13 +138,14 @@ public class ElleWizard extends WizardPanel {
 	return "";
     }
 
-    private FLayer getLayer(int pos, IProjection proj) throws SQLException, DBException {
+    private FLayer getLayer(int pos, IProjection proj) throws SQLException,
+    DBException {
 	String layerName = layers[pos][1];
 	String tableName = layers[pos][2];
 
 	String schema = null;
 	if (layers[pos].length > 8) {
-	    if (layers[pos][8].length()>0) {
+	    if (layers[pos][8].length() > 0) {
 		schema = layers[pos][8];
 	    }
 	}
@@ -172,14 +170,15 @@ public class ElleWizard extends WizardPanel {
 	    mainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 		    null, PluginServices.getText(this, "Choose_Layer"),
 		    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-		    javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-
+		    javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+		    null));
 
 	    mainPanel.add(getListPanel(), BorderLayout.CENTER);
 	    mainPanel.add(getCRSPanel(), BorderLayout.SOUTH);
 
 	} else {
-	    JLabel label = new JLabel(PluginServices.getText(this, "notConnectedError"));
+	    JLabel label = new JLabel(PluginServices.getText(this,
+		    "notConnectedError"));
 	    mainPanel.add(label, BorderLayout.NORTH);
 	}
 	add(mainPanel, BorderLayout.CENTER);
@@ -196,8 +195,8 @@ public class ElleWizard extends WizardPanel {
 	    listPanel = new JPanel();
 
 	    try {
-		 InputStream stream = getClass().getClassLoader()
-			    .getResourceAsStream("forms/loadLayer.jfrm");
+		InputStream stream = getClass().getClassLoader()
+			.getResourceAsStream("forms/loadLayer.jfrm");
 		FormPanel form = new FormPanel(stream);
 		form.setFocusTraversalPolicyProvider(true);
 
@@ -205,7 +204,8 @@ public class ElleWizard extends WizardPanel {
 
 		dbs = DBSession.getCurrentSession();
 
-		if (dbs.tableExists(DBStructure.getSchema(), DBStructure.getMapTable())) {
+		if (dbs.tableExists(DBStructure.getSchema(),
+			DBStructure.getMapTable())) {
 
 		    String[] maps = MapDAO.getInstance().getMaps();
 
@@ -213,23 +213,32 @@ public class ElleWizard extends WizardPanel {
 		    groupList = form.getList("groupList");
 		    groupList.setListData(filterMaps(maps));
 
-		    groupList.addListSelectionListener(new ListSelectionListener() {
+		    groupList
+		    .addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-			    int[] selected = groupList.getSelectedIndices();
+			    int[] selected = groupList
+				    .getSelectedIndices();
 			    if (selected.length == 1) {
-				String where = String.format("where mapa ='%s'", groupList.getSelectedValues()[0]);
+				String where = String.format(
+					"where mapa ='%s'",
+					groupList.getSelectedValues()[0]);
 				try {
 					    layers = dbs.getTable(
 						    DBStructure.getMapTable(),
 						    DBStructure.getSchema(),
-						    where);
+						    where, new String[] {
+							    "posicion",
+							    "nombre_capa" },
+						    true);
 				} catch (SQLException e) {
-				    JOptionPane.showMessageDialog(null,
-					    "Error SQL: " + e.getMessage(),
-					    "SQL Exception",
-					    JOptionPane.ERROR_MESSAGE);
+				    JOptionPane.showMessageDialog(
+					    null,
+					    "Error SQL: "
+						    + e.getMessage(),
+						    "SQL Exception",
+						    JOptionPane.ERROR_MESSAGE);
 				    try {
 					dbs = DBSession.reconnect();
 				    } catch (DBException e1) {
@@ -238,7 +247,7 @@ public class ElleWizard extends WizardPanel {
 				}
 				if (layers != null) {
 				    String[] layerNames = new String[layers.length];
-				    for (int i=0; i<layers.length; i++) {
+				    for (int i = 0; i < layers.length; i++) {
 					layerNames[i] = layers[i][1];
 				    }
 				    layerList.setListData(layerNames);
@@ -251,11 +260,13 @@ public class ElleWizard extends WizardPanel {
 
 		    });
 
-		    layerList.addListSelectionListener(new ListSelectionListener() {
+		    layerList
+		    .addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-			    int[] selected = groupList.getSelectedIndices();
+			    int[] selected = groupList
+				    .getSelectedIndices();
 			    if (selected.length > 0) {
 				callStateChanged(true);
 			    } else {
@@ -266,7 +277,8 @@ public class ElleWizard extends WizardPanel {
 		    });
 		} else {
 		    listPanel = new JPanel();
-		    JLabel label = new JLabel(PluginServices.getText(this, "no_map_table_on_schema"));
+		    JLabel label = new JLabel(PluginServices.getText(this,
+			    "no_map_table_on_schema"));
 		    listPanel.add(label);
 		}
 
@@ -296,7 +308,8 @@ public class ElleWizard extends WizardPanel {
 
     private JPanel getCRSPanel() {
 	if (crsPanel == null) {
-	    crsPanel = CRSSelectPanel.getPanel(AddLayerDialog.getLastProjection());
+	    crsPanel = CRSSelectPanel.getPanel(AddLayerDialog
+		    .getLastProjection());
 	    crsPanel.addActionListener(new java.awt.event.ActionListener() {
 		@Override
 		public void actionPerformed(java.awt.event.ActionEvent e) {
