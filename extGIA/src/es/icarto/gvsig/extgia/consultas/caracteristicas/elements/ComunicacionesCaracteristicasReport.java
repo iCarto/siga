@@ -12,17 +12,19 @@ import es.icarto.gvsig.extgia.consultas.QueryType;
 
 public class ComunicacionesCaracteristicasReport extends PDFReport {
 
-    public ComunicacionesCaracteristicasReport(String[] element, String fileName,
-	    DefaultTableModel table, ConsultasFilters<Field> filters,
-	    QueryType reportType) {
+    public ComunicacionesCaracteristicasReport(String[] element,
+	    String fileName, DefaultTableModel table,
+	    ConsultasFilters<Field> filters, QueryType reportType) {
 	super(element, fileName, table, filters, reportType);
     }
 
     @Override
     protected String[] getColumnNames() {
-	String[] columnNames = { "ID", "Fecha actualización", "Área mantenimiento", "Base contratista",
-		"Tramo", "Tramo Constructivo", "PK inicial (Km)", "PK final (Km)", "Municipio", "Tipo", "Sección", "Longitud (m)",
-		"N. elementos", "Descripción" };
+	// should be taken from column.properties
+	String[] columnNames = { "ID Comunicación", "Tramo",
+		"Tramo Constructivo", "PK inicial (Km)", "PK final (Km)",
+		"Tipo", "Sección", "Longitud (m)", "Nº elementos",
+		"Descripción", "Observaciones" };
 	return columnNames;
     }
 
@@ -30,24 +32,21 @@ public class ComunicacionesCaracteristicasReport extends PDFReport {
     protected float[] getColumnsWidth(int columnCount) {
 	float[] columnsWidth = new float[columnCount];
 
-	columnsWidth[0] = 35f;
-	columnsWidth[1] = 60f;
-	columnsWidth[2] = 70f;
-	columnsWidth[3] = 60f;
-	columnsWidth[4] = 45f;
-	columnsWidth[5] = 60f;
-	columnsWidth[6] = 50f;
-	columnsWidth[7] = 60f;
-	columnsWidth[8] = 60f;
-	columnsWidth[9] = 60f;
-	columnsWidth[10] = 50f;
-	columnsWidth[11] = 60f;
-	columnsWidth[12] = 50f;
-	columnsWidth[13] = 90f;
+	columnsWidth[0] = 65f;
+	columnsWidth[1] = 65f;
+	columnsWidth[2] = 85f;
+	columnsWidth[3] = 70f;
+	columnsWidth[4] = 70f;
+	columnsWidth[5] = 65f;
+	columnsWidth[6] = 60f;
+	columnsWidth[7] = 70f;
+	columnsWidth[8] = 70f;
+	columnsWidth[9] = 95f;
+	columnsWidth[10] = 95f;
 
 	return columnsWidth;
     }
-    
+
     @Override
     protected void writeDatesRange(Document document,
 	    ConsultasFilters<Field> filters) {

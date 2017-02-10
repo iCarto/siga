@@ -150,7 +150,7 @@ public class ConsultasFieldNames {
 	case Ramales:
 	    return "tr.item, tv.item, nv.item, pk, ramal, st.item, direccion, mu.item, longitud, observaciones";
 	case Comunicaciones:
-	    return "gid, fecha_actualizacion, am.item, bc.item, tr.item, tramo_constructivo, pk_inicial, pk_final, mu.item, tipo, seccion, longitud, n_elementos, descripcion";
+	    return "gid, tr.item, tramo_constructivo, pk_inicial, pk_final, tipo, seccion, longitud, n_elementos, descripcion, observaciones";
 	}
 	return null;
     }
@@ -607,12 +607,13 @@ public class ConsultasFieldNames {
 		+ "longitud as \"Longitud\","
 		+ "observaciones as \"Observaciones\"";
     }
-    
+
     public static String comunicacionesCSVFieldNames() {
-	return "gid, fecha_actualizacion as \"Fecha Actualización\","
+	return "gid as \"ID Comunicación\", fecha_actualizacion as \"Fecha Actualización\","
 		+ "am.item as \"Area Mantenimiento\","
 		+ "bc.item as \"Base Contratista\","
 		+ "tr.item as \"Tramo\","
+		+ "tramo_constructivo as \"Tramo Constructivo\","
 		+ "pk_inicial as \"PK Inicial\","
 		+ "pk_final as \"PK Final\","
 		+ "mu.item as \"Municipio\","
@@ -620,7 +621,8 @@ public class ConsultasFieldNames {
 		+ "seccion as \"Seccion\","
 		+ "longitud as \"Longitud\","
 		+ "n_elementos as \"Número de elementos\","
-		+ "descripcion as \"Descripción\"";
+		+ "descripcion as \"Descripción\","
+		+ "observaciones as \"Observaciones\"";
     }
 
     public static void createCaracteristicasReport(String[] element,
@@ -713,7 +715,8 @@ public class ConsultasFieldNames {
 		    filters, tipo);
 	    break;
 	case Comunicaciones:
-	    new ComunicacionesCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+	    new ComunicacionesCaracteristicasReport(element, outputFile,
+		    tableModel, filters, tipo);
 	}
     }
 

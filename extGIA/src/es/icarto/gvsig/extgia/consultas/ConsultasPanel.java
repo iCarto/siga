@@ -1,5 +1,9 @@
 package es.icarto.gvsig.extgia.consultas;
 
+import static es.icarto.gvsig.extgia.preferences.DBFieldNames.AREA_MANTENIMIENTO;
+import static es.icarto.gvsig.extgia.preferences.DBFieldNames.BASE_CONTRATISTA;
+import static es.icarto.gvsig.extgia.preferences.DBFieldNames.TRAMO;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -30,14 +34,12 @@ import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
-import static es.icarto.gvsig.extgia.preferences.DBFieldNames.AREA_MANTENIMIENTO;
-import static es.icarto.gvsig.extgia.preferences.DBFieldNames.BASE_CONTRATISTA;
-import static es.icarto.gvsig.extgia.preferences.DBFieldNames.TRAMO;
 
 @SuppressWarnings("serial")
 public class ConsultasPanel extends ValidatableForm implements ActionListener {
 
-    private static final KeyValue ALL_ITEMS = new KeyValue("todos", "00   TODOS   00");
+    private static final KeyValue ALL_ITEMS = new KeyValue("todos",
+	    "00   TODOS   00");
     private static final KeyValue EMPTY_ITEM = new KeyValue(" ", " ");
 
     private JComboBox elemento;
@@ -64,17 +66,17 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	fechaInicio.setDate(calendar.getTime());
 	fechaFin.setDate(calendar.getTime());
     }
-    
+
     @Override
     protected void initWidgets() {
-        super.initWidgets();
-        addImageHandler("image", PreferencesPage.SIGA_LOGO);
-        addChained(BASE_CONTRATISTA, AREA_MANTENIMIENTO);
-        addChained(TRAMO, BASE_CONTRATISTA);
-        addChained("elemento", "tipo_consulta");
-        
-        elemento = (JComboBox) getWidgets().get("elemento");
-	
+	super.initWidgets();
+	addImageHandler("image", PreferencesPage.SIGA_LOGO);
+	addChained(BASE_CONTRATISTA, AREA_MANTENIMIENTO);
+	addChained(TRAMO, BASE_CONTRATISTA);
+	addChained("elemento", "tipo_consulta");
+
+	elemento = (JComboBox) getWidgets().get("elemento");
+
 	queriesWidget = new QueriesWidgetCombo(formPanel, "tipo_consulta");
 
 	pdfRadioButton = (JRadioButton) formPanel.getComponentByName("pdf");
@@ -88,23 +90,24 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 
 	launchButton = (JButton) formPanel.getComponentByName("launch_button");
 	customButton = (JButton) formPanel.getComponentByName("custom_button");
-	
+
     }
-    
+
     @Override
     protected void setListeners() {
-        super.setListeners();
-        reportTypeListener = new ReportTypeListener();
-        elemento.addActionListener(reportTypeListener);
-        queriesWidget.addActionListener(reportTypeListener);
-        launchButton.addActionListener(this);
-        customButton.addActionListener(this);
+	super.setListeners();
+	reportTypeListener = new ReportTypeListener();
+	elemento.addActionListener(reportTypeListener);
+	queriesWidget.addActionListener(reportTypeListener);
+	launchButton.addActionListener(this);
+	customButton.addActionListener(this);
 	customButton.setEnabled(false);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	consultasFilters = new ConsultasFilters<Field>(getFilterValue(AREA_MANTENIMIENTO),
+	consultasFilters = new ConsultasFilters<Field>(
+		getFilterValue(AREA_MANTENIMIENTO),
 		getFilterValue(BASE_CONTRATISTA), getFilterValue(TRAMO),
 		fechaInicio.getDate(), fechaFin.getDate());
 
@@ -123,14 +126,26 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	    URL resource = getClass().getClassLoader().getResource(
 		    "columns.properties");
 
-	    List<Field> columns = Utils.getFields(resource.getPath(),
-		    "audasa_extgia", selElement.getKey().toLowerCase());
+	    List<Field> columns = null;
+	    if (selElement.getKey().equalsIgnoreCase("comunicaciones")) {
+		// Para poder incluir el gid
+		final List<String> reserved = Arrays.asList(new String[] {
+			"the_geom", "geom" });
+		columns = Utils.getFields(resource.getPath(), "audasa_extgia",
+			selElement.getKey().toLowerCase(), reserved);
+	    } else {
+		columns = Utils.getFields(resource.getPath(), "audasa_extgia",
+			selElement.getKey().toLowerCase());
+	    }
+
 	    for (Field f : columns) {
 		f.setKey("el." + f.getKey());
 	    }
 
 	    if (selElement.getKey().equalsIgnoreCase("senhalizacion_vertical")) {
-		final List<String> reservedColumns = Arrays.asList(new String[] { "gid", "the_geom", "geom", "municipio" });
+		final List<String> reservedColumns = Arrays
+			.asList(new String[] { "gid", "the_geom", "geom",
+			"municipio" });
 		List<Field> columns2 = Utils.getFields(resource.getPath(),
 			"audasa_extgia", selElement.getKey().toLowerCase()
 				+ "_senhales", reservedColumns);
@@ -284,7 +299,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	}
 	return elements;
     }
-    
+
     private KeyValue getFilterValue(String cmpName) {
 	KeyValue kv = null;
 	JComboBox cmp = (JComboBox) getWidgets().get(cmpName);
