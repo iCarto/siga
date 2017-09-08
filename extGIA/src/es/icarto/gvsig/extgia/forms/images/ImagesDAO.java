@@ -8,7 +8,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import es.icarto.gvsig.extgia.utils.ImageUtils;
+import es.icarto.gvsig.commons.utils.ImageUtils;
+
 
 public class ImagesDAO {
 

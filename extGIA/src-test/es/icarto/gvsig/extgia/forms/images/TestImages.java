@@ -16,7 +16,8 @@ import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Test;
 
-import es.icarto.gvsig.extgia.utils.ImageUtils;
+import es.icarto.gvsig.commons.utils.ImageUtils;
+
 
 public class TestImages {
 

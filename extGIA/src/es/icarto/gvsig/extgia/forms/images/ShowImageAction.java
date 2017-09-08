@@ -9,8 +9,8 @@ import javax.swing.JButton;
 
 import com.jeta.forms.components.image.ImageComponent;
 
+import es.icarto.gvsig.commons.utils.ImageUtils;
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
-import es.icarto.gvsig.extgia.utils.ImageUtils;
 import es.icarto.gvsig.siga.PreferencesPage;
 
 public class ShowImageAction {
