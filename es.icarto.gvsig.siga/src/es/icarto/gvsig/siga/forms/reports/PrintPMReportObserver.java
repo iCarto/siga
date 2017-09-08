@@ -13,9 +13,9 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import es.icarto.gvsig.commons.imagefilechooser.ImageFileChooser;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.siga.PreferencesPage;
-import es.icarto.gvsig.siga.forms.reports.imagefilechooser.ImageFileChooser;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class PrintPMReportObserver implements ActionListener {
