@@ -8,9 +8,10 @@ import javax.swing.JRadioButton;
 import com.iver.andami.messages.NotificationManager;
 import com.jeta.forms.components.panel.FormPanel;
 
+import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.queries.CSVReport;
 import es.icarto.gvsig.commons.queries.XLSReport;
-import es.icarto.gvsig.extgex.utils.SaveFileDialog;
+import es.icarto.gvsig.commons.utils.FileUtils;
 
 public class QueriesOuputWidget {
 
@@ -44,6 +45,7 @@ public class QueriesOuputWidget {
 
     public File toPDF(ResultTableModel table, String[] filters) {
 	SaveFileDialog sfd = new SaveFileDialog("Archivos PDF", "pdf");
+	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
 	if (f != null && table.getRowCount() > 0) {
 	    String filename = f.getAbsolutePath();
@@ -55,6 +57,7 @@ public class QueriesOuputWidget {
     private File toCSV(ResultTableModel table, final String[] filters) {
 
 	SaveFileDialog sfd = new SaveFileDialog("CSV files", "csv");
+	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
 	if (f != null && table.getRowCount() > 0) {
 	    new CSVReport(f.getAbsolutePath(), table, table.getQueryFilters());
@@ -69,9 +72,10 @@ public class QueriesOuputWidget {
 
     public File toHtml(ResultTableModel table, String[] filters) {
 	SaveFileDialog sfd = new SaveFileDialog("HTML files", "html", "htm");
+	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
 	if (f != null && table.getRowCount() > 0) {
-	    if (sfd.writeFileToDisk(table.getHTML(), f)) {
+	    if (FileUtils.write(table.getHTML(), f)) {
 		NotificationManager.showMessageError("error_saving_file", null);
 	    }
 	}
@@ -80,6 +84,7 @@ public class QueriesOuputWidget {
 
     public File toRTF(ResultTableModel table, String[] filters) {
 	SaveFileDialog sfd = new SaveFileDialog("RTF files", "rtf");
+	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
 	if (f != null && table.getRowCount() > 0) {
 	    String filename = f.getAbsolutePath();
@@ -90,6 +95,7 @@ public class QueriesOuputWidget {
 
     public File toXLSX(ResultTableModel table, final String[] filters) {
 	SaveFileDialog sfd = new SaveFileDialog("Archivos Excel", "xls");
+	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
 	if (f != null && table.getRowCount() > 0) {
 	    String filename = f.getAbsolutePath();

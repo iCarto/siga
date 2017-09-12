@@ -13,6 +13,7 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.imagefilechooser.ImageFileChooser;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.siga.PreferencesPage;
@@ -37,6 +38,7 @@ public class PrintPMReportObserver implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent arg0) {
 	SaveFileDialog sfd = new SaveFileDialog("PDF files", "pdf");
+	sfd.setAskForOverwrite(true);
 	outputFile = sfd.showDialog();
 
 	if (outputFile != null) {

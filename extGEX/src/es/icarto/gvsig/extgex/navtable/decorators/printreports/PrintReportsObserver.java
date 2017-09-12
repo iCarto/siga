@@ -16,7 +16,7 @@ import com.iver.cit.gvsig.fmap.layers.LayerDrawEvent;
 import com.iver.cit.gvsig.fmap.layers.LayerDrawingListener;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-import es.icarto.gvsig.extgex.utils.SaveFileDialog;
+import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 /**
@@ -46,6 +46,7 @@ public class PrintReportsObserver implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent arg0) {
 	SaveFileDialog sfd = new SaveFileDialog("PDF files", "pdf");
+	sfd.setAskForOverwrite(true);
 	outputFile = sfd.showDialog();
 	if (outputFile != null) {
 	    // center in view

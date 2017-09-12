@@ -19,10 +19,10 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 
+import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.queries.FinalActions;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.icarto.gvsig.siga.forms.reports.PrintReportAction;
-import es.icarto.gvsig.siga.forms.reports.SaveFileDialog;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class PrintSVReportObserver implements ActionListener {
@@ -75,6 +75,7 @@ public class PrintSVReportObserver implements ActionListener {
 	    }
 
 	    SaveFileDialog sfd = new SaveFileDialog("PDF files", "pdf");
+	    sfd.setAskForOverwrite(true);
 	    outputFile = sfd.showDialog();
 
 	    if (outputFile != null) {

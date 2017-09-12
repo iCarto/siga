@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import com.iver.andami.PluginServices;
 
 import es.icarto.gvsig.commons.db.ConnectionWrapper;
+import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.queries.Component;
 import es.icarto.gvsig.commons.queries.FinalActions;
 import es.icarto.gvsig.commons.queries.XLSReport;
@@ -15,7 +16,6 @@ import es.icarto.gvsig.extgia.consultas.agregados.TrabajosAgregadosReport;
 import es.icarto.gvsig.extgia.consultas.agregados.XLSTrabajosAgregadosReport;
 import es.icarto.gvsig.extgia.consultas.firme.FirmeTrabajosReport;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
-import es.icarto.gvsig.siga.forms.reports.SaveFileDialog;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class Leaf implements Component {
@@ -49,8 +49,8 @@ public class Leaf implements Component {
 	    extensionDescription = PluginServices.getText(this, "excelFiles");
 	}
 	if (path == null) {
-	    SaveFileDialog sfd = new SaveFileDialog(extensionDescription,
-		    extension);
+	    SaveFileDialog sfd = new SaveFileDialog(extensionDescription, extension);
+	    sfd.setAskForOverwrite(true);
 	    outputFile = sfd.showDialog();
 	} else {
 	    if (path.isDirectory()) {
