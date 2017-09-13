@@ -60,11 +60,13 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.apache.log4j.Logger;
 
+import com.hardcode.gdbms.engine.data.driver.AlphanumericDBDriver;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.SingleVectorialDBConnectionExtension;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
+import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.utiles.swing.JPasswordDlg;
@@ -356,7 +358,8 @@ public class DBConnectionManagerDialog extends JPanel implements IWindow,
         }
 
         if (src == newButton) {
-            DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
+	    DBConnectionParamsDialog newco = new DBConnectionParamsDialog(
+		    new Class[] { IVectorialDatabaseDriver.class });
             newco.showDialog();
 
             if (newco.isOkPressed()) {

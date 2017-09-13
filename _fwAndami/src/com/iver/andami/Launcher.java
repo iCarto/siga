@@ -105,6 +105,7 @@ import org.gvsig.installer.swing.api.SwingInstallerLocator;
 import org.gvsig.installer.swing.api.execution.AbstractInstallPackageWizard;
 import org.gvsig.installer.swing.api.wizard.InstallerWizardActionListener;
 import org.gvsig.installer.swing.api.wizard.InstallerWizardPanel;
+import org.gvsig.tools.OsUtils;
 import org.gvsig.tools.library.impl.DefaultLibrariesInitializer;
 
 import com.iver.andami.authentication.IAuthentication;
@@ -276,9 +277,8 @@ public class Launcher {
 		AbstractInstallPackageWizard installPackageWizard = SwingInstallerLocator
 				.getSwingInstallerManager().createInstallPackageWizard(
 						appFolder,
-						new File(Launcher.getAndamiConfig()
-								.getPluginsDirectory()).getAbsoluteFile(),
 						new File(appFolder, "install"));
+		
 		installPackageWizard
 				.setWizardActionListener(new InstallerWizardActionListener() {
 
@@ -2136,14 +2136,10 @@ public class Launcher {
 	}
 
 	public static String getDefaultLookAndFeel() {
-		String osName = (String) System.getProperty("os.name");
-
-		if (osName.length() > 4 && osName.substring(0,5).toLowerCase().equals("linux"))
+		if (OsUtils.isLinux()) 
 			return nonWinDefaultLookAndFeel;
-		if (osName.toLowerCase().startsWith("mac os x"))
+		if (OsUtils.isMac())
 			return "ch.randelshofer.quaqua.QuaquaLookAndFeel";
-
-
 		return UIManager.getSystemLookAndFeelClassName();
 	}
 

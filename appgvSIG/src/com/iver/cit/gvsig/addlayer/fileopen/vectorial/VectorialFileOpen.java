@@ -22,6 +22,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -34,10 +35,15 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.addlayer.fileopen.AbstractFileOpen;
+import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
+import com.iver.cit.gvsig.fmap.drivers.gvl.FMapGVLDriver;
+import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.utiles.XMLEntity;
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
@@ -138,9 +144,30 @@ public class VectorialFileOpen extends AbstractFileOpen{
 				AddLayer.checkProjection(lyr, mapControl.getViewPort());
 				mapControl.getMapContext().getLayers().addLayer(lyr);
 
+				String path = file.getAbsolutePath();
+				// last index + 1 because FmapGVLDriver.FILE_EXTENSION
+				// does not contain the dot
+				FMapGVLDriver legendDriver = new FMapGVLDriver();
+				File legendFile = new File(path.substring(0,
+						path.lastIndexOf('.') + 1)
+						+ legendDriver.getFileExtension());
+
+				if (legendFile.exists() && lyr instanceof FLyrVect) {
+					FLyrVect lyrVect = (FLyrVect) lyr;
+					Hashtable<FLayer, IVectorLegend> map = legendDriver.read(
+							mapControl
+							.getMapContext().getLayers(), lyr, legendFile);
+					if (map.containsKey(lyr)) {
+						lyrVect.setLegend(map.get(lyr));
+					}
+				}
 				return lyr.getFullExtent();
 			}
 		} catch (ReadDriverException e) {
+			errors.add(e);
+		} catch (LegendDriverException e) {
+			errors.add(e);
+		} catch (LegendLayerException e) {
 			errors.add(e);
 		}
 		return null;

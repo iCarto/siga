@@ -49,10 +49,10 @@ public class ImageDrawer {
 	private int       width     = 0;
 	private int       height    = 0;
 	private Rendering rendering = null;
-	
-	BufferedImage image;
-	byte[] data;
 
+        BufferedImage image;
+        byte[] data;
+    
 	public ImageDrawer(Rendering rendering) {
 		this.rendering = rendering;
 	}
@@ -76,12 +76,12 @@ public class ImageDrawer {
 	public Image drawBufferOverImageObject(boolean replicateBand, int[] renderBands, Cancellable cancel) throws InterruptedException {
 		if (rasterBuf == null || width == 0 || height == 0)
 			return null;
-		
+
 		image=null;
 		data=null;
-		
+
 		System.gc();
-		
+
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		data = new byte[rasterBuf.getBandCount()];
 
@@ -93,6 +93,7 @@ public class ImageDrawer {
 
 		// Asigna la banda de transparencia si existe esta.
 		// assignTransparencyBand(renderBands);
+
 		GridTransparency transparency = rendering.getLastTransparency();
 		if (transparency != null && transparency.isTransparencyActive()) {
 			if (transparency.existAlphaBand() &&
@@ -105,7 +106,6 @@ public class ImageDrawer {
 		}
 		data=null;
 		transparency.free();
-		
 		return image;
 	}
 

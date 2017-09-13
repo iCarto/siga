@@ -248,7 +248,7 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 
 	public ILayerDefinition getResultLayerDefinition(){
 		if(this.resultLayerDefinition == null){
-			ArrayList fields = new ArrayList();
+			ArrayList<FieldDescription> fields = new ArrayList<FieldDescription>();
 			resultLayerDefinition = new SHPLayerDefinition();
 			//result layer will be exactly similar to firstLayer with
 			//new attributes
@@ -260,33 +260,17 @@ public class IntersectSpatialJoinVisitor implements SpatialJoinVisitor {
 			}
 
 			//first layer attributes
-			int numFields = 0;
 			try {
-				numFields = sourceRecordset.getFieldCount();
+			    for (FieldDescription fieldDesc : sourceRecordset.getFieldsDescription()) {
+			        fields.add(fieldDesc);
+			    }
 			} catch (ReadDriverException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			    e.printStackTrace();
 			}
-
-			FieldDescription fieldDesc = null;
-			for(int i = 0; i < numFields; i++){
-				fieldDesc = new FieldDescription();
-				try {
-					fieldDesc.setFieldName(sourceRecordset.getFieldName(i));
-					int fieldType = sourceRecordset.getFieldType(i);
-					fieldDesc.setFieldType(fieldType);
-					fieldDesc.setFieldLength(DefinitionUtils.
-							getDataTypeLength(fieldType));
-					fieldDesc.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
-				} catch (ReadDriverException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				fields.add(fieldDesc);
-			}//for
 
 			//target layer attributes
 			Iterator fieldsIt = fields_sumarizeFunc.keySet().iterator();
+			FieldDescription fieldDesc;
 			while(fieldsIt.hasNext()){
 				String field = (String) fieldsIt.next();
 				SummarizationFunction[] functions =

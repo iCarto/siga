@@ -62,10 +62,6 @@
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>
-<!--		<copy todir="${dist}/images">
-			<fileset dir="images/" includes="*"/>
-		</copy>
-		-->
 		<copy todir="${dist}">
 			<fileset dir="." includes="*.jar"/>
 		</copy>

@@ -1636,15 +1636,21 @@ public class MapControl extends JComponent implements ComponentListener, Command
 
 			LayerCollectionEvent[] aux = e.getLayerCollectionEvents();
 			if (aux.length > 0) {
+				boolean bNeedRepaint = false;
 				for (int i=0; i < aux.length; i++)
 				{
 					if (aux[i].getAffectedLayer().getFLayerStatus().isDriverLoaded())
 					{
-						MapControl.this.drawMap(false);
-						return;
+						bNeedRepaint = true;
+						break;
 					}
 				}
-
+				if (bNeedRepaint) {
+					// If a layer has been added or removed, we redraw the whole map
+					// but once only.
+					MapControl.this.drawMap(false);
+					return;
+				}
 			}
 
 			if (e.getLegendEvents().length > 0) {

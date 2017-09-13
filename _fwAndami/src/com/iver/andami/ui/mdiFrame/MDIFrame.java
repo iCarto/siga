@@ -81,6 +81,7 @@ import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.gvsig.gui.beans.controls.IControl;
+import org.gvsig.tools.OsUtils;
 
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
@@ -784,9 +785,7 @@ ContainerListener, ActionListener, MainFrame {
 		}
 
 		if (menu.getKey() != null) {
-			String osName = (String) System.getProperty("os.name");
-			boolean MAC_OS_X = osName.toLowerCase().startsWith("mac os x");
-			if (MAC_OS_X) {
+			if (OsUtils.isMac()) {
 				//en OS X, en vez de hardwiring la ShortcutKey, usamos el default sugerido por el OS
 				nuevoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(
 						menu.getKey().charAt(0)), Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));

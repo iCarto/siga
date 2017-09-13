@@ -67,11 +67,14 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import org.cresques.cts.IProjection;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
 import org.exolab.castor.xml.ValidationException;
@@ -194,6 +197,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	private int                         lastNColumns = 0;
 	private int                         lastNRows = 0;
 	private boolean 					hasImageLegend = false;
+	
+	private int cachedAxisOrientation = WMSStatus.CRS_AXIS_OTHER_OR_UNKNOWN;
 
 	/***
 	 * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server.
@@ -258,35 +263,41 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			if (!drv.connect(null))
 				throw new ConnectionErrorLayerException(getName(),null);
 
-			WMSLayerNode wmsNode = drv.getLayer(sLayer);
+			WMSLayerNode[] wmsNodeList = new WMSLayerNode[sLayers.length];
+			for (int i=0; i<sLayers.length; i++) {
+				wmsNodeList[i] = drv.getLayer(sLayers[i]);
+			}
 
-			if (wmsNode == null){
+			if (wmsNodeList == null || wmsNodeList.length==0){
 				throw new LoadLayerException(getName(),null);
 			}
 			if( sFormat == null ) {
 				sFormat = this.getGreatFormat(drv.getFormats());
 			}
 			// SRS
-			Vector allSrs = wmsNode.getAllSrs();
+			ArrayList allSrs = new ArrayList();
+			for (int i=0; i<wmsNodeList.length; i++) {
+				allSrs.addAll(wmsNodeList[i].getAllSrs());
+			}
 			boolean isSRSSupported = false;
 			if( sSRS != null ) {
 				for (int i=0; i<allSrs.size() ; i++){
-						 if (((String)allSrs.get(i)).compareTo(sSRS) == 0){
-							 isSRSSupported = true;
-						 }
-					 }
+					if (((String)allSrs.get(i)).compareTo(sSRS) == 0){
+						isSRSSupported = true;
+					}
+				}
 			}
 
-				 if(!isSRSSupported) {
-					 for (int i=0; i<allSrs.size() ; i++){
-						 if (((String)wmsNode.getAllSrs().get(i)).compareTo("EPSG:4326") == 0){
-							 sSRS = (String)wmsNode.getAllSrs().get(i);
-						 }
-					 }
-					 if (sSRS==null){
-						 sSRS = (String)wmsNode.getAllSrs().get(0);
-					 }
-				 }
+			if(!isSRSSupported) {
+				for (int i=0; i<allSrs.size() ; i++){
+					if (((String)allSrs.get(i)).compareTo("EPSG:4326") == 0){
+						sSRS = (String)allSrs.get(i);
+					}
+				}
+				if (sSRS==null){
+					sSRS = (String)allSrs.get(0);
+				}
+			}
 			if( fullExtent == null ) {
 				fullExtent = drv.getLayersExtent(sLayers,sSRS);
 			}
@@ -325,11 +336,10 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	private String getGreatFormat(Vector formats){
 			for (int i=0 ; i<formats.size() ; i++){
 					String format = (String) formats.get(i);
-				if (format.equals("image/jpg")){
-							return format;
-				}
-				if (format.equals("image/jpeg")){
-							return format;
+				if (format.equals("image/png")
+						|| format.equals("image/jpg")
+						|| format.equals("image/jpeg")) {
+					return format;
 				}
 			}
 
@@ -677,10 +687,10 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 				wmsStatus.setFormat( m_Format );
 				wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
 				wmsStatus.setSrs(m_SRS);
+				wmsStatus.setCrsAxisOrder(cachedAxisOrientation);
 				wmsStatus.setStyles(styles);
 				wmsStatus.setDimensions(dimensions);
 				wmsStatus.setTransparency(wmsTransparency);
-				wmsStatus.setSrs(m_SRS);
 				MyCancellable c = new MyCancellable(cancellable);
 				try {
 					item[0] = new StringXMLItem(new String(getDriver()
@@ -799,9 +809,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					try {
 						if(datasets != null && datasets[0][0] != null) {
 							dataset = new CompositeDataset(datasets);
-							if (layerRaster != null && layerRaster[0] != null) {
-							    initializeRasterLayer(datasets, buf);
-							}
+                                                        if (layerRaster != null && layerRaster[0] != null) {
+                                                            initializeRasterLayer(datasets, buf);
+                                                        }
 							buf = null;
 						}
 					} catch (MosaicNotValidException e) {
@@ -842,9 +852,13 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	 * Closes files and releases memory (pointers to null)
 	 */
 	synchronized private void closeAndFree() {
+		int count = 0;
 		while(readingData != null && readingData.compareTo(Thread.currentThread().toString()) != 0)
 			try {
 				Thread.sleep(100);
+				count++;
+				if (count==1000)
+					readingData = null;
 			} catch (InterruptedException e) {
 			}
 
@@ -933,6 +947,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			wmsStatus.setWidth( fixedSize.width );
 			wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
 			wmsStatus.setSrs(m_SRS);
+			wmsStatus.setCrsAxisOrder(cachedAxisOrientation);
 			wmsStatus.setStyles(styles);
 			wmsStatus.setDimensions(dimensions);
 			wmsStatus.setTransparency(wmsTransparency);
@@ -1033,8 +1048,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	 * @throws LoadLayerException
 	 */
 	private void rasterProcess(String filePath, Graphics2D g, ViewPort vp, double scale, Cancellable cancel, int nLyr) throws ReadDriverException, LoadLayerException, FilterTypeException {
-	    	closeAndFree();
-		//Cargamos el dataset con el raster de disco.
+                closeAndFree();
+	        //Cargamos el dataset con el raster de disco.
 		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getProjection());
 		//layerRaster[nLyr].getRender().setBufferFactory(layerRaster[nLyr].getBufferFactory());
 		layerRaster[nLyr].setNoDataValue(getNoDataValue());
@@ -1196,6 +1211,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			wmsStatus.setWidth( wImg );
 			wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
 			wmsStatus.setSrs(m_SRS);
+			wmsStatus.setCrsAxisOrder(cachedAxisOrientation);
 			wmsStatus.setStyles(styles);
 			wmsStatus.setDimensions(dimensions);
 			wmsStatus.setTransparency(wmsTransparency);
@@ -2294,4 +2310,48 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		return null;
 	}
 
+	/**
+	 * Try to guess the axis orientation from the CRS WKT definition,
+	 * as there is no good way to do this using libProjection API.
+	 * 
+	 * @return One of @link {@link WMSStatus#CRS_AXIS_EAST_NORTH},
+	 * {@link WMSStatus#CRS_AXIS_NORTH_EAST}, {@link WMSStatus#CRS_AXIS_SOUTH_WEST},
+	 * {@link WMSStatus#CRS_AXIS_WEST_SOUTH}, {@link WMSStatus#CRS_AXIS_OTHER_OR_UNKNOWN}.
+	 */
+	private int guessAxisOrientation() {
+		if (this.getProjection()!=null) {
+			String wkt = this.getProjection().getWKT();
+			if (wkt!=null) {
+				String wktup = wkt.toUpperCase();
+				Pattern p = Pattern.compile(".*AXIS\\[(.*)\\]\\s*,\\s*AXIS\\[(.*)\\].*", Pattern.DOTALL);
+				Matcher m = p.matcher(wkt);
+				if (m.matches()) {
+					String firstAxis = m.group(1);
+					String secondAxis = m.group(2);
+					if (firstAxis.contains("EAST")
+							&& secondAxis.contains("NORTH")) {
+						return WMSStatus.CRS_AXIS_EAST_NORTH;
+					}
+					else if (firstAxis.contains("NORTH")
+							&& secondAxis.contains("EAST")) {
+						return WMSStatus.CRS_AXIS_NORTH_EAST;
+					}
+					else if (firstAxis.contains("WEST")
+							&& secondAxis.contains("SOUTH")) {
+						return WMSStatus.CRS_AXIS_WEST_SOUTH;
+					}
+					else if (firstAxis.contains("SOUTH")
+							&& secondAxis.contains("WEST")) {
+						return WMSStatus.CRS_AXIS_SOUTH_WEST;
+					}
+				}
+			}
+		}
+		return WMSStatus.CRS_AXIS_OTHER_OR_UNKNOWN;
+	}
+	
+	public void setProjection(IProjection proj) {
+		super.setProjection(proj);
+		cachedAxisOrientation = guessAxisOrientation();
+	}
 }

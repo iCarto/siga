@@ -6,12 +6,12 @@
 	<extensions>
 		<extension class-name="org.gvsig.iconThemeBase.ExtensionIcon16Theme"
 			description="Extensión encargada de cargar iconos de 16x16."
-			active="false"
+			active="true"
 			priority="50">					
 		</extension>
 		<extension class-name="org.gvsig.iconThemeBase.ExtensionIcon22Theme"
 			description="Extensión encargada de cargar iconos de 22x22."
-			active="true"
+			active="false"
 			priority="50">					
 		</extension>
 	</extensions>

@@ -63,6 +63,29 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 	private int unit = -1; //(pixel)
 	private boolean useFixedSize;
 	private boolean useFixedColor;
+	private boolean withHalo = false;
+	private Color haloColor = Color.WHITE;
+	private float haloWidth = 3;
+	public Color getHaloColor() {
+		return haloColor;
+	}
+
+	public void setHaloColor(Color haloColor) {
+		this.haloColor = haloColor;
+	}
+
+	public float getHaloWidth() {
+		return haloWidth;
+	}
+
+	public void setHaloWidth(float haloWidth) {
+		this.haloWidth = haloWidth;
+	}
+
+	public void setWithHalo(boolean withHalo) {
+		this.withHalo = withHalo;
+	}
+
 	private int referenceSystem;
 	// private double  printDPI_;
 	private Font font;
@@ -112,6 +135,11 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 
 		sym.setUnit(unit);
 		sym.setReferenceSystem(referenceSystem);
+		sym.setDrawWithHalo(isWithHalo());
+		if (isWithHalo()) {
+			sym.setHaloWidth(getHaloWidth());
+			sym.setHaloColor(getHaloColor());
+		}
 
 		if (zoom==null ||
 			( zoom.isUserDefined() && (scale <= zoom.getMaxScale())
@@ -297,6 +325,11 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 		xml.putProperty("fixedSize", fixedSize);
 		xml.putProperty("Unit", unit);
 		xml.putProperty("referenceSystem",referenceSystem);
+		if (isWithHalo()) {
+			xml.putProperty("haloWidth", getHaloWidth());
+			xml.putProperty("haloColor", StringUtilities.color2String(getHaloColor()));
+		}
+
 		return xml;
 
 	}
@@ -395,6 +428,14 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 		}
 		if (xml.contains("referenceSystem"))
 			referenceSystem=xml.getIntProperty("referenceSystem");
+		
+		if (xml.contains("haloWidth")) {
+			float haloWidth = xml.getFloatProperty("haloWidth");
+			setHaloColor(StringUtilities.string2Color(xml.getStringProperty("haloColor")));
+			setHaloWidth(haloWidth);
+			setWithHalo(true);
+		}
+
 
 	}
 
@@ -568,5 +609,9 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 
 	public void setFont(Font selFont) {
 		this.font = selFont;
+	}
+
+	public boolean isWithHalo() {
+		return withHalo;
 	}
 }

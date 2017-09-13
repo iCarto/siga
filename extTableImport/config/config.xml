@@ -7,7 +7,7 @@
 	<extensions>
 		<extension class-name="org.gvsig.tableImport.addgeominfo.AddGeometricInfoExtension"
 			description="Add information about the geometries of a layer, to its table."
-			active="false">
+			active="true">
 			<menu text="Capa/add_geometric_info"
 				icon="add-geom-info"
 				tooltip="add_geometric_info"
@@ -15,7 +15,7 @@
 		</extension>
 		<extension class-name="org.gvsig.tableImport.importfields.ImportFieldsExtension"
 			description="Import fields to table from another one"
-			active="false"
+			active="true"
 			priority="30">
 			<menu text="Tabla/import_fields"
 				position="11506" action-command="gdbms dbf driver|dbf|dbf file"/>

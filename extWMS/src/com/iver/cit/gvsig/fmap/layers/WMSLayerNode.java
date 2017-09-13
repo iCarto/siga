@@ -220,8 +220,9 @@ public class WMSLayerNode {
      * @return Returns the srs.
      */
     public Vector getAllSrs() {
-        if ((srs.size() == 0) && _parent!=null)
-            return _parent.getAllSrs();
+        if ((srs.size() == 0) && _parent!=null) {
+	    return _parent.getAllSrs();
+	}
         return srs;
     }
 
@@ -344,8 +345,9 @@ public class WMSLayerNode {
      * @param dimensionExpression
      */
     public void addDimension(String name, String units, String unitSymbol, String dimExpression) {
-    	if (dimensions == null)
-    		dimensions = new ArrayList();
+    	if (dimensions == null) {
+	    dimensions = new ArrayList();
+	}
     	if (name.equalsIgnoreCase("time")) {
     		try {
     			dimensions.add(new TimeDimension(units, unitSymbol,
@@ -421,8 +423,9 @@ public class WMSLayerNode {
     	if (style.getName().toLowerCase().contains("default")) {
     		selectedStyleIndex = styles.size();
     	}
-        if (styles==null)
-            styles = new ArrayList();
+        if (styles==null) {
+	    styles = new ArrayList();
+	}
         styles.add(new FMapWMSStyle(style, this));
 
     }
@@ -432,8 +435,9 @@ public class WMSLayerNode {
      * @return FMapWMSStyle
      */
     public FMapWMSStyle getSelectedStyle() {
-    	if (styles == null || selectedStyleIndex > styles.size()-1 || selectedStyleIndex == -1)
-    		return null;
+    	if (styles == null || selectedStyleIndex > styles.size()-1 || selectedStyleIndex == -1) {
+	    return null;
+	}
     	return (FMapWMSStyle) styles.get(selectedStyleIndex);
     }
 
@@ -452,8 +456,9 @@ public class WMSLayerNode {
      * @param style name
      */
 	public void setSelectedStyleByName(String styName) {
-		if (styName == null || styName.equals(""))
-			setSelectedStyleByIndex(-1);
+		if (styName == null || styName.equals("")) {
+		    setSelectedStyleByIndex(-1);
+		}
 		for (int i = 0; i < styles.size(); i++) {
 			FMapWMSStyle sty = (FMapWMSStyle) styles.get(i);
 			if (sty.name.equals(styName)) {
@@ -466,17 +471,19 @@ public class WMSLayerNode {
 	}
 
 	public void addKeyword(String keyword) {
-		if (keywords == null)
-			keywords = new ArrayList();
+		if (keywords == null) {
+		    keywords = new ArrayList();
+		}
 		keywords.add(keyword);
 	}
 
     public String toString(){
     	String str;
-    	if (getName()==null)
-    		str = getTitle();
-    	else
-    		str = "["+getName()+"] "+getTitle();
+    	if (getName()==null) {
+	    str = getTitle();
+	} else {
+	    str = "["+getName()+"] "+getTitle();
+	}
         return str;
     }
 
@@ -502,18 +509,20 @@ public class WMSLayerNode {
 				clone.keywords.add((String) keywords.get(i));
 			}
         }
-        if (styles!=null)
-        	for (int i=0; i<styles.size(); i++){
-        		FMapWMSStyle sty = (FMapWMSStyle) ((FMapWMSStyle) this.styles.get(i)).clone();
-        		sty.parent = this;
-        		clone.styles.add(sty);
-        	}
+        if (styles!=null) {
+	    for (int i=0; i<styles.size(); i++){
+	    	FMapWMSStyle sty = (FMapWMSStyle) ((FMapWMSStyle) this.styles.get(i)).clone();
+	    	sty.parent = this;
+	    	clone.styles.add(sty);
+	    }
+	}
 
-        if (dimensions!=null)
-        	for (int i = 0; i < dimensions.size(); i++) {
-        		clone.dimensions = new ArrayList();
-        		clone.dimensions.add((IFMapWMSDimension) this.dimensions.get(i));
-        	}
+        if (dimensions!=null) {
+	    for (int i = 0; i < dimensions.size(); i++) {
+	    	clone.dimensions = new ArrayList();
+	    	clone.dimensions.add((IFMapWMSDimension) this.dimensions.get(i));
+	    }
+	}
 
         return clone;
     }

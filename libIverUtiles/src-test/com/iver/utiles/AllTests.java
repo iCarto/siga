@@ -1,29 +1,13 @@
 package com.iver.utiles;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import com.iver.utiles.extensionPoints.TestExtensionPoint;
-import com.iver.utiles.extensionPoints.TestExtensionPoints;
-import com.iver.utiles.search.TestBinarySearchUsingFirstCharacters;
-import com.iver.utiles.stringNumberUtilities.TestStringNumberUtilities;
-import com.iver.utiles.vectorUtilities.TestVectorUtilities;
+import com.iver.utiles.vectorUtilities.VectorUtilitiesTest;
 
+@RunWith(Suite.class)
+@SuiteClasses({ DoubleUtilitiesTest.class, VectorUtilitiesTest.class })
 public class AllTests {
-
-	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for com.iver.utiles");
-		//$JUnit-BEGIN$
-		suite.addTestSuite(DoubleUtilitiesTest.class);
-		suite.addTestSuite(TestBinarySearchUsingFirstCharacters.class);
-		suite.addTestSuite(TestExtensionPoint.class);
-		suite.addTestSuite(TestExtensionPoints.class);
-		suite.addTestSuite(TestStringNumberUtilities.class);
-		suite.addTestSuite(TestStringUtilities.class);
-		suite.addTestSuite(TestVectorUtilities.class);
-		suite.addTestSuite(TestXMLEntity.class);
-		//$JUnit-END$
-		return suite;
-	}
 
 }

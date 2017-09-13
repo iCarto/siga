@@ -1,5 +1,5 @@
 
-state=devel
+state=final
 name=org.gvsig.gpe
 official=true
 code=org.gvsig.gpe
@@ -10,7 +10,7 @@ gvSIG-version=1.12.0
 version=1.12.0
 type=plugin
 description=gvSIG basic extensions
-build=1406
-buildNumber=1406
+build=1483
+buildNumber=1483
 model-version=1.0.0
 		

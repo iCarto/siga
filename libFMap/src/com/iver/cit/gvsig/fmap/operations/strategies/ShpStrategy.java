@@ -52,6 +52,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.log4j.Logger;
 import org.cresques.cts.ICoordTrans;
 import org.geotools.resources.geometry.XRectangle2D;
+import org.gvsig.tools.OsUtils;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -212,7 +213,7 @@ public class ShpStrategy extends DefaultStrategy {
 
 			//En OS X con renderer Quartz (JRE<6), mezclar setRGB con dibujado geometrico en mismo BufferedImage
 			//provoca ralentizaci—n brutal. Lo evitamos separando los setRGB en otro BufferedImage y juntandolos luego.
-			boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+			boolean MAC_OS_X = OsUtils.isMac();
 			BufferedImage auxBI = null;
 			if (MAC_OS_X) {
 				auxBI = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());

@@ -254,6 +254,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	 */
 	public void addLayer(FLayer layer) {
 		int position = getOrderManager().getPosition(this, layer);
+		System.out.println("ORDER MANAGER DEVUELVE :" + getOrderManager().getClassName() + " position=" + position);
 		addLayer(position,layer);
 	}
 
@@ -1348,9 +1349,10 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 
 						String driverName = xml.getStringProperty("other");
 						VectorialDriver driver = null;
+						XMLEntity xmlDriver = null;
 						try {
 							driver = (VectorialDriver) LayerFactory.getDM().getDriver(driverName);
-						} catch (DriverLoadException e) {
+						} catch (Exception e) {
 							// Si no existe ese driver, no pasa nada.
 							// Puede que el desarrollador no quiera que
 							// aparezca en el cuadro de diálogo y ha metido
@@ -1361,30 +1363,27 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 								String className2 = xml.getChild(classChild).getStringProperty("className");
 								try {
 									driver = (VectorialDriver) Class.forName(className2).newInstance();
+									xmlDriver = xml.getChild(classChild);
 								} catch (Exception e1) {
-									throw new DriverLayerException(name,e);
+									// Ultima oportunidad: (para evitar el problema del eventThemeExtension
+									if (xml.getChild(3).contains("className"))
+									{
+										String className3 = xml.getChild(3).getStringProperty("className");
+										try {
+											driver = (VectorialDriver) Class.forName(className3).newInstance();
+											xmlDriver = xml.getChild(3);
+										} catch (Exception e2) {
+											throw new DriverLayerException(name,e2);
+										}
+									}									
 								}
 							}
-						} catch (NullPointerException npe) {
-							// Si no existe ese driver, no pasa nada.
-							// Puede que el desarrollador no quiera que
-							// aparezca en el cuadro de diálogo y ha metido
-							// el jar con sus clases en nuestro directorio lib.
-							// Intentamos cargar esa clase "a pelo".
-							if (xml.getChild(2).contains("className"))
-							{
-								String className2 = xml.getChild(classChild).getStringProperty("className");
-								try {
-									driver = (VectorialDriver) Class.forName(className2).newInstance();
-								} catch (Exception e1) {
-									throw new DriverLayerException(name,e1);
-								}
-							}
+
 						}
 						if (driver instanceof IPersistence)
 						{
 							IPersistence persist = (IPersistence) driver;
-							persist.setXMLEntity(xml.getChild(classChild));
+							persist.setXMLEntity(xmlDriver);
 						}
 						layer = LayerFactory.createLayer(name, driver, proj);
 					}

@@ -50,6 +50,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.gvsig.tools.OsUtils;
+
  
 /**
 * <p>A simple, static class to display a URL in the system browser.<br></p>
@@ -94,11 +96,10 @@ public class BrowserControl
      */
     public static void displayURL(String url)
     {
-        boolean windows = isWindowsPlatform();
         String cmd = null;
         try
         {
-        	if (windows)
+        	if (OsUtils.isWindows())
         	{
         		// cmd = 'rundll32 url.dll,FileProtocolHandler http://...'
         		cmd = WIN_PATH + " " + WIN_FLAG + " " + url;
@@ -166,22 +167,6 @@ public class BrowserControl
 
     }
 
-    /**
-     * Try to determine whether this application is running under Windows
-     * or some other platform by examing the "os.name" property.
-     *
-     * @return true if this application is running under a Windows OS
-     */
-    public static boolean isWindowsPlatform()
-    {
-        String os = System.getProperty("os.name");
-        if ( os != null && os.startsWith(WIN_ID))
-            return true;
-        else
-            return false;
-    }
-
-
     public static void setBrowserCommand(String browserCommand) {
     	BrowserControl.browserCommand = browserCommand;
     }
@@ -203,8 +188,7 @@ public class BrowserControl
     	}
     	return supportedBrowsers;
     }
-    // Used to identify the windows platform.
-    private static final String WIN_ID = "Windows";
+    
     // The default system browser under windows.
     private static final String WIN_PATH = "rundll32";
     // The flag to display a url.

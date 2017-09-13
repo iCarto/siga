@@ -141,7 +141,7 @@ public class FileSelectionPanel extends JPanel implements ActionListener {
 					layer.getDataSource().close();
 				layer = FLyrRasterSE.createLayer(RasterUtilities.getLastPart(path, File.separator), path, null);
 				if (layer != null) {
-					layer.init();
+//					layer.init();
 					getFileName().setText(path);
 				}
 				return layer;

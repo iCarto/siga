@@ -110,21 +110,8 @@ public class DefinitionUtils {
 		solution.setName(layer.getName());
 		solution.setShapeType(layer.getShapeType());
 		SelectableDataSource datasource = layer.getRecordset();
-		int numFields = datasource.getFieldCount();
-		FieldDescription[] fields =
-			new FieldDescription[numFields];
-		FieldDescription fieldDesc = null;
-		for(int i = 0; i < numFields; i++){
-			fieldDesc = new FieldDescription();
-			fieldDesc.setFieldName(datasource.getFieldName(i));
-			int fieldType = datasource.getFieldType(i);
-			fieldDesc.setFieldType(fieldType);
-			int fieldLength  = getDataTypeLength(fieldType);
-			fieldDesc.setFieldLength(fieldLength);
-			fieldDesc.setFieldDecimalCount(NUM_DECIMALS);
-			fields[i] = fieldDesc;
-		}
-		solution.setFieldsDesc(fields);
+		FieldDescription[] fieldsDescription = datasource.getFieldsDescription();
+		solution.setFieldsDesc(fieldsDescription);
 		return solution;
 	}
 
@@ -171,32 +158,17 @@ public class DefinitionUtils {
 		solution.setShapeType(firstLayer.getShapeType());
 		SelectableDataSource firstDatasource = firstLayer.getRecordset();
 		SelectableDataSource secondDatasource = secondLayer.getRecordset();
-		int numFieldsA = firstDatasource.getFieldCount();
-		int numFieldsB = secondDatasource.getFieldCount();
-		FieldDescription[] fields =
-			new FieldDescription[numFieldsA + numFieldsB];
-		FieldDescription fieldDesc = null;
-		for(int i = 0; i < numFieldsA; i++){
-			fieldDesc = new FieldDescription();
-			fieldDesc.setFieldName(firstDatasource.getFieldName(i));
-			int fieldType = firstDatasource.getFieldType(i);
-			fieldDesc.setFieldType(fieldType);
-			int fieldLength  = getDataTypeLength(fieldType);
-			fieldDesc.setFieldLength(fieldLength);
-			fieldDesc.setFieldDecimalCount(NUM_DECIMALS);
-			fields[i] = fieldDesc;
+		FieldDescription[] fields = 
+			new FieldDescription[firstDatasource.getFieldCount() + secondDatasource.getFieldCount()];
+		
+		int i = 0;
+		for (FieldDescription fieldDesc:firstDatasource.getFieldsDescription()) {
+		    fields[i++] = fieldDesc;
 		}
-
-		for(int i = 0; i < numFieldsB; i++){
-			fieldDesc = new FieldDescription();
-			fieldDesc.setFieldName(secondDatasource.getFieldName(i));
-			int fieldType = secondDatasource.getFieldType(i);
-			fieldDesc.setFieldType(fieldType);
-			int fieldLength  = getDataTypeLength(fieldType);
-			fieldDesc.setFieldLength(fieldLength);
-			fieldDesc.setFieldDecimalCount(NUM_DECIMALS);
-			fields[i + numFieldsA] = fieldDesc;
+		for (FieldDescription fieldDesc:secondDatasource.getFieldsDescription()) {
+		    fields[i++] = fieldDesc;
 		}
+		
 		solution.setFieldsDesc(fields);
 		return solution;
 	}

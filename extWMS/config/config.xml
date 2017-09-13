@@ -11,7 +11,7 @@
 		</extension>
 		<extension class-name="com.iver.cit.gvsig.wmc.ExportWebMapContextExtension"
 			description="Support for exporting OGC's Web Map Context documents"
-			active="false"
+			active="true"
 			priority="10">
 			<menu text="Vista/export/web_map_context"
 				tooltip="export_to_map_context"
@@ -19,7 +19,7 @@
 		</extension>
 		<extension class-name="com.iver.cit.gvsig.wmc.ImportWebMapContextExtension"
 			description="Support for exporting OGC's Web Map Context documents"
-			active="false"
+			active="true"
 			priority="10">
 			<menu text="Archivo/import/web_map_context"
 				tooltip="import_map_context"

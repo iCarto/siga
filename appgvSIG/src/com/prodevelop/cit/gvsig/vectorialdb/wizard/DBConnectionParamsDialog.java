@@ -103,6 +103,7 @@ public class DBConnectionParamsDialog extends JPanel implements IWindow,
     private JLabel connectedLabel = null;
     private JLabel connNameLabel = null;
     private JTextField connNameTextField = null;
+    private Class[] driversToShow;
 
 
     // private JLabel schemaLabel = null;
@@ -114,8 +115,15 @@ public class DBConnectionParamsDialog extends JPanel implements IWindow,
      *
      */
     public DBConnectionParamsDialog() {
-        super();
-        initialize();
+	this(new Class[] { IVectorialDatabaseDriver.class,
+		AlphanumericDBDriver.class });
+    }
+
+    public DBConnectionParamsDialog(Class driversToShow[]) {
+	super();
+	this.driversToShow = driversToShow;
+	initialize();
+
     }
 
     public void showDialog() {
@@ -272,23 +280,26 @@ public class DBConnectionParamsDialog extends JPanel implements IWindow,
      * @return javax.swing.JComboBox
      */
     private JComboBox getDriverComboBox() {
+	// fpuga. Really but approach hard coded the name here. But, as
+	// PostGisDriver class is in extJDBC i should change appgvSIG
+	// classpath and it not seems like a good idea
+	final String POSTGIS_DRIVER_NAME = "PostGIS JDBC Driver";
+	final String POSTGRESQL_DRIVER_NAME = "PostgreSQL Alphanumeric";
+
         if (driverComboBox == null) {
-            driverComboBox = new JComboBox();
-            driverComboBox.setMaximumRowCount(20);
-            driverComboBox.addActionListener(this);
+	    String[] drvName = getDriverNames();
+	    Arrays.sort(drvName);
 
-            String[] drvName = getDriverNames();
-            int len = drvName.length;
-            String[] sorted = new String[len];
-            for (int i=0; i<len; i++) {
-            	sorted[i] = "" + drvName[i];
-            }
-            Arrays.sort(sorted);
+	    driverComboBox = new JComboBox(drvName);
 
-            for (int i = 0; i < len; i++) {
-		driverComboBox.addItem(sorted[ (i + (2*len-2)) % len]);
+	    if (Arrays.binarySearch(drvName, POSTGIS_DRIVER_NAME) > 0) {
+		driverComboBox.setSelectedItem(POSTGIS_DRIVER_NAME);
+	    } else if (Arrays.binarySearch(drvName, POSTGRESQL_DRIVER_NAME) > 0) {
+		driverComboBox.setSelectedItem(POSTGRESQL_DRIVER_NAME);
 	    }
 
+            driverComboBox.setMaximumRowCount(20);
+            driverComboBox.addActionListener(this);
             driverComboBox.setBounds(new java.awt.Rectangle(155, 55, 166, 21));
         }
 
@@ -356,23 +367,19 @@ public class DBConnectionParamsDialog extends JPanel implements IWindow,
     }
 
     private String[] getDriverNames() {
-        Class[] classes = new Class[] {
-        		IVectorialDatabaseDriver.class,
-        		AlphanumericDBDriver.class };
-
-        ArrayList ret = new ArrayList();
+	ArrayList<String> ret = new ArrayList<String>();
         String[] driverNames = LayerFactory.getDM().getDriverNames();
 
         for (int i = 0; i < driverNames.length; i++) {
-            for (int j = 0; j < classes.length; j++) {
-                if (LayerFactory.getDM().isA(driverNames[i], classes[j])) {
+            for (int j = 0; j < driversToShow.length; j++) {
+                if (LayerFactory.getDM().isA(driverNames[i], driversToShow[j])) {
                     ret.add(driverNames[i]);
                     continue;
                 }
             }
         }
 
-        return (String[]) ret.toArray(new String[0]);
+	return ret.toArray(new String[0]);
     }
 
     public void actionPerformed(ActionEvent arg0) {

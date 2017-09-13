@@ -77,6 +77,7 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.ILayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.geoprocess.core.fmap.DefinitionUtils;
 import com.iver.cit.gvsig.geoprocess.core.fmap.SummarizationFunction;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
@@ -108,11 +109,19 @@ public class SingleFieldDissolveCriteria implements IDissolveCriteria{
 	 */
 	protected SingleFieldFeatureBuilder builder;
 
+	private int dissolveFieldIndex;
+
 
 	public SingleFieldDissolveCriteria(String dissolveField,
 			FLyrVect layer) throws DriverException{
-		this.dissolveField = dissolveField;
 		this.layer = layer;
+		this.dissolveField = dissolveField;
+		try {
+		    dissolveFieldIndex = layer.getRecordset().getFieldIndexByName(dissolveField);
+		} catch (ReadDriverException e) {
+		    e.printStackTrace();
+		    throw new DriverException(e);
+		}
 		builder = new SingleFieldFeatureBuilder();
 
 	}
@@ -155,12 +164,10 @@ public class SingleFieldDissolveCriteria implements IDissolveCriteria{
 	private void fetchDissolveValue(int index){
 		if(cachedDissolveValue == null){
 			try {
-				int fieldIndex =
-					layer.getRecordset().getFieldIndexByName(dissolveField);
 
 				cachedDissolveValue = layer.getRecordset().
 								getFieldValue(index,
-										fieldIndex);
+										dissolveFieldIndex);
 			} catch (ReadDriverException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -172,10 +179,8 @@ public class SingleFieldDissolveCriteria implements IDissolveCriteria{
 	public boolean verifyIfDissolve(int featureIndex1, int featureIndex2) {
 		try {
 			fetchDissolveValue(featureIndex1);
-			int fieldIndex = layer.getRecordset().
-				getFieldIndexByName(this.dissolveField);
 			Value value2 = layer.getRecordset().
-				getFieldValue(featureIndex2, fieldIndex);
+				getFieldValue(featureIndex2, dissolveFieldIndex);
 			return value2.doEquals(cachedDissolveValue);
 		} catch (ReadDriverException e) {
 			//Ver que hacer con la excepcion
@@ -192,7 +197,7 @@ public class SingleFieldDissolveCriteria implements IDissolveCriteria{
 	public ILayerDefinition createLayerDefinition(Map numFields_SumFunc) {
 		SHPLayerDefinition resultLayerDefinition = new SHPLayerDefinition();
 		resultLayerDefinition.setShapeType(XTypes.POLYGON);
-		ArrayList fields = new ArrayList();
+		ArrayList<FieldDescription> fields = new ArrayList<FieldDescription>();
 		//first of all: FID
 		FieldDescription fidFd = new FieldDescription();
 		fidFd.setFieldLength(10);
@@ -229,24 +234,11 @@ public class SingleFieldDissolveCriteria implements IDissolveCriteria{
 		}//if
 
 	 try {
-			FieldDescription description = new FieldDescription();
-			int dissolveFieldIndex = layer.getRecordset().
-				getFieldIndexByName(dissolveField);
-			int fieldType = layer.getRecordset().
-				getFieldType(dissolveFieldIndex);
-			int fieldLenght = DefinitionUtils.
-				getDataTypeLength(fieldType);
-			description.setFieldName(dissolveField);
-			description.setFieldType(fieldType);
-			description.setFieldLength(fieldLenght);
-			if(DefinitionUtils.isNumeric(description)){
-				description.setFieldDecimalCount(DefinitionUtils.NUM_DECIMALS);
-			}
-			fields.add(description);
-		} catch (ReadDriverException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	     FieldDescription description = layer.getRecordset().getFieldsDescription()[dissolveFieldIndex];
+	     fields.add(description);
+	  } catch (ReadDriverException e) {
+	      e.printStackTrace();
+	  }
 
 		FieldDescription[] fieldsDesc = null;
 		if(fields.size() == 0){

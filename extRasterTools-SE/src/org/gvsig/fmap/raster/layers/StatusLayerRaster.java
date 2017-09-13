@@ -288,11 +288,11 @@ public class StatusLayerRaster implements IStatusRaster {
 		}
 		
 		//Refrescamos todas las vistas
-		IWindow[] w = PluginServices.getMDIManager().getAllWindows();
-		for (int i = 0; i < w.length; i++) {
-			if(w[i] != null && w[i] instanceof IView) 
-				((IView)w[i]).getMapControl().getMapContext().invalidate();	
-		}
+//		IWindow[] w = PluginServices.getMDIManager().getAllWindows();
+//		for (int i = 0; i < w.length; i++) {
+//			if(w[i] != null && w[i] instanceof IView) 
+//				((IView)w[i]).getMapControl().getMapContext().invalidate();	
+//		}
 	}
 	
 	/**

@@ -19,7 +19,7 @@
 		</extension>
 		<extension class-name="org.gvsig.rastertools.GenericToolBarModule"
 			description="Módulo de una barra de herramientas generica." 
-			active="false" 
+			active="true" 
 			priority="1">
 		</extension>
 <!--

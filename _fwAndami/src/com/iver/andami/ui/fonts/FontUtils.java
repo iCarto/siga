@@ -101,7 +101,8 @@ public class FontUtils {
 				"ToolBar.font",
 				"ToolTip.font",
 				"Tree.font",
-				"Viewport.font"
+ "Viewport.font",
+		"InternalFrame.titleFont"
 		} ;
 		
 		Font font;

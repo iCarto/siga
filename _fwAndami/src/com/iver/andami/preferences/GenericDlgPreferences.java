@@ -44,6 +44,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -551,7 +553,9 @@ public class GenericDlgPreferences extends JPanel implements IWindow {
 		if (jPanelCenter == null) {
 			jLabelBigTitle = new JLabel();
 			jLabelBigTitle.setText("General");
-			jLabelBigTitle.setFont(new java.awt.Font("MS Sans Serif", java.awt.Font.BOLD, 14));
+	    Font font = UIManager.getFont("Label.font");
+	    font = font.deriveFont(Font.BOLD, font.getSize() * 1.1f);
+	    jLabelBigTitle.setFont(font);
 			jLabelBigTitle.setHorizontalTextPosition(javax.swing.SwingConstants.TRAILING);
 			jLabelBigTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 			jPanelCenter = new JPanel();

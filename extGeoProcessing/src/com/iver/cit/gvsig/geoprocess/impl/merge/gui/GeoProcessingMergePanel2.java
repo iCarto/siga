@@ -250,7 +250,7 @@ public class GeoProcessingMergePanel2 extends GridBagLayoutPanel implements
 		JFileChooser jfc = new JFileChooser();
 		jfc
 				.addChoosableFileFilter(new GenericFileFilter("shp",
-						"Ficheros SHP"));
+						PluginServices.getText(this, "Ficheros_SHP")));
 		if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 			File file = jfc.getSelectedFile();
 			if (!(file.getPath().endsWith(".shp") || file.getPath().endsWith(

@@ -44,14 +44,19 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.styles.ILabelStyle;
+import com.iver.cit.gvsig.fmap.core.symbols.ITextSymbol;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 
 public class LabelClassPreview extends JPanel {
@@ -102,9 +107,30 @@ public class LabelClassPreview extends JPanel {
 
 //		try {
 //			labelClass.drawInsideRectangle((Graphics2D) g, r);
-			Font myFont = new Font(labelClass.getTextSymbol().getFont().getName(),labelClass.getTextSymbol().getFont().getStyle(),35);
+			ITextSymbol sym = labelClass.getTextSymbol();
+			Font myFont = new Font(sym.getFont().getName(),sym.getFont().getStyle(),35);
+			AffineTransform saveAT = ((Graphics2D)g).getTransform();
+			
+//			AffineTransform tx = new AffineTransform();
+//			tx.setToTranslation(0, -r.getCenterY());
+			saveAT.translate(0, r.getCenterY());
+			((Graphics2D) g).setTransform(saveAT);
+			FontRenderContext frc = new FontRenderContext(
+					saveAT, false, true);;
 			g.setFont(myFont);
-			g.drawString(PluginServices.getText(this, "text_field"), 0, (int)r.getCenterY());
+			String text = PluginServices.getText(this, "text_field");
+			
+			if (sym.isDrawWithHalo()) {
+				BasicStroke haloStroke = new BasicStroke(sym.getHaloWidth());
+				char[] charText = new char[text.length()];
+				text.getChars(0, charText.length, charText, 0);
+				GlyphVector glyph = myFont.layoutGlyphVector(frc, charText, 0, charText.length, Font.LAYOUT_NO_LIMIT_CONTEXT);
+				g.setColor(sym.getHaloColor());
+				((Graphics2D) g).setStroke(haloStroke);
+				((Graphics2D) g).draw(glyph.getOutline());
+			}
+			g.setColor(sym.getTextColor());
+			g.drawString(PluginServices.getText(this, "text_field"), 0, 0);
 //		} catch (SymbolDrawingException e) {
 //			SymbologyFactory
 //					.getWarningSymbol(

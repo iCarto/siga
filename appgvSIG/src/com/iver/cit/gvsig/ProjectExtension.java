@@ -118,7 +118,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	//private ProjectWindow projectFrame;
 	private ProjectWindow projectFrame;
 	private Project p;
-	private String lastPath;
 	private String lastSavePath;
 	private String templatesPath;
 	private WindowInfo seedProjectWindow;
@@ -372,23 +371,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 					PluginServices.getText(this, "tipo_fichero_proyecto")));
 
 			if (jfc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-				ProjectDocument.initializeNUMS();
-				PluginServices.getMDIManager().closeAllWindows();
-
 				File projectFile = jfc.getSelectedFile();
-				Project o = readProject(projectFile);
-				setPath(projectFile.getAbsolutePath());
-				lastPath = getPath();
-				if (o != null) {
-					setProject(o);
-				}
-
-				getProjectFrame().setProject(p);
-				PluginServices.getMainFrame().setTitle(p.getName());
-				getProjectFrame().refreshControls();
-
-//jaume				p.setModified(true);
-				p.restoreWindowProperties();
+				openProject(projectFile);
 			}
 		} else if (actionCommand.equals("GUARDAR")) {
 			guardar();
@@ -403,6 +387,20 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 //jaume			p.setModified(true);
 		}
 	}
+	
+	public void openProject(File projectFile) {
+	    ProjectDocument.initializeNUMS();
+	    PluginServices.getMDIManager().closeAllWindows();
+	    Project o = readProject(projectFile);
+	    setPath(projectFile.getAbsolutePath());
+	    if (o != null) {
+		setProject(o);
+	    }
+	    PluginServices.getMainFrame().setTitle(p.getName());
+	    getProjectFrame().refreshControls();
+	    p.restoreWindowProperties();
+	}
+	
 	public void openLayout() {
 		//Project project = ((ProjectExtension) PluginServices.getExtension(ProjectExtension.class)).getProject();
 		Layout layout=null;

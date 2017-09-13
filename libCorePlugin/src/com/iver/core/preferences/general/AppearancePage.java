@@ -92,6 +92,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.log4j.Logger;
+import org.gvsig.tools.OsUtils;
 
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
@@ -120,9 +121,9 @@ public class AppearancePage extends AbstractPreferencePage{
         // install the plastic look and feel before getting the laf combobox
     	UIManager.installLookAndFeel("Plastic XP", "com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
     	// install the extra LAF's before getting the LAF combobox
-    	String osName = (String) System.getProperty("os.name");
-		if (osName.toLowerCase().startsWith("mac os x"))
-			UIManager.installLookAndFeel("Quaqua", "ch.randelshofer.quaqua.QuaquaLookAndFeel");
+    	if (OsUtils.isMac()){
+    	    UIManager.installLookAndFeel("Quaqua", "ch.randelshofer.quaqua.QuaquaLookAndFeel");
+    	}
 
 
     	addComponent(PluginServices.getText(this, "options.general.select_theme"), getLookAndFeelComboBox());

@@ -27,7 +27,9 @@
 
 package org.gvsig.installer.app.extension.creation;
 
-import org.gvsig.installer.app.extension.GvSIGFolders;
+import org.gvsig.installer.app.extension.BackportrHelper.ApplicationLocator;
+import org.gvsig.installer.app.extension.BackportrHelper.PluginsLocator;
+import org.gvsig.installer.app.extension.BackportrHelper.PluginsManager;
 import org.gvsig.installer.swing.api.SwingInstallerLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,38 +43,43 @@ import com.iver.cit.gvsig.Version;
  */
 public class MakePluginPackageExtension extends Extension {
 
-    private static final Logger LOG = LoggerFactory
-        .getLogger(MakePluginPackageExtension.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(MakePluginPackageExtension.class);
 
-    public void execute(String actionCommand) {
-        GvSIGFolders folders = new GvSIGFolders();
+	public void execute(String actionCommand) {
+		if ("tools-devel-pack-plugin".equalsIgnoreCase(actionCommand)) {
+			PluginsManager manager = PluginsLocator.getManager();
 
-        try {
-            PluginServices.getMDIManager().addCentredWindow(
-                new MakePluginPackageWindow(folders.getApplicationFolder(),
-                    folders.getPluginsFolder(), folders.getInstallFolder()));
-        } catch (Exception e) {
-            LOG.error("Error creating teh wizard to create an installer ", e);
-        }
-    }
+			try {
+				PluginServices.getMDIManager().addCentredWindow(
+						new MakePluginPackageWindow(manager
+								.getApplicationFolder(), manager
+								.getInstallFolder()));
+			} catch (Exception e) {
+				LOG.error("Error creating teh wizard to create an installer ",
+						e);
+			}
+		}
+	}
 
-    public void initialize() {
-    }
+	public void initialize() {
 
-    @Override
-    public void postInitialize() {
-        super.postInitialize();
-        //Version version = ApplicationLocator.getManager().getVersion();
-        SwingInstallerLocator.getSwingInstallerManager().setApplicationVersion(
-            Version.format());
-    }
+	}
 
-    public boolean isEnabled() {
-        return true;
-    }
+	@Override
+	public void postInitialize() {
+		super.postInitialize();
+		Version version = ApplicationLocator.getManager().getVersion();
+		SwingInstallerLocator.getSwingInstallerManager().setApplicationVersion(
+				version.getFormat());
+	}
 
-    public boolean isVisible() {
-        return true;
-    }
+	public boolean isEnabled() {
+		return true;
+	}
+
+	public boolean isVisible() {
+		return true;
+	}
 
 }

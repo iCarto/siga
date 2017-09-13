@@ -563,20 +563,15 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 		} else {
 			int num = ((Integer) relations.get(integer)).intValue();
 			feat = (IFeature) expansionFile.getRow(num).getLinkedRow();
-			// expansionFile.invalidateRow(num);
 		}
-		System.err.println("Elimina una Row en la posición: " + index);
 		// Se actualiza el índice
 		if (feat != null) {
-		    Rectangle2D r = null;
-		    	if (feat.getGeometry()!=null) {
-		    		r = feat.getGeometry().getBounds2D();
-		    	}
-			this.fmapSpatialIndex.delete(r,
-					new Integer(index));
-//			System.out.println("Está borrado : " + borrado);
-//			System.out.println("Index.lenght : " + this.index.size());
+		    IGeometry geom = feat.getGeometry();
+		    if (geom != null) {
+			Rectangle2D r = geom.getBounds2D();
+			this.fmapSpatialIndex.delete(r, new Integer(index));
 			isFullExtentDirty = true;
+		    }
 		}
 		setSelection(new FBitSet());
 		fireAfterRemoveRow(index, sourceType);

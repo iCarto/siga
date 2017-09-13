@@ -5,24 +5,22 @@
 # Variables depending on the installation #
 ###########################################
 
-# Java home
-export JAVA_HOME=${JAVA_HOME}
 
 # gvSIG installation folder
-GVSIG_HOME=`pwd`
+GVSIG_HOME=`dirname "$0"`
 
-# gdal data files
-# Don't need to set it, as it is defined by default by the linux or mac packages
-#export GDAL_DATA="/usr/share/gdal15/"
+# Go into the gvSIG installation folder, just in case
+cd "${GVSIG_HOME}"
+
+# Java home
+export JAVA_HOME="../jre"
+
 
 ###################################################################
 # Variables not depending (at least directly) on the installation #
 ###################################################################
 
 # gvSIG native libraries location 
-#GVSIG_NATIVE_DEPMAN_LIBS="${HOME}/.depman/lib"
-#GVSIG_NATIVE_BINARIES_LIBS="/home/cordin/projects/gvsig/svn/gvSIG-2.0/binaries/linux/"
-#GVSIG_NATIVE_LIBS="${GVSIG_NATIVE_DEPMAN_LIBS}:${GVSIG_NATIVE_BINARIES_LIBS}"
 GVSIG_NATIVE_LIBS=${GVSIG_HOME}/native:${HOME}/.depman/lib
 
 # Proj4 data files
@@ -34,22 +32,21 @@ export GDAL_DATA="${GVSIG_HOME}/data/gdal"
 # Native libraries path
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$GVSIG_NATIVE_LIBS"
 
-# Go into the gvSIG installation folder, just in case
-cd "${GVSIG_HOME}"
+
 
 # Load gvSIG Andami jars and dependencies for the classpath 
 for i in ./lib/*.jar ; do
-  LIBRARIES=$LIBRARIES:"$i"
+  LIBRARIES="$LIBRARIES":"$i"
 done
 for i in ./lib/*.zip ; do
-  LIBRARIES=$LIBRARIES:"$i"
+  LIBRARIES="$LIBRARIES":"$i"
 done
-LIBRARIES=$LIBRARIES:andami.jar
+LIBRARIES="$LIBRARIES":andami.jar
 
 # echo Initial libraries found: ${LIBRARIES}
 
 # gvSIG Andami launcher
-GVSIG_LAUNCHER=org.gvsig.andamiupdater.Updater
+GVSIG_LAUNCHER=com.iver.andami.Launcher
 
 # gvSIG initial classpath
 GVSIG_CLASSPATH=$LIBRARIES
@@ -59,9 +56,9 @@ GVSIG_CLASSPATH=$LIBRARIES
 ########################
 
 # Initial gvSIG memory (M=Megabytes, G=Gigabytes)
-GVSIG_INITIAL_MEM=128M
+GVSIG_INITIAL_MEM=256M
 # Maximum gvSIG memory (M=Megabytes, G=Gigabytes)
-GVSIG_MAX_MEM=512M
+GVSIG_MAX_MEM=1024M
 # Maximum permanent memory size: needed to load classes and statics
 GVSIG_MAX_PERM_SIZE=96M
 
@@ -79,6 +76,7 @@ export LC_NUMERIC=C
 echo Launching gvSIG: ${JAVA_HOME}/bin/java \
 	-Djava.library.path=/usr/lib:"${GVSIG_NATIVE_LIBS}" \
 	-cp $GVSIG_CLASSPATH \
+	-DgvSIG.confDir="$GVSIG_HOME/../cfg" \
 	-Xms${GVSIG_INITIAL_MEM} \
 	-Xmx${GVSIG_MAX_MEM} \
 	-XX:MaxPermSize=${GVSIG_MAX_PERM_SIZE} \
@@ -86,8 +84,9 @@ echo Launching gvSIG: ${JAVA_HOME}/bin/java \
 
 ${JAVA_HOME}/bin/java \
 	-Djava.library.path=/usr/lib:"${GVSIG_NATIVE_LIBS}" \
-	-cp $GVSIG_CLASSPATH \
+	-cp "$GVSIG_CLASSPATH" \
+	-DgvSIG.confDir="${GVSIG_HOME}/../cfg" \
 	-Xms${GVSIG_INITIAL_MEM} \
 	-Xmx${GVSIG_MAX_MEM} \
 	-XX:MaxPermSize=${GVSIG_MAX_PERM_SIZE} \
-	$GVSIG_LAUNCHER gvSIG gvSIG/extensiones "$@"
+	"${GVSIG_LAUNCHER}" gvSIG gvSIG/extensiones "$@"

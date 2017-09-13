@@ -93,9 +93,9 @@ public class FPoint3D extends FPoint2D implements FShape3D {
 	public String toText() {
 		StringBuffer str = new StringBuffer();
 		str.append(NAME);
-		str.append(" ((");
+		str.append(" (");
 		str.append(getX() + " " + getY() + " " + z);
-		str.append("))");
+		str.append(")");
 		return str.toString();
 	}
 }

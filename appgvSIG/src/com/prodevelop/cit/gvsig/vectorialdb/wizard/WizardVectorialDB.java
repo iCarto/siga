@@ -670,7 +670,8 @@ ListSelectionListener {
 	 private ConnectionWithParams addNewConnection() {
 		 ConnectionWithParams resp = null;
 
-		 DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
+	DBConnectionParamsDialog newco = new DBConnectionParamsDialog(
+		new Class[] { IVectorialDatabaseDriver.class });
 		 newco.showDialog();
 
 		 if (newco.isOkPressed()) {

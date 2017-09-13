@@ -177,7 +177,10 @@ public class SingleDBConnectionManager {
 			try {
 				intport = Integer.parseInt(_port);
 			} catch (Exception ex) {
-				throw new DBException(ex);
+				// throw new DBException(ex);
+				// With ODBC, we may not choose a port, so, this error shouldn't be thrown.
+				System.out.println(_drv.getName() + " port parameter should be an Integer??" + _port);
+				intport = 0;
 			}
 			AlphanumericDBDriver alpha_drv = (AlphanumericDBDriver) _drv;
 			Connection _c_ = alpha_drv.getConnection(_host, intport, _db, _user, _pw);

@@ -40,6 +40,7 @@
  */
 package com.iver.cit.gvsig.fmap.core.symbols;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -80,6 +81,35 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	private String text = "";
 	private Font font = SymbologyFactory.DefaultTextFont;
 	private Color textColor = Color.BLACK;
+	private Color haloColor = Color.WHITE;
+	private float haloWidth = 3;
+	private boolean drawWithHalo = false;
+	private BasicStroke haloStroke;
+	public Color getHaloColor() {
+		return haloColor;
+	}
+
+	public void setHaloColor(Color haloColor) {
+		this.haloColor = haloColor;
+	}
+
+	public float getHaloWidth() {
+		return haloWidth;
+	}
+
+	public void setHaloWidth(float haloWidth) {
+		this.haloWidth = haloWidth;
+		this.haloStroke = new BasicStroke(haloWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	}
+
+	public boolean isDrawWithHalo() {
+		return drawWithHalo;
+	}
+
+	public void setDrawWithHalo(boolean drawWithHalo) {
+		this.drawWithHalo = drawWithHalo;
+	}
+
 	private double rotation;
 	private FontRenderContext frc = new FontRenderContext(
 			new AffineTransform(), false, true);
@@ -98,8 +128,6 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 		}
 		//Fin del parche
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setColor(textColor);
-		g.setFont(font);
 		g.translate(shpX, shpY);
 
 		g.rotate(rotation);
@@ -112,7 +140,19 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 		// Para chino hay que escoger una fuente como esta (SimSun)
 //		g.setFont(new Font("SimSun",Font.PLAIN, 12));
 
-		g.drawString(getText(), -((int) bounds.getWidth()/2), 0); //(int)-bounds.getY());
+//		g.drawString(getText(), -((int) bounds.getWidth()/2), 0); //(int)-bounds.getY());
+		if (isDrawWithHalo()) {
+			char[] charText = new char[text.length()];
+			getText().getChars(0, charText.length, charText, 0);
+			GlyphVector glyph = font.layoutGlyphVector(frc, charText, 0, charText.length, Font.LAYOUT_NO_LIMIT_CONTEXT);
+			g.setColor(getHaloColor());
+			g.setStroke(haloStroke);
+			g.draw(glyph.getOutline());
+		}
+		g.setColor(textColor);
+		g.setFont(font);
+
+		g.drawString(getText(), 0, 0);
 //		g.drawRect(0, 0, 5, 5);
 		g.rotate(-rotation);
 		g.translate(-shpX, -shpY);
@@ -148,9 +188,9 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 		//Only for debugging purpose
 //		g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
 		if (properties==null)
-			draw(g, null, new FPoint2D(r.getX(), r.getY()), null);
+			draw(g, null, new FPoint2D(r.getX(), r.getY() + r.height), null);
 		else
-			print(g, new AffineTransform(), new FPoint2D(r.getX(), r.getY()), properties);
+			print(g, new AffineTransform(), new FPoint2D(r.getX(), r.getY() + r.getHeight()), properties);
 
 	}
 
@@ -185,6 +225,10 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 		xml.putProperty("unit", getUnit());
 		xml.putProperty("referenceSystem", getReferenceSystem());
 		xml.putProperty("autoresizeFlag", isAutoresizeEnabled());
+		if (isDrawWithHalo()) {
+			xml.putProperty("haloWidth", getHaloWidth());
+			xml.putProperty("haloColor", StringUtilities.color2String(getHaloColor()));
+		}
 		return xml;
 	}
 
@@ -203,6 +247,12 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 		setUnit(xml.getIntProperty("unit"));
 		setReferenceSystem(xml.getIntProperty("referenceSystem"));
 		setAutoresizeEnabled(xml.getBooleanProperty("autoresizeFlag"));
+		if (xml.contains("haloWidth")) {
+			float haloWidth = xml.getFloatProperty("haloWidth");
+			setHaloColor(StringUtilities.string2Color(xml.getStringProperty("haloColor")));
+			setHaloWidth(haloWidth);
+			setDrawWithHalo(true);
+		}
 		this.bounds = null;
 		this.horizontalTextWrappingShape = null;
 	}

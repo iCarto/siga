@@ -49,7 +49,7 @@ import java.util.Comparator;
  * @author Fernando González Cortés
  * @author Pablo Piqueras Bartolomé
  */
-public class StringComparator implements Comparator {
+public class StringComparator implements Comparator<Object> {
 	protected boolean caseSensitive = true;
 	protected LocaleRules localeRules = null;
 

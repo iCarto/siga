@@ -1,5 +1,6 @@
 package com.iver.cit.gvsig.fmap.core.symbols;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
@@ -70,4 +71,14 @@ public interface ITextSymbol extends ISymbol {
 	public abstract void setAutoresizeEnabled(boolean autoresizeFlag);
 	
 	public abstract boolean isAutoresizeEnabled();
+	
+	public Color getHaloColor();
+	public void setHaloColor(Color haloColor);
+
+	public float getHaloWidth();
+	public void setHaloWidth(float haloWidth);
+
+	public boolean isDrawWithHalo();
+	public void setDrawWithHalo(boolean drawWithHalo);
+
 }

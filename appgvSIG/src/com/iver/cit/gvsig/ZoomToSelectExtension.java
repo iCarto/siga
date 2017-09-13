@@ -80,6 +80,7 @@ public class ZoomToSelectExtension extends Extension {
 			Rectangle2D selectedExtent = mapa.getSelectionBounds();
 
 			if (selectedExtent != null) {
+			    	resizeExtent(selectedExtent);
 				mapa.getViewPort().setExtent(selectedExtent);
 				((ProjectDocument)vista.getModel()).setModified(true);
 			}
@@ -89,10 +90,21 @@ public class ZoomToSelectExtension extends Extension {
 			Rectangle2D selectedExtent = mapa.getSelectionBounds();
 
 			if (selectedExtent != null) {
+			    	resizeExtent(selectedExtent);
 				mapa.getViewPort().setExtent(selectedExtent);
 				table.getModel().setModified(true);
 			}
 		}
+	}
+	
+	private void resizeExtent(Rectangle2D selectedExtent) {
+	    if (selectedExtent.getWidth() < 200) {
+		selectedExtent.setFrameFromCenter(selectedExtent.getCenterX(),
+			selectedExtent.getCenterY(),
+			selectedExtent.getCenterX() + 100,
+			selectedExtent.getCenterY() + 100);
+	    }
+	    
 	}
 
 	/**

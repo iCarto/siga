@@ -1,29 +1,21 @@
 <project name="IverUtiles" default="create-jar" basedir=".">
-  	<!-- set global properties for this build -->
+	<!-- set global properties for this build -->
 	<property name="src"  location="src"/>
-	<property name="src-test" location="src-test"/>
 	<property name="build"  location="bin"/>
-	<property name="build-test" location="bin-test"/>
 	<property name="dist"  location="dist"/>
 	<property name="targetDir" location="../_fwAndami/lib"/>
 	<property name="jarName" value="iver-utiles"/>
-	<property name="andamiLibs" location="../_fwAndami/lib" />
-	<property name="fmapLibs" location="../libFMap" />
+	
 	<import file="../binaries/ant/utilities.xml"/>
-
-  <target name="init">
-    <!-- Create the time stamp -->
-<!--    <tstamp/>-->
-	<echo>
-		Compiling ${ant.project.name}...</echo>
-  </target>
-
-	<target name="batch-build"
-				description="compile the sources, create the jar file"
-				depends="init,compile,create-jar">
+	
+	<target name="batch-build" depends="init,compile,create-jar">
+	</target>
+		
+	<target name="init">
+		<echo> Compiling ${ant.project.name}...</echo>
 	</target>
 
-	<target name="compile" description="compile the source">
+	<target name="compile">
 		<!-- Compile the Java code from ${src} to ${build} -->
 		<mkdir dir="${build}" />
 		<loadEclipseClasspath project="${basedir}"/>
@@ -35,13 +27,11 @@
 		</copy>
 	</target>
 
-	<target name="create-jar" description="Crea el jar de la aplicacion">
-		<!--<mkdir dir="${dist}" />-->
+	<target name="create-jar">
 	  	<jar jarfile="${targetDir}/${jarName}.jar" basedir="${build}"/>
 	</target>
 
-	<target name="clean" description="clean up">
-		<!-- Delete the ${build} and ${dist} directory trees -->
+	<target name="clean">
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
 	</target>

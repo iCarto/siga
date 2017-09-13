@@ -135,6 +135,19 @@ public class MergeVisitor implements FeatureVisitor {
 					}else{
 						values[i] = recordset.getFieldValue(index, fieldIndex);
 					}
+					// afalciano: ...but also field length and precision
+					int fieldLength = fields[i].getFieldLength();
+					int fieldDecimalCount = fields[i].getFieldDecimalCount();
+					FieldDescription[] recordsetFieldsDescription = recordset.getFieldsDescription();
+					int recordsetLength = recordsetFieldsDescription[fieldIndex].getFieldLength();
+					int recordsetDecimalCount = recordsetFieldsDescription[fieldIndex].getFieldDecimalCount();
+					if(fieldLength != recordsetLength){
+						fields[i].setFieldLength(recordsetLength);
+					}
+					if(fieldDecimalCount != recordsetDecimalCount){
+						fields[i].setFieldDecimalCount(recordsetDecimalCount);
+					}
+					
 				}
 			} catch (ReadDriverException e) {
 				throw new ProcessVisitorException(recordset.getName(),e,"Error en merge al tratar de leer el atributo de un feature de una de las capas");

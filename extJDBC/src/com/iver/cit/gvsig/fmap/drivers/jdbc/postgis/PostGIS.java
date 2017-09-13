@@ -306,7 +306,7 @@ public class PostGIS {
 			throw new ProcessVisitorException("incorrect_geometry",new Exception());
 		//MCoord
 		if (((type & FShape.M) != 0) && ((type & FShape.MULTIPOINT) == 0)) {
-			sqlBuf.append(" GeometryFromText( '"
+			sqlBuf.append(" ST_GeometryFromText( '"
 					+ ((FShapeM)geometry.getInternalShape()).toText() + "', "
 					+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
 		} else
@@ -334,7 +334,7 @@ public class PostGIS {
 			//With st_force_3d it is avoid		
 			if (dbLayerDef.getDimension() == 3) sqlBuf.append("ST_Force_3D (");
 			
-			sqlBuf.append(" GeometryFromText( '"
+			sqlBuf.append(" ST_GeometryFromText( '"
 				+ jtsGeom.toText() + "', "
 				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
 
@@ -421,7 +421,7 @@ public class PostGIS {
 			//MCoord
 			int type = feat.getGeometry().getGeometryType();
 			if (((type & FShape.M) != 0) && ((type & FShape.MULTIPOINT) == 0)) {
-				sqlBuf.append(" GeometryFromText( '"
+				sqlBuf.append(" ST_GeometryFromText( '"
 						+ ((FShapeM)feat.getGeometry().getInternalShape()).toText() + "', "
 						+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
 			} else
@@ -432,7 +432,7 @@ public class PostGIS {
 						//TODO: Metodo toText 3D o 2DM 											
 					} else {
 					//Its not a multipoint
-					sqlBuf.append(" GeometryFromText( '"
+					sqlBuf.append(" ST_GeometryFromText( '"
 							+ ((FShape3D)feat.getGeometry().getInternalShape()).toText() + "', "
 							+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
 					}
@@ -446,7 +446,7 @@ public class PostGIS {
 				//With st_force_3d it is avoid		
 				if (dbLayerDef.getDimension() == 3) sqlBuf.append("ST_Force_3D (");
 				
-				sqlBuf.append(" GeometryFromText( '"
+				sqlBuf.append(" ST_GeometryFromText( '"
 				+ feat.getGeometry().toJTSGeometry().toText() + "', "
 				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
 				

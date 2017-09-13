@@ -452,10 +452,11 @@ public class LabelClass implements IPersistence, CartographicSupport {
 					int height = (int) Math.round(xy[1] - y) ;
 
 					Rectangle textRect = new Rectangle(x, y, width, height);
-					Shape oldClip = graphics.getClip();
-					graphics.setClip(textRect);
+//					Shape oldClip = graphics.getClip();
+//					graphics.setClip(textRect);
 					getTextSymbol().drawInsideRectangle(graphics, null, textRect, null);
-					graphics.setClip(oldClip);
+//					graphics.setClip(oldClip);
+//					graphics.draw(textRect);
 				}
 			}
 		} else {

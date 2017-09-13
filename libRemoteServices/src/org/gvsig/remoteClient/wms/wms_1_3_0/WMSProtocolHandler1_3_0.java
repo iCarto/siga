@@ -533,4 +533,25 @@ public class WMSProtocolHandler1_3_0 extends org.gvsig.remoteClient.wms.WMSProto
     protected String getSRSParameter(){
     	return "CRS";
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.gvsig.remoteClient.wms.WMSProtocolHandler#getBoundingBox()
+     */
+    protected StringBuffer appendBoundingBox(WMSStatus status, StringBuffer req) {
+    	if (status.getCrsAxisOrder()==WMSStatus.CRS_AXIS_NORTH_EAST) {
+    		// We should check whether we should also reverse the bounding box for other orientations
+    		// (such as WMSStatus.CRS_AXIS_SOUTH_WEST), but it is difficult to get test cases.
+    		// For the moment we are conservative and will only reverse when order is CRS_AXIS_NORTH_EAST.
+    		req.append("&BBOX=")
+    		.append(status.getExtent().getMinY()).append(",")
+    		.append(status.getExtent().getMinX()).append(",")
+    		.append(status.getExtent().getMaxY()).append(",")
+    		.append(status.getExtent().getMaxX());
+    		return req;
+    	}
+    	else {
+    		return super.appendBoundingBox(status, req);
+    	}
+    }
   }

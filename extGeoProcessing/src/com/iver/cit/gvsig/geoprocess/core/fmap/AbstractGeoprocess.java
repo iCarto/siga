@@ -198,13 +198,8 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 		}else{
 			IWriter[] writers = ((MultiShpWriter)writer).getWriters();
 			if(writers.length > 1){
-				MapContext map = ((View)PluginServices.
-							getMDIManager().
-							getActiveWindow()).
-							getModel().
-							getMapContext();
 				FLayers solution = new FLayers();//(map,null);
-				solution.setMapContext(map);
+				solution.setMapContext(firstLayer.getMapContext());
 				String name = ((MultiShpWriter)writer).getFileName();
 				int fileNameStart = name.lastIndexOf(File.separator) + 1;
 				if(fileNameStart == -1)

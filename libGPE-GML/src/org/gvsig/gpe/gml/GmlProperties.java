@@ -29,8 +29,8 @@ package org.gvsig.gpe.gml;
 
 import java.util.Properties;
 
-import org.gvsig.gpe.GPEDefaults;
 import org.gvsig.gpe.IGPEProperties;
+
 
 /**
  * This class contains the properties for the GML

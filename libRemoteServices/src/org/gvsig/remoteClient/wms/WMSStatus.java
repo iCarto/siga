@@ -23,6 +23,14 @@ public class WMSStatus extends org.gvsig.remoteClient.RemoteClientStatus {
     private boolean transparency;
 	private String onlineResource;
 	private String infoFormat;
+	/* On WMS 1.3 we need to order the bounding box depending on the defined CRS axis order */
+	private int crsAxisOrder;
+	
+	public static final int CRS_AXIS_NORTH_EAST = 0;
+	public static final int CRS_AXIS_EAST_NORTH = 1;
+	public static final int CRS_AXIS_SOUTH_WEST = 2;
+	public static final int CRS_AXIS_WEST_SOUTH = 3;
+	public static final int CRS_AXIS_OTHER_OR_UNKNOWN = 4;
 	
     public String getInfoFormat() {
 		return infoFormat;
@@ -264,5 +272,29 @@ public class WMSStatus extends org.gvsig.remoteClient.RemoteClientStatus {
 	 */
 	public void setOnlineResource(String url) {
 		onlineResource = url;
+	}
+	
+	/**
+	 * Returns the axis order as specified by the CRS, as this defines the
+	 * order of the bounding box parameters on WMS 1.3.
+	 * 
+	 *  Valid values include: {@link #CRS_AXIS_EAST_NORTH},
+	 *  {@link #CRS_AXIS_NORTH_EAST}, {@link #CRS_AXIS_SOUTH_WEST},
+	 *  {@link #CRS_AXIS_WEST_SOUTH}, {@link #CRS_AXIS_OTHER_OR_UNKNOWN}.
+	 */
+	public int getCrsAxisOrder() {
+		return crsAxisOrder;
+	}
+	
+	/**
+	 * Sets the axis order as specified by the CRS, as this defines the
+	 * order of the bounding box parameters on WMS 1.3.
+	 * 
+	 *  Valid values include: {@link #CRS_AXIS_EAST_NORTH},
+	 *  {@link #CRS_AXIS_NORTH_EAST}, {@link #CRS_AXIS_SOUTH_WEST},
+	 *  {@link #CRS_AXIS_WEST_SOUTH}, {@link #CRS_AXIS_OTHER_OR_UNKNOWN}.
+	 */
+	public void setCrsAxisOrder(int axisOrder) {
+		this.crsAxisOrder = axisOrder;
 	}
 }

@@ -548,7 +548,8 @@ public class DataBaseOpenDialog extends JPanel implements ActionListener {
 	 private ConnectionWithParams addNewConnection() {
 		 ConnectionWithParams resp = null;
 
-		 DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
+	DBConnectionParamsDialog newco = new DBConnectionParamsDialog(
+		new Class[] { AlphanumericDBDriver.class });
 		 newco.showDialog();
 
 		 if (newco.isOkPressed()) {

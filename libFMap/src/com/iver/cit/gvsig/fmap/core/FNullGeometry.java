@@ -64,6 +64,8 @@ import com.vividsolutions.jts.geom.Geometry;
  * @author Vicente Caballero Navarro
  */
 public class FNullGeometry extends AbstractGeometry {
+    
+    public final static FNullGeometry INSTANCE = new FNullGeometry();
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D,
 	 * 		ViewPort, ISymbol)

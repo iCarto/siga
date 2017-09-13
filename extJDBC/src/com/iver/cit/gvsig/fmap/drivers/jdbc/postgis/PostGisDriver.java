@@ -327,7 +327,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			try {
 				Statement s = ((ConnectionJDBC) conn).getConnection()
 						.createStatement();
-				String query = "SELECT extent(\""
+				String query = "SELECT ST_extent(\""
 				    + getLyrDef().getFieldGeometry()
 				    + "\") AS FullExtent FROM " + getLyrDef().getComposedTableName()
 				    + " " + getCompleteWhere();
@@ -440,7 +440,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		double yMin = r.getMinY();
 		double xMax = r.getMaxX();
 		double yMax = r.getMaxY();
-		String wktBox = "GeometryFromText('LINESTRING(" + xMin + " " + yMin
+		String wktBox = "ST_GeometryFromText('LINESTRING(" + xMin + " " + yMin
 		+ ", " + xMax + " " + yMin + ", " + xMax + " " + yMax + ", "
 		+ xMin + " " + yMax + ")', " + strEPSG + ")";
 		String sqlAux;
@@ -756,7 +756,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getGeometryField(java.lang.String)
 	 */
 	public String getGeometryField(String fieldName) {
-	    return "AsEWKB(\"" + fieldName + "\", 'XDR')";
+	    return "ST_AsEWKB(\"" + fieldName + "\", 'XDR')";
 	}
 
 	/**

@@ -92,6 +92,7 @@
 */
 package org.gvsig.symbology.fmap.symbols;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -99,12 +100,14 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -116,6 +119,7 @@ import javax.swing.JTextField;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JComboBoxFonts;
 import org.gvsig.gui.beans.swing.JIncrementalNumberField;
+import org.gvsig.symbology.fmap.labeling.placements.PointPlacementConstraints;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.FPolygon2D;
@@ -227,6 +231,9 @@ public class SmartTextSymbol extends SimpleTextSymbol implements ITextSymbol {
 		}
 	}
 	public SmartTextSymbol() {
+		PointPlacementConstraints pc = new PointPlacementConstraints();
+		this.constraints = pc;
+		
 	}
 
 	/**
@@ -249,6 +256,8 @@ public class SmartTextSymbol extends SimpleTextSymbol implements ITextSymbol {
 		g.setFont(font);
 		FontRenderContext frc = g.getFontRenderContext();
 		LineMetrics lineMetrics = font.getLineMetrics(getText(), frc);
+		
+//		GlyphVector glyph =  font.layoutGlyphVector(frc, charText, 0, charText.length, Font.LAYOUT_NO_START_CONTEXT);
 		double cons = 0;
 
 		/* Repartimos el leading (espacio de separación entre lineas)
@@ -269,9 +278,13 @@ public class SmartTextSymbol extends SimpleTextSymbol implements ITextSymbol {
 //			cons = lineMetrics.getDescent()+(lineMetrics.getLeading()/2)-(lineMetrics.getHeight()/2);
 			cons = lineMetrics.getDescent()+lineMetrics.getLeading()-(lineMetrics.getHeight()/2);
 		}
+		
+		double[] coords = tp.nextPosForGlyph(0);
+		Stroke haloStroke = new BasicStroke(getHaloWidth(), BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND);
 
 		for (int i = 0; i < tp.getGlyphCount(); i++) {
-			double[] coords = tp.nextPosForGlyph(i);
+			coords = tp.nextPosForGlyph(i);
 			if (coords[0] == TextPath.NO_POS || coords[1] == TextPath.NO_POS)
 				continue;
 
@@ -281,6 +294,17 @@ public class SmartTextSymbol extends SimpleTextSymbol implements ITextSymbol {
 
 			g.translate(coords[0]+xOffset, coords[1]-yOffset);
 			g.rotate(coords[2]);
+
+			char[] aux = new char[1];
+			aux[0] = charText[i];
+			if (isDrawWithHalo()) {
+				GlyphVector glyph = font.createGlyphVector(frc, aux);
+				Shape outlineChar = glyph.getOutline();
+				g.setStroke(haloStroke);
+				g.setColor(getHaloColor());
+				g.draw(outlineChar);
+			}
+			
 			g.setColor(this.getTextColor());
 			g.drawString(String.valueOf(charText[i]), 0, 0);
 			g.rotate(-coords[2]);
@@ -453,6 +477,8 @@ public class SmartTextSymbol extends SimpleTextSymbol implements ITextSymbol {
 
 				gpx.moveTo(50, 100);
 				gpx.lineTo(100, 50);
+				gpx.lineTo(150, 100);
+				gpx.lineTo(250, 50);
 
 				SmartTextSymbol sms = new SmartTextSymbol();
 				FPolyline2D theLineShape = new FPolyline2D(gpx);

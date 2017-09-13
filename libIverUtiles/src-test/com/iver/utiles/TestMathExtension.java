@@ -1,4 +1,3 @@
-package com.iver.utiles;
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -39,6 +38,7 @@ package com.iver.utiles;
  *   +34 963163400
  *   dac@iver.es
  */
+package com.iver.utiles;
 
 /**
  * Tests for the MathExtension class
@@ -46,53 +46,59 @@ package com.iver.utiles;
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
 public class TestMathExtension {
-	/**
-	 * Test method for the TestMathExtension class
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args)
-	{
-		// Test 1
-		System.out.println("Test 1 -> log2(1)");
-		showResultState(0, MathExtension.log2(1), 1);
+    /**
+     * Test method for the TestMathExtension class
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+	// Test 1
+	System.out.println("Test 1 -> log2(1)");
+	showResultState(0, MathExtension.log2(1), 1);
 
-		// Test 2
-		System.out.println("Test 2 -> log2(16)");
-		showResultState(4, MathExtension.log2(16), 2);
+	// Test 2
+	System.out.println("Test 2 -> log2(16)");
+	showResultState(4, MathExtension.log2(16), 2);
 
-		// Test 3
-		System.out.println("Test 3 -> log2Integer(15)");
-		showResultState(3, MathExtension.log2Integer(15), 3);
-		
-		// Test 4
-		System.out.println("Test 4 -> log2Integer(64)");
-		showResultState(6, MathExtension.log2Integer(64), 4);
-		
-		// Test 5
-		System.out.println("Test 5 -> logX(e2, e6)");
-		showResultState(3, MathExtension.logX(Math.pow(Math.E, 2), Math.pow(Math.E, 6)), 5);
-		
-		// Test 6
-		System.out.println("Test 6 -> logXInteger(5, 137.43)");
-		showResultState(3, MathExtension.logXInteger(5, 137.43), 6);
+	// Test 3
+	System.out.println("Test 3 -> log2Integer(15)");
+	showResultState(3, MathExtension.log2Integer(15), 3);
 
-		
-		// There might be more tests
-		
+	// Test 4
+	System.out.println("Test 4 -> log2Integer(64)");
+	showResultState(6, MathExtension.log2Integer(64), 4);
+
+	// Test 5
+	System.out.println("Test 5 -> logX(e2, e6)");
+	showResultState(3,
+		MathExtension.logX(Math.pow(Math.E, 2), Math.pow(Math.E, 6)), 5);
+
+	// Test 6
+	System.out.println("Test 6 -> logXInteger(5, 137.43)");
+	showResultState(3, MathExtension.logXInteger(5, 137.43), 6);
+
+	// There might be more tests
+
+    }
+
+    /**
+     * Indicates if the result of the current test has been successfull or not
+     * 
+     * @param correct
+     *            The correct result
+     * @param result
+     *            The result of the operation
+     * @param testNumber
+     *            The numer of the current test
+     */
+    private static void showResultState(double correct, double result,
+	    int testNumber) {
+	if (correct == result) {
+	    System.out.println("Test " + testNumber + " OK    (Result: "
+		    + result + ")");
+	} else {
+	    System.out.println("Test " + testNumber + " FAILED    (Result: "
+		    + result + ")");
 	}
-	
-	/**
-	 * Indicates if the result of the current test has been successfull or not
-	 * 
-	 * @param correct The correct result
-	 * @param result The result of the operation
-	 * @param testNumber The numer of the current test
-	 */
-	private static void showResultState(double correct, double result, int testNumber) {
-		if (correct == result)
-			System.out.println("Test " + testNumber + " OK    (Result: " + result + ")");
-		else
-			System.out.println("Test " + testNumber + " FAILED    (Result: " + result + ")");
-	}
+    }
 }

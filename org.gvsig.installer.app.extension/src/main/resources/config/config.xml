@@ -9,15 +9,15 @@
 			active="false">
 			<menu text="tools/Development/make_plugin_package"
 				  tooltip="make_plugin_package_description"
-				  action-command=""
+				  action-command="tools-devel-pack-plugin"
 				  position="4998" />			
 		</extension>
 			<extension class-name="org.gvsig.installer.app.extension.execution.InstallPackageExtension"
 			description="This extension is used to install a package from a bundle in gvSIG"
-			active="false">
+			active="true">
 			<menu text="tools/install_package"
 				  tooltip="install_package_description"
-				  action-command=""
+				  action-command="tools-addonsmanager"
 				  position="4999" />			
 		</extension>
 	</extensions>

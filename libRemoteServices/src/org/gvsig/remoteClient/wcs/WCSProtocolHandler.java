@@ -84,21 +84,7 @@ public abstract class WCSProtocolHandler extends OGCProtocolHandler {
 	 * @see org.gvsig.remoteClient.OGCProtocolHandler#setHost(java.lang.String)
 	 */
 	public void setHost(String host) {
-		try {
-			// Validates the URL if doesn't produces an exception
-			new URL(host);
-
-			int index = host.indexOf("?");
-			
-			if (index == -1)
-				super.setHost(host);
-			else
-				super.setHost(host.substring(0, index));
-		}
-		catch (MalformedURLException m) {
-			// Bad URL -> hold it
-			super.setHost(host);
-		}
+	    super.setHost(host);
 	}
 
 	/**

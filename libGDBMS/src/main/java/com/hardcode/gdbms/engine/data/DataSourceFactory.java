@@ -1816,7 +1816,12 @@ public class DataSourceFactory {
 	 *
 	 */
 	private void fillDriversNamesAliases() {
-
+		this.driversNamesAliases.put("GDBMS HSQLDB driver", "HSQL");
+		this.driversNamesAliases.put("mysql", "MySQL Alphanumeric");
+		this.driversNamesAliases.put("odbc", "ODBC");
+		this.driversNamesAliases.put("mysql", "MySQL Alphanumeric");
+		this.driversNamesAliases.put("oracle", "Oracle Alphanumeric");
+		this.driversNamesAliases.put("postgresql", "PostgreSQL Alphanumeric");
 	}
 
 	private Driver getDriver(String name) throws DriverLoadException {

@@ -40,6 +40,9 @@
  */
 package com.iver.cit.gvsig.fmap.rendering;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.hardcode.gdbms.engine.values.DateValue;
 import com.hardcode.gdbms.engine.values.DoubleValue;
 import com.hardcode.gdbms.engine.values.FloatValue;
@@ -124,23 +127,17 @@ public class FInterval implements IInterval {
 	 * @return FInterval nuevo.
 	 */
 	public static IInterval create(String s) {
-		String[] str = s.split("-");
-		if (s.startsWith("-")) {
-			str[0]="-"+str[1];
-			s.replaceFirst("-","");
-			str[1]=str[2];
-		}
-		if (s.contentEquals(new StringBuffer("--"))) {
-			str[1]=s.substring(s.indexOf('-')+1,s.length()-1);
+		Pattern pattern = Pattern.compile("(-?[^-]*)-(-?.*)");
+		Matcher matcher = pattern.matcher(s);
+		IInterval inter=new NullIntervalValue(); // temporal pessimism
+		if (matcher.find()) {
+			try{
+				inter = new FInterval(Double.parseDouble(matcher.group(1)),
+						Double.parseDouble(matcher.group(2)));
+			}catch (NumberFormatException e) {
+			}
 		}
 
-		IInterval inter=null;
-		try{
-		inter = new FInterval(Double.parseDouble(str[0]),
-				Double.parseDouble(str[1]));
-		}catch (NumberFormatException e) {
-			return new NullIntervalValue();
-		}
 		return inter;
 	}
 }

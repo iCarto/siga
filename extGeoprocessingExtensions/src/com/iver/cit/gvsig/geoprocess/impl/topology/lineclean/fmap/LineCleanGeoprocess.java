@@ -392,12 +392,8 @@ public class LineCleanGeoprocess extends AbstractGeoprocess {
 			try {
 				if(pseudonodes.getSource().getShapeCount() != 0){
 	
-					MapContext map = ((View)PluginServices.getMDIManager().
-														getActiveWindow()).
-														getModel().
-														getMapContext();
 					FLayers solution = new FLayers();//(map,null);
-					solution.setMapContext(map);
+					solution.setMapContext(firstLayer.getMapContext());
 					solution.setName(this.firstLayer.getName()+"_cleaned");
 					solution.addLayer(cleanedLayer);
 					solution.addLayer(pseudonodes);

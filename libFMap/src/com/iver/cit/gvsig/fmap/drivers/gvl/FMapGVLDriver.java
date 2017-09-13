@@ -12,7 +12,6 @@ import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.ValidationException;
 
-
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.drivers.legend.IFMapLegendDriver;
@@ -40,7 +39,7 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 		String fName = f.getAbsolutePath();
 		if (fName!=null) {
 			fName = fName.toLowerCase();
-			return fName.endsWith(".gvl");
+			return fName.endsWith("." + FILE_EXTENSION);
 		}
 		return false;
 	}

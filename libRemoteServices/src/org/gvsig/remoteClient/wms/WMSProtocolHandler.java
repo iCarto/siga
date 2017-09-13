@@ -623,7 +623,9 @@ public abstract class WMSProtocolHandler {
 
 		req.append(onlineResource + symbol + "REQUEST=GetLegendGraphic&SERVICE=WMS&VERSION=").append(getVersion());
         req.append("&LAYER=" + layerName).append("&TRANSPARENT=TRUE").append("&FORMAT=image/png");
-		return req.toString().replaceAll(" ", "%20");
+        String aux = req.toString().replaceAll(" ", "%20");
+        System.out.println("GetLegendGraphic url:" + aux);
+		return aux;
     }
 
     /**
@@ -669,22 +671,21 @@ public abstract class WMSProtocolHandler {
     public String getPartialQuery(WMSStatus status)
     {
         StringBuffer req = new StringBuffer();
-        req.append("LAYERS=" + Utilities.Vector2CS(status.getLayerNames()))
-           .append("&" + getSRSParameter() + "=" + status.getSrs())
-           .append("&BBOX=" + status.getExtent().getMinX()+ "," )
-           .append(status.getExtent().getMinY()+ ",")
-           .append(status.getExtent().getMaxX()+ ",")
-           .append(status.getExtent().getMaxY())
-           .append("&WIDTH=" + status.getWidth())
-           .append("&HEIGHT=" + status.getHeight())
-           .append("&FORMAT=" + status.getFormat())
+        req.append("LAYERS=")
+           .append(Utilities.Vector2CS(status.getLayerNames()))
+           .append("&").append(getSRSParameter()).append("=").append(status.getSrs());
+        
+        appendBoundingBox(status, req);
+        req.append("&WIDTH=").append(status.getWidth())
+           .append("&HEIGHT=").append(status.getHeight())
+           .append("&FORMAT=").append(status.getFormat())
            .append("&STYLES=");
         Vector v = status.getStyles();
         if (v!=null && v.size()>0)
         	req.append(Utilities.Vector2CS(v));
         v = status.getDimensions();
         if (v!=null && v.size()>0)
-            req.append("&" + Utilities.Vector2URLParamString(v));
+            req.append("&").append(Utilities.Vector2URLParamString(v));
         if (status.getTransparency()) {
             req.append("&TRANSPARENT=TRUE");
         }
@@ -700,6 +701,15 @@ public abstract class WMSProtocolHandler {
 
     public void close() {
         // your code here
+    }
+    
+    protected StringBuffer appendBoundingBox(WMSStatus status, StringBuffer req) {
+    	req.append("&BBOX=")
+    	.append(status.getExtent().getMinX()).append(",")
+        .append(status.getExtent().getMinY()).append(",")
+        .append(status.getExtent().getMaxX()).append(",")
+        .append(status.getExtent().getMaxY());
+    	return req;
     }
 
     /**

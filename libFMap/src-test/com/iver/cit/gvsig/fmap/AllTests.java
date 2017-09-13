@@ -95,6 +95,7 @@ public class AllTests extends TestCase{
 		suite.addTestSuite(SpatialIndexTest.class);
 		suite.addTestSuite(TestDbf.class);
 		suite.addTestSuite(TestDgn.class);
+		
 
 		//$JUnit-END$
 		return suite;

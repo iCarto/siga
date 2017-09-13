@@ -2,6 +2,8 @@ package com.prodevelop.cit.gvsig.vectorialdb.wizard;
 
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -10,6 +12,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,7 +29,9 @@ import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.SingleVectorialDBConnectionExtension;
+import com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
+import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.utiles.swing.JPasswordDlg;
@@ -67,6 +74,8 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
 	private JComboBox datasourceComboBox;
 	private ConnectionWithParams theConnWithParams = null;
 	private JButton dbButton;
+    private JLabel schemaLB;
+    private JComboBox schemaCB;
 
 	/**
 	 * This method initializes this
@@ -78,9 +87,9 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
 		loadVectorialDBDatasourcesCombo();
 		
 		chooseConnLabel = new JLabel();
-		chooseConnLabel.setText(PluginServices.getText(this, "choose_connection"));
-		chooseConnLabel.setBounds(new java.awt.Rectangle(14,9+50,300,22));
-		
+	chooseConnLabel.setText(PluginServices.getText(this,
+		"choose_connection") + ":");
+	chooseConnLabel.setBounds(new java.awt.Rectangle(15, 10, 300, 20));
 		dbButton = getJdbcButton();
         
         this.setLayout(null);
@@ -93,9 +102,47 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
         this.add(datasourceComboBox, null);
         this.add(dbButton, null);
         
+	this.add(getSchemaLB(), null);
+	this.add(getSchemaCB(), null);
+
     	this.updateFinishButton();
     	getTableNameField().setText(getNewTableName());
 	}
+
+    private JLabel getSchemaLB() {
+	if (schemaLB == null) {
+	schemaLB = new JLabel(PluginServices.getText(this, "schema") + ":");
+	    schemaLB.setBounds(new java.awt.Rectangle(15, 70, 300, 20));
+	}
+	return schemaLB;
+    }
+
+    private JComboBox getSchemaCB() {
+	if (schemaCB == null) {
+	schemaCB = new JComboBox();
+	    schemaCB.setBounds(new java.awt.Rectangle(15, 95, 300, 20));
+	loadAvaliableSchemas();
+	}
+	return schemaCB;
+    }
+
+    private void loadAvaliableSchemas() {
+
+	if ((theConnWithParams == null) || (!theConnWithParams.isConnected())) {
+	    return;
+	}
+
+	try {
+	    schemaCB.removeAllItems();
+	    ResultSet rs = ((ConnectionJDBC) theConnWithParams.getConnection())
+		    .getConnection().getMetaData().getSchemas();
+	    while (rs.next()) {
+		schemaCB.addItem(rs.getString("TABLE_SCHEM"));
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+    }
 
 	private String getNewTableName() {
 		String resp = "GVSIG_" + NEW_TABLE_NAME_INDEX;
@@ -107,7 +154,7 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
 
 		if (tableNameField == null) {
 			tableNameField = new JTextField();
-			tableNameField.setBounds(new java.awt.Rectangle(14,32,300,22));
+	    tableNameField.setBounds(new java.awt.Rectangle(15, 155, 300, 20));
 			tableNameField.addKeyListener(this);
 		}
 		return tableNameField;
@@ -119,7 +166,8 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
 		if (tableNameLabel == null) {
 			tableNameLabel = new JLabel();
 			tableNameLabel.setText(PluginServices.getText(this, "Tabla") + ":");
-			tableNameLabel.setBounds(new java.awt.Rectangle(14,9,300,22));
+	    tableNameLabel
+.setBounds(new java.awt.Rectangle(15, 130, 300, 20));
 		}
 		return tableNameLabel;
 	}
@@ -135,7 +183,8 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
     private JComboBox getDatasourceComboBox() {
         if (datasourceComboBox == null) {
             datasourceComboBox = new JComboBox();
-            datasourceComboBox.setBounds(new java.awt.Rectangle(14,32+50,300,22));
+	    datasourceComboBox
+		    .setBounds(new java.awt.Rectangle(15, 35, 300, 20));
             datasourceComboBox.addItemListener(this);
         }
 
@@ -202,6 +251,7 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
             }
 
             theConnWithParams = cwp;
+	    loadAvaliableSchemas();
         	this.updateFinishButton();
             datasourceComboBox.repaint();
 		}
@@ -259,7 +309,8 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
     private ConnectionWithParams addNewConnection() {
         ConnectionWithParams resp = null;
 
-        DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
+	DBConnectionParamsDialog newco = new DBConnectionParamsDialog(
+		new Class[] { IVectorialDatabaseDriver.class });
         newco.showDialog();
 
         if (newco.isOkPressed()) {
@@ -304,8 +355,7 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
             dbButton.addActionListener(this);
             dbButton.setToolTipText(PluginServices.getText(this,
                     "add_connection"));
-            dbButton.setBounds(new java.awt.Rectangle(320, 32+50, 26, 21));
-
+	    dbButton.setBounds(new java.awt.Rectangle(320, 32, 26, 21));
             String _file = createResourceUrl("images/jdbc.png").getFile();
             dbButton.setIcon(new ImageIcon(_file));
         }
@@ -345,9 +395,13 @@ implements ItemListener, PropertyChangeListener, ActionListener, KeyListener {
 	}    
 	
 	private void updateFinishButton() {
+	if ((theConnWithParams != null) && (theConnWithParams.isConnected())
+		&& (schemaCB.getSelectedItem() != null)
+		&& (schemaCB.getSelectedItem().toString().length() > 0)) {
 		String aux_table_name = getTableName(); 
 		boolean active = (theConnWithParams != null) && validTableName(aux_table_name);
 		getWizardComponents().getFinishButton().setEnabled(active);
+	}
 	}
 
 	private boolean validTableName(String str) {

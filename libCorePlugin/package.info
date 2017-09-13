@@ -1,5 +1,5 @@
 
-state=devel
+state=final
 name=com.iver.core
 official=true
 code=com.iver.core
@@ -10,7 +10,7 @@ gvSIG-version=1.12.0
 version=1.12.0
 type=plugin
 description=gvSIG basic extensions
-build=1402
-buildNumber=1402
+build=1482
+buildNumber=1482
 model-version=1.0.0
 		

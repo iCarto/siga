@@ -174,7 +174,7 @@ public class ElementTypeBinding {
 					if (!isInitialized){
 						element = handler.getContentHandler().startElement(
 								elementRootType.getNamespaceURI(),
-								GMLUtilsParser.removeBlancSymbol(elementRootType.getLocalPart()), 
+								elementRootType.getLocalPart(), 
 								value,	
 								attributesIterator,
 								parentElement);

@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Properties;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -80,8 +81,14 @@ public class ODBCDriver implements AlphanumericDBDriver, IWriteable {
         if ((user != null) && (!user.equalsIgnoreCase(""))) {
             connectionString += (";UID=" + user + ";PWD=" + password);
         }
-
-        return DriverManager.getConnection(connectionString);
+        Properties prop = new Properties();
+        // TODO: Pasar como parámetro el charset... aunque lo he probado y no va bien con cirílico
+//        prop.put("charSet", "ISO-8859-5");
+        if (user != null)
+        	prop.put("user", user);
+        if (password != null)
+        	prop.put("password", password);        
+        return DriverManager.getConnection(connectionString, prop);
     }
 
     /**

@@ -152,10 +152,10 @@ public abstract class RasterProcess implements IIncrementable, IncrementableList
 			queueActions = null;
 		} finally {
 			RasterTaskQueue.remove(rasterTask);
-			if (progressActive) {
+//			if (progressActive) {
 				if (incrementableTask != null)
 					getIncrementableTask().processFinalize();
-			}
+//			}
 			if (queueActions != null)
 				queueActions.end(this);
 			time = new java.util.Date().getTime() - t1;
@@ -239,8 +239,16 @@ public abstract class RasterProcess implements IIncrementable, IncrementableList
 	 * procesará cuando pueda e interrumpirá el proceso.
 	 */
 	public void actionCanceled(IncrementableEvent e) {
-		if(cancellable)
-			rasterTask.setEvent(new CancelEvent(this));
+		if(cancellable) {
+			CancelEvent ev = new CancelEvent(this);
+			rasterTask.setEvent(ev);
+			try {
+				rasterTask.manageEvent(ev);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	/**

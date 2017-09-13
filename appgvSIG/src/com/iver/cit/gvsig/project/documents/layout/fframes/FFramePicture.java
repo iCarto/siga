@@ -355,21 +355,24 @@ public class FFramePicture extends FFrame {
         if (file == null || !f.exists()) {
             return null;
         }
-        setPath(file);
-        String iString = file.toLowerCase();
 
-        if (iString.endsWith("jpg") || iString.endsWith("jpeg") ||
-                iString.endsWith("gif")) {
-            tmpIcon = new ImageIcon(Jimi.getImage(file, Jimi.VIRTUAL_MEMORY)); //((File)main.allImages.elementAt(x)).getAbsolutePath());
-        } else if (iString.endsWith("png") || iString.endsWith("tif") ||
-                iString.endsWith("ico") || iString.endsWith("xpm") ||
-                iString.endsWith("bmp")) {
-            tmpIcon = new ImageIcon(Jimi.getImage(file, Jimi.VIRTUAL_MEMORY)); //new ImageIcon(f.getPath());
-        } else if (iString.endsWith("svg")) {
-            isSVG = true;
-            obtainStaticRenderer(new File(file));
-        }else {
-        	tmpIcon=new ImageIcon(file);
+        if (new File(file).isFile()) {
+            setPath(file);
+            String iString = file.toLowerCase();
+
+            if (iString.endsWith("jpg") || iString.endsWith("jpeg") ||
+                    iString.endsWith("gif")) {
+                tmpIcon = new ImageIcon(Jimi.getImage(file, Jimi.VIRTUAL_MEMORY)); //((File)main.allImages.elementAt(x)).getAbsolutePath());
+            } else if (iString.endsWith("png") || iString.endsWith("tif") ||
+                    iString.endsWith("ico") || iString.endsWith("xpm") ||
+                    iString.endsWith("bmp")) {
+                tmpIcon = new ImageIcon(Jimi.getImage(file, Jimi.VIRTUAL_MEMORY)); //new ImageIcon(f.getPath());
+            } else if (iString.endsWith("svg")) {
+                isSVG = true;
+                obtainStaticRenderer(new File(file));
+            }else {
+                tmpIcon=new ImageIcon(file);
+            }
         }
 
         if (!isSVG && (tmpIcon != null)) {

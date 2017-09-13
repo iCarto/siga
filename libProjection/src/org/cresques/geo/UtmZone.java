@@ -400,4 +400,13 @@ public class UtmZone extends Projection {
 	public String getFullCode() {
 		return getAbrev();
 	}
+	
+    /*
+     * (non-Javadoc)
+     * @see org.cresques.cts.IProjection#getWKT()
+     */
+	public String getWKT() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

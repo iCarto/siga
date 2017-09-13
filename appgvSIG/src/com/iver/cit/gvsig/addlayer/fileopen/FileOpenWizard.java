@@ -332,8 +332,11 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 		}
 		allFileFilter.setAllFileFilters(allFileFilters);
 		fileChooser.addChoosableFileFilter(allFileFilter);
-		if (finded && (lastFileFilter != null))
-			fileChooser.setFileFilter(auxFilter);
+		if (finded && (lastFileFilter != null)) {
+		    fileChooser.setFileFilter(auxFilter);
+		} else {
+		    fileChooser.setFileFilter(allFileFilter);
+		}
 
 		int result = fileChooser.showOpenDialog(this);
 

@@ -27,15 +27,17 @@
 
 package org.gvsig.installer.app.extension.execution;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.JOptionPane;
-
-import org.gvsig.i18n.Messages;
-import org.gvsig.installer.app.extension.GvSIGFolders;
+import org.gvsig.installer.app.extension.BackportrHelper.ApplicationLocator;
+import org.gvsig.installer.app.extension.BackportrHelper.PluginsLocator;
+import org.gvsig.installer.app.extension.BackportrHelper.PluginsManager;
 import org.gvsig.installer.swing.api.SwingInstallerLocator;
-import org.gvsig.tools.library.impl.DefaultLibrariesInitializer;
+import org.gvsig.installer.swing.api.SwingInstallerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,56 +50,67 @@ import com.iver.cit.gvsig.Version;
  */
 public class InstallPackageExtension extends Extension {
 
-    private static final Logger LOG = LoggerFactory
-        .getLogger(InstallPackageExtension.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(InstallPackageExtension.class);
 
-    public void execute(String actionCommand) {
-    	int resp = JOptionPane.showConfirmDialog(
-    			null,
-    			Messages.getText("install_package_extension_warning"),
-    			Messages.getText("select_an_option"),
-    			JOptionPane.YES_NO_OPTION);
-    	if (resp!=JOptionPane.OK_OPTION){
-    		return;
-    	}
+	public void execute(String actionCommand) {
+		if ("tools-addonsmanager".equalsIgnoreCase(actionCommand)) {
+			PluginsManager manager = PluginsLocator.getManager();
+			try {
+				PluginServices.getMDIManager().addCentredWindow(
+						new InstallPackageWindow(
+								manager.getApplicationFolder(), manager
+										.getInstallFolder()));
+			} catch (Error e) {
+				LOG.error("Error creating the wizard to install a package ", e);
+			} catch (Exception e) {
+				LOG.error("Error creating the wizard to install a package ", e);
+			}
+		}
+	}
 
-        GvSIGFolders folders = new GvSIGFolders();
-        try {
-            PluginServices.getMDIManager().addCentredWindow(
-                new InstallPackageWindow(folders.getApplicationFolder(),
-                    folders.getPluginsFolder(), folders.getInstallFolder()));
-        } catch (Exception e) {
-            LOG.error("Error creating the wizard to install a package ", e);
-        }
-    }
+	public void initialize() {
+		Version version = ApplicationLocator.getManager().getVersion();
 
-    public void initialize() {
+		try {
+	    	PluginsLocator.getIconThemeManager().getCurrent().registerDefault(
+					"tools-addonsmanager",
+					this.getClass().getClassLoader().getResource("images/action/tools-addonsmanager.png")
+				);
+	    	
+			SwingInstallerManager manager = SwingInstallerLocator
+					.getSwingInstallerManager();
+			InputStream is = this.getClass().getResourceAsStream(
+					"/defaultDownloadsURLs");
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			for (line = in.readLine(); line != null; line = in.readLine()) {
+				line = line.replace("$version", version.getFormat());
+				line = line.replace("<%Version%>", version.getFormat());
+				try {
+					manager.addDefaultDownloadURL(new URL(line));
+				} catch (MalformedURLException e) {
+					LOG.error(
+							"Error creating the default packages download URL pointing to "
+									+ line, e);
+				}
+			}
+			manager.getInstallerManager().setVersion(version.getFormat());
+		} catch (Throwable e) {
+			LOG.error("Error reading the default packages download URL file "
+					+ "/defaultDownloadsURLs", e);
+		}
+	}
 
-        // TODO: move to user preferences or an external configuration file
-        String packageDownloadURL =
-            "http://gvsig-desktop.forge.osor.eu/gvSIG-desktop/dists/"+(new Version()).getFormat()+"/packages.gvspki";
+	public boolean isEnabled() {
+		return true;
+	}
 
-        try {
-        	
-//        	InitializeLibraries.initialize();
-    		new DefaultLibrariesInitializer(this.getClass().getClassLoader()).fullInitialize();
+	public boolean isVisible() {
+		return true;
+	}
 
-        	
-        	SwingInstallerLocator.getSwingInstallerManager()
-                .setDefaultDownloadURL(new URL(packageDownloadURL));
-        } catch (MalformedURLException e) {
-            LOG.error(
-                "Error creating the default packages download URL pointing to"
-                    + packageDownloadURL, e);
-        }
-    }
-
-    public boolean isEnabled() {
-        return true;
-    }
-
-    public boolean isVisible() {
-        return true;
-    }
-
+    
+ 
+    
 }

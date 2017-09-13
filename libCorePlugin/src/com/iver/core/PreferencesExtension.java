@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.gvsig.tools.OsUtils;
+
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
@@ -190,9 +192,9 @@ public class PreferencesExtension extends Extension{
 		this.extensionPoints.add("AplicationPreferences","FolderingPage", new FolderingPage());
 		this.extensionPoints.add("AplicationPreferences","ResolutionPage", new ScreenSettingsPage());
 		this.extensionPoints.add("AplicationPreferences","SkinPreferences", new SkinPreferences());
-		String os = System.getProperty("os.name").toLowerCase();
-		if (os.indexOf("linux") != -1 || os.indexOf("unix")!= -1)
+		if (OsUtils.isLinux()) {
 			this.extensionPoints.add("AplicationPreferences","BrowserControlPage", new BrowserControlPage());
+		}
 
 		//Falta los plugin
 	}

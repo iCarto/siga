@@ -908,6 +908,9 @@ public class DbaseFileHeaderNIO {
 			case Types.DATE:
 				header.addColumn(colName, 'D', fieldLen, 0);
 				break;
+			case Types.TIMESTAMP:
+				header.addColumn(colName, 'T', fieldLen, 0);
+				break;				
 			case Types.BIT:
 			case Types.BOOLEAN:
 				header.addColumn(colName, 'L', 1, 0);

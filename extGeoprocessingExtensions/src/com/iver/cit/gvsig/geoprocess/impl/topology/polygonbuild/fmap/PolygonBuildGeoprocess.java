@@ -120,7 +120,6 @@ import com.iver.cit.gvsig.geoprocess.core.fmap.AbstractGeoprocess;
 import com.iver.cit.gvsig.geoprocess.core.fmap.FeaturePersisterProcessor2;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.topology.NodeError;
 import com.iver.utiles.swing.threads.AbstractMonitorableTask;
 import com.iver.utiles.swing.threads.IMonitorableTask;
@@ -637,8 +636,7 @@ public class PolygonBuildGeoprocess extends AbstractGeoprocess {
 			IWriter[] writers = new IWriter[tempWriters.size()];
 			tempWriters.toArray(writers);
 
-			MapContext map = ((View)PluginServices.getMDIManager().
-				 getActiveWindow()).getModel().getMapContext();
+	    MapContext map = firstLayer.getMapContext();
 			FLayers solution = new FLayers();//(map,map.getLayers());
 			solution.setMapContext(map);
 			solution.setParentLayer(map.getLayers());

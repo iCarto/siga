@@ -218,4 +218,17 @@ public class CoordSys implements IProjection {
 	public String getFullCode() {
 		return getAbrev();
 	}
+
+    /*
+     * (non-Javadoc)
+     * @see org.cresques.cts.IProjection#getWKT()
+     */
+	public String getWKT() {
+		if (isProjected()) {
+			return projCS.toWKT();
+		}
+		else {
+			return geogCS.toWKT();	
+		}
+	}
 }

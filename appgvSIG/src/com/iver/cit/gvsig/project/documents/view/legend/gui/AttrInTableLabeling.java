@@ -40,6 +40,7 @@
  */
 package com.iver.cit.gvsig.project.documents.view.legend.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -51,12 +52,14 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JBlank;
+import org.gvsig.gui.beans.swing.JIncrementalNumberField;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -70,7 +73,6 @@ import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.styling.JComboBoxUnitsReferenceSystem;
 import com.iver.cit.gvsig.gui.utils.FontChooser;
-import com.iver.cit.gvsig.project.Project;
 import com.iver.utiles.swing.JComboBox;
 
 public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPanel{
@@ -98,6 +100,10 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 	private JButton chooseFontBut;
 	private Font labelFont = SymbologyFactory.DefaultTextFont;
+	
+	private JCheckBox chkWithHalo;
+	private ColorChooserPanel colorHaloChooser;
+	private JIncrementalNumberField txtHaloWidth;
 
 	public AttrInTableLabeling() {
 		initialize();
@@ -122,6 +128,8 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		aux2.setBorder(BorderFactory.createTitledBorder(null,PluginServices.getText(this,"color")));
 		aux2.addComponent(getRdBtnFixedColor(),getColorChooser());
 		aux2.addComponent(getRdBtnColorField(),getCmbColorField());
+		aux2.addComponent(getCheckHalo(), getHaloColorChooser());
+		aux2.addComponent(PluginServices.getText(null, "HaloWidth") + ":", getTxtHaloWidth());
 		aux.addComponent(aux2);
 
 		panel.add(new JBlank(20,20));
@@ -143,11 +151,34 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	}
 
 
+	private JIncrementalNumberField getTxtHaloWidth() {
+		if (txtHaloWidth == null) {
+			txtHaloWidth = new JIncrementalNumberField("3");
+		}
+		return txtHaloWidth;
+	}
+
 	private ColorChooserPanel getColorChooser() {
 		if (colorChooser == null){
 			colorChooser = new ColorChooserPanel(true);
 		}
 		return colorChooser;
+	}
+
+	private JCheckBox getCheckHalo() {
+		if (chkWithHalo == null) {
+			chkWithHalo = new JCheckBox(PluginServices.getText(this, "chk_halo") + ":");
+			chkWithHalo.setSelected(false);
+			chkWithHalo.setName("CHECK_HALO");
+		}
+		return chkWithHalo;
+	}
+	private ColorChooserPanel getHaloColorChooser() {
+		if (colorHaloChooser == null){
+			colorHaloChooser = new ColorChooserPanel(true);
+			colorHaloChooser.setColor(Color.WHITE);
+		}
+		return colorHaloChooser;
 	}
 
 	private JButton getChooseFontBut() {
@@ -255,7 +286,7 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		refreshCmbRefSystem();
 		//		the font for the text
 		refreshFont();
-		//		the color for the font
+		//		the color for the font AND halo with and haloColor
 		refreshColorFont();
 	}
 
@@ -344,6 +375,11 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 
 		strategy.setFont(labelFont);
+		strategy.setWithHalo(getCheckHalo().isSelected());
+		if (strategy.isWithHalo()) {
+			strategy.setHaloColor(getHaloColorChooser().getColor());
+			strategy.setHaloWidth((float) getTxtHaloWidth().getDouble());
+		}
 		return strategy;
 	}
 
@@ -411,6 +447,11 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 
 				getRdBtnFixedColor().setSelected(aux.usesFixedColor());
 				getRdBtnColorField().setSelected(!aux.usesFixedColor());
+				
+				getCheckHalo().setSelected(aux.isWithHalo());
+				if (aux.isWithHalo()) {
+					getHaloColorChooser().setColor(aux.getHaloColor());
+				}
 
 				String item = aux.getColorField();
 				getCmbColorField().setSelectedItem(item);
@@ -540,6 +581,9 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 		getRdBtnFixedHeight().setEnabled(enabled);
 		getRdBtnHeightField().setEnabled(enabled);
 		getTxtHeightField().setEnabled(enabled);
+		getCheckHalo().setEnabled(enabled);
+		getHaloColorChooser().setEnabled(enabled);
+		getTxtHaloWidth().setEnabled(enabled);
 
 	}
 

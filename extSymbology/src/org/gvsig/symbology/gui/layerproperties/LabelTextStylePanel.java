@@ -41,6 +41,7 @@
 package org.gvsig.symbology.gui.layerproperties;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -50,12 +51,11 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-
 
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JComboBoxFonts;
@@ -80,8 +80,39 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 	private JIncrementalNumberField incrTextSize;
 	private JComboBoxUnits units;
 	private JComboBoxUnitsReferenceSystem referenceSystem;
+
+	private JCheckBox chkWithHalo;
+	private ColorChooserPanel colorHaloChooser;
+	private JIncrementalNumberField txtHaloWidth;
+
 	private ArrayList<ActionListener> listeners = new ArrayList<ActionListener>();
 	private boolean performAction = true;
+	
+	private JCheckBox getCheckHalo() {
+		if (chkWithHalo == null) {
+			chkWithHalo = new JCheckBox(PluginServices.getText(this, "chk_halo") + ":");
+			chkWithHalo.setSelected(false);
+			chkWithHalo.setName("CHECK_HALO");
+		}
+		return chkWithHalo;
+	}
+	private ColorChooserPanel getHaloColorChooser() {
+		if (colorHaloChooser == null){
+			colorHaloChooser = new ColorChooserPanel(true);
+			colorHaloChooser.setColor(Color.WHITE);
+		}
+		return colorHaloChooser;
+	}
+	
+
+	private JIncrementalNumberField getTxtHaloWidth() {
+		if (txtHaloWidth == null) {
+			txtHaloWidth = new JIncrementalNumberField("3");
+		}
+		return txtHaloWidth;
+	}
+
+
 
 	public LabelTextStylePanel() {
 		setLayout(new BorderLayout(10, 2));
@@ -130,9 +161,17 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 		aux3.add(referenceSystem);
 
 		aux2.addComponent(aux3);
-		aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 0));
-		aux3.add(rdBtnFitOnTextArea);
-		aux2.addComponent(aux3);
+		GridBagLayoutPanel aux4 = new GridBagLayoutPanel();
+		aux4.addComponent(rdBtnFitOnTextArea);
+		
+		// Para reflejar los cambios.
+		getCheckHalo().addActionListener(this);
+		getHaloColorChooser().addActionListener(this);
+		getTxtHaloWidth().addActionListener(this);
+		aux4.addComponent(getCheckHalo(), getHaloColorChooser());
+		aux4.addComponent(PluginServices.getText(null, "HaloWidth") + ":", getTxtHaloWidth());
+	
+		aux2.addComponent(aux4);
 		aux.add(aux2);
 
 		add(aux, BorderLayout.CENTER);
@@ -144,6 +183,11 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 		incrTextSize.setDouble(textSymbol.getFont().getSize());
 		rdBtnTextHeight.setSelected(!textSymbol.isAutoresizeEnabled());
 		rdBtnFitOnTextArea.setSelected(textSymbol.isAutoresizeEnabled());
+		getCheckHalo().setSelected(textSymbol.isDrawWithHalo());
+		if (textSymbol.isDrawWithHalo()) {
+			getHaloColorChooser().setColor(textSymbol.getHaloColor());
+			getTxtHaloWidth().setDouble(textSymbol.getHaloWidth());
+		}
 		performAction = false;
 		cmbFont.setSelectedItem(textSymbol.getFont().getName());
 		colorFont.setColor(textSymbol.getTextColor());
@@ -158,6 +202,12 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 	}
 
 	public ITextSymbol getTextSymbol() {
+		symbol.setDrawWithHalo(chkWithHalo.isSelected());
+		if (symbol.isDrawWithHalo()) {
+			symbol.setHaloColor(colorHaloChooser.getColor());
+			symbol.setHaloWidth((float) txtHaloWidth.getDouble());
+		}
+
 		return symbol;
 	}
 
@@ -186,6 +236,11 @@ public class LabelTextStylePanel extends JPanel implements ActionListener{
 					SimpleTextSymbol myText = (SimpleTextSymbol) symbol;
 					myText.setUnit(units.getSelectedUnitIndex());
 					myText.setReferenceSystem(referenceSystem.getSelectedIndex());
+					myText.setDrawWithHalo(chkWithHalo.isSelected());
+					if (myText.isDrawWithHalo()) {
+						myText.setHaloColor(colorHaloChooser.getColor());
+						myText.setHaloWidth((float) txtHaloWidth.getDouble());
+					}
 				}
 			}
 			for (ActionListener l : listeners) {

@@ -101,6 +101,7 @@
 */
 package com.iver.core.preferences.network;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -108,6 +109,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.preferences.AbstractPreferencePage;
@@ -133,7 +135,8 @@ public class NetworkPage extends AbstractPreferencePage {
 		// icon = new ImageIcon(this.getClass().getClassLoader().getResource("images/network.png"));
 		icon=PluginServices.getIconTheme().get("aplication-preferences-network");
 		lblNetworkStatus = new JLabel();
-		lblNetworkStatus.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+	lblNetworkStatus.setFont(UIManager.getFont("Label.font").deriveFont(
+		Font.BOLD));
 		lblNetworkStatus.setText(PluginServices.getText(this, "optinos.network.click_to_test_connection"));
 
 		JPanel aux = new JPanel();

@@ -78,8 +78,6 @@ import org.gvsig.gui.beans.swing.JButton;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
-import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.FShapeM;
 import com.iver.cit.gvsig.fmap.drivers.gvl.FMapGVLDriver;
 import com.iver.cit.gvsig.fmap.drivers.legend.IFMapLegendDriver;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;

@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/gt2-main.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/postgis-jdbc-driver.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/postgresql-74.213.jar"/>
-	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/ojdbc14.jar"/>
@@ -17,5 +16,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/geoutils.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -647,7 +647,7 @@ public class MultiRasterDataset implements IRasterDataSource {
 		
 		for(int i = 0; i < bufferDatasets.length; i++)
 			bufferDatasets[i].free();
-		
+
 		bufferDatasets=null;
 		
 		return raster;
@@ -767,6 +767,7 @@ public class MultiRasterDataset implements IRasterDataSource {
 						
 		for(int i = 0; i < bufferDatasets.length; i++)
 			bufferDatasets[i].free();
+
 		
 		return raster;
 	}

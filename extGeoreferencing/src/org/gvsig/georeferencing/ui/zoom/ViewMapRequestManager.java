@@ -34,6 +34,7 @@ import com.iver.cit.gvsig.fmap.DefaultMapContextDrawer;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
+import com.iver.cit.gvsig.fmap.operations.Cancel;
 import com.iver.utiles.swing.threads.Cancellable;
 
 /**
@@ -158,7 +159,8 @@ public class ViewMapRequestManager implements IExtensionRequest {
 			DefaultMapContextDrawer mapContextDrawer = new DefaultMapContextDrawer();
 			mapContextDrawer.setMapContext(lyrs.getMapContext());
 			mapContextDrawer.setViewPort(vp);
-			mapContextDrawer.draw(lyrs, initImg, img, new CancellableClass(), mapControl.getMapContext().getScaleView());
+			Cancel myCancel = new Cancel();
+			mapContextDrawer.draw(lyrs, initImg, img, myCancel, mapControl.getMapContext().getScaleView());
 			//lyrs.draw(initImg, img, vp, new CancellableClass(), mapControl.getMapContext().getScaleView());
 
 			setDrawParams(initImg, extent);
@@ -210,14 +212,4 @@ public class ViewMapRequestManager implements IExtensionRequest {
 		this.backGroundColor = backGroundColor;
 	}
 
-	class CancellableClass implements Cancellable{
-    	private boolean cancel = false;
-   		public void setCanceled(boolean canceled) {
-   			this.cancel = canceled;
-   		}
-
-		public boolean isCanceled() {
-			return this.cancel;
-		}
-   	}
 }

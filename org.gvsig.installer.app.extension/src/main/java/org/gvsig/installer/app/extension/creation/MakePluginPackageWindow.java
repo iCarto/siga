@@ -48,37 +48,35 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
  */
 public class MakePluginPackageWindow extends JPanel implements IWindow {
 
-    private static final long serialVersionUID = 3423389124323013058L;
-    WindowInfo windowInfo = null;
+	private static final long serialVersionUID = 3423389124323013058L;
+	WindowInfo windowInfo = null;
 
-    public MakePluginPackageWindow(File applicationFolder, File pluginsFolder,
-        File installFolder) throws LocatorException,
-        MakePluginPackageWizardException {
-        super();
-        MakePluginPackageWizard makePluginPackageWizard =
-            SwingInstallerLocator.getSwingInstallerManager()
-                .createMakePluginPackageWizard(applicationFolder,
-                    pluginsFolder, installFolder);
-        makePluginPackageWizard
-            .setWizardActionListener(new WindowInstallerListener(this));
-        this.setLayout(new BorderLayout());
-        add(makePluginPackageWizard, BorderLayout.CENTER);
-    }
+	public MakePluginPackageWindow(File applicationFolder, File installFolder)
+			throws LocatorException, MakePluginPackageWizardException {
+		super();
+		MakePluginPackageWizard makePluginPackageWizard = SwingInstallerLocator
+				.getSwingInstallerManager().createMakePluginPackageWizard(
+						applicationFolder, installFolder);
+		makePluginPackageWizard
+				.setWizardActionListener(new WindowInstallerListener(this));
+		this.setLayout(new BorderLayout());
+		add(makePluginPackageWizard, BorderLayout.CENTER);
+	}
 
-    public WindowInfo getWindowInfo() {
-        if (windowInfo == null) {
-            windowInfo =
-                new WindowInfo(WindowInfo.MODELESSDIALOG
-                    | WindowInfo.ICONIFIABLE | WindowInfo.RESIZABLE);
-            Dimension dim = getPreferredSize();
-            windowInfo.setWidth((int) dim.getWidth());
-            windowInfo.setHeight((int) dim.getHeight());
-            windowInfo.setTitle(Messages.getText("make_plugin_package"));
-        }
-        return windowInfo;
-    }
+	public WindowInfo getWindowInfo() {
+		if (windowInfo == null) {
+			windowInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+					| WindowInfo.ICONIFIABLE | WindowInfo.RESIZABLE);
+			Dimension dim = getPreferredSize();
+			windowInfo.setWidth((int) dim.getWidth());
+			windowInfo.setHeight((int) dim.getHeight());
+			windowInfo.setTitle(Messages.getText("make_plugin_package"));
+		}
+		return windowInfo;
+	}
 
-    public Object getWindowProfile() {
-        return WindowInfo.DIALOG_PROFILE;
-    }
+	public Object getWindowProfile() {
+		return WindowInfo.DIALOG_PROFILE;
+	}
+	
 }

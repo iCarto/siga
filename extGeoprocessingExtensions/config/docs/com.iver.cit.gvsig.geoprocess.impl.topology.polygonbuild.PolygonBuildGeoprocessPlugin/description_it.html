@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Polygon build (costruisci topologia poligonale)</TITLE>
+</HEAD>
+<BODY DIR="LTR">
+<P><FONT COLOR="#800000"><B>Clean</B></FONT>
+</P>
+<P>Questo geoprocesso genera un layer di poligoni a partire da un layer di linee.
+I poligoni vengono creati in corrispondenza delle aree (chiuse) che risultano 
+interamente contornate da linee del layer di input.
+</P>
+<P>
+Opzionalmente, tutte le linee che non racchiudono alcuna area possono essere salvate
+in due layer ausiliari ("dangling lines" e "cutted lines").
+</P>
+<P>
+<IMG SRC="polybuilddesc.png" NAME="Imagen1" ALIGN=LEFT BORDER=0 WIDTH=600 HEIGHT=500>
+<P>
+Opzionalmente, è possibile anche specificare una <b>dangling line tolerance</b> 
+(tolleranza linee pendenti) per escludere tutti i tratti lineari pendenti la cui 
+lunghezza eccede il valore di tolleranza assegnato.
+</P>
+</BODY>
+</HTML>

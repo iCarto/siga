@@ -158,9 +158,9 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
                 symbols.put(auxInterval,
                     SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null));
                 keys.add(auxInterval);
-                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
-                		 SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null)
-                           .getDescription());
+//                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
+//                		 SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null)
+//                           .getDescription());
             }
         }
 
@@ -200,9 +200,9 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
                 symbols.put(auxInterval,
                 		SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null));
                 keys.add(auxInterval);
-                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
-                		SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null)
-                           .getDescription());
+//                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
+//                		SymbologyFactory.createSymbolFromXML(xml.getChild(i + hasDefaultSymbol), null)
+//                           .getDescription());
             }
         }
 		if (xml.contains("shapeType")){

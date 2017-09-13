@@ -48,38 +48,35 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
  */
 public class InstallPackageWindow extends JPanel implements IWindow {
 
-    private static final long serialVersionUID = 4719868181091291809L;
-    WindowInfo windowInfo = null;
 
-    public InstallPackageWindow(File applicationFolder, File pluginsFolder,
-        File installFolder) throws LocatorException,
-        InstallPackageWizardException {
-        super();
-        AbstractInstallPackageWizard installPackageWizard =
-            SwingInstallerLocator.getSwingInstallerManager()
-                .createInstallPackageWizard(applicationFolder, pluginsFolder,
-                    installFolder);
-        installPackageWizard
-            .setWizardActionListener(new WindowInstallerListener(this));
-        this.setLayout(new BorderLayout());
-        add(installPackageWizard, BorderLayout.CENTER);
-    }
+	private static final long serialVersionUID = 4719868181091291809L;
+	WindowInfo windowInfo = null;
 
-    public WindowInfo getWindowInfo() {
-        if (windowInfo == null) {
-            windowInfo =
-                new WindowInfo(WindowInfo.MODELESSDIALOG
-                    | WindowInfo.ICONIFIABLE | WindowInfo.RESIZABLE);
-            Dimension dim = getPreferredSize();
-            windowInfo.setWidth((int) dim.getWidth());
-            windowInfo.setHeight((int) dim.getHeight());
-            windowInfo.setTitle(Messages.getText("install_package"));
-        }
-        return windowInfo;
-    }
+	public InstallPackageWindow(File applicationFolder, File installFolder)
+			throws LocatorException, InstallPackageWizardException {
+		super();
+		AbstractInstallPackageWizard installPackageWizard = SwingInstallerLocator
+				.getSwingInstallerManager().createInstallPackageWizard(
+						applicationFolder, installFolder);
+		installPackageWizard
+				.setWizardActionListener(new WindowInstallerListener(this));
+		this.setLayout(new BorderLayout());
+		add(installPackageWizard, BorderLayout.CENTER);
+	}
 
-    public Object getWindowProfile() {
-        return WindowInfo.DIALOG_PROFILE;
-    }
+	public WindowInfo getWindowInfo() {
+		if (windowInfo == null) {
+			windowInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
+					| WindowInfo.ICONIFIABLE | WindowInfo.RESIZABLE);
+			Dimension dim = getPreferredSize();
+			windowInfo.setWidth((int) dim.getWidth());
+			windowInfo.setHeight((int) dim.getHeight());
+			windowInfo.setTitle(Messages.getText("install_package"));
+		}
+		return windowInfo;
+	}
 
+	public Object getWindowProfile() {
+		return WindowInfo.DIALOG_PROFILE;
+	}
 }

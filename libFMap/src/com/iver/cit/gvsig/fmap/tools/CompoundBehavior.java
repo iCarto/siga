@@ -45,6 +45,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
@@ -258,7 +260,9 @@ public class CompoundBehavior extends Behavior {
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
 	 */
 	public void mousePressed(MouseEvent e) throws BehaviorException {
-		for (Behavior mapBehavior : behaviors) {
+		List<Behavior> aux = Collections.unmodifiableList(behaviors);
+		for (int i=0; i< aux.size(); i++) {
+			Behavior mapBehavior = aux.get(i);
 			mapBehavior.mousePressed(e);
 		}
 
@@ -271,12 +275,14 @@ public class CompoundBehavior extends Behavior {
 	 * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	public void mouseReleased(MouseEvent e) throws BehaviorException {
-		for (Behavior mapBehavior : behaviors) {
-			mapBehavior.mouseReleased(e);
-		}
-
+		List<Behavior> aux = Collections.unmodifiableList(behaviors);
+			for (int i=0; i< aux.size(); i++) {
+				Behavior mapBehavior = aux.get(i);
+				mapBehavior.mouseReleased(e);
+			}
+		
 		if(behavior != null)
-			behavior.mouseReleased(e);
+			behavior.mouseReleased(e);			
 	}
 
 	/*

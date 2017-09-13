@@ -75,4 +75,10 @@ public interface IProjection {
 
     public double getScale(double minX, double maxX, double width, double dpi);
     public Rectangle2D getExtent(Rectangle2D extent,double scale,double wImage,double hImage,double mapUnits,double distanceUnits,double dpi);
+    
+    /**
+     * Returns the definition of this CRS as well-known-text format (WKT), if
+     * available. Otherwise return null. 
+     */
+	public String getWKT();
 }
