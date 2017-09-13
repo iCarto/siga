@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <plugin-config>
 	<depends plugin-name="com.iver.cit.gvsig"/>
+	<depends plugin-name="es.udc.cartolab.gvsig.users"/>
+	<depends plugin-name="es.icarto.gvsig.commons"/>
 	<depends plugin-name="es.udc.cartolab.gvsig.navtable"/>
 	<depends plugin-name="es.icarto.gvsig.navtableforms"/>
-	<depends plugin-name="es.udc.cartolab.gvsig.users"/>
 	<depends plugin-name="es.icarto.gvsig.siga"/>
-	<depends plugin-name="es.icarto.gvsig.commons"/>
 	<libraries library-dir="lib"/>
 	<resourceBundle name="text"/>
 	<extensions>

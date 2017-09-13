@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
@@ -18,107 +17,118 @@ import org.apache.log4j.Logger;
 import com.iver.andami.PluginServices;
 import com.jeta.forms.components.image.ImageComponent;
 
-import es.icarto.gvsig.commons.imagefilechooser.ImageFileChooser;
+import es.icarto.gvsig.commons.utils.FileUtils;
 import es.icarto.gvsig.commons.utils.ImageUtils;
-import es.icarto.gvsig.extgia.preferences.DBFieldNames;
+import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
+import es.icarto.gvsig.extgia.forms.FilesLinkDataImp;
 
 public class AddImageListener implements ActionListener {
-    
-    
+
     private static final Logger logger = Logger.getLogger(AddImageListener.class);
 
-    private final Connection connection;
     private final ImagesDAO dao;
     private final ImageComponent imageComponent;
     private final JButton addImageButton;
-    private final String tablename;
-    private final String pkField;
+    private final JButton saveImageButton;
+    private final JButton deleteImageButton;
+
     private String pkValue;
 
-    public String getPkValue() {
-	return pkValue;
-    }
+    private AbstractFormWithLocationWidgets form;
 
     public void setPkValue(String pkValue) {
-	this.pkValue = pkValue;
+        this.pkValue = pkValue;
     }
 
-    public AddImageListener(ImageComponent imageComponent, JButton addImageButton, String tablename,
-	    String pkField) {
-	this.imageComponent = imageComponent;
-	this.addImageButton = addImageButton;
-	this.tablename = tablename;
-	this.pkField = pkField;
-
-	connection = DBFacade.getConnection();
-	dao = new ImagesDAO();
+    public AddImageListener(ImageComponent imageComponent, JButton addImageButton, ImagesDAO dao,
+            JButton saveImageButton, JButton deleteImageButton) {
+        this.imageComponent = imageComponent;
+        this.addImageButton = addImageButton;
+        this.saveImageButton = saveImageButton;
+        this.deleteImageButton = deleteImageButton;
+        this.dao = dao;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	if (hasAlreadyImage()) {
-	    addImage(true);
-	}else {
-	    addImage(false);
-	}
+
+        WorkFlow wf = new WorkFlow(dao, pkValue, getDestFolder());
+        if (wf.abort()) {
+            return;
+        }
+        File fileImage = wf.getFile();
+        String destFile = null;
+        BufferedImage image;
+        try {
+            image = ImageIO.read(fileImage);
+            if (image == null) {
+                throw new IOException("La imagen no puede ser leída");
+            }
+        } catch (IOException e1) {
+            logger.error(e1.getStackTrace(), e1);
+            showWarning(PluginServices.getText(this, "image_msg_error"));
+            return;
+        }
+
+        if (this.form != null) {
+            destFile = getDestFolder() + File.separator + fileImage.getName();
+            File destFolderFile = new File(getDestFolder());
+            if (!destFolderFile.exists()) {
+                if (!destFolderFile.mkdirs()) {
+                    showWarning(PluginServices.getText(this, "image_msg_error"));
+                    return;
+                }
+            }
+
+            try {
+                File oldFile = dao.getFileOnDisk(pkValue);
+                if (oldFile != null && oldFile.exists()) {
+                    oldFile.delete();
+                }
+            } catch (SQLException e1) {
+                logger.error(e1.getStackTrace(), e1);
+            }
+
+            FileUtils.copyFile(fileImage, new File(destFile));
+        }
+
+        try {
+            BufferedImage imageResized = ImageUtils.resizeImage(image, 615, 345, 460);
+            if (wf.oldImageInDB) {
+                dao.updateImageIntoDb(pkValue, imageResized, fileImage.getName(), destFile);
+            } else {
+                dao.insertImageIntoDb(pkValue, imageResized, fileImage.getName(), destFile);
+            }
+        } catch (SQLException e1) {
+            logger.error(e1.getStackTrace(), e1);
+            showWarning(PluginServices.getText(this, "image_msg_error"));
+            return;
+        } catch (IOException e1) {
+            logger.error(e1.getStackTrace(), e1);
+            showWarning(PluginServices.getText(this, "image_msg_error"));
+            return;
+        }
+
+        // JOptionPane.showMessageDialog(null, PluginServices.getText(this, "image_msg_added"));
+        ShowImageAction showImage = new ShowImageAction(imageComponent, addImageButton, dao, pkValue);
+        showImage.resetEnability(saveImageButton, deleteImageButton);
+
     }
 
-    private void addImage(boolean update) {
-	final ImageFileChooser fileChooser = new ImageFileChooser();
-	File fileImage = fileChooser.showDialog();
-	if (fileImage != null) {
-	    try {
-		BufferedImage image = ImageIO.read(fileImage);
-		BufferedImage imageResized = resizeImage(image);
-		dao.insertImageIntoDb(connection, DBFieldNames.GIA_SCHEMA, tablename,
-			pkField, pkValue, imageResized, update);
-		JOptionPane.showMessageDialog(null,
-			    PluginServices.getText(this, "image_msg_added"));
-		    new ShowImageAction(imageComponent, addImageButton, tablename, pkField, pkValue);
-	    } catch (SQLException e) {
-		logger.error(e.getStackTrace(), e);
-		showWarning(PluginServices.getText(this, "image_msg_error"));
-	    } catch (IOException e) {
-		logger.error(e.getStackTrace(), e);
-		showWarning(PluginServices.getText(this, "image_msg_error"));
-	    }
-	    
-	}
-    }
-    
     private void showWarning(String msg) {
-	JOptionPane.showMessageDialog(
-		(Component) PluginServices.getMainFrame(), msg, "Aviso",
-		JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), msg, "Aviso",
+                JOptionPane.WARNING_MESSAGE);
     }
 
-    private BufferedImage resizeImage(BufferedImage image) {
-	BufferedImage imageResized;
-	if (image.getWidth() < 615) {
-	    return image;
-	}
-	if (image.getWidth() > image.getHeight()) {
-	    imageResized =
-		    ImageUtils.resizeImageWithHint(image, 615, 460);
-	}else {
-	    imageResized =
-		    ImageUtils.resizeImageWithHint(image, 345, 460);
-	}
-	return imageResized;
+    public void setForm(AbstractFormWithLocationWidgets form) {
+        this.form = form;
     }
 
-    private boolean hasAlreadyImage() {
-	try {
-	    byte[] image = dao.readImageFromDb(connection, DBFieldNames.GIA_SCHEMA, tablename,
-		    pkField, pkValue);
-	    if (image != null) {
-		return true;
-	    }else {
-		return false;
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-	return false;
+    public String getDestFolder() {
+        if (form != null) {
+            FilesLinkDataImp data = new FilesLinkDataImp(form.getElement());
+            return data.getFolder(form);
+        }
+        return null;
     }
 }

@@ -1,63 +1,68 @@
 package es.icarto.gvsig.extgia.forms.images;
 
-import java.awt.image.BufferedImage;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import org.apache.log4j.Logger;
+
 import com.jeta.forms.components.image.ImageComponent;
 
-import es.icarto.gvsig.commons.utils.ImageUtils;
-import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.siga.PreferencesPage;
 
 public class ShowImageAction {
 
+    private static final Logger logger = Logger.getLogger(ShowImageAction.class);
+
     private final ImageComponent imageComponent;
     private final JButton addImageButton;
-    private final Connection connection;
-    private final String tablename;
-    private final String pkField;
     private final String pkValue;
+    private final ImagesDAO dao;
+    private final boolean showImage;
 
-    public ShowImageAction(ImageComponent imageComponent, JButton addImageButton, String tablename,
-	    String pkField, String pkValue) {
-	this.imageComponent = imageComponent;
-	this.addImageButton = addImageButton;
-	this.tablename = tablename;
-	this.pkField = pkField;
-	this.pkValue = pkValue;
-	connection = DBFacade.getConnection();
-	if (showImage()) {
-	    addImageButton.setText("Actualizar");
-	}else {
-	    addImageButton.setText("Añadir");
-	}
-	imageComponent.repaint();
+    public ShowImageAction(ImageComponent imageComponent, JButton addImageButton, ImagesDAO dao, String pkValue) {
+        this.imageComponent = imageComponent;
+        this.addImageButton = addImageButton;
+        this.dao = dao;
+        this.pkValue = pkValue;
+        showImage = showImage();
+        if (showImage) {
+            addImageButton.setText("Actualizar");
+        } else {
+            addImageButton.setText("Añadir");
+        }
+        imageComponent.repaint();
     }
 
     public boolean showImage() {
-	ImagesDAO dao = new ImagesDAO();
-	try {
-	    byte[] elementImageBytes = dao.readImageFromDb(connection, DBFieldNames.GIA_SCHEMA,
-		    tablename, pkField, pkValue);
-	    if (elementImageBytes == null) {
-		imageComponent.setIcon(getUnavailableImageIcon());
-		return false;
-	    }
-	    BufferedImage elementImage = ImageUtils.convertByteaToImage(elementImageBytes);
-	    ImageIcon elementIcon = new ImageIcon(elementImage);
-	    imageComponent.setIcon(elementIcon);
-	} catch (SQLException e1) {
-	    e1.printStackTrace();
-	}
-	return true;
+        try {
+            ImageIcon elementIcon = dao.getImageIconFromDb(pkValue);
+            if (elementIcon == null) {
+                imageComponent.setIcon(getUnavailableImageIcon());
+                return false;
+            }
+            imageComponent.setIcon(elementIcon);
+        } catch (SQLException e1) {
+            logger.error(e1.getStackTrace(), e1);
+            return false;
+        }
+        return true;
     }
 
     private ImageIcon getUnavailableImageIcon() {
-	return new ImageIcon (PreferencesPage.IMG_UNAVAILABLE);
+        return new ImageIcon(PreferencesPage.IMG_UNAVAILABLE);
+    }
+
+    public void resetEnability(JButton saveImageButton, JButton deleteImageButton) {
+
+        if (saveImageButton != null) {
+            saveImageButton.setEnabled(showImage);
+        }
+        if (deleteImageButton != null) {
+            deleteImageButton.setEnabled(showImage);
+        }
+
     }
 
 }

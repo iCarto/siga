@@ -2,64 +2,65 @@ package es.icarto.gvsig.extgia.forms.images;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
+import java.io.File;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import com.iver.andami.PluginServices;
 import com.jeta.forms.components.image.ImageComponent;
 
-import es.icarto.gvsig.extgia.preferences.DBFieldNames;
-
-
 public class DeleteImageListener implements ActionListener {
 
-    private final Connection connection;
+    private static final Logger logger = Logger.getLogger(DeleteImageListener.class);
+
     private final JButton addImageButton;
+    private final JButton saveImageButton;
     private final ImagesDAO dao;
     private final ImageComponent imageComponent;
-    private final String tablename;
-    private final String pkField;
+
     private String pkValue;
 
-    public DeleteImageListener(ImageComponent imageComponent, JButton addImageButton, String tablename,
-	    String pkField) {
-	this.imageComponent = imageComponent;
-	this.addImageButton = addImageButton;
-	this.tablename = tablename;
-	this.pkField = pkField;
-
-	connection = DBFacade.getConnection();
-	dao = new ImagesDAO();
-    }
-
-    public String getPkValue() {
-	return pkValue;
+    public DeleteImageListener(ImageComponent imageComponent, JButton addImageButton, ImagesDAO dao,
+            JButton saveImageButton) {
+        this.imageComponent = imageComponent;
+        this.addImageButton = addImageButton;
+        this.saveImageButton = saveImageButton;
+        this.dao = dao;
     }
 
     public void setPkValue(String pkValue) {
-	this.pkValue = pkValue;
+        this.pkValue = pkValue;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	try {
-	    Object[] options = {PluginServices.getText(this, "delete"),
-		    PluginServices.getText(this, "cancel")};
-	    int response = JOptionPane.showOptionDialog(null,
-		    PluginServices.getText(this, "img_delete_warning"),
-		    PluginServices.getText(this, "delete"),
-		    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
-		    null, options, options[0]);
-	    if (response == JOptionPane.YES_OPTION) {
-		dao.deleteImageFromDb(connection, DBFieldNames.GIA_SCHEMA, tablename, pkField, pkValue);
-		new ShowImageAction(imageComponent, addImageButton, tablename, pkField, pkValue);
-	    }
-	} catch (SQLException e1) {
-	    e1.printStackTrace();
-	}
+        try {
+            Object[] options = { PluginServices.getText(this, "delete"), PluginServices.getText(this, "cancel") };
+            int response = JOptionPane.showOptionDialog(null, PluginServices.getText(this, "img_delete_warning"),
+                    PluginServices.getText(this, "delete"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+                    null, options, options[0]);
+            if (response == JOptionPane.YES_OPTION) {
+                try {
+                    File oldFile = dao.getFileOnDisk(pkValue);
+                    if (oldFile != null) {
+                        oldFile.delete();
+                    }
+                } catch (SQLException e1) {
+                    logger.error(e1.getStackTrace(), e1);
+                }
+                dao.deleteImageFromDb(pkValue);
+
+                ShowImageAction showImage = new ShowImageAction(imageComponent, addImageButton, dao, pkValue);
+                showImage.resetEnability(saveImageButton, (JButton) e.getSource());
+
+            }
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
     }
 
 }
