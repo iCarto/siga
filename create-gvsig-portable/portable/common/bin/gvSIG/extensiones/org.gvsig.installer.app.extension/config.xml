@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<libraries library-dir="lib"/>
+	<depends plugin-name="com.iver.cit.gvsig"/>
+	<resourceBundle name="text"/>
+	<extensions>
+		<extension class-name="org.gvsig.installer.app.extension.creation.MakePluginPackageExtension"
+			description="This extension is used to create a bundle for a plugin package from the current gvSIG application."
+			active="false">
+			<menu text="tools/Development/make_plugin_package"
+				  tooltip="make_plugin_package_description"
+				  action-command=""
+				  position="4998" />			
+		</extension>
+			<extension class-name="org.gvsig.installer.app.extension.execution.InstallPackageExtension"
+			description="This extension is used to install a package from a bundle in gvSIG"
+			active="false">
+			<menu text="tools/install_package"
+				  tooltip="install_package_description"
+				  action-command=""
+				  position="4999" />			
+		</extension>
+	</extensions>
+</plugin-config>
