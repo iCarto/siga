@@ -139,6 +139,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
         concesionariaLb = getFormPanel().getLabel("etiqueta_concesion");
         JDateChooser dateWidget = (JDateChooser) getFormPanel().getComponentByName("fecha_actualizacion");
         if (dateWidget != null) {
+            dateWidget.setEnabled(false);
             // firme does not have fecha_actualizacion
             final JTextFieldDateEditor uiComponent = (JTextFieldDateEditor) dateWidget.getDateEditor()
                     .getUiComponent();
@@ -231,8 +232,8 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
                     int m = JOptionPane.showOptionDialog(
                             null,
                             PluginServices.getText(this, "updateInfo_msg_I")
-                            + layer.getRecordset().getSelection().cardinality() + " "
-                            + PluginServices.getText(this, "updateInfo_msg_II"), null,
+                                    + layer.getRecordset().getSelection().cardinality() + " "
+                                    + PluginServices.getText(this, "updateInfo_msg_II"), null,
                             JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
                             options[1]);
                     if (m == JOptionPane.OK_OPTION) {
@@ -240,8 +241,8 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
                         JOptionPane.showMessageDialog(
                                 null,
                                 PluginServices.getText(this, "updatedInfo_msg_I")
-                                + layer.getRecordset().getSelection().cardinality() + " "
-                                + PluginServices.getText(this, "updatedInfo_msg_II"));
+                                        + layer.getRecordset().getSelection().cardinality() + " "
+                                        + PluginServices.getText(this, "updatedInfo_msg_II"));
                         setChangedValues(false);
                         setSavingValues(false);
                     }
@@ -344,30 +345,30 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
         }
         table.getColumnModel().getColumn(2).setCellRenderer(
 
-                new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                            boolean hasFocus, int row, int column) {
-                        JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                                column);
-                        if (value == null) {
-                            label.setText("");
-                        } else {
-                            String text = value.toString().trim();
-                            if (text.equals("0") || text.isEmpty()) {
-                                label.setText("");
-                            } else if (text.equals("1")) {
-                                label.setText("Creciente");
-                            } else if (text.equals("2")) {
-                                label.setText("Decreciente");
-                            } else if (text.equals("3")) {
-                                label.setText("Ambos");
-                            }
-                        }
-
-                        return label;
+        new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
+                if (value == null) {
+                    label.setText("");
+                } else {
+                    String text = value.toString().trim();
+                    if (text.equals("0") || text.isEmpty()) {
+                        label.setText("");
+                    } else if (text.equals("1")) {
+                        label.setText("Creciente");
+                    } else if (text.equals("2")) {
+                        label.setText("Decreciente");
+                    } else if (text.equals("3")) {
+                        label.setText("Ambos");
                     }
-                });
+                }
+
+                return label;
+            }
+        });
     }
 
     private void fillEmpresaLB() {
