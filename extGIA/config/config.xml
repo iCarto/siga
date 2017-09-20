@@ -43,18 +43,25 @@
 			</tool-bar>
 		</extension>
 		
-				<extension class-name="es.icarto.gvsig.extgia.ToolBarBatchTrabajosExtension" description="toolbar_form_launcher" active="true">
+		<extension class-name="es.icarto.gvsig.extgia.ToolBarBatchTrabajosExtension" description="toolbar_form_launcher" active="true">
 			<tool-bar name="GIA" position="73">
 				<action-tool icon="extgia-batchTrabajos" tooltip="Añadir trabajos" action-command="ToolBarFormExtension" position="3"/>
 			</tool-bar>
 		</extension>
-
+		
 		<extension class-name="es.icarto.gvsig.extgia.ConsultasExtension" description="consultas" active="true">
 			<menu text="SIGA/Consultas Inventario" action-command="Consultas" position="30419"/>
 		</extension>
 		
+		<extension class-name="es.icarto.gvsig.extgia.ImagesInViewExtension" active="true">
+			<menu text="SIGA/es.icarto.gvsig.extgia.ImagesInViewExtension.tooltip" position="30420"/>
+			<tool-bar name="GIA" position="73">
+				<action-tool icon="es.icarto.gvsig.extgia.ImagesInViewExtension" tooltip="es.icarto.gvsig.extgia.ImagesInViewExtension.tooltip" position="4"/>
+			</tool-bar>
+		</extension>
+		
 		<extension class-name="es.icarto.gvsig.extgia.SignalSimbologyExtension" active="true">
-			<menu text="SIGA/Pictogramas Señales" position="30420"/>
+			<menu text="SIGA/Pictogramas Señales" position="30421"/>
 		</extension>
 	</extensions>
 </plugin-config>
