@@ -410,7 +410,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
     public abstract JTable getTrabajosJTable();
 
     public String getImagesDBTableName() {
-        return getBasicName() + "_imagenes";
+        return getElement().imagenesTableName;
     }
 
     public String getReconocimientosIDField() {
