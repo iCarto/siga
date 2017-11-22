@@ -27,8 +27,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
-	<classpathentry kind="lib" path="lib/poi-3.10.1-20140818.jar"/>
-	<classpathentry kind="lib" path="lib/poi-ooxml-3.10.1-20140818.jar"/>
 	<classpathentry kind="src" path="/extNavTableForms"/>
 	<classpathentry kind="lib" path="lib/jasperreports-5.6.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/es.icarto.gvsig.commons"/>
@@ -37,5 +35,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/extSymbology"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/miglayout-swing-5.1-20150404.220019-96.jar"/>
 	<classpathentry kind="src" path="/extJDBC"/>
+	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-3.13-20150929.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

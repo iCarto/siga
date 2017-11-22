@@ -26,6 +26,8 @@
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/miglayout-swing-5.1-20150404.220019-96.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="src" path="/extSymbology"/>
-	<classpathentry kind="lib" path="/es.icarto.gvsig.siga/lib/poi-3.10.1-20140818.jar"/>
+	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-schemas-3.13-20150929.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
