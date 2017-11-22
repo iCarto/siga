@@ -3,3 +3,6 @@ binaries
 !create-gvsig-portable/**
 **/bin-test
 **/.pmd
+_fwAndami/gvSIG
+package.info
+**/build.number
