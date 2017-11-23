@@ -17,38 +17,39 @@ public class AddTrabajosBatchListener implements ActionListener {
     private final AbstractFormWithLocationWidgets form;
 
     public AddTrabajosBatchListener(AbstractFormWithLocationWidgets form) {
-	this.form = form;
-	this.element = form.getElement().name();
-	this.dbTableName = form.getTrabajosDBTableName();
-	this.trabajosTableHandler = getTrabajosTableHandler();
+        this.form = form;
+        this.element = form.getElement().name();
+        this.dbTableName = form.getTrabajosDBTableName();
+        this.trabajosTableHandler = getTrabajosTableHandler();
     }
 
     private BaseTableHandler getTrabajosTableHandler() {
-	BaseTableHandler trabajosTableHandler = null;
-	for (BaseTableHandler th : form.getTableHandlers()) {
-	    if (th.getJTable().getName().equals(form.getTrabajosDBTableName())) {
-		trabajosTableHandler = th;
-		break;
-	    }
-	}
-	return trabajosTableHandler;
+        BaseTableHandler trabajosTableHandler = null;
+        for (BaseTableHandler th : form.getTableHandlers()) {
+            if (th.getJTable().getName().equals(form.getTrabajosDBTableName())) {
+                trabajosTableHandler = th;
+                break;
+            }
+        }
+        return trabajosTableHandler;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	boolean emptySelection = form.getRecordset().getSelection().isEmpty();
-	if (emptySelection) {
-	    JOptionPane
-	    .showMessageDialog(
-		    form,
-		    "Debe tener registros seleccionados para añadir trabajos en lote",
-		    "Aviso", JOptionPane.WARNING_MESSAGE);
-	    return;
-	}
+        if (isSelectionEmpty()) {
+            showWarning("Debe tener registros seleccionados para añadir trabajos en lote");
+            return;
+        }
 
-	LaunchGIAForms.callBatchTrabajosSubFormDependingOfElement(element,
-		dbTableName, trabajosTableHandler);
+        LaunchGIAForms.callBatchTrabajosSubFormDependingOfElement(element, dbTableName, trabajosTableHandler);
+    }
 
+    private boolean isSelectionEmpty() {
+        return form.getRecordset().getSelection().isEmpty();
+    }
+
+    private void showWarning(String msg) {
+        JOptionPane.showMessageDialog(form, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
     }
 
 }

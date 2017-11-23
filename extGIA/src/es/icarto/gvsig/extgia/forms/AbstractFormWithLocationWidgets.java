@@ -161,7 +161,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
                 ImageIcon batchReconocimientoIcon = new ImageIcon(imgURL);
                 addReconocimientosBatchButton.setIcon(batchReconocimientoIcon);
                 addReconocimientosBatchButton.setToolTipText(PluginServices.getText(this,
-                        "addBatchReconocimientos_tooltip"));
+                        "es.icarto.gvsig.extgia.ToolBarBatchReconocimientosExtension.tooltip"));
                 getActionsToolBar().add(addReconocimientosBatchButton);
             }
         }
@@ -172,7 +172,8 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
                 java.net.URL imgURL = getClass().getResource("/batch_trabajo.png");
                 ImageIcon trabajosBatchIcon = new ImageIcon(imgURL);
                 addTrabajosBatchButton.setIcon(trabajosBatchIcon);
-                addTrabajosBatchButton.setToolTipText(PluginServices.getText(this, "addBatchTrabajos_tooltip"));
+                addTrabajosBatchButton.setToolTipText(PluginServices.getText(this,
+                        "es.icarto.gvsig.extgia.ToolBarBatchTrabajosExtension.tooltip"));
                 getActionsToolBar().add(addTrabajosBatchButton);
             }
         }
@@ -183,8 +184,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
         }
 
         if (addReconocimientosBatchListener == null && addReconocimientosBatchButton != null) {
-            addReconocimientosBatchListener = new AddReconocimientosBatchListener(getElement(),
-                    getReconocimientosFormFileName(), getReconocimientosDBTableName());
+            addReconocimientosBatchListener = new AddReconocimientosBatchListener(this);
             addReconocimientosBatchButton.addActionListener(addReconocimientosBatchListener);
         }
 
@@ -382,7 +382,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
         return DBFieldNames.GIA_SCHEMA;
     }
 
-    protected String getReconocimientosFormFileName() {
+    public String getReconocimientosFormFileName() {
         return "forms/" + getBasicName() + "_reconocimientos.jfrm";
     }
 
