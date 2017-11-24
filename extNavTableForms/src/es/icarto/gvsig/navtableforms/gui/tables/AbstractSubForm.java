@@ -209,6 +209,7 @@ public abstract class AbstractSubForm extends JPanel implements IForm, IValidata
         chainedHandler.fillEmptyValues();
         imageHandlerManager.fillEmptyValues(); // fillValues()
         setFillingValues(false);
+        validateForm();
     }
 
     protected void setFillingValues(boolean b) {
@@ -252,7 +253,7 @@ public abstract class AbstractSubForm extends JPanel implements IForm, IValidata
         chainedHandler.fillValues();
         imageHandlerManager.fillValues();
         setFillingValues(false);
-        validationHandler.validate();
+        validateForm();
     }
 
     @Override
@@ -474,7 +475,7 @@ public abstract class AbstractSubForm extends JPanel implements IForm, IValidata
     /**
      * Instead of create an implementation of ImageHandler that only sets a path (FixedImageHandler) this utiliy method
      * sets the image without doing anything more
-     * 
+     *
      * @param imgComponent
      *            . Name of the abeille widget
      * @param absPath

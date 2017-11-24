@@ -38,6 +38,11 @@ public class ValidatorForm {
     }
 
     public void addComponentValidator(ValidatorComponent cv) {
+        for (ValidatorComponent existent : cvs) {
+            if (existent.getComponentName().equals(cv.getComponentName())) {
+                return;
+            }
+        }
         cvs.add(cv);
     }
 

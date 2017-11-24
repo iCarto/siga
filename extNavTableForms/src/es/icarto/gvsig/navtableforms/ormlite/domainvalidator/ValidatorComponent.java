@@ -32,7 +32,7 @@ public class ValidatorComponent {
 
     public static final Color INVALID_COLOR = new Color(249, 112, 140);
     private JComponent c = null;
-    private Color defaultbg = null;
+    private final Color defaultbg;
     private ValidatorDomain domain = null;
 
     public ValidatorComponent(JComponent c, ValidatorDomain dv) {
