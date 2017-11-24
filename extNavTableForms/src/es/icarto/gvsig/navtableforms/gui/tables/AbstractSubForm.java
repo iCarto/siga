@@ -43,11 +43,14 @@ import com.toedter.calendar.JDateChooser;
 
 import es.icarto.gvsig.navtableforms.DependencyHandler;
 import es.icarto.gvsig.navtableforms.FillHandler;
+import es.icarto.gvsig.navtableforms.I18nHandler;
+import es.icarto.gvsig.navtableforms.II18nForm;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.icarto.gvsig.navtableforms.ValidationHandler;
 import es.icarto.gvsig.navtableforms.calculation.Calculation;
 import es.icarto.gvsig.navtableforms.calculation.CalculationHandler;
 import es.icarto.gvsig.navtableforms.chained.ChainedHandler;
+import es.icarto.gvsig.navtableforms.gui.i18n.resource.I18nResource;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandler;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandlerManager;
 import es.icarto.gvsig.navtableforms.gui.tables.handler.BaseTableHandler;
@@ -60,12 +63,15 @@ import es.udc.cartolab.gvsig.navtable.dataacces.TableController;
 import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 
 @SuppressWarnings("serial")
-public abstract class AbstractSubForm extends JPanel implements IForm, IValidatableForm, IWindow, IWindowListener {
+public abstract class AbstractSubForm extends JPanel implements IForm,
+IValidatableForm, IWindow, IWindowListener, II18nForm {
 
-    private static final Logger logger = Logger.getLogger(AbstractSubForm.class);
+    private static final Logger logger = Logger
+	    .getLogger(AbstractSubForm.class);
 
     private FormPanel formPanel;
     private HashMap<String, JComponent> widgets;
+    private final I18nHandler i18nHandler;
     private final ValidationHandler validationHandler;
     private IController iController;
     private final ORMLite ormlite;
@@ -91,53 +97,58 @@ public abstract class AbstractSubForm extends JPanel implements IForm, IValidata
     private String basicName;
 
     public AbstractSubForm(String basicName) {
-        super(null);
-        this.basicName = basicName;
-        initGUI();
-        ormlite = new ORMLite(getMetadataPath());
-        validationHandler = new ValidationHandler(ormlite, this);
-        dependencyHandler = new DependencyHandler(ormlite, widgets, this);
-        calculationHandler = new CalculationHandler();
-        chainedHandler = new ChainedHandler();
-        imageHandlerManager = new ImageHandlerManager();
+	super(null);
+	this.basicName = basicName;
+	i18nHandler = new I18nHandler(this);
+	initGUI();
+	ormlite = new ORMLite(getMetadataPath());
+	validationHandler = new ValidationHandler(ormlite, this);
+	dependencyHandler = new DependencyHandler(ormlite, widgets, this);
+	calculationHandler = new CalculationHandler();
+	chainedHandler = new ChainedHandler();
+	imageHandlerManager = new ImageHandlerManager();
     }
 
     public AbstractSubForm() {
-        super();
-        initGUI();
-        ormlite = new ORMLite(getMetadataPath());
-        validationHandler = new ValidationHandler(ormlite, this);
-        dependencyHandler = new DependencyHandler(ormlite, widgets, this);
-        calculationHandler = new CalculationHandler();
-        chainedHandler = new ChainedHandler();
-        imageHandlerManager = new ImageHandlerManager();
+	super();
+	i18nHandler = new I18nHandler(this);
+	initGUI();
+	ormlite = new ORMLite(getMetadataPath());
+	validationHandler = new ValidationHandler(ormlite, this);
+	dependencyHandler = new DependencyHandler(ormlite, widgets, this);
+	calculationHandler = new CalculationHandler();
+	chainedHandler = new ChainedHandler();
+	imageHandlerManager = new ImageHandlerManager();
     }
 
     private void initGUI() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        getFormPanel();
-        JScrollPane scrollPane = new JScrollPane(formPanel);
-        widgets = AbeilleParser.getWidgetsFromContainer(formPanel);
-        for (JComponent c : getWidgets().values()) {
-            if (c instanceof JDateChooser) {
-                initDateChooser((JDateChooser) c);
-            }
-        }
-        // AbeilleUtils au = new AbeilleUtils();
-        // au.formatLabels(formPanel);
-        // au.formatTextArea(formPanel);
-        add(scrollPane);
-        add(getSouthPanel());
-        setFocusCycleRoot(true);
+	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+	getFormPanel();
+	JScrollPane scrollPane = new JScrollPane(formPanel);
+	widgets = AbeilleParser.getWidgetsFromContainer(formPanel);
+	for (JComponent c : getWidgets().values()) {
+	    if (c instanceof JDateChooser) {
+		initDateChooser((JDateChooser) c);
+	    }
+	}
+	// AbeilleUtils au = new AbeilleUtils();
+	// au.formatLabels(formPanel);
+	// au.formatTextArea(formPanel);
+	add(scrollPane);
+	add(getSouthPanel());
+	setFocusCycleRoot(true);
+	i18nHandler.translateFormStaticTexts();
     }
 
     private void initDateChooser(JDateChooser c) {
-        SimpleDateFormat dateFormat = DateFormatNT.getDateFormat();
-        c.setDateFormatString(dateFormat.toPattern());
-        c.getDateEditor().setEnabled(false);
-        c.getDateEditor().getUiComponent().setBackground(new Color(255, 255, 255));
-        c.getDateEditor().getUiComponent().setFont(new Font("Arial", Font.PLAIN, 11));
-        c.getDateEditor().getUiComponent().setToolTipText(null);
+	SimpleDateFormat dateFormat = DateFormatNT.getDateFormat();
+	c.setDateFormatString(dateFormat.toPattern());
+	c.getDateEditor().setEnabled(false);
+	c.getDateEditor().getUiComponent()
+	.setBackground(new Color(255, 255, 255));
+	c.getDateEditor().getUiComponent()
+	.setFont(new Font("Arial", Font.PLAIN, 11));
+	c.getDateEditor().getUiComponent().setToolTipText(null);
 
     }
 
@@ -241,35 +252,46 @@ public abstract class AbstractSubForm extends JPanel implements IForm, IValidata
     }
 
     public void fillValues() {
-        setFillingValues(true);
-        try {
-            iController.read(position);
-            fillHandler.fillValues();
-            dependencyHandler.fillValues();
-            fillSpecificValues();
-        } catch (ReadDriverException e) {
-            logger.error(e.getStackTrace());
-        }
-        chainedHandler.fillValues();
-        imageHandlerManager.fillValues();
-        setFillingValues(false);
-        validateForm();
+	setFillingValues(true);
+	try {
+	    iController.read(position);
+	    fillHandler.fillValues();
+	    dependencyHandler.fillValues();
+	    fillSpecificValues();
+	} catch (ReadDriverException e) {
+	    logger.error(e.getStackTrace());
+	}
+	chainedHandler.fillValues();
+	imageHandlerManager.fillValues();
+	setFillingValues(false);
+	validationHandler.validate();
+    }
+
+    public FormPanel getFormPanel() {
+	if (formPanel == null) {
+	    InputStream stream = getClass().getClassLoader()
+		    .getResourceAsStream("/forms/" + getBasicName() + ".jfrm");
+	    if (stream == null) {
+		stream = getClass().getClassLoader().getResourceAsStream(
+			"/forms/" + getBasicName() + ".xml");
+	    }
+	    try {
+		formPanel = new FormPanel(stream);
+	    } catch (FormException e) {
+		e.printStackTrace();
+	    }
+	}
+	return formPanel;
     }
 
     @Override
-    public FormPanel getFormPanel() {
-        if (formPanel == null) {
-            InputStream stream = getClass().getClassLoader().getResourceAsStream("/forms/" + getBasicName() + ".jfrm");
-            if (stream == null) {
-                stream = getClass().getClassLoader().getResourceAsStream("/forms/" + getBasicName() + ".xml");
-            }
-            try {
-                formPanel = new FormPanel(stream);
-            } catch (FormException e) {
-                e.printStackTrace();
-            }
-        }
-        return formPanel;
+    public I18nResource[] getI18nResources() {
+	return null;
+    }
+
+    @Override
+    public I18nHandler getI18nHandler() {
+	return i18nHandler;
     }
 
     protected String getMetadataPath() {

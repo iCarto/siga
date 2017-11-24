@@ -56,6 +56,7 @@ import es.icarto.gvsig.navtableforms.calculation.CalculationHandler;
 import es.icarto.gvsig.navtableforms.chained.ChainedHandler;
 import es.icarto.gvsig.navtableforms.forms.windowproperties.FormWindowProperties;
 import es.icarto.gvsig.navtableforms.forms.windowproperties.FormWindowPropertiesSerializator;
+import es.icarto.gvsig.navtableforms.gui.i18n.resource.I18nResource;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandler;
 import es.icarto.gvsig.navtableforms.gui.images.ImageHandlerManager;
 import es.icarto.gvsig.navtableforms.gui.tables.handler.BaseTableHandler;
@@ -69,7 +70,7 @@ import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 
 @SuppressWarnings("serial")
 public abstract class AbstractForm extends AbstractNavTable implements
-IValidatableForm {
+	IValidatableForm, II18nForm {
 
     private static final Logger logger = Logger.getLogger(AbstractForm.class);
 
@@ -84,6 +85,7 @@ IValidatableForm {
 
     private FillHandler fillHandler;
 
+    private final I18nHandler i18nHandler;
     private final ValidationHandler validationHandler;
     private final DependencyHandler dependencyHandler;
     private final CalculationHandler calculationHandler;
@@ -94,7 +96,8 @@ IValidatableForm {
 
     public AbstractForm(FLyrVect layer) {
 	super(layer);
-	formBody = getFormBody();
+	formBody = getFormPanel();
+	i18nHandler = new I18nHandler(this);
 	widgets = AbeilleParser.getWidgetsFromContainer(formBody);
 	ormlite = new ORMLite(getXMLPath());
 	validationHandler = new ValidationHandler(ormlite, this);
@@ -134,10 +137,19 @@ IValidatableForm {
      * @return
      */
     public abstract FormPanel getFormBody();
-
-    @Override
+    
     public FormPanel getFormPanel() {
 	return getFormBody();
+    }
+
+    @Override
+    public I18nResource[] getI18nResources() {
+	return null;
+    }
+
+    @Override
+    public I18nHandler getI18nHandler() {
+	return i18nHandler;
     }
 
     public abstract String getXMLPath();
@@ -186,6 +198,12 @@ IValidatableForm {
     }
 
     @Override
+    protected void initGUI() {
+	super.initGUI();
+	i18nHandler.translateFormStaticTexts();
+    }
+
+    @Override
     protected void initWidgets() {
 	setListeners();
 	fillHandler = new FillHandler(getWidgets(), layerController,
@@ -202,9 +220,9 @@ IValidatableForm {
 	c.setDateFormatString(dateFormat.toPattern());
 	c.getDateEditor().setEnabled(false);
 	c.getDateEditor().getUiComponent()
-	.setBackground(new Color(255, 255, 255));
+		.setBackground(new Color(255, 255, 255));
 	c.getDateEditor().getUiComponent()
-	.setFont(new Font("Arial", Font.PLAIN, 11));
+		.setFont(new Font("Arial", Font.PLAIN, 11));
 	c.getDateEditor().getUiComponent().setToolTipText(null);
 
     }

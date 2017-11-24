@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/formsrt.jar"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/miglayout-swing-5.1-20150404.220019-96.jar"/>
+	<classpathentry kind="src" path="/libInternationalization"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
