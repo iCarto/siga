@@ -552,28 +552,31 @@ public abstract class AbstractForm extends AbstractNavTable implements
 
     @Override
     public void layerEvent(LayerEvent e) {
-	super.layerEvent(e);
+    layerEventTables(e);
+    super.layerEvent(e);
+    }
 
-	// When the layer is in edition mode, subforms must be disabled, because
-	// if the user, adds a new subelement
-	// with an fk or modifies the pk of the element it will fail
-	if (e.getEventType() == LayerEvent.EDITION_CHANGED) {
-	    if (layer.isEditing()) {
-		for (BaseTableHandler bth : tableHandlers) {
-		    bth.removeListeners();
-		}
-	    } else {
-		for (BaseTableHandler bth : tableHandlers) {
-		    final BaseTableModel bthModel = bth.getModel();
-		    if (bthModel != null) {
-			// This should never happen, but tablehandlers are not
-			// correctly constructed and model field is not
-			// correctly set
-			bthModel.reloadUnderlyingData();
-		    }
-		    bth.reload();
-		}
-	    }
-	}
+    private void layerEventTables(LayerEvent e) {
+    // When the layer is in edition mode, subforms must be disabled, because
+    // if the user, adds a new subelement
+    // with an fk or modifies the pk of the element it will fail
+    if (e.getEventType() == LayerEvent.EDITION_CHANGED) {
+        if (layer.isEditing()) {
+        for (BaseTableHandler bth : tableHandlers) {
+            bth.removeListeners();
+        }
+        } else {
+        for (BaseTableHandler bth : tableHandlers) {
+            final BaseTableModel bthModel = bth.getModel();
+            if (bthModel != null) {
+            // This should never happen, but tablehandlers are not
+            // correctly constructed and model field is not
+            // correctly set
+            bthModel.reloadUnderlyingData();
+            }
+            bth.reload();
+        }
+        }
+    }
     }
 }
