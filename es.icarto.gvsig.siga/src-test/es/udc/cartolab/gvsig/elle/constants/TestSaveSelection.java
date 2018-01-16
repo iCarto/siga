@@ -21,9 +21,9 @@ import com.iver.cit.gvsig.fmap.layers.VectorialAdapter;
 import com.iver.cit.gvsig.fmap.layers.VectorialDefaultAdapter;
 
 import es.icarto.gvsig.commons.datasources.FieldDescriptionFactory;
-import es.udc.cartolab.gvsig.testutils.FLyrVectDBStub;
-import es.udc.cartolab.gvsig.testutils.FLyrVectStub;
-import es.udc.cartolab.gvsig.testutils.VectorialDBDriverStub;
+import es.icarto.gvsig.commons.testutils.FLyrVectDBStub;
+import es.icarto.gvsig.commons.testutils.FLyrVectStub;
+import es.icarto.gvsig.commons.testutils.VectorialDBDriverStub;
 
 public class TestSaveSelection {
 

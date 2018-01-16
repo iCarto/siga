@@ -12,10 +12,10 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 
 import es.icarto.gvsig.commons.testutils.Drivers;
+import es.icarto.gvsig.commons.testutils.MapControlStub;
 import es.icarto.gvsig.commons.testutils.TestProperties;
 import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsDialog;
 import es.icarto.gvsig.siga.locatorbycoords.LocatorByCoordsModel;
-import es.udc.cartolab.gvsig.testutils.MapControlStub;
 import es.udc.cartolab.gvsig.users.utils.DBSessionPostGIS;
 
 public class TestGoToDialog {
