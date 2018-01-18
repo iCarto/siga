@@ -199,9 +199,17 @@ public class MapSheetsCreationExtension extends Extension {
 		    double left_cm = AudasaPreferences.VIEW_X_POSITION;
 		    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
 
-		    if (panel.getSelectedTemplate().contains("A4")) {
-			left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
-			top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
+		    if (panel.getSelectedTemplate().contains("vertical")) {
+		    	if ((panel.getSelectedTemplate().contains("A4"))) {
+		    		left_cm = AudasaPreferences.VIEW_X_POSITION_A4_VERTICAL;
+					top_cm = AudasaPreferences.VIEW_Y_POSITION_A4_VERTICAL;
+		    	} else {
+		    		left_cm = AudasaPreferences.VIEW_X_POSITION_VERTICAL;
+					top_cm = AudasaPreferences.VIEW_Y_POSITION_VERTICAL;
+		    	}
+		    } else if ((panel.getSelectedTemplate().contains("A4"))) {
+		    	left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
+				top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
 		    }
 		    ArrayList act_flds = dlg.getActiveFieldsList();
 		    ArrayList act_flds_tem = dlg.getActiveFieldsTemplateList();

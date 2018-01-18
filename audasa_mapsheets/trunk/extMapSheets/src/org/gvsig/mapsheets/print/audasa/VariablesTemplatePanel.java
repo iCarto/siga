@@ -42,6 +42,9 @@ public class VariablesTemplatePanel extends JPanel implements IWindow, ActionLis
 		template.equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA)) {
 	    height = 200;
 	    componentsList = TemplatePanel.create(AudasaPreferences.A4_POLICIA_MARGENES);
+	} else if(template.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL)) {
+		height = 200;
+		componentsList = TemplatePanel.create(AudasaPreferences.A4_CONSULTAS_VERTICAL);
 	} else {
 	    componentsList = TemplatePanel.create(AudasaPreferences.A4_CONSULTAS);
 	}
