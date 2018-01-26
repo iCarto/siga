@@ -221,4 +221,7 @@ public class DBFieldNames {
     public static final String LONGITUD = "longitud";
     public static final String ANCHO = "ancho";
     public static final String FECHA = "fecha";
+    
+    // TUNELES
+    public static final String ID_TUNELES = "gid";
 }

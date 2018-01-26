@@ -109,6 +109,7 @@ public class CaracteristicasQueries {
 	case Lecho_Frenado:
 	case Senhalizacion_Variable:
 	case Transformadores:
+	case Tuneles:
 	case Ramales:
 	    return getLocalizationTablesWithSentido();
 
@@ -207,6 +208,9 @@ public class CaracteristicasQueries {
 	    break;
 	case Comunicaciones:
 	    query = ConsultasFieldNames.comunicacionesCSVFieldNames();
+	    break;
+	case Tuneles:
+	    query = ConsultasFieldNames.tunelesCSVFieldNames();
 	}
 	return "SELECT " + query + getFromClauseCaracteristicas(element)
 		+ filters.getWhereClauseByLocationWidgets() + " ORDER BY gid";

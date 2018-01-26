@@ -27,6 +27,7 @@ import es.icarto.gvsig.extgia.forms.senhalizacion_variable.SenhalizacionVariable
 import es.icarto.gvsig.extgia.forms.senhalizacion_vertical.SenhalizacionVerticalForm;
 import es.icarto.gvsig.extgia.forms.taludes.TaludesForm;
 import es.icarto.gvsig.extgia.forms.transformadores.TransformadoresForm;
+import es.icarto.gvsig.extgia.forms.tuneles.TunelesForm;
 import es.icarto.gvsig.extgia.forms.valla_cierre.VallaCierreForm;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 
@@ -176,6 +177,14 @@ public enum Elements {
 	    "transformadores_trabajos",
 	    "transformadores_imagenes",
 	    "transformadores_reconocimientos"),
+	Tuneles(
+	    "id_tunel",
+	    TunelesForm.class,
+	    null,
+	    null,
+	    null,
+	    "tuneles_imagenes",
+	    null),
     Valla_Cierre(
 	    "id_valla",
 	    VallaCierreForm.class,
