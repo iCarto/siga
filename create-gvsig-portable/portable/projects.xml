@@ -28,6 +28,7 @@
 		extSymbology,
 		extRasterTools-SE,
 		extJDBC,
+		es.icarto.gvsig.commons,
 		extCAD,
 		extScripting,
 		extWMS,
@@ -49,8 +50,8 @@
 		org.gvsig.installer.app.extension
 	"/>
 		
+	<!--  es.icarto.gvsig.commons está antes de extCAD porqué ahora depende de él -->
 	<property name="custom-projects" value="
-		es.icarto.gvsig.commons,
 		extNavTable,
 		extMapSheets,
 		extDBConnection,
