@@ -60,6 +60,12 @@
                 <action-tool icon="es.icarto.gvsig.siga.ConstantReloadExtension" tooltip="es.icarto.gvsig.siga.ConstantReloadExtension.tooltip" position="5"/>
             </tool-bar>
 		</extension>
+		
+		<extension class-name="es.icarto.gvsig.siga.PrintSelectedExtension" active="true">
+			<tool-bar name="ELLE" position="30">
+                <action-tool icon="es.icarto.gvsig.siga.PrintSelectedExtension" tooltip="es.icarto.gvsig.siga.PrintSelectedExtension.tooltip" position="10" name="es.icarto.gvsig.siga.PrintSelectedExtension" />
+            </tool-bar>
+		</extension>
 
 
 	</extensions>
