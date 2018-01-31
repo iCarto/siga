@@ -14,6 +14,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasPeajeCarac
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasServicioCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BarreraRigidaCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ComunicacionesCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.DrenCazCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.EnlacesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.FirmeCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.IsletasCaracteristicasReport;
@@ -154,6 +155,8 @@ public class ConsultasFieldNames {
 	    return "gid, tr.item, tramo_constructivo, pk_inicial, pk_final, tipo, seccion, longitud, n_elementos, descripcion, observaciones";
 	case Tuneles:
 	    return "gid, nombre, tr.item, pk_inicial, pk_final, longitud, observaciones";
+	case Dren_Caz:
+	    return "gid, tr.item, tv.item, nv.item, pk, longitud, observaciones";
 	}
 	return null;
     }
@@ -639,6 +642,15 @@ public class ConsultasFieldNames {
 		+ "observaciones as \"Observaciones\"";
     }
 
+	public static String drenCazCSVFieldNames() {
+	return "gid as \"ID Dren-Caz\","
+		+ localizationCSVFieldNames() + "pk as \"PK\","
+		+ "ramal as \"Ramal\"," + "st.item as \"Sentido\","
+		+ "direccion as \"Dirección\"," + "mu.item as \"Municipio\","
+		+ "longitud as \"Longitud\","
+		+ "observaciones as \"Observaciones\"";
+	}
+    
     public static void createCaracteristicasReport(String[] element,
 	    String outputFile, DefaultTableModel tableModel,
 	    ConsultasFilters<Field> filters, QueryType tipo) {
@@ -731,8 +743,13 @@ public class ConsultasFieldNames {
 	case Comunicaciones:
 	    new ComunicacionesCaracteristicasReport(element, outputFile,
 		    tableModel, filters, tipo);
+	    break;
 	case Tuneles:
 	    new TunelesCaracteristicasReport(element, outputFile,
+		    tableModel, filters, tipo);
+	    break;
+	case Dren_Caz:
+		new DrenCazCaracteristicasReport(element, outputFile,
 		    tableModel, filters, tipo);
 	}
     }

@@ -111,6 +111,7 @@ public class CaracteristicasQueries {
 	case Transformadores:
 	case Tuneles:
 	case Ramales:
+	case Dren_Caz:
 	    return getLocalizationTablesWithSentido();
 
 	case Firme:
@@ -211,6 +212,9 @@ public class CaracteristicasQueries {
 	    break;
 	case Tuneles:
 	    query = ConsultasFieldNames.tunelesCSVFieldNames();
+	    break;
+	case Dren_Caz:
+		query = ConsultasFieldNames.drenCazCSVFieldNames();
 	}
 	return "SELECT " + query + getFromClauseCaracteristicas(element)
 		+ filters.getWhereClauseByLocationWidgets() + " ORDER BY gid";
