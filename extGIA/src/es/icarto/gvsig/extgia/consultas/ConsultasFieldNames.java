@@ -12,6 +12,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasDescansoCa
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasMantenimientoCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasPeajeCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasServicioCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BajantesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BarreraRigidaCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ComunicacionesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.DrenCazCaracteristicasReport;
@@ -156,6 +157,8 @@ public class ConsultasFieldNames {
 	case Tuneles:
 	    return "gid, nombre, tr.item, pk_inicial, pk_final, longitud, observaciones";
 	case Dren_Caz:
+	    return "gid, tr.item, tv.item, nv.item, pk, longitud, observaciones";
+	case Bajantes:
 	    return "gid, tr.item, tv.item, nv.item, pk, longitud, observaciones";
 	}
 	return null;
@@ -650,6 +653,15 @@ public class ConsultasFieldNames {
 		+ "longitud as \"Longitud\","
 		+ "observaciones as \"Observaciones\"";
 	}
+	
+	public static String bajantesCSVFieldNames() {
+	return "gid as \"ID Bajante\","
+		+ localizationCSVFieldNames() + "pk as \"PK\","
+		+ "ramal as \"Ramal\"," + "st.item as \"Sentido\","
+		+ "margen as \"Margen\"," + "direccion as \"Dirección\","
+		+ "mu.item as \"Municipio\"," + "longitud as \"Longitud\","
+		+ "observaciones as \"Observaciones\"";
+	}
     
     public static void createCaracteristicasReport(String[] element,
 	    String outputFile, DefaultTableModel tableModel,
@@ -750,6 +762,10 @@ public class ConsultasFieldNames {
 	    break;
 	case Dren_Caz:
 		new DrenCazCaracteristicasReport(element, outputFile,
+		    tableModel, filters, tipo);
+		break;
+	case Bajantes:
+		new BajantesCaracteristicasReport(element, outputFile,
 		    tableModel, filters, tipo);
 	}
     }
