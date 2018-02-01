@@ -998,64 +998,35 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData#process(com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor, com.iver.cit.gvsig.fmap.layers.FBitSet)
-	 */
-	public void process(FeatureVisitor visitor, FBitSet subset)
-	throws ReadDriverException, ExpansionFileReadException, VisitorException {
-		for (Iterator iter = layers.iterator(); iter.hasNext();) {
-			FLayer layer = (FLayer) iter.next();
+	public void process(FeatureVisitor visitor, FBitSet subset) throws ReadDriverException, ExpansionFileReadException, VisitorException {
+	    FLayer[] actives = getActives();
+        for (FLayer l:actives) {
+            if (l instanceof VectorialData) {
+                ((VectorialData) l).process(visitor, subset);
+            }
+        }
 
-			if (layer instanceof VectorialData) {
-				((VectorialData) layer).process(visitor, subset);
-			}
-		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData#process(com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor)
-	 */
-	public void process(FeatureVisitor visitor)
-	throws ReadDriverException, VisitorException {
-		for (Iterator iter = layers.iterator(); iter.hasNext();) {
-			FLayer layer = (FLayer) iter.next();
 
-			if (layer instanceof FLayers){
-				FLayers lyrs=(FLayers)layer;
-				for (int i=0;i<lyrs.getLayersCount();i++){
-					FLayer lyr=lyrs.getLayer(i);
-					if (lyr.isActive()) {
-						if (lyr instanceof VectorialData) {
-							((VectorialData) lyr).process(visitor);
-						}
-					}
-				}
-			}
-			if (layer.isActive()) {
-				if (layer instanceof VectorialData) {
-					((VectorialData) layer).process(visitor);
-				}
-			}
-		}
+	public void process(FeatureVisitor visitor) throws ReadDriverException, VisitorException {
+	    FLayer[] actives = getActives();
+	    for (FLayer l:actives) {
+	        if (l instanceof VectorialData) {
+                ((VectorialData) l).process(visitor);
+            }
+	    }
 	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData#process(com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor, java.awt.geom.Rectangle2D)
-	 */
+
 	public void process(FeatureVisitor visitor, Rectangle2D rect) throws ReadDriverException, ExpansionFileReadException, VisitorException {
-		for (Iterator iter = layers.iterator(); iter.hasNext();) {
-			FLayer layer = (FLayer) iter.next();
-
-			if (layer.isActive()) {
-				if (layer instanceof VectorialData) {
-					((VectorialData) layer).process(visitor, rect);
-				}
-			}
-		}
-
+	    FLayer[] actives = getActives();
+        for (FLayer l:actives) {
+            if (l instanceof VectorialData) {
+                ((VectorialData) l).process(visitor, rect);
+            }
+        }
 	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#getMapContext()

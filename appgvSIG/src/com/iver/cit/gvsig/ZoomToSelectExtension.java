@@ -57,7 +57,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
-import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 
@@ -67,33 +66,26 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
  * @author Vicente Caballero Navarro
  */
 public class ZoomToSelectExtension extends Extension {
-	/**
-	 * @see com.iver.mdiApp.plugins.IExtension#updateUI(java.lang.String)
-	 */
+
 	public void execute(String s) {
-		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
-		 	.getActiveWindow();
+		IWindow f = PluginServices.getMDIManager().getActiveWindow();
+		MapContext mapa = null;
+		ProjectDocument model = null;
 		if (f instanceof View) {
 			View vista = (View)f;
-			IProjectView model = vista.getModel();
-			MapContext mapa = model.getMapContext();
-			Rectangle2D selectedExtent = mapa.getSelectionBounds();
-
-			if (selectedExtent != null) {
-			    	resizeExtent(selectedExtent);
-				mapa.getViewPort().setExtent(selectedExtent);
-				((ProjectDocument)vista.getModel()).setModified(true);
-			}
-		}else if (f instanceof Table) {
+			model = (ProjectDocument) vista.getModel();
+			mapa = vista.getMapControl().getMapContext();
+		} else if (f instanceof Table) {
 			Table table=(Table)f;
-			MapContext mapa=((FLyrVect)table.getModel().getAssociatedTable()).getMapContext();
-			Rectangle2D selectedExtent = mapa.getSelectionBounds();
-
-			if (selectedExtent != null) {
-			    	resizeExtent(selectedExtent);
-				mapa.getViewPort().setExtent(selectedExtent);
-				table.getModel().setModified(true);
-			}
+			model = table.getModel();
+			mapa=((FLyrVect)table.getModel().getAssociatedTable()).getMapContext();
+		}
+		
+		Rectangle2D selectedExtent = mapa.getSelectionBounds();
+		if (selectedExtent != null) {
+            resizeExtent(selectedExtent);
+            mapa.getViewPort().setExtent(selectedExtent);
+            model.setModified(true);
 		}
 	}
 	
