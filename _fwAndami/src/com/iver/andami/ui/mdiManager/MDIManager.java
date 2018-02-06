@@ -41,6 +41,7 @@
 package com.iver.andami.ui.mdiManager;
 
 import java.beans.PropertyVetoException;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -181,6 +182,10 @@ public interface MDIManager {
      */
     public IWindow[] getAllWindows();
     
+    public <T extends IWindow> List<T> getAllWindows(IWindowFilter filter);
+
+    public void process(IWindowVisitor visitor);
+
     /**
      * Gets all the open windows (as {@link #getAllWindows()}),
      * but in this method the windows are returned in the same

@@ -64,7 +64,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
-
 import org.gvsig.fmap.swing.toc.TOC;
 import org.gvsig.gui.beans.AcceptCancelPanel;
 import org.gvsig.gui.beans.comboboxconfigurablelookup.DefaultComboBoxConfigurableLookUpModel;
@@ -102,6 +101,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
+import com.iver.cit.gvsig.project.documents.table.gui.TablesFor;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.TocItemBranch;
 import com.iver.utiles.swing.JComboBox;
@@ -1313,16 +1313,8 @@ public class AddGeometricInfoPanel extends JPanel implements IWindow {
     		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer.getSource();
 
     		ISpatialWriter writer = (ISpatialWriter) vea.getWriter();
-    		com.iver.andami.ui.mdiManager.IWindow[] views = PluginServices.getMDIManager().getAllWindows();
-    		for (int j = 0; j < views.length; j++) {
-    			if (views[j] instanceof Table) {
-    				Table table = (Table) views[j];
-    				if (table.getModel().getAssociatedTable() != null
-    						&& table.getModel().getAssociatedTable().equals(layer)) {
-    					table.stopEditingCell();
-    				}
-    			}
-    		}
+    		TablesFor.layer(layer).stopEditingCell();
+    		
     		vea.cleanSelectableDatasource();
     		layer.setRecordset(vea.getRecordset());
 

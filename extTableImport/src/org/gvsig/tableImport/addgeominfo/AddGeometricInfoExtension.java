@@ -83,7 +83,7 @@ public class AddGeometricInfoExtension extends Extension {
 			);
 		PluginServices.getIconTheme().registerDefault(
 				"double-right-arrow-icon",
-				this.getClass().getClassLoader().getResource("images/double-right-arrw-icon.png")
+				this.getClass().getClassLoader().getResource("images/double-right-arrow-icon.png")
 			);
 		PluginServices.getIconTheme().registerDefault(
 				"layer-group",

@@ -45,7 +45,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.KeyEventDispatcher;
 import java.awt.Point;
@@ -58,6 +57,7 @@ import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
 
 import javax.swing.DefaultDesktopManager;
@@ -82,7 +82,9 @@ import com.iver.andami.ui.mdiFrame.GlassPane;
 import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.andami.ui.mdiFrame.NewStatusBar;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.IWindowFilter;
 import com.iver.andami.ui.mdiManager.IWindowListener;
+import com.iver.andami.ui.mdiManager.IWindowVisitor;
 import com.iver.andami.ui.mdiManager.MDIManager;
 import com.iver.andami.ui.mdiManager.MDIUtilities;
 import com.iver.andami.ui.mdiManager.SingletonDialogAlreadyShownException;
@@ -858,6 +860,24 @@ public class NewSkin extends Extension implements MDIManager{
             windows.add((IWindow) i.next());
         }
         return (IWindow[]) windows.toArray(new IWindow[0]);
+    }
+    
+    @Override
+    public <T extends IWindow> List<T> getAllWindows(IWindowFilter filter) {
+        ArrayList<T> windows = new ArrayList<T>();
+        for (IWindow w : getAllWindows()) {
+            if (filter.filter(w)) {
+                windows.add((T) w);
+            }
+        }
+        return windows;
+    }
+
+    @Override
+    public void process(IWindowVisitor visitor) {
+        for (IWindow w : getAllWindows()) {
+            visitor.visit(w);
+        }
     }
 
     /*

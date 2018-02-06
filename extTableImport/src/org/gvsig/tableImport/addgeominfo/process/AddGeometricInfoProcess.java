@@ -78,6 +78,7 @@ import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.table.ProjectTable;
 import com.iver.cit.gvsig.project.documents.table.ProjectTableFactory;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
+import com.iver.cit.gvsig.project.documents.table.gui.TablesFor;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.legend.CreateSpatialIndexMonitorableTask;
 
@@ -1145,16 +1146,7 @@ public class AddGeometricInfoProcess extends IncrementableProcess {
 			VectorialEditableAdapter vea = (VectorialEditableAdapter) layer.getSource();
 
 			ISpatialWriter writer = (ISpatialWriter) vea.getWriter();
-			com.iver.andami.ui.mdiManager.IWindow[] views = PluginServices.getMDIManager().getAllWindows();
-			for (int j = 0; j < views.length; j++) {
-				if (views[j] instanceof Table) {
-					Table table = (Table) views[j];
-					if (table.getModel().getAssociatedTable() != null
-							&& table.getModel().getAssociatedTable().equals(layer)) {
-						table.stopEditingCell();
-					}
-				}
-			}
+			TablesFor.layer(layer).stopEditingCell();
 			vea.cleanSelectableDatasource();
 			layer.setRecordset(vea.getRecordset());
 
@@ -1189,6 +1181,7 @@ public class AddGeometricInfoProcess extends IncrementableProcess {
 	private void cancelEdition(FLyrVect layer) throws Exception {
 		try {
 			layer.setProperty("stoppingEditing",new Boolean(true));
+			TablesFor.layer(layer).cancelEdition();
 			com.iver.andami.ui.mdiManager.IWindow[] views = PluginServices.getMDIManager().getAllWindows();
 			VectorialEditableAdapter vea = (VectorialEditableAdapter) layer.getSource();
 			vea.cancelEdition(EditionEvent.GRAPHIC);
@@ -1212,6 +1205,7 @@ public class AddGeometricInfoProcess extends IncrementableProcess {
 			throw e;
 		}
 	}
+	
 	protected void processFinalize() {
 		super.processFinalize();
 		ProjectExtension pe = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
@@ -1224,15 +1218,10 @@ public class AddGeometricInfoProcess extends IncrementableProcess {
 		} catch (ReadDriverException e1) {
 			e1.printStackTrace();
 		}
-		IWindow[] windows=PluginServices.getMDIManager().getAllWindows();
-		for (int i = 0; i < windows.length; i++) {
-			if (windows[i] instanceof Table && ((Table)windows[i]).getModel().equals(pt)){
-				try {
-					((Table)windows[i]).cancelEditing();
-				} catch (CancelEditingTableException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		try {
+            TablesFor.projectTable(pt).cancelEditing();
+        } catch (CancelEditingTableException e1) {
+            e1.printStackTrace();
+        }
 	}
 }
