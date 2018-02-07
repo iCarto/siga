@@ -170,6 +170,10 @@
 				<COMPONENT>tipo_via</COMPONENT>
 				<VALUE>Área de Servicio</VALUE>
 				</CONDITION>
+				<CONDITION>
+					<COMPONENT>tipo_via</COMPONENT>
+					<VALUE>Área de mantenimiento</VALUE>
+				</CONDITION>
 			</ENABLEIF>
 		</FIELD>
 
