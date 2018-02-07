@@ -146,23 +146,24 @@ public class AddEventThemePanel extends JPanel implements IWindow {
      */
     private void initialize() {
         String helpMsg = PluginServices.getText(this, "same_reference_system_that_actual_view");
-        helpMsg = "El sistema de referencia de la tabla debe coincidir con el de la vista actual:";
+        helpMsg = "Para los datos de coordenadas se debe utilizar como separador decimal el punto (.)<br>";
+        helpMsg += "El sistema de referencia de la tabla debe coincidir con el de la vista actual:";
         String p = mapContext.getProjection().getAbrev();
         helpMsg = "<html><span style='font-size:80%%; color:#aaaaaa;'>" + helpMsg + " " + p;
         JLabel helpLabel = new JLabel(helpMsg);
-        helpLabel.setBounds(6, 6, 425, 35);
+        helpLabel.setBounds(6, 6, 425, 55);
         this.add(helpLabel, null);
         yLabel = new JLabel();
-        yLabel.setBounds(6, 113, 120, 23);
+        yLabel.setBounds(6, 133, 120, 23);
         yLabel.setText(secondCoordinate + ":");
         xLabel = new JLabel();
-        xLabel.setBounds(6, 80, 120, 23);
+        xLabel.setBounds(6, 100, 120, 23);
         xLabel.setText(firstCoordinate + ":");
         tableLabel = new JLabel();
-        tableLabel.setBounds(6, 49, 120, 23);
+        tableLabel.setBounds(6, 69, 120, 23);
         tableLabel.setText(PluginServices.getText(this, "Tabla") + ":");
         this.setLayout(null);
-        this.setSize(431, 178);
+        this.setSize(431, 198);
         this.add(tableLabel, null);
         this.add(xLabel, null);
         this.add(yLabel, null);
@@ -277,7 +278,7 @@ public class AddEventThemePanel extends JPanel implements IWindow {
             tableComboBox = new JComboBox();
             DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(getTableNames());
             tableComboBox.setModel(defaultModel);
-            tableComboBox.setBounds(123, 49, 290, 23);
+            tableComboBox.setBounds(123, 69, 290, 23);
             tableComboBox.addItemListener(new java.awt.event.ItemListener() {
                 @Override
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -304,7 +305,7 @@ public class AddEventThemePanel extends JPanel implements IWindow {
             xComboBox = new JComboBox();
             DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(getFieldNames());
             xComboBox.setModel(defaultModel);
-            xComboBox.setBounds(123, 80, 290, 23);
+            xComboBox.setBounds(123, 100, 290, 23);
         }
         return xComboBox;
     }
@@ -319,7 +320,7 @@ public class AddEventThemePanel extends JPanel implements IWindow {
             yComboBox = new JComboBox();
             DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(getFieldNames());
             yComboBox.setModel(defaultModel);
-            yComboBox.setBounds(123, 113, 290, 23);
+            yComboBox.setBounds(123, 133, 290, 23);
         }
         return yComboBox;
     }
@@ -353,7 +354,7 @@ public class AddEventThemePanel extends JPanel implements IWindow {
                     }
                 }
             });
-            acceptPanel.setBounds(0, 143, getWidth() - 6, 30);
+            acceptPanel.setBounds(0, 163, getWidth() - 6, 30);
         }
         return acceptPanel;
     }
