@@ -31,6 +31,7 @@ import es.icarto.gvsig.commons.queries.Component;
 import es.icarto.gvsig.commons.queries.CustomiceDialog;
 import es.icarto.gvsig.commons.queries.Utils;
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -158,18 +159,11 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
     
     private CustomiceDialog<Field> customize(String selElementKey, KeyValue selTipoConsulta) {
         CustomiceDialog<Field> customiceDialog = new CustomiceDialog<Field>();
+        
+        URL resource = getClass().getClassLoader().getResource("columns.properties");
 
-        URL resource = getClass().getClassLoader().getResource(
-            "columns.properties");
-
-        List<Field> columns = null;
-        if (selElementKey.equalsIgnoreCase("comunicaciones")) {
-            // Para poder incluir el gid
-            final List<String> reserved = Arrays.asList(new String[] {"the_geom", "geom" });
-            columns = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase(), reserved);
-        } else {
-            columns = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase());
-        }
+        final List<String> reserved = Elements.valueOf(selElementKey).ignoredColumnsInReports;
+        List<Field> columns = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase(), reserved);
 
         for (Field f : columns) {
             f.setKey("el." + f.getKey());
