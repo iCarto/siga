@@ -165,8 +165,6 @@
 				<COMPONENT>tipo_via</COMPONENT>
 				<VALUE>Área de Servicio</VALUE>
 				</CONDITION>
-				
-				<!-- Ramales is different. direccion should be activated for area mantenimiento also -->
 				<CONDITION>
 					<COMPONENT>tipo_via</COMPONENT>
 					<VALUE>Área de mantenimiento</VALUE>

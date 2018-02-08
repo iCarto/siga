@@ -37,6 +37,5 @@
 	<classpathentry kind="src" path="/extJDBC"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-3.13-20150929.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/extCAD"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
