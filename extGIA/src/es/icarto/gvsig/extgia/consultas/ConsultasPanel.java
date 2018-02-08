@@ -121,74 +121,14 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	}
 
 	if (e.getSource().equals(customButton)) {
-	    CustomiceDialog<Field> customiceDialog = new CustomiceDialog<Field>();
-
-	    URL resource = getClass().getClassLoader().getResource(
-		    "columns.properties");
-
-	    List<Field> columns = null;
-	    if (selElement.getKey().equalsIgnoreCase("comunicaciones")) {
-		// Para poder incluir el gid
-		final List<String> reserved = Arrays.asList(new String[] {
-			"the_geom", "geom" });
-		columns = Utils.getFields(resource.getPath(), "audasa_extgia",
-			selElement.getKey().toLowerCase(), reserved);
-	    } else {
-		columns = Utils.getFields(resource.getPath(), "audasa_extgia",
-			selElement.getKey().toLowerCase());
-	    }
-
-	    for (Field f : columns) {
-		f.setKey("el." + f.getKey());
-	    }
-
-	    if (selElement.getKey().equalsIgnoreCase("senhalizacion_vertical")) {
-		final List<String> reservedColumns = Arrays
-			.asList(new String[] { "gid", "the_geom", "geom",
-			"municipio" });
-		List<Field> columns2 = Utils.getFields(resource.getPath(),
-			"audasa_extgia", selElement.getKey().toLowerCase()
-				+ "_senhales", reservedColumns);
-		for (Field f : columns2) {
-		    f.setKey("se." + f.getKey());
-		}
-		popToDestination(columns2, "se.id_senhal_vertical",
-			customiceDialog);
-		columns.addAll(columns2);
-	    } else {
-		String elementId = ConsultasFieldNames.getElementId(selElement
-			.getKey());
-		popToDestination(columns, "el." + elementId, customiceDialog);
-	    }
-
-	    customiceDialog.addSourceElements(columns);
-
-	    if (selTipoConsulta.equals("Trabajos")) {
-		List<Field> columns2 = Utils.getFields(resource.getPath(),
-			"audasa_extgia", selElement.getKey().toLowerCase()
-				+ "_trabajos");
-		setAsFirstItem(columns2, "id_trabajo");
-
-		customiceDialog.clearDestinationListModel();
-		customiceDialog.addDestinationElements(columns2);
-	    }
-	    if (selTipoConsulta.equals("Inspecciones")) {
-		List<Field> columns2 = Utils.getFields(resource.getPath(),
-			"audasa_extgia", selElement.getKey().toLowerCase()
-				+ "_reconocimientos");
-
-		setAsFirstItem(columns2, "n_inspeccion");
-		customiceDialog.clearDestinationListModel();
-		customiceDialog.addDestinationElements(columns2);
-	    }
-
+	    CustomiceDialog<Field> customiceDialog = customize(selElement.getKey(), selTipoConsulta);
 	    int status = customiceDialog.open();
-	    if (status == CustomiceDialog.CANCEL) {
-		return;
-	    }
-	    consultasFilters.setQueryType("CUSTOM");
-	    consultasFilters.setFields(customiceDialog.getFields());
-	    consultasFilters.setOrderBy(customiceDialog.getOrderBy());
+        if (status == CustomiceDialog.CANCEL) {
+            return;
+        }
+        consultasFilters.setQueryType("CUSTOM");
+        consultasFilters.setFields(customiceDialog.getFields());
+        consultasFilters.setOrderBy(customiceDialog.getOrderBy());
 	}
 
 	Component todos = null;
@@ -215,7 +155,61 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	todos.finalActions();
 
     }
+    
+    private CustomiceDialog<Field> customize(String selElementKey, KeyValue selTipoConsulta) {
+        CustomiceDialog<Field> customiceDialog = new CustomiceDialog<Field>();
 
+        URL resource = getClass().getClassLoader().getResource(
+            "columns.properties");
+
+        List<Field> columns = null;
+        if (selElementKey.equalsIgnoreCase("comunicaciones")) {
+            // Para poder incluir el gid
+            final List<String> reserved = Arrays.asList(new String[] {"the_geom", "geom" });
+            columns = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase(), reserved);
+        } else {
+            columns = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase());
+        }
+
+        for (Field f : columns) {
+            f.setKey("el." + f.getKey());
+        }
+
+        if (selElementKey.equalsIgnoreCase("senhalizacion_vertical")) {
+            final List<String> reservedColumns = Arrays.asList(new String[] { "gid", "the_geom", "geom", "municipio" });
+            List<Field> columns2 = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase() + "_senhales", reservedColumns);
+            for (Field f : columns2) {
+                f.setKey("se." + f.getKey());
+            }
+            popToDestination(columns2, "se.id_senhal_vertical", customiceDialog);
+            columns.addAll(columns2);
+        } else {
+            String elementId = ConsultasFieldNames.getElementId(selElementKey); // Se puede sacar del Enum
+            popToDestination(columns, "el." + elementId, customiceDialog);
+        }
+
+        customiceDialog.addSourceElements(columns);
+
+        if (selTipoConsulta.equals("Trabajos")) {
+        List<Field> columns2 = Utils.getFields(resource.getPath(),
+            "audasa_extgia", selElementKey.toLowerCase()
+                + "_trabajos");
+        setAsFirstItem(columns2, "id_trabajo");
+
+        customiceDialog.clearDestinationListModel();
+        customiceDialog.addDestinationElements(columns2);
+        }
+        if (selTipoConsulta.equals("Inspecciones")) {
+            List<Field> columns2 = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase() + "_reconocimientos");
+            setAsFirstItem(columns2, "n_inspeccion");
+            customiceDialog.clearDestinationListModel();
+            customiceDialog.addDestinationElements(columns2);
+        }
+
+        return customiceDialog;
+    }
+
+    // TODO. This method should be in CustomiceDialog and not here
     private void popToDestination(List<Field> fields, String key,
 	    CustomiceDialog<Field> customiceDialog) {
 	Iterator<Field> iterator = fields.iterator();
@@ -233,7 +227,6 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	    return;
 	}
 
-	fields.remove(0);
 	ArrayList<Field> destist = new ArrayList<Field>();
 	destist.add(firstItem);
 	customiceDialog.addDestinationElements(destist);
