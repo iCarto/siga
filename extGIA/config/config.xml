@@ -63,7 +63,7 @@
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgia.ImagesInViewExtension" active="true">
-			<menu text="SIGA/es.icarto.gvsig.extgia.ImagesInViewExtension.tooltip" position="30420"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.ImagesInViewExtension.menu" icon="es.icarto.gvsig.extgia.ImagesInViewExtension" position="30420"/>
 			<tool-bar name="GIA" position="73">
 				<action-tool icon="es.icarto.gvsig.extgia.ImagesInViewExtension" tooltip="es.icarto.gvsig.extgia.ImagesInViewExtension.tooltip" position="5"/>
 			</tool-bar>
