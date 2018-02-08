@@ -6,10 +6,10 @@ import com.lowagie.text.pdf.PdfPCell;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
-import es.icarto.gvsig.extgia.consultas.PDFReport;
+import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 
-public class TunelesCaracteristicasReport extends PDFReport {
+public class TunelesCaracteristicasReport extends PDFCaracteristicasReport {
 
 	public TunelesCaracteristicasReport(String[] element, String fileName,
 			DefaultTableModel table, ConsultasFilters<Field> filters,
@@ -41,19 +41,16 @@ public class TunelesCaracteristicasReport extends PDFReport {
 
 	@Override
 	protected boolean hasEmbebedTable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected PdfPCell writeAditionalColumnName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected PdfPCell writeAditionalColumnValues(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

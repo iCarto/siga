@@ -6,25 +6,22 @@ import java.sql.Statement;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.lowagie.text.Document;
 import com.lowagie.text.Element;
-import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
-import es.icarto.gvsig.extgia.consultas.PDFReport;
+import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class AreasDescansoCaracteristicasReport extends PDFReport {
+public class AreasDescansoCaracteristicasReport extends PDFCaracteristicasReport {
 
     public AreasDescansoCaracteristicasReport(String[] element,
 	    String fileName, DefaultTableModel tableModel,
-	    ConsultasFilters<Field> filters, QueryType tipo) {
-	super(element, fileName, tableModel, filters, tipo);
+	    ConsultasFilters<Field> filters, QueryType reportType) {
+	super(element, fileName, tableModel, filters, reportType);
     }
 
     @Override
@@ -55,12 +52,6 @@ public class AreasDescansoCaracteristicasReport extends PDFReport {
 	columnsWidth[11] = 60f;
 
 	return columnsWidth;
-    }
-
-    @Override
-    protected void writeDatesRange(Document document,
-	    ConsultasFilters<Field> filters) {
-
     }
 
     @Override

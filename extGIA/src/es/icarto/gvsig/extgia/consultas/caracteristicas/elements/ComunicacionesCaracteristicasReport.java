@@ -2,15 +2,14 @@ package es.icarto.gvsig.extgia.consultas.caracteristicas.elements;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.lowagie.text.Document;
 import com.lowagie.text.pdf.PdfPCell;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
-import es.icarto.gvsig.extgia.consultas.PDFReport;
+import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 
-public class ComunicacionesCaracteristicasReport extends PDFReport {
+public class ComunicacionesCaracteristicasReport extends PDFCaracteristicasReport {
 
     public ComunicacionesCaracteristicasReport(String[] element,
 	    String fileName, DefaultTableModel table,
@@ -45,12 +44,6 @@ public class ComunicacionesCaracteristicasReport extends PDFReport {
 	columnsWidth[10] = 95f;
 
 	return columnsWidth;
-    }
-
-    @Override
-    protected void writeDatesRange(Document document,
-	    ConsultasFilters<Field> filters) {
-
     }
 
     @Override

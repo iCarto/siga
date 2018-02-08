@@ -2,17 +2,14 @@ package es.icarto.gvsig.extgia.consultas.caracteristicas.elements;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
-import es.icarto.gvsig.extgia.consultas.PDFReport;
+import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 
-public class RamalesCaracteristicasReport extends PDFReport {
+public class RamalesCaracteristicasReport extends PDFCaracteristicasReport {
 
     public RamalesCaracteristicasReport(String[] element, String fileName,
 	    DefaultTableModel tableModel, ConsultasFilters<Field> filters,
@@ -47,26 +44,17 @@ public class RamalesCaracteristicasReport extends PDFReport {
     }
 
     @Override
-    protected void writeDatesRange(Document document,
-	    ConsultasFilters<Field> filters) {
-
-    }
-
-    @Override
     protected boolean hasEmbebedTable() {
-	// TODO Auto-generated method stub
 	return false;
     }
 
     @Override
     protected PdfPCell writeAditionalColumnName() {
-	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
     protected PdfPCell writeAditionalColumnValues(String id) {
-	// TODO Auto-generated method stub
 	return null;
     }
 

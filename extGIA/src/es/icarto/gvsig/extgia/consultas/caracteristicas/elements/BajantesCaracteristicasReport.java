@@ -6,10 +6,11 @@ import com.lowagie.text.pdf.PdfPCell;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
+import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.PDFReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 
-public class BajantesCaracteristicasReport extends PDFReport {
+public class BajantesCaracteristicasReport extends PDFCaracteristicasReport {
 
 	public BajantesCaracteristicasReport(String[] element, String fileName,
 			DefaultTableModel table, ConsultasFilters<Field> filters,
