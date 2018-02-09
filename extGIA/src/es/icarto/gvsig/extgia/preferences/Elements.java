@@ -13,6 +13,7 @@ import es.icarto.gvsig.extgia.forms.areas_descanso.AreasDescansoForm;
 import es.icarto.gvsig.extgia.forms.areas_mantenimiento.AreasMantenimientoForm;
 import es.icarto.gvsig.extgia.forms.areas_peaje.AreasPeajeForm;
 import es.icarto.gvsig.extgia.forms.areas_servicio.AreasServicioForm;
+import es.icarto.gvsig.extgia.forms.arquetas.ArquetasForm;
 import es.icarto.gvsig.extgia.forms.bajantes.BajantesForm;
 import es.icarto.gvsig.extgia.forms.barrera_rigida.BarreraRigidaForm;
 import es.icarto.gvsig.extgia.forms.competencias.CompetenciasForm;
@@ -36,7 +37,6 @@ import es.icarto.gvsig.extgia.forms.taludes.TaludesForm;
 import es.icarto.gvsig.extgia.forms.transformadores.TransformadoresForm;
 import es.icarto.gvsig.extgia.forms.tuneles.TunelesForm;
 import es.icarto.gvsig.extgia.forms.valla_cierre.VallaCierreForm;
-import es.icarto.gvsig.extgis.forms.arquetas.ArquetasForm;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 
 final class Help {
@@ -267,7 +267,7 @@ public enum Elements {
         null,
         null,
         null,
-        "dren_caz",
+        "dren_caz_imagenes",
         null,
         Help.ignoredGidGeom),
     Bajantes(
@@ -276,7 +276,7 @@ public enum Elements {
         null,
         null,
         null,
-        "bajantes",
+        "bajantes_imagenes",
         null,
         Help.ignoreGeom),
     Cunetas(
@@ -285,7 +285,7 @@ public enum Elements {
         null,
         null,
         null,
-        "cunetas",
+        "cunetas_imagenes",
         null,
         Help.ignoreGeom),
     Arquetas(
@@ -294,7 +294,7 @@ public enum Elements {
          null,
          null,
          null,
-         "arquetas",
+         "arquetas_imagenes",
          null,
          Help.ignoreGeom);
 

@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgis.forms.arquetas;
+package es.icarto.gvsig.extgia.forms.arquetas;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
