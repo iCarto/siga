@@ -422,16 +422,20 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 
 	Object src = e.getSource();
 	if (src == this.audasaRB) {
+		Object templateSelected = templateCB.getSelectedItem();
 	    ComboBoxModel templateCBModel = new DefaultComboBoxModel(
 		    AudasaPreferences.getTemplates());
 	    templateCB.setModel(templateCBModel);
+	    templateCB.setSelectedItem(templateSelected);
 	    return;
 	} else if (src == this.autoestradasRB) {
+		Object templateSelected = templateCB.getSelectedItem();
 	    DefaultComboBoxModel templateCBModel = new DefaultComboBoxModel(
 		    AudasaPreferences.getTemplates());
 	    templateCBModel.removeElement(AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA);
 	    templateCBModel.removeElement(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA);
 	    templateCB.setModel(templateCBModel);
+	    templateCB.setSelectedItem(templateSelected);
 	    return;
 	}
 	
