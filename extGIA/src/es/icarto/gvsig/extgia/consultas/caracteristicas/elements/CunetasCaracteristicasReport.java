@@ -19,7 +19,7 @@ public class CunetasCaracteristicasReport extends PDFCaracteristicasReport {
 
 	@Override
 	protected String[] getColumnNames() {
-		String[] columnNames = { "ID Cunetas", "Tramo", "Tipo Vía", 
+		String[] columnNames = { "ID Cuneta", "Tramo", "Tipo Vía", 
 				"Nombre Vía", "PK Inicial", "PK Final", "Tipo", "Longitud", 
 				"Observaciones" };
 			return columnNames;

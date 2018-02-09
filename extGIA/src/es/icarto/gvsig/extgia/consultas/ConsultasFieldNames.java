@@ -12,6 +12,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasDescansoCa
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasMantenimientoCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasPeajeCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasServicioCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ArquetasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BajantesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BarreraRigidaCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ComunicacionesCaracteristicasReport;
@@ -163,6 +164,8 @@ public class ConsultasFieldNames {
 	    return "gid, tr.item, tv.item, nv.item, pk, longitud, observaciones";
 	case Cunetas:
 	    return "gid, tr.item, tv.item, nv.item, pk_inicial, pk_final, tipo, longitud, observaciones";
+	case Arquetas:
+	    return "gid, tr.item, tv.item, nv.item, pk, observaciones";
 	}
 	return null;
     }
@@ -676,6 +679,14 @@ public class ConsultasFieldNames {
 		+ "longitud as \"Longitud\","
 		+ "observaciones as \"Observaciones\"";
 	}
+	
+	public static String arquetasCSVFieldNames() {
+	return "gid as \"ID Arqueta\","
+		+ localizationCSVFieldNames() + "pk as \"PK\","
+		+ "ramal as \"Ramal\"," + "st.item as \"Sentido\","
+		+ "margen as \"Margen\"," + "direccion as \"Dirección\","
+		+ "mu.item as \"Municipio\"," + "observaciones as \"Observaciones\"";
+	}
     
     public static void createCaracteristicasReport(String[] element,
 	    String outputFile, DefaultTableModel tableModel,
@@ -784,6 +795,10 @@ public class ConsultasFieldNames {
 		break;
 	case Cunetas:
 		new CunetasCaracteristicasReport(element, outputFile,
+		    tableModel, filters, tipo);
+		break;
+	case Arquetas:
+		new ArquetasCaracteristicasReport(element, outputFile,
 		    tableModel, filters, tipo);
 	}
     }

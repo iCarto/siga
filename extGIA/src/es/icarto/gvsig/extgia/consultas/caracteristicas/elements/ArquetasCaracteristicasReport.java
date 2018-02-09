@@ -7,12 +7,11 @@ import com.lowagie.text.pdf.PdfPCell;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
 import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
-import es.icarto.gvsig.extgia.consultas.PDFReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 
-public class BajantesCaracteristicasReport extends PDFCaracteristicasReport {
+public class ArquetasCaracteristicasReport extends PDFCaracteristicasReport {
 
-	public BajantesCaracteristicasReport(String[] element, String fileName,
+	public ArquetasCaracteristicasReport(String[] element, String fileName,
 			DefaultTableModel table, ConsultasFilters<Field> filters,
 			QueryType reportType) {
 		super(element, fileName, table, filters, reportType);
@@ -20,8 +19,8 @@ public class BajantesCaracteristicasReport extends PDFCaracteristicasReport {
 
 	@Override
 	protected String[] getColumnNames() {
-		String[] columnNames = { "ID Bajante", "Tramo", "Tipo Vía", 
-				"Nombre Vía", "PK", "Longitud", "Observaciones" };
+		String[] columnNames = { "ID Arqueta", "Tramo", "Tipo Vía", 
+				"Nombre Vía", "PK", "Observaciones" };
 			return columnNames;
 	}
 
@@ -34,8 +33,7 @@ public class BajantesCaracteristicasReport extends PDFCaracteristicasReport {
 		columnsWidth[2] = 60f;
 		columnsWidth[3] = 60f;
 		columnsWidth[4] = 60f;
-		columnsWidth[5] = 60f;
-		columnsWidth[6] = 90f;
+		columnsWidth[5] = 90f;
 
 		return columnsWidth;
 	}

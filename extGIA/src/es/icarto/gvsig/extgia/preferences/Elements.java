@@ -36,6 +36,7 @@ import es.icarto.gvsig.extgia.forms.taludes.TaludesForm;
 import es.icarto.gvsig.extgia.forms.transformadores.TransformadoresForm;
 import es.icarto.gvsig.extgia.forms.tuneles.TunelesForm;
 import es.icarto.gvsig.extgia.forms.valla_cierre.VallaCierreForm;
+import es.icarto.gvsig.extgis.forms.arquetas.ArquetasForm;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 
 final class Help {
@@ -286,7 +287,16 @@ public enum Elements {
         null,
         "cunetas",
         null,
-        Help.ignoreGeom);
+        Help.ignoreGeom),
+    Arquetas(
+        "gid",
+         ArquetasForm.class,
+         null,
+         null,
+         null,
+         "arquetas",
+         null,
+         Help.ignoreGeom);
 
     public final String pk;
     public final Class<? extends AbstractForm> form;
