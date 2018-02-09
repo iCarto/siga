@@ -12,20 +12,20 @@ public class AudasaPreferences {
 
     // Templates
     public static final String CONSULTAS = "Expediente consultas";
-    public static final String A3_CONSULTAS = "Expediente consultas (A3)";
-    public static final String A3_CONSULTAS_LOCALIZADOR = "Expediente consultas modificado (A3)";
-    public static final String A3_CONSULTAS_VERTICAL = "Expediente consultas vertical (A3)";
-    public static final String A4_CONSULTAS = "Expediente consultas (A4)";
-    public static final String A4_CONSULTAS_LOCALIZADOR = "Expediente consultas modificado (A4)";
-    public static final String A4_CONSULTAS_VERTICAL = "Expediente consultas vertical (A4)";
+    public static final String A3_CONSULTAS = "Expediente consultas (A3-Horizontal)";
+    public static final String A3_CONSULTAS_LOCALIZADOR = "Expediente consultas (A3-Horizontal/leyenda)";
+    public static final String A3_CONSULTAS_VERTICAL = "Expediente consultas (A3-Vertical)";
+    public static final String A4_CONSULTAS = "Expediente consultas (A4-Horizontal)";
+    public static final String A4_CONSULTAS_LOCALIZADOR = "Expediente consultas (A4-Horizontal/leyenda)";
+    public static final String A4_CONSULTAS_VERTICAL = "Expediente consultas (A4-Vertical)";
     public static final String DIMENSIONES = "Estado dimensiones";
-    public static final String A3_DIMENSIONES = "Estado dimensiones (A3)";
-    public static final String A3_DIMENSIONES_LOCALIZADOR = "Estado dimensiones modificado (A3)";
+    public static final String A3_DIMENSIONES = "Estado dimensiones (A3-Horizontal)";
+    public static final String A3_DIMENSIONES_LOCALIZADOR = "Estado dimensiones (A3-Horizontal/leyenda)";
     public static final String POLICIA_MARGENES = "Policía de márgenes";
-    public static final String A3_POLICIA_MARGENES = "Policía de márgenes (A3)";
-    public static final String A3_POLICIA_MARGENES_LEYENDA = "Policía de márgenes con leyenda (A3)";
-    public static final String A4_POLICIA_MARGENES = "Policía de márgenes (A4)";
-    public static final String A4_POLICIA_MARGENES_LEYENDA = "Policía de márgenes con leyenda (A4)";
+    public static final String A3_POLICIA_MARGENES = "Policía de márgenes (A3-Horizontal)";
+    public static final String A3_POLICIA_MARGENES_LEYENDA = "Policía de márgenes (A3-Horizontal/leyenda)";
+    public static final String A4_POLICIA_MARGENES = "Policía de márgenes (A4-Horizontal)";
+    public static final String A4_POLICIA_MARGENES_LEYENDA = "Policía de márgenes (A4-Horizontal/leyenda)";
 
     public static String[] getTemplates() {
 	String[] plantillas = new String[12];

@@ -249,7 +249,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	    templateCBLabel.setBounds(new Rectangle(95, 21 + 25, 150, 21));
 	    templateCB = new JComboBox();
 	    templateCB.setModel(templateCBModel);
-	    templateCB.setBounds(new Rectangle(200, 21 + 25, 300, 21));
+	    templateCB.setBounds(new Rectangle(200, 21 + 25, 325, 21));
 
 	    templatesPanel.add(audasaRB, null);
 	    templatesPanel.add(autoestradasRB, null);
