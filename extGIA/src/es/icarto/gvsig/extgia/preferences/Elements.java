@@ -17,6 +17,7 @@ import es.icarto.gvsig.extgia.forms.bajantes.BajantesForm;
 import es.icarto.gvsig.extgia.forms.barrera_rigida.BarreraRigidaForm;
 import es.icarto.gvsig.extgia.forms.competencias.CompetenciasForm;
 import es.icarto.gvsig.extgia.forms.comunicaciones.ComunicacionesForm;
+import es.icarto.gvsig.extgia.forms.cunetas.CunetasForm;
 import es.icarto.gvsig.extgia.forms.dren_caz.DrenCazForm;
 import es.icarto.gvsig.extgia.forms.enlaces.EnlacesForm;
 import es.icarto.gvsig.extgia.forms.firme.FirmeForm;
@@ -275,6 +276,15 @@ public enum Elements {
         null,
         null,
         "bajantes",
+        null,
+        Help.ignoreGeom),
+    Cunetas(
+        "gid",
+        CunetasForm.class,
+        null,
+        null,
+        null,
+        "cunetas",
         null,
         Help.ignoreGeom);
 

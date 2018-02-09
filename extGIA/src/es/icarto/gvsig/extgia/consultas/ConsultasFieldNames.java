@@ -15,6 +15,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasServicioCa
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BajantesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BarreraRigidaCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ComunicacionesCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.CunetasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.DrenCazCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.EnlacesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.FirmeCaracteristicasReport;
@@ -160,6 +161,8 @@ public class ConsultasFieldNames {
 	    return "gid, tr.item, tv.item, nv.item, pk, longitud, observaciones";
 	case Bajantes:
 	    return "gid, tr.item, tv.item, nv.item, pk, longitud, observaciones";
+	case Cunetas:
+	    return "gid, tr.item, tv.item, nv.item, pk_inicial, pk_final, tipo, longitud, observaciones";
 	}
 	return null;
     }
@@ -662,6 +665,17 @@ public class ConsultasFieldNames {
 		+ "mu.item as \"Municipio\"," + "longitud as \"Longitud\","
 		+ "observaciones as \"Observaciones\"";
 	}
+	
+	public static String cunetasCSVFieldNames() {
+	return "gid as \"ID Cuneta\","
+		+ localizationCSVFieldNames()
+		+ "pk_inicial as \"PK Inicial\"," + "pk_final as \"PK Final\","
+		+ "ramal as \"Ramal\"," + "st.item as \"Sentido\","
+		+ "margen as \"Margen\"," + "direccion as \"Dirección\","
+		+ "mu.item as \"Municipio\"," + "tipo as \"Tipo\"," 
+		+ "longitud as \"Longitud\","
+		+ "observaciones as \"Observaciones\"";
+	}
     
     public static void createCaracteristicasReport(String[] element,
 	    String outputFile, DefaultTableModel tableModel,
@@ -766,6 +780,10 @@ public class ConsultasFieldNames {
 		break;
 	case Bajantes:
 		new BajantesCaracteristicasReport(element, outputFile,
+		    tableModel, filters, tipo);
+		break;
+	case Cunetas:
+		new CunetasCaracteristicasReport(element, outputFile,
 		    tableModel, filters, tipo);
 	}
     }
