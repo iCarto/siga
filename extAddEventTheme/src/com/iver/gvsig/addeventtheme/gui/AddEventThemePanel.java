@@ -122,19 +122,19 @@ public class AddEventThemePanel extends JPanel implements IWindow {
             formatter.setMaximumFractionDigits(5);
             formatter.setMinimumFractionDigits(5);
             formatter.setGroupingUsed(false);
-            firstCoordinate = String.format("<html>Lon <span style='font-size:80%%; color:#aaaaaa;'> (ej: %s)</span>",
+            firstCoordinate = String.format("<html>Lon <span style='font-size:80%%; color:#9d9d9d;'> (ej: %s)</span>",
                     formatter.format(center.getX()));
             secondCoordinate = String.format(
-                    "<html>Lat <span style='font-size:80%%; color:#aaaaaa;'> (ej: %s)</span>",
+                    "<html>Lat <span style='font-size:80%%; color:#9d9d9d;'> (ej: %s)</span>",
                     formatter.format(center.getY()));
         } else {
             NumberFormat formatter = NumberFormat.getNumberInstance(new Locale("en", "US"));
             formatter.setMaximumFractionDigits(2);
             formatter.setMinimumFractionDigits(2);
             formatter.setGroupingUsed(false);
-            firstCoordinate = String.format("<html>X <span style='font-size:80%%; color:#aaaaaa;'> (ej: %s)</span>",
+            firstCoordinate = String.format("<html>X <span style='font-size:80%%; color:#9d9d9d;'> (ej: %s)</span>",
                     formatter.format(center.getX()));
-            secondCoordinate = String.format("<html>Y <span style='font-size:80%%; color:#aaaaaa;'> (ej: %s)</span>",
+            secondCoordinate = String.format("<html>Y <span style='font-size:80%%; color:9d9d9d;'> (ej: %s)</span>",
                     formatter.format(center.getY()));
         }
     }
@@ -149,7 +149,7 @@ public class AddEventThemePanel extends JPanel implements IWindow {
         helpMsg = "Para los datos de coordenadas se debe utilizar como separador decimal el punto (.)<br>";
         helpMsg += "El sistema de referencia de la tabla debe coincidir con el de la vista actual:";
         String p = mapContext.getProjection().getAbrev();
-        helpMsg = "<html><span style='font-size:80%%; color:#aaaaaa;'>" + helpMsg + " " + p;
+        helpMsg = "<html><span style='font-size:80%%; color:#9d9d9d;'>" + helpMsg + " " + p;
         JLabel helpLabel = new JLabel(helpMsg);
         helpLabel.setBounds(6, 6, 425, 55);
         this.add(helpLabel, null);
