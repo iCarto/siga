@@ -199,7 +199,7 @@ public class MapSheetsCreationExtension extends Extension {
 		    double left_cm = AudasaPreferences.VIEW_X_POSITION;
 		    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
 
-		    if (panel.getSelectedTemplate().contains("vertical")) {
+		    if (panel.getSelectedTemplate().contains("Vertical")) {
 		    	if ((panel.getSelectedTemplate().contains("A4"))) {
 		    		left_cm = AudasaPreferences.VIEW_X_POSITION_A4_VERTICAL;
 					top_cm = AudasaPreferences.VIEW_Y_POSITION_A4_VERTICAL;
