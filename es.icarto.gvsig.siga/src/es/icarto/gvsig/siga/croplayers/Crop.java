@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.printselected;
+package es.icarto.gvsig.siga.croplayers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import es.icarto.gvsig.commons.utils.FileNameUtils;
 import es.icarto.gvsig.elle.style.LayerLabeling;
 import es.icarto.gvsig.elle.style.LayerSimbology;
 
-public class Clip {
+public class Crop {
 
     private final FLyrVect newLayer;
     private final FLyrVect layer;
@@ -44,7 +44,7 @@ public class Clip {
      * Hacer bien un clip es complicado. Habría que descartar las geometrías que no sean del mismo tipo. Gestionar las
      * coleciones tras el intersection, ...
      */
-    public Clip(FLyrVect layer, String tmpPath, Geometry g) throws BaseException, LegendDriverException {
+    public Crop(FLyrVect layer, String tmpPath, Geometry g) throws BaseException, LegendDriverException {
 
         this.layer = layer;
         path = FileNameUtils.ensureExtension(tmpPath, "shp");

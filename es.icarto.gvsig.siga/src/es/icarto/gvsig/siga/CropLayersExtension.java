@@ -21,10 +21,10 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PolygonBehavior;
 
 import es.icarto.gvsig.commons.AbstractExtension;
-import es.icarto.gvsig.siga.printselected.PrintSelectedListener;
-import es.icarto.gvsig.siga.printselected.Visibility;
+import es.icarto.gvsig.siga.croplayers.CropLayersListener;
+import es.icarto.gvsig.siga.croplayers.Visibility;
 
-public class PrintSelectedExtension extends AbstractExtension {
+public class CropLayersExtension extends AbstractExtension {
 
     private FLayer[] actives;
 
@@ -150,7 +150,7 @@ public class PrintSelectedExtension extends AbstractExtension {
     private void setupTool(List<FLayer> layers, String folder) {
         MapControl mapControl = getView().getMapControl();
 
-        PrintSelectedListener listener = new PrintSelectedListener(mapControl, layers, folder);
+        CropLayersListener listener = new CropLayersListener(mapControl, layers, folder);
         listener.setCursorImage(id + ".cursor");
 
         mapControl.addMapTool(id, new PolygonBehavior(listener));

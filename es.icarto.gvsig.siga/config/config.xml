@@ -19,12 +19,19 @@
 				<action-tool icon="open-street-view" position="6" tooltip="Abrir Street View" />
 			</tool-bar>
 		</extension>
+		
+		<extension class-name="es.icarto.gvsig.siga.CropLayersExtension" active="true">
+			<menu text="SIGA/es.icarto.gvsig.siga.CropLayersExtension.menu" icon="es.icarto.gvsig.siga.CropLayersExtension" position="30952"/>
+			<tool-bar name="SIGA_Tools" position="75">
+                <action-tool icon="es.icarto.gvsig.siga.CropLayersExtension" tooltip="es.icarto.gvsig.siga.CropLayersExtension.tooltip" position="8" name="es.icarto.gvsig.siga.CropLayersExtension" />
+            </tool-bar>
+		</extension>
 
 		<extension class-name="es.icarto.gvsig.siga.ImportIncidenciasExtension" active="true">
-			<menu text="SIGA" position="30951" is_separator="true"/>
-			<menu text="SIGA/es.icarto.gvsig.siga.ImportIncidenciasExtension.menu" icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="30952"/>
+			<menu text="SIGA" position="30954" is_separator="true"/>
+			<menu text="SIGA/es.icarto.gvsig.siga.ImportIncidenciasExtension.menu" icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="30956"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="7" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
+				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="10" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
 			</tool-bar>
 		</extension>
 
@@ -58,12 +65,6 @@
 			<menu text="data_base_menu/es.icarto.gvsig.siga.ConstantReloadExtension.menu" icon="es.icarto.gvsig.siga.ConstantReloadExtension"  position="20700"/>
 			<tool-bar name="ELLE" position="30">
                 <action-tool icon="es.icarto.gvsig.siga.ConstantReloadExtension" tooltip="es.icarto.gvsig.siga.ConstantReloadExtension.tooltip" position="5"/>
-            </tool-bar>
-		</extension>
-		
-		<extension class-name="es.icarto.gvsig.siga.PrintSelectedExtension" active="true">
-			<tool-bar name="ELLE" position="30">
-                <action-tool icon="es.icarto.gvsig.siga.PrintSelectedExtension" tooltip="es.icarto.gvsig.siga.PrintSelectedExtension.tooltip" position="10" name="es.icarto.gvsig.siga.PrintSelectedExtension" />
             </tool-bar>
 		</extension>
 

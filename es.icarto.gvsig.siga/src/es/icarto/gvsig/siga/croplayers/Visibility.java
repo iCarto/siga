@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.printselected;
+package es.icarto.gvsig.siga.croplayers;
 
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 

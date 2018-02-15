@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.printselected;
+package es.icarto.gvsig.siga.croplayers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,8 +48,8 @@ public class Export {
             path += layer.getName() + LAYER_NAME_SUFFIX;
             try {
 
-                Clip clip = new Clip((FLyrVect) layer, path, clipperGeom.toJTSGeometry());
-                newLayers.add(clip.getNewLayer());
+                Crop crop = new Crop((FLyrVect) layer, path, clipperGeom.toJTSGeometry());
+                newLayers.add(crop.getNewLayer());
                 oldLayers.add(layer);
 
             } catch (BaseException e) {

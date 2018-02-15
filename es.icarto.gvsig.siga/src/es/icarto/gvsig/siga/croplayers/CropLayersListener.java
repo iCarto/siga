@@ -1,4 +1,4 @@
-package es.icarto.gvsig.siga.printselected;
+package es.icarto.gvsig.siga.croplayers;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -21,11 +21,11 @@ import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 
-import es.icarto.gvsig.siga.PrintSelectedExtension;
+import es.icarto.gvsig.siga.CropLayersExtension;
 
-public class PrintSelectedListener implements PolylineListener {
+public class CropLayersListener implements PolylineListener {
 
-    private static final Logger logger = Logger.getLogger(PrintSelectedListener.class);
+    private static final Logger logger = Logger.getLogger(CropLayersListener.class);
 
     /**
      * The image to display when the cursor is active.
@@ -43,7 +43,7 @@ public class PrintSelectedListener implements PolylineListener {
     private final List<FLayer> layers;
     private final String folder;
 
-    public PrintSelectedListener(MapControl mapControl, List<FLayer> layers, String folder) {
+    public CropLayersListener(MapControl mapControl, List<FLayer> layers, String folder) {
         this.mapControl = mapControl;
         this.layers = layers;
         this.folder = folder;
@@ -97,17 +97,17 @@ public class PrintSelectedListener implements PolylineListener {
     }
 
     private void foo(IGeometry clipperGeom) {
-        PrintSelectedExtension extension = null;
+        CropLayersExtension extension = null;
         try {
             PluginServices.getMDIManager().setWaitCursor();
-            extension = (PrintSelectedExtension) PluginServices.getExtension(PrintSelectedExtension.class);
+            extension = (CropLayersExtension) PluginServices.getExtension(CropLayersExtension.class);
             Export export = new Export(folder, layers, clipperGeom);
             export.export();
 
-            PrintSelectedExtension.clipedLayers.addAll(export.getNewLayers());
+            CropLayersExtension.clipedLayers.addAll(export.getNewLayers());
 
             for (FLayer l : export.getOldLayers()) {
-                PrintSelectedExtension.dbLayers.add(new Visibility(l, l.isVisible()));
+                CropLayersExtension.dbLayers.add(new Visibility(l, l.isVisible()));
                 l.setVisible(false);
             }
         } catch (Exception e) {
