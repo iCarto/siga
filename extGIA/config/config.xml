@@ -25,7 +25,7 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/firme" action-command="Firme" position="30410"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/isletas" action-command="Isletas" position="30411"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/juntas" action-command="Juntas" position="30412"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/lecho_frenado" action-command="Lecho_Frenado" position="304013"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/lecho_frenado" action-command="Lecho_Frenado" position="30413"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/lineas_suministro" action-command="Lineas_Suministro" position="30414"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/muros" action-command="Muros" position="30415"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_desague" action-command="Obras_Desague" position="30416"/>
