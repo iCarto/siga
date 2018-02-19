@@ -269,7 +269,7 @@ public enum Elements {
         null,
         "dren_caz_imagenes",
         null,
-        Help.ignoredGidGeom),
+        Help.ignoreGeom),
     Bajantes(
         "gid",
         BajantesForm.class,
