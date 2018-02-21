@@ -1245,7 +1245,7 @@
             <property key="desc" value=""/>
             <property key="unit" value="-1"/>
             <property key="referenceSystem" value="0"/>
-            <property key="color" value="255,0,255,255"/>
+            <property key="color" value="255,0,0,255"/>
             <xml-tag>
                 <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
                 <property key="desc"/>
@@ -1371,7 +1371,7 @@
             <property key="desc"/>
             <property key="unit" value="-1"/>
             <property key="referenceSystem" value="0"/>
-            <property key="color" value="255,0,0,255"/>
+            <property key="color" value="255,0,255,255"/>
             <xml-tag>
                 <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
                 <property key="desc"/>
