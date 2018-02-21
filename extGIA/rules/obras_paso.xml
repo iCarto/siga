@@ -6,10 +6,6 @@
 	</PRIMARYKEY>
 	<RECORDSET>
 
-		<FIELD>
-			<FIELDNAME>id_obra_paso</FIELDNAME>
-		</FIELD>
-
 		<!-- LOCATION WIDGETS START -->
 		<FIELD>
 		<FIELDNAME>area_mantenimiento</FIELDNAME>
