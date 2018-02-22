@@ -213,6 +213,9 @@ public class ConstantsPanel extends JPanel {
 
     public String buildWhereAndSetConstants() {
 	List<String> values = getSelectedIds();
+	if (table.getModel().getRowCount() == values.size()) {
+	    values.clear();
+	}
 	// TODO: An index on selectedConstant field could speed up the queryS
 	String where = "WHERE municipio IN (";
 	if (!values.isEmpty()) {
