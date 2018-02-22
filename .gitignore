@@ -6,3 +6,4 @@ binaries
 _fwAndami/gvSIG
 package.info
 **/build.number
+*.class
