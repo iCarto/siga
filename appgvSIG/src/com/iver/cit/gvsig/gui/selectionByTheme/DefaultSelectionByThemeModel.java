@@ -40,29 +40,57 @@
  */
 package com.iver.cit.gvsig.gui.selectionByTheme;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.LayersIterator;
+import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 
 
 public class DefaultSelectionByThemeModel
 	implements SelectionByThemeModel {
 
-	private FLayers layers;
+	private View view;
+	
+	public DefaultSelectionByThemeModel() {
+		IWindow view = PluginServices.getMDIManager().getActiveWindow();
+		if (view instanceof View){
+			this.view = (View) view;
+		}
+		
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.gui.selectionByTheme.SelectionByThemeModel#getViews()
 	 */
-	public FLayers getLayers() {
-		IWindow v = PluginServices.getMDIManager().getActiveWindow();
-		if (v instanceof com.iver.cit.gvsig.project.documents.view.gui.View){
-			com.iver.cit.gvsig.project.documents.view.gui.View vista = (com.iver.cit.gvsig.project.documents.view.gui.View) v;
-			
-			return vista.getModel().getMapContext().getLayers();
+	public FLayers getLayers() {			
+		return view.getModel().getMapContext().getLayers();
+	}
+	
+	public List<FLayer> getInnerLayers() {
+		List<FLayer> flayers = new ArrayList<FLayer>();
+
+		LayersIterator it = new LayersIterator(view.getModel().getMapContext().getLayers()) {
+		    @Override
+		    public boolean evaluate(FLayer layer) {
+		        return layer instanceof FLyrVect;
+		    }
+		};
+
+		while (it.hasNext()) {
+		    flayers.add(it.nextLayer());
 		}
-		
-		return null;
+		return (List<FLayer>) flayers;
 	}
 
+
+
+
+	
 }

@@ -43,6 +43,7 @@ package com.iver.cit.gvsig.gui.selectionByTheme;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -53,6 +54,10 @@ import org.gvsig.gui.beans.swing.JButton;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+import com.iver.cit.gvsig.fmap.layers.FLayer;
+import com.iver.cit.gvsig.fmap.layers.FLayers;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.LayersIterator;
 import com.iver.utiles.swing.JComboBox;
 
 
@@ -276,19 +281,20 @@ public class SelectionByTheme extends JPanel implements IWindow {
 	public SelectionByThemeModel getModel() {
 		return dataSource;
 	}
-
+	
 	/**
 	 * @param source
 	 */
 	public void setModel(SelectionByThemeModel source) {
 		dataSource = source;
-		String[] nameLayers = new String[dataSource.getLayers().getLayersCount()];
-		for (int i=0; i < nameLayers.length; i++)
-			nameLayers[i] = dataSource.getLayers().getLayer(i).getName();
+		String[] nameLayers = new String[dataSource.getInnerLayers().size()];
+		for (int i=0; i < dataSource.getInnerLayers().size(); i++)
+			nameLayers[i] = dataSource.getInnerLayers().get(i).getName();
 		DefaultComboBoxModel model =
 			new DefaultComboBoxModel(nameLayers);
 		cmbCapas.setModel(model);
 	}
+	
 	/**
 	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#getWindowInfo()
 	 */
@@ -304,7 +310,7 @@ public class SelectionByTheme extends JPanel implements IWindow {
 		for (int i = 0; i < listeners.size();
 				i++) {
 			SelectionByThemeListener l = (SelectionByThemeListener) listeners.get(i);
-			l.newSet(dataSource.getLayers().getActives(), dataSource.getLayers().getLayer(selection), actionCode);
+			l.addToSet(dataSource.getLayers().getActives(), dataSource.getInnerLayers().get(selection), actionCode);
 		}
 
 	}
@@ -313,7 +319,7 @@ public class SelectionByTheme extends JPanel implements IWindow {
 		for (int i = 0; i < listeners.size();
 				i++) {
 			SelectionByThemeListener l = (SelectionByThemeListener) listeners.get(i);
-			l.addToSet(dataSource.getLayers().getActives(), dataSource.getLayers().getLayer(selection), actionCode);
+			l.addToSet(dataSource.getLayers().getActives(), dataSource.getInnerLayers().get(selection), actionCode);
 		}
 
 	}
@@ -322,7 +328,7 @@ public class SelectionByTheme extends JPanel implements IWindow {
 		for (int i = 0; i < listeners.size();
 				i++) {
 			SelectionByThemeListener l = (SelectionByThemeListener) listeners.get(i);
-			l.fromSet(dataSource.getLayers().getActives(), dataSource.getLayers().getLayer(selection), actionCode);
+			l.fromSet(dataSource.getLayers().getActives(), dataSource.getInnerLayers().get(selection), actionCode);
 		}
 
 	}

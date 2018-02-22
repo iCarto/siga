@@ -40,9 +40,13 @@
  */
 package com.iver.cit.gvsig.gui.selectionByTheme;
 
+import java.util.List;
+
+import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 
 
 public interface SelectionByThemeModel {
 	public FLayers getLayers();
+	public List<FLayer> getInnerLayers();
 }
