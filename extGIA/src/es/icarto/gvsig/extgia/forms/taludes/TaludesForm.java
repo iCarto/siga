@@ -70,7 +70,7 @@ public class TaludesForm extends AbstractFormWithLocationWidgets {
 
 	taludid = new TaludesCalculateTaludIDValue(this, getWidgets(),
 		DBFieldNames.ID_TALUD, DBFieldNames.TIPO_TALUD,
-		DBFieldNames.NUMERO_TALUD, DBFieldNames.BASE_CONTRATISTA);
+		DBFieldNames.NUMERO_TALUD, DBFieldNames.BASE_CONTRATISTA, DBFieldNames.TRAMO);
 	taludid.setListeners();
 
 	inclinacionMedia = new TaludesCalculateInclinacionMediaValue(this,

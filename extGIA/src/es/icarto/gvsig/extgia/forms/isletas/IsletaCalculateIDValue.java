@@ -37,6 +37,7 @@ public class IsletaCalculateIDValue extends CalculateComponentValue {
 		.get(DBFieldNames.NUMERO_ISLETA);
 	JComboBox baseContratistaWidget = (JComboBox) operatorComponents
 		.get(DBFieldNames.BASE_CONTRATISTA);
+	JComboBox tramoWidget = (JComboBox) operatorComponents.get(DBFieldNames.TRAMO);
 
 	if (numeroIsletaWidget.getText().isEmpty()) {
 	    validate = false;
@@ -44,11 +45,16 @@ public class IsletaCalculateIDValue extends CalculateComponentValue {
 
 	String isletaID = "";
 	if (validate) {
+	    
+	    boolean isAG = ((KeyValue) tramoWidget.getSelectedItem()).getValue().startsWith("AG");
+        String lastLetter = ((KeyValue) baseContratistaWidget.getSelectedItem()).getValue().substring(0, 1);
+        if (isAG) {
+            lastLetter = "X";
+        }
 
 	    isletaID = String.format("%s-%03d%s", "I", Integer
 		    .valueOf(numeroIsletaWidget.getText()),
-		    ((KeyValue) baseContratistaWidget.getSelectedItem())
-		    .getValue().substring(0, 1));
+		    lastLetter);
 	}
 	resultComponent.setText(isletaID);
 	form.getFormController().setValue(resultComponentName, isletaID);

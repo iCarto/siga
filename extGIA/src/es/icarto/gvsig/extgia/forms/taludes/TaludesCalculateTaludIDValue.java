@@ -39,6 +39,7 @@ public class TaludesCalculateTaludIDValue extends CalculateComponentValue {
 		.get(DBFieldNames.NUMERO_TALUD);
 	JComboBox baseContratistaWidget = (JComboBox) operatorComponents
 		.get(DBFieldNames.BASE_CONTRATISTA);
+	JComboBox tramoWidget = (JComboBox) operatorComponents.get(DBFieldNames.TRAMO);
 
 	if (numeroTaludWidget.getText().isEmpty()) {
 	    validate = false;
@@ -46,12 +47,17 @@ public class TaludesCalculateTaludIDValue extends CalculateComponentValue {
 
 	String taludID = "";
 	if (validate) {
-
+	    
+	    boolean isAG = ((KeyValue) tramoWidget.getSelectedItem()).getValue().startsWith("AG");
+	    String lastLetter = ((KeyValue) baseContratistaWidget.getSelectedItem()).getValue().substring(0, 1);
+	    if (isAG) {
+	        lastLetter = "X";
+	    }
+	    
 	    taludID = String.format("%s-%03d%s", ((KeyValue) tipoTaludWidget
 		    .getSelectedItem()).getValue().substring(0, 1), Integer
 		    .valueOf(numeroTaludWidget.getText()),
-		    ((KeyValue) baseContratistaWidget.getSelectedItem())
-		    .getValue().substring(0, 1));
+		    lastLetter);
 	}
 	resultComponent.setText(taludID);
 	form.getFormController().setValue(resultComponentName, taludID);
