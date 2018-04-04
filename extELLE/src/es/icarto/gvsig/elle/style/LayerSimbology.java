@@ -119,7 +119,10 @@ public class LayerSimbology {
         String ext = FileNameUtils.getExtension(file.getName());
         IFMapLegendDriver driver = getDriver(ext);
 
-        Hashtable<FLayer, ILegend> table = driver.read(layer.getMapContext().getLayers(), layer, file);
+        // driver.read does not use `layers`. And commonly this field is only set
+        // after adding the layer to the TOC, but set the style can be done before
+        // FLayers layers = layer.getMapContext().getLayers();
+        Hashtable<FLayer, ILegend> table = driver.read(null, layer, file);
         ILegend legend = table.get(layer);
         if (legend == null) {
             throw new LegendDriverException(0);
