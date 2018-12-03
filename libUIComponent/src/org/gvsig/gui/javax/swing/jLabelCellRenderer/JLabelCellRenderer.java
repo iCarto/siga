@@ -54,7 +54,7 @@ import javax.swing.ListCellRenderer;
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JLabelCellRenderer extends DefaultListCellRenderer implements ListCellRenderer, Serializable {
+public class JLabelCellRenderer extends DefaultListCellRenderer {
 	private static final long serialVersionUID = -3820198983465837422L;
 
 	/* (non-Javadoc)

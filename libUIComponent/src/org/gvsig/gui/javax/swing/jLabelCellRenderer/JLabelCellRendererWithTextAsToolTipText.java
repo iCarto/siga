@@ -53,7 +53,7 @@ import javax.swing.ListCellRenderer;
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JLabelCellRendererWithTextAsToolTipText extends JLabelCellRenderer implements ListCellRenderer, Serializable {
+public class JLabelCellRendererWithTextAsToolTipText extends JLabelCellRenderer {
 	private static final long serialVersionUID = 4799667459274027212L;
 
 	/* (non-Javadoc)
