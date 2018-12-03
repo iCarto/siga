@@ -8,6 +8,7 @@
     <RECORDSET>
       <FIELD>
         <FIELDNAME>tramo</FIELDNAME>
+        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
         <DOMAINREADER>
             <DRTYPE>db</DRTYPE>
             <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
@@ -18,6 +19,7 @@
       </FIELD>
       <FIELD>
         <FIELDNAME>unidad_constructiva</FIELDNAME>
+        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
         <DOMAINREADER>
             <DRTYPE>db</DRTYPE>
             <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
@@ -29,6 +31,7 @@
       </FIELD>
       <FIELD>
         <FIELDNAME>ayuntamiento</FIELDNAME>
+        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
 		<DOMAINREADER>
 		    <DRTYPE>db</DRTYPE>
 		    <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>

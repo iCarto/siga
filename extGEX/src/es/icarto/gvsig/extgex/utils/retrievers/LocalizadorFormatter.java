@@ -1,5 +1,7 @@
 package es.icarto.gvsig.extgex.utils.retrievers;
 
+import es.icarto.gvsig.commons.utils.StrUtils;
+
 
 public class LocalizadorFormatter {
 
@@ -14,23 +16,31 @@ public class LocalizadorFormatter {
     public static final String FINCA_DEFAULT_VALUE = "0000";
 
     public static String getUC(String ucValue) {
-	return String.format(FORMAT_IDUC, Integer.parseInt(ucValue));
+        if (StrUtils.isEmptyString(ucValue)) {
+            return null;
+        }
+        return String.format(FORMAT_IDUC, Integer.parseInt(ucValue));
     }
 
     public static String getTramo(String tramoValue) {
-	return String.format(FORMAT_IDTRAMO, Integer.parseInt(tramoValue));
+        if (StrUtils.isEmptyString(tramoValue)) {
+            return null;
+        }
+        return String.format(FORMAT_IDTRAMO, Integer.parseInt(tramoValue));
     }
 
     public static String getAyuntamiento(String ayuntamientoValue) {
-	return String.format(FORMAT_IDAYUNTAMIENTO, Integer.parseInt(ayuntamientoValue));
+        if (StrUtils.isEmptyString(ayuntamientoValue)) {
+            return null;
+        }
+        return String.format(FORMAT_IDAYUNTAMIENTO, Integer.parseInt(ayuntamientoValue));
     }
 
     public static String getSubtramo(String subtramoValue) {
-	try {
-	    return String.format(FORMAT_IDSUBTRAMO, Integer.parseInt(subtramoValue));
-	} catch (NumberFormatException nfe) {
-	    return SUBTRAMO_DEFAULT_VALUE;
-	}
+        if (StrUtils.isEmptyString(subtramoValue)) {
+            return SUBTRAMO_DEFAULT_VALUE;
+        }
+        return String.format(FORMAT_IDSUBTRAMO, Integer.parseInt(subtramoValue));
     }
 
     public static String getNroFinca(String nroFincaValue) {
