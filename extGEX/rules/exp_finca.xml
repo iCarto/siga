@@ -53,6 +53,31 @@
         	<DRDBFOREIGNKEY>id_ayuntamiento</DRDBFOREIGNKEY>
         </DOMAINREADER>
       </FIELD>
+      
+      <FIELD>
+        <FIELDNAME>tipo_ocupacion</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>exp_finca_parcial_total</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+        </DOMAINREADER>
+      </FIELD>
+      
+      <FIELD>
+        <FIELDNAME>desafeccion</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>exp_finca_parcial_total</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+        </DOMAINREADER>
+      </FIELD>
+      
       <FIELD>
         <FIELDNAME>numero_finca</FIELDNAME>
 		<VALIDATIONRULE>INTEGER_POSITIVE</VALIDATIONRULE>
