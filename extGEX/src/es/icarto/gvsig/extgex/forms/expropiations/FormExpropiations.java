@@ -1,8 +1,10 @@
 package es.icarto.gvsig.extgex.forms.expropiations;
 
 import java.awt.event.ActionEvent;
+
 import static es.icarto.gvsig.extgex.forms.expropiations.ImporteTotalPagadoCalculation.FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO; 
 import static es.icarto.gvsig.extgex.forms.expropiations.ImportePendienteTotalCalculation.FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO;
+
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,12 +32,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
-import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.extgex.forms.GEXAlphanumericTableHandler;
+import es.icarto.gvsig.extgex.forms.GEXSubForm;
 import es.icarto.gvsig.extgex.navtable.NavTableComponentsFactory;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.extgex.utils.retrievers.LocalizadorFormatter;
@@ -58,8 +60,11 @@ public class FormExpropiations extends BasicAbstractForm implements
     public static final String PKFIELD = "id_finca";
 
     private static final String WIDGET_REVERSIONES = "tabla_reversiones_afectan";
-    private static final String WIDGET_EXPROPIACIONES = "expropiaciones";
     private static final String WIDGET_PM = "tabla_pm_afectan";
+    
+    public static final String[] bienesAfectadosColNames = { "superficie", "tipo"};
+    public static final String[] bienesAfectadosColAlias = { "Superficie", "Tipo"};
+    public static final int[] bienesAfectadosColWidths = { 100, 100 };
 
     private JComboBox tramo;
     private JComboBox uc;
@@ -69,16 +74,10 @@ public class FormExpropiations extends BasicAbstractForm implements
     private JTextField numFinca;
     private JTextField seccion;
 
-    private JTable expropiaciones;
     private JTable reversiones;
     private JTable pm;
 
     private JComboBox afectado_pm;
-
-    private AddExpropiationListener addExpropiationListener;
-    private DeleteExpropiationListener deleteExpropiationListener;
-    private JButton addExpropiationButton;
-    private JButton deleteExpropiationButton;
 
     private DependentComboboxHandler ayuntamientoDomainHandler;
     private DependentComboboxHandler subtramoDomainHandler;
@@ -90,7 +89,9 @@ public class FormExpropiations extends BasicAbstractForm implements
 
     public FormExpropiations(FLyrVect layer, IGeometry insertedGeom) {
 	super(layer);
-
+	
+	addTableHandler(new GEXAlphanumericTableHandler("bienes_afectados", getWidgets(), getElementID(), bienesAfectadosColNames, bienesAfectadosColAlias, bienesAfectadosColWidths, this, BienesAfectadosSubForm.class));
+	
 	addButtonsToActionsToolBar();
 
 	addCalculation(new ImporteTotalPagadoCalculation(this));
@@ -120,6 +121,10 @@ public class FormExpropiations extends BasicAbstractForm implements
     protected String getPrimaryKeyValue() {
 	return getFormController().getValue(PKFIELD);
     }
+    
+    public String getElementID() {
+        return PKFIELD;
+    };
 
     @Override
     protected void setListeners() {
@@ -140,21 +145,10 @@ public class FormExpropiations extends BasicAbstractForm implements
 
 	finca = (JTextField) widgets.get(DBNames.FIELD_IDFINCA);
 
-	expropiaciones = (JTable) widgets.get(WIDGET_EXPROPIACIONES);
 	reversiones = (JTable) widgets.get(WIDGET_REVERSIONES);
 	pm = (JTable) widgets.get(WIDGET_PM);
 
 	afectado_pm = (JComboBox) widgets.get(EXPROPIATIONS_AFECTADO_PM);
-
-	addExpropiationListener = new AddExpropiationListener();
-	addExpropiationButton = (JButton) formBody
-		.getComponentByName("expropiaciones_add_button");
-	addExpropiationButton.addActionListener(addExpropiationListener);
-
-	deleteExpropiationListener = new DeleteExpropiationListener();
-	deleteExpropiationButton = (JButton) formBody
-		.getComponentByName("expropiaciones_delete_button");
-	deleteExpropiationButton.addActionListener(deleteExpropiationListener);
 
 	ayuntamientoDomainHandler = new DependentComboboxHandler(this, uc,
 		ayuntamiento);
@@ -188,35 +182,6 @@ public class FormExpropiations extends BasicAbstractForm implements
 	seccion.removeKeyListener(updateNroFincaHandler);
 
 	reversiones.removeMouseListener(formReversionsLauncher);
-
-	addExpropiationButton.removeActionListener(addExpropiationListener);
-	deleteExpropiationButton
-		.removeActionListener(deleteExpropiationListener);
-    }
-
-    public class AddExpropiationListener implements ActionListener {
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-	    SubformExpropiationsAddExpropiation subForm = new SubformExpropiationsAddExpropiation(
-		    expropiaciones);
-	    PluginServices.getMDIManager().addWindow(subForm);
-	}
-    }
-
-    public class DeleteExpropiationListener implements ActionListener {
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-	    int[] selectedRows = expropiaciones.getSelectedRows();
-	    DefaultTableModel model = (DefaultTableModel) expropiaciones
-		    .getModel();
-	    for (int i = 0; i < selectedRows.length; i++) {
-		int rowIndex = selectedRows[i];
-		model.removeRow(rowIndex);
-		repaint();
-	    }
-	}
     }
 
     private void setIDFinca() {
@@ -306,67 +271,11 @@ public class FormExpropiations extends BasicAbstractForm implements
     private void updateJTables() {
 	oldReversions = new ArrayList<String>();
 
-	updateExpropiationsTable();
 	updateReversionsTable();
 	updatePMTable();
 
     }
 
-    private void updateExpropiationsTable() {
-	ArrayList<String> columnasCultivos = new ArrayList<String>();
-	columnasCultivos.add(DBNames.FIELD_SUPERFICIE_EXPROPIACIONES);
-	columnasCultivos.add(DBNames.FIELD_IDCULTIVO_EXPROPIACIONES);
-
-	try {
-	    DefaultTableModel tableModel;
-	    tableModel = new DefaultTableModel();
-	    for (String columnName : columnasCultivos) {
-		tableModel.addColumn(columnName);
-	    }
-	    expropiaciones.setModel(tableModel);
-	    Value[] expropiationData = new Value[3];
-	    PreparedStatement statement;
-	    String query = "SELECT " + DBNames.FIELD_SUPERFICIE_EXPROPIACIONES
-		    + ", " + DBNames.FIELD_DESCRIPCION_CULTIVOS + " " + "FROM "
-		    + DBNames.SCHEMA_DATA + "." + DBNames.TABLE_EXPROPIACIONES
-		    + " a, " + DBNames.SCHEMA_DATA + "."
-		    + DBNames.TABLE_CULTIVOS + " b " + "WHERE a."
-		    + DBNames.FIELD_IDCULTIVO_EXPROPIACIONES + " = " + "b."
-		    + DBNames.FIELD_ID_CULTIVO_CULTIVOS + " AND "
-		    + DBNames.FIELD_ID_FINCA_EXPROPIACIONES + " = '"
-		    + getIDFinca() + "';";
-	    statement = DBSession.getCurrentSession().getJavaConnection()
-		    .prepareStatement(query);
-	    statement.execute();
-	    ResultSet rs = statement.getResultSet();
-	    while (rs.next()) {
-		if (rs.getObject(1) != null) {
-		    NumberFormat doubleFormat = DoubleFormatNT
-			    .getDisplayingFormat();
-		    Double doubleValue = rs.getDouble(1);
-		    String doubleAsString = doubleFormat.format(doubleValue);
-		    expropiationData[0] = ValueFactory
-			    .createValue(doubleAsString);
-		} else {
-		    expropiationData[0] = null;
-		}
-		if (rs.getObject(2) != null) {
-		    expropiationData[1] = ValueFactory.createValue(rs
-			    .getString(2));
-		} else {
-		    expropiationData[1] = null;
-		}
-		tableModel.addRow(expropiationData);
-		// Save current Fincas in order to remove them
-		// from database when there is some change in the table model
-		// oldExpropiations.add(rs.getString(1));
-	    }
-	    repaint();
-	    tableModel.addTableModelListener(this);
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-    }
 
     private void updateReversionsTable() {
 	DefaultTableModel tableModel = setTableHeader();
@@ -493,107 +402,11 @@ public class FormExpropiations extends BasicAbstractForm implements
 	}
     }
 
-    @Override
-    public boolean saveRecord() throws StopWriterVisitorException {
-	saveExpropiationsTable();
-	return super.saveRecord();
-    }
-
-    private void saveExpropiationsTable() {
-	PreparedStatement statement;
-	String query = null;
-	String superficie;
-	String cultivo;
-
-	// First, we remove old Expropiations on this Finca
-	try {
-	    query = "DELETE FROM " + DBNames.SCHEMA_DATA + "."
-		    + DBNames.TABLE_EXPROPIACIONES + " " + "WHERE "
-		    + DBNames.FIELD_ID_FINCA_EXPROPIACIONES + " = '"
-		    + getIDFinca() + "';";
-	    statement = DBSession.getCurrentSession().getJavaConnection()
-		    .prepareStatement(query);
-	    statement.execute();
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-
-	// Now, we save into database current state of JTable
-	for (int i = 0; i < expropiaciones.getRowCount(); i++) {
-	    try {
-		if (expropiaciones.getModel().getValueAt(i, 0) != null) {
-		    superficie = expropiaciones.getModel().getValueAt(i, 0)
-			    .toString();
-		    if (superficie.contains(",")) {
-			superficie = superficie.replace(",", ".");
-		    }
-		} else {
-		    superficie = null;
-		}
-		if (expropiaciones.getModel().getValueAt(i, 1) != null) {
-		    cultivo = expropiaciones.getModel().getValueAt(i, 1)
-			    .toString();
-		} else {
-		    cultivo = null;
-		}
-		query = "INSERT INTO " + DBNames.SCHEMA_DATA + "."
-			+ DBNames.TABLE_EXPROPIACIONES + " " + "VALUES ('"
-			+ getIDFinca() + "',";
-		if (superficie != null) {
-		    query = query + " '" + superficie + "',";
-		} else {
-		    query = query + " null,";
-		}
-		if (cultivo != null) {
-		    String cultivoID = getIDCultivo(cultivo);
-
-		    query = query + " '" + cultivoID + "');";
-		} else {
-		    query = query + " null );";
-		}
-		statement = DBSession.getCurrentSession().getJavaConnection()
-			.prepareStatement(query);
-		statement.execute();
-	    } catch (SQLException e) {
-		e.printStackTrace();
-		continue;
-	    }
-	}
-
-    }
-
-    private String getIDCultivo(String cultivo) {
-	String cultivoID = null;
-	PreparedStatement statement;
-	String query = "SELECT " + DBNames.FIELD_ID_CULTIVO_CULTIVOS + " "
-		+ "FROM " + DBNames.SCHEMA_DATA + "." + DBNames.TABLE_CULTIVOS
-		+ " " + "WHERE " + DBNames.FIELD_DESCRIPCION_CULTIVOS + " = "
-		+ "'" + cultivo + "';";
-	try {
-	    statement = DBSession.getCurrentSession().getJavaConnection()
-		    .prepareCall(query);
-	    statement.execute();
-	    ResultSet rs = statement.getResultSet();
-	    rs.next();
-	    cultivoID = rs.getString(1);
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-	return cultivoID;
-    }
 
     public void internalFrameDeactivated(InternalFrameEvent e) {
 	updateJTables();
     }
 
-    public String getSQLQuery(String queryID) {
-	if (queryID.equalsIgnoreCase("EXPROPIACIONES")) {
-	    return "select * from " + "'" + DBNames.TABLE_EXPROPIACIONES + "'"
-		    + "where " + DBNames.FIELD_IDFINCA + " = " + "'"
-		    + getIDFinca() + "'" + ";";
-	}
-	return null;
-    }
 
     @Override
     public String getBasicName() {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METADATA>
+ <LAYER alias="Bienes Afectados">
+    <TABLENAME>bienes_afectados</TABLENAME>
+    <PRIMARYKEY>
+        <PKELEMENT>id_bien_afectado</PKELEMENT>
+    </PRIMARYKEY>
+    <RECORDSET>
+      <FIELD>
+        <FIELDNAME>superficie</FIELDNAME>
+        <VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
+      </FIELD>
+      <FIELD>
+        <FIELDNAME>tipo</FIELDNAME>
+        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>bienes_afectados_tipo</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+		</DOMAINREADER>
+      </FIELD>
+    </RECORDSET>
+  </LAYER>
+  </METADATA>

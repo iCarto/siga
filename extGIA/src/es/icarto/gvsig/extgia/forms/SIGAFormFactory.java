@@ -72,7 +72,7 @@ public class SIGAFormFactory extends DBConnectionBaseFormFactory {
 	 * ugly if instead of have a factory for each project
 	 */
 	String schema = "audasa_extgia";
-	if (tableName.equalsIgnoreCase("expropiaciones")) {
+	if (tableName.equalsIgnoreCase("bienes_expropiados")) {
 	    schema = "audasa_expropiaciones";
 	}
 	loadTable(tableName, schema);

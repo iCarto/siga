@@ -79,9 +79,6 @@ public class DBNames {
     public static final String LAYER_PARROQUIAS = "Parroquias";
 
     // tipo cultivos en DB
-    public static final String TABLE_CULTIVOS = "tipo_cultivos";
-    public static final String FIELD_ID_CULTIVO_CULTIVOS = "id_cultivo";
-    public static final String FIELD_DESCRIPCION_CULTIVOS = "descripcion";
     public static final int VALUE_CULTIVOS_OTROS = 99;
     public static final int VALUE_CULTIVOS_EDIFICACION = 7;
     public static final int VALUE_CULTIVOS_TERRENO = 6;
