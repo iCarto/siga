@@ -58,7 +58,7 @@ public class InitializationExtension extends Extension {
 		endReversionesGeometry(layer);
 	    } else if (layer.getName().equals(FormExpropiations.TOCNAME)) {
 		endFincasGeometry(layer, cadToolKey);
-	    } else if (layer.getName().equals(FormExpropiationLine.TOCNAME)) {
+	    } else if (layer.getName().equals(FormExpropiationLine.TOCNAME) || layer.getName().equals(FormExpropiationLine.TOCNAME_AMPLIACION)) {
 		endLineExpropiationGeometry(layer);
 	    } else {
 		LaunchGIAForms.callFormDependingOfLayer((FLyrVect) layer, true);
@@ -66,8 +66,9 @@ public class InitializationExtension extends Extension {
 	}
 
 	private void endLineExpropiationGeometry(FLayer layer) {
+	    boolean isAmpliacion = layer.getName().equals(FormExpropiationLine.TOCNAME_AMPLIACION);
 	    FormExpropiationLine dialog = new FormExpropiationLine(
-		    (FLyrVect) layer);
+		    (FLyrVect) layer, isAmpliacion);
 	    if (dialog.init()) {
 		PluginServices.getMDIManager().addCentredWindow(dialog);
 		dialog.last();

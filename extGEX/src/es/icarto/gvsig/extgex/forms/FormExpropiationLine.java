@@ -9,10 +9,13 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 public class FormExpropiationLine extends BasicAbstractForm {
 
     public static final String TOCNAME = "Linea_Expropiacion";
+    public static final String TOCNAME_AMPLIACION = "Linea_Expropiacion_Ampliacion";
     public static final String TABLENAME = "linea_expropiacion";
+    private Boolean ampliacion;
 
-    public FormExpropiationLine(FLyrVect layer) {
-	super(layer);
+    public FormExpropiationLine(FLyrVect layer, Boolean ampliacion) {
+        super(layer);
+        this.ampliacion = ampliacion;
     }
 
     @Override
@@ -23,6 +26,12 @@ public class FormExpropiationLine extends BasicAbstractForm {
     @Override
     protected String getSchema() {
 	return DBNames.SCHEMA_DATA;
+    }
+    
+    @Override
+    protected void fillSpecificValues() {
+        super.fillSpecificValues();
+        getFormController().setValue("ampliacion", ampliacion.toString());
     }
 
 }

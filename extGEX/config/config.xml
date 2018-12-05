@@ -34,6 +34,9 @@
 		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationLineExtension" description="FORMS_PANEL" active="true">
 			<menu text="SIGA/Expropiaciones/Línea de Expropiación" action-command="ExpropiationLineFileExtensionv" position="30060"/>
 		</extension>
+		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationLineAmpliacionExtension" active="true">
+			<menu text="SIGA/Expropiaciones/es.icarto.gvsig.extgex.FormExpropiationLineAmpliacionExtension.menu" position="30061"/>
+		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.QueriesExtension" active="true">
 			<menu text="SIGA/es.icarto.gvsig.extgex.QueriesExtension.menu" position="30100"/>
