@@ -434,6 +434,8 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		    AudasaPreferences.getTemplates());
 	    templateCBModel.removeElement(AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA);
 	    templateCBModel.removeElement(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA);
+	    templateCBModel.removeElement(AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL_LEYENDA);
+	    templateCBModel.removeElement(AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL_LEYENDA);
 	    templateCB.setModel(templateCBModel);
 	    templateCB.setSelectedItem(templateSelected);
 	    return;
