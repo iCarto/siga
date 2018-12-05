@@ -482,7 +482,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="CONCESIONARIA"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="7"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -1105,7 +1105,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1135,7 +1135,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1165,7 +1165,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1195,7 +1195,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1225,7 +1225,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1255,7 +1255,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1285,7 +1285,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1315,7 +1315,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1345,7 +1345,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1375,7 +1375,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1405,7 +1405,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1557,7 +1557,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1664,7 +1664,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1694,7 +1694,7 @@
         <property key="textColor" value="0,0,0,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="10"/>
+        <property key="fontSize" value="9"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>

@@ -460,10 +460,16 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 				    .equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA)) {
 			grid_width = AudasaPreferences.VIEW_WIDTH_A4;
 			grid_height = AudasaPreferences.VIEW_HEIGHT_A4;
-		    } else if (selTmpl.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL)) {
+		    } else if (selTmpl.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL) ||
+		    		selTmpl.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL_LOCALIZADOR) ||
+		    		selTmpl.equals(AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL) ||
+		    		selTmpl.equals(AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL_LEYENDA)) {
 		    	grid_width = AudasaPreferences.VIEW_WIDTH_A4_VERTICAL;
 		    	grid_height = AudasaPreferences.VIEW_HEIGHT_A4_VERTICAL;
-		    } else if (selTmpl.equals(AudasaPreferences.A3_CONSULTAS_VERTICAL)) {
+		    } else if (selTmpl.equals(AudasaPreferences.A3_CONSULTAS_VERTICAL) ||
+		    		selTmpl.equals(AudasaPreferences.A3_CONSULTAS_VERTICAL_LOCALIZADOR) ||
+		    		selTmpl.equals(AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL) ||
+		    		selTmpl.equals(AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL_LEYENDA)) {
 				grid_width = AudasaPreferences.VIEW_WIDTH_A3_VERTICAL;
 				grid_height = AudasaPreferences.VIEW_HEIGHT_A3_VERTICAL;
 		    } else { // any A3 template

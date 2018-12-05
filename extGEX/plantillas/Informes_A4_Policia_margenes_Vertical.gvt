@@ -22,84 +22,24 @@
         <property key="m_selTypeUnit" value="2"/>
         <property key="m_area" value="2.54 ,2.54 ,2.54 ,2.54"/>
         <property key="anchoXalto" value="1.4142857142857141"/>
-        <property key="m_isLandSel" value="true"/>
+        <property key="m_isLandSel" value="false"/>
         <xml-tag>
             <property key="className" value="com.iver.cit.gvsig.project.documents.layout.Size"/>
-            <property key="ancho" value="29.7"/>
-            <property key="alto" value="21.0"/>
+            <property key="ancho" value="21.0"/>
+            <property key="alto" value="29.7"/>
         </xml-tag>
         <xml-tag>
             <property key="className" value="com.iver.cit.gvsig.project.documents.layout.Size"/>
             <property key="ancho" value="29.7"/>
             <property key="alto" value="21.0"/>
         </xml-tag>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.2"/>
-        <property key="y" value="18.88"/>
-        <property key="w" value="2.1"/>
-        <property key="h" value="0.2"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="383"/>
-        <property key="num" value="166"/>
-        <property key="s" value="TÍTULO DEL ESTUDIO"/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Negrita"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="7"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value=""/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="25.0"/>
-        <property key="y" value="19.48"/>
-        <property key="w" value="2.1"/>
-        <property key="h" value="0.2"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="384"/>
-        <property key="num" value="167"/>
-        <property key="s" value="TRAMO"/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Negrita"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="7"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value=""/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameGraphics"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="1.5"/>
-        <property key="y" value="18.8"/>
-        <property key="w" value="27.2"/>
+        <property key="x" value="1.0"/>
+        <property key="y" value="27.5"/>
+        <property key="w" value="19.0"/>
         <property key="h" value="1.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -137,15 +77,15 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="28.7 ,20.0 ,1.5 ,18.8"/>
+            <property key="points" value="20.0 ,28.7 ,1.0 ,27.5"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameGraphics"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="5.0"/>
-        <property key="y" value="18.8"/>
+        <property key="x" value="4.5"/>
+        <property key="y" value="27.5"/>
         <property key="w" value="5.0"/>
         <property key="h" value="1.2"/>
         <property key="m_Selected" value="0"/>
@@ -184,16 +124,16 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="10.0 ,20.0 ,5.0 ,18.8"/>
+            <property key="points" value="9.5 ,28.7 ,4.5 ,27.5"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameGraphics"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="12.4"/>
-        <property key="y" value="18.8"/>
-        <property key="w" value="4.0"/>
+        <property key="x" value="11.9"/>
+        <property key="y" value="27.5"/>
+        <property key="w" value="1.7"/>
         <property key="h" value="1.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -231,63 +171,16 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="16.4 ,20.0 ,12.4 ,18.8"/>
+            <property key="points" value="13.6 ,28.7 ,11.9 ,27.5"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameGraphics"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="14.6"/>
-        <property key="y" value="19.4"/>
-        <property key="w" value="1.8"/>
-        <property key="h" value="0.6"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="389"/>
-        <property key="num" value="73"/>
-        <property key="m_type" value="24"/>
-        <xml-tag>
-            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
-            <property key="color" value="0,0,0,255"/>
-            <property key="hasFill" value="false"/>
-            <property key="desc"/>
-            <property key="isShapeVisible" value="true"/>
-            <property key="referenceSystem" value="0"/>
-            <property key="unit" value="-1"/>
-            <property key="hasOutline" value="true"/>
-            <xml-tag>
-                <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
-                <property key="isShapeVisible" value="true"/>
-                <property key="desc"/>
-                <property key="unit" value="-1"/>
-                <property key="referenceSystem" value="0"/>
-                <property key="color" value="0,0,0,255"/>
-                <xml-tag>
-                    <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
-                    <property key="desc"/>
-                    <property key="lineWidth" value="0.5"/>
-                    <property key="dashPhase" value="0.0"/>
-                    <property key="endCap" value="0"/>
-                    <property key="lineJoin" value="2"/>
-                    <property key="miterLimit" value="10.0"/>
-                    <property key="offset" value="0.0"/>
-                    <property key="unit" value="0"/>
-                </xml-tag>
-            </xml-tag>
-        </xml-tag>
-        <xml-tag>
-            <property key="points" value="16.4 ,20.0 ,14.6 ,19.4"/>
-            <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
-        </xml-tag>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameGraphics"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="19.0"/>
-        <property key="y" value="18.8"/>
-        <property key="w" value="3.0"/>
+        <property key="x" value="16.0"/>
+        <property key="y" value="27.5"/>
+        <property key="w" value="2.6"/>
         <property key="h" value="1.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -325,62 +218,15 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="22.0 ,20.0 ,19.0 ,18.8"/>
-            <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
-        </xml-tag>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameGraphics"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.2"/>
-        <property key="y" value="18.8"/>
-        <property key="w" value="1.5"/>
-        <property key="h" value="0.6"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="391"/>
-        <property key="num" value="75"/>
-        <property key="m_type" value="24"/>
-        <xml-tag>
-            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
-            <property key="color" value="0,0,0,255"/>
-            <property key="hasFill" value="false"/>
-            <property key="desc"/>
-            <property key="isShapeVisible" value="true"/>
-            <property key="referenceSystem" value="0"/>
-            <property key="unit" value="-1"/>
-            <property key="hasOutline" value="true"/>
-            <xml-tag>
-                <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
-                <property key="isShapeVisible" value="true"/>
-                <property key="desc"/>
-                <property key="unit" value="-1"/>
-                <property key="referenceSystem" value="0"/>
-                <property key="color" value="0,0,0,255"/>
-                <xml-tag>
-                    <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
-                    <property key="desc"/>
-                    <property key="lineWidth" value="0.5"/>
-                    <property key="dashPhase" value="0.0"/>
-                    <property key="endCap" value="0"/>
-                    <property key="lineJoin" value="2"/>
-                    <property key="miterLimit" value="10.0"/>
-                    <property key="offset" value="0.0"/>
-                    <property key="unit" value="0"/>
-                </xml-tag>
-            </xml-tag>
-        </xml-tag>
-        <xml-tag>
-            <property key="points" value="28.7 ,19.4 ,27.2 ,18.8"/>
+            <property key="points" value="18.6 ,28.7 ,16.0 ,27.5"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="5.4"/>
-        <property key="y" value="19.4"/>
+        <property key="x" value="4.9"/>
+        <property key="y" value="28.1"/>
         <property key="w" value="3.2"/>
         <property key="h" value="0.5"/>
         <property key="m_Selected" value="0"/>
@@ -410,16 +256,16 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="10.2"/>
-        <property key="y" value="18.88"/>
+        <property key="x" value="9.7"/>
+        <property key="y" value="27.58"/>
         <property key="w" value="2.1"/>
-        <property key="h" value="0.4"/>
+        <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
         <property key="m_rotation" value="0.0"/>
         <property key="level" value="393"/>
         <property key="num" value="169"/>
-        <property key="s" value="EL INGENIERO DIRECTOR  ,DEL ESTUDIO"/>
+        <property key="s" value="TÍTULO DEL PROYECTO"/>
         <property key="m_isFixed" value="false"/>
         <property key="m_pos" value="0"/>
         <property key="fontName" value="Arial Negrita"/>
@@ -440,9 +286,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="12.6"/>
-        <property key="y" value="18.88"/>
-        <property key="w" value="2.1"/>
+        <property key="x" value="12.1"/>
+        <property key="y" value="27.58"/>
+        <property key="w" value="1.9"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -470,38 +316,8 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="14.8"/>
-        <property key="y" value="18.88"/>
-        <property key="w" value="2.1"/>
-        <property key="h" value="0.2"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="395"/>
-        <property key="num" value="171"/>
-        <property key="s" value="PROYECTO"/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Negrita"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="7"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value=""/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="16.6"/>
-        <property key="y" value="18.88"/>
+        <property key="x" value="16.2"/>
+        <property key="y" value="27.58"/>
         <property key="w" value="2.1"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
@@ -530,46 +346,16 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="14.8"/>
-        <property key="y" value="19.48"/>
-        <property key="w" value="2.1"/>
-        <property key="h" value="0.2"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="397"/>
-        <property key="num" value="173"/>
-        <property key="s" value="DIBUJO"/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Negrita"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="7"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value=""/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="19.2"/>
-        <property key="y" value="18.88"/>
-        <property key="w" value="2.1"/>
+        <property key="x" value="13.8"/>
+        <property key="y" value="28.18"/>
+        <property key="w" value="1.8"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
         <property key="m_rotation" value="0.0"/>
         <property key="level" value="398"/>
         <property key="num" value="174"/>
-        <property key="s" value="REF. CONSULTA - EXPEDIENTE"/>
+        <property key="s" value="Nº REFERENCIA"/>
         <property key="m_isFixed" value="false"/>
         <property key="m_pos" value="0"/>
         <property key="fontName" value="Arial Negrita"/>
@@ -590,9 +376,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="19.2"/>
-        <property key="y" value="19.48"/>
-        <property key="w" value="2.1"/>
+        <property key="x" value="18.8"/>
+        <property key="y" value="27.58"/>
+        <property key="w" value="1.1"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -620,9 +406,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.2"/>
-        <property key="y" value="19.48"/>
-        <property key="w" value="2.1"/>
+        <property key="x" value="13.8"/>
+        <property key="y" value="27.58"/>
+        <property key="w" value="1.8"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -650,38 +436,8 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.4"/>
-        <property key="y" value="18.88"/>
-        <property key="w" value="1.2"/>
-        <property key="h" value="0.2"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="401"/>
-        <property key="num" value="177"/>
-        <property key="s" value="Nº PLANO"/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Negrita"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="7"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value=""/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.3"/>
-        <property key="y" value="19.58"/>
+        <property key="x" value="18.8"/>
+        <property key="y" value="28.28"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
@@ -710,8 +466,8 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.78"/>
-        <property key="y" value="19.58"/>
+        <property key="x" value="19.3"/>
+        <property key="y" value="28.28"/>
         <property key="w" value="0.6"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
@@ -740,8 +496,8 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="5.2"/>
-        <property key="y" value="18.88"/>
+        <property key="x" value="4.7"/>
+        <property key="y" value="27.58"/>
         <property key="w" value="2.1"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
@@ -770,8 +526,8 @@
     <xml-tag>
         <property key="className" value="FFrameGroup"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="8.9"/>
-        <property key="y" value="18.88"/>
+        <property key="x" value="8.4"/>
+        <property key="y" value="27.58"/>
         <property key="w" value="0.94"/>
         <property key="h" value="1.0"/>
         <property key="m_Selected" value="0"/>
@@ -782,8 +538,8 @@
         <xml-tag>
             <property key="className" value="FFramePicture"/>
             <property key="m_name" value="./Audasa.JPG"/>
-            <property key="x" value="8.9"/>
-            <property key="y" value="18.88"/>
+            <property key="x" value="8.4"/>
+            <property key="y" value="27.58"/>
             <property key="w" value="0.94"/>
             <property key="h" value="1.0"/>
             <property key="m_Selected" value="9"/>
@@ -799,8 +555,8 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="17.5"/>
-        <property key="y" value="18.88"/>
+        <property key="x" value="17.1"/>
+        <property key="y" value="27.58"/>
         <property key="w" value="1.34"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
@@ -829,8 +585,8 @@
     <xml-tag>
         <property key="className" value="FFrameScaleBar"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="16.6"/>
-        <property key="y" value="19.5"/>
+        <property key="x" value="16.2"/>
+        <property key="y" value="28.2"/>
         <property key="w" value="2.27"/>
         <property key="h" value="0.41"/>
         <property key="m_Selected" value="0"/>
@@ -865,8 +621,8 @@
     <xml-tag>
         <property key="className" value="FFrameScaleBar"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="17.3"/>
-        <property key="y" value="19.2"/>
+        <property key="x" value="16.9"/>
+        <property key="y" value="27.9"/>
         <property key="w" value="0.73"/>
         <property key="h" value="0.41"/>
         <property key="m_Selected" value="0"/>
@@ -901,8 +657,8 @@
     <xml-tag>
         <property key="className" value="FFramePicture"/>
         <property key="m_name" value="./Fomento.png"/>
-        <property key="x" value="1.65"/>
-        <property key="y" value="18.85"/>
+        <property key="x" value="1.15"/>
+        <property key="y" value="27.55"/>
         <property key="w" value="3.22"/>
         <property key="h" value="1.1"/>
         <property key="m_Selected" value="0"/>
@@ -917,10 +673,10 @@
     <xml-tag>
         <property key="className" value="FFrameGraphics"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="1.5"/>
+        <property key="x" value="1.0"/>
         <property key="y" value="1.0"/>
-        <property key="w" value="27.2"/>
-        <property key="h" value="17.8"/>
+        <property key="w" value="19.0"/>
+        <property key="h" value="26.5"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
         <property key="m_rotation" value="0.0"/>
@@ -957,16 +713,16 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="28.7 ,18.8 ,1.5 ,1.0"/>
+            <property key="points" value="20.0 ,27.5 ,1.0 ,1.0"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="12.6"/>
-        <property key="y" value="19.48"/>
-        <property key="w" value="2.1"/>
+        <property key="x" value="12.1"/>
+        <property key="y" value="28.18"/>
+        <property key="w" value="1.9"/>
         <property key="h" value="0.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -994,9 +750,9 @@
     <xml-tag>
         <property key="className" value="FFrameGroup"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="12.4"/>
-        <property key="y" value="18.8"/>
-        <property key="w" value="2.2"/>
+        <property key="x" value="11.9"/>
+        <property key="y" value="27.5"/>
+        <property key="w" value="4.1"/>
         <property key="h" value="0.6"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1006,9 +762,9 @@
         <xml-tag>
             <property key="className" value="FFrameGraphics"/>
             <property key="m_name" value="FFrame"/>
-            <property key="x" value="12.4"/>
-            <property key="y" value="18.8"/>
-            <property key="w" value="2.2"/>
+            <property key="x" value="11.9"/>
+            <property key="y" value="27.5"/>
+            <property key="w" value="4.1"/>
             <property key="h" value="0.6"/>
             <property key="m_Selected" value="9"/>
             <property key="tag"/>
@@ -1046,17 +802,17 @@
                 </xml-tag>
             </xml-tag>
             <xml-tag>
-                <property key="points" value="14.6 ,19.4 ,12.4 ,18.8"/>
+                <property key="points" value="16.0 ,28.1 ,11.9 ,27.5"/>
                 <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
             </xml-tag>
         </xml-tag>
-    </xml-tag>
+    </xml-tag>   
     <xml-tag>
         <property key="className" value="FFrameGraphics"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.2"/>
-        <property key="y" value="19.4"/>
-        <property key="w" value="1.5"/>
+        <property key="x" value="18.6"/>
+        <property key="y" value="28.1"/>
+        <property key="w" value="1.4"/>
         <property key="h" value="0.6"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1094,16 +850,16 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="28.7 ,20.0 ,27.2 ,19.4"/>
+            <property key="points" value="20.0 ,28.7 ,18.6 ,28.1"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="12.8"/>
-        <property key="y" value="19.6"/>
-        <property key="w" value="1.7"/>
+        <property key="x" value="12.1"/>
+        <property key="y" value="28.3"/>
+        <property key="w" value="1.5"/>
         <property key="h" value="0.38"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1118,7 +874,7 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
+        <property key="fontSize" value="8"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1131,9 +887,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="12.8"/>
-        <property key="y" value="19.0"/>
-        <property key="w" value="1.7"/>
+        <property key="x" value="12.1"/>
+        <property key="y" value="27.7"/>
+        <property key="w" value="1.5"/>
         <property key="h" value="0.38"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1148,7 +904,7 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
+        <property key="fontSize" value="8"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1161,8 +917,8 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="10.4"/>
-        <property key="y" value="19.4"/>
+        <property key="x" value="9.9"/>
+        <property key="y" value="28.1"/>
         <property key="w" value="1.9"/>
         <property key="h" value="0.38"/>
         <property key="m_Selected" value="0"/>
@@ -1178,37 +934,7 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value="ingeniero_director"/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="15.0"/>
-        <property key="y" value="19.0"/>
-        <property key="w" value="1.3"/>
-        <property key="h" value="0.38"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="416"/>
-        <property key="num" value="185"/>
-        <property key="s" value=""/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Bold"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
+        <property key="fontSize" value="8"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1221,39 +947,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="15.0"/>
-        <property key="y" value="19.6"/>
-        <property key="w" value="1.3"/>
-        <property key="h" value="0.38"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="417"/>
-        <property key="num" value="186"/>
-        <property key="s" value=""/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Bold"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value="dibujo"/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="19.4"/>
-        <property key="y" value="19.0"/>
-        <property key="w" value="2.2"/>
+        <property key="x" value="13.8"/>
+        <property key="y" value="28.3"/>
+        <property key="w" value="1.8"/>
         <property key="h" value="0.38"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1268,11 +964,11 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="8"/>
+        <property key="fontSize" value="7"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="consulta"/>
+        <property key="title" value="referencia"/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -1281,9 +977,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="19.4"/>
-        <property key="y" value="19.6"/>
-        <property key="w" value="2.2"/>
+        <property key="x" value="19.0"/>
+        <property key="y" value="27.7"/>
+        <property key="w" value="0.9"/>
         <property key="h" value="0.38"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1298,7 +994,7 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
+        <property key="fontSize" value="8"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1311,39 +1007,9 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.4"/>
-        <property key="y" value="19.0"/>
-        <property key="w" value="4.8"/>
-        <property key="h" value="0.38"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="420"/>
-        <property key="num" value="189"/>
-        <property key="s" value=""/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Bold"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value="titulo_estudio"/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.4"/>
-        <property key="y" value="19.6"/>
-        <property key="w" value="2.5"/>
+        <property key="x" value="13.8"/>
+        <property key="y" value="27.7"/>
+        <property key="w" value="1.8"/>
         <property key="h" value="0.38"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -1358,71 +1024,11 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
+        <property key="fontSize" value="8"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
         <property key="title" value="titulo_plano"/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="25.2"/>
-        <property key="y" value="19.6"/>
-        <property key="w" value="1.8"/>
-        <property key="h" value="0.38"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="422"/>
-        <property key="num" value="191"/>
-        <property key="s" value=""/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Bold"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value="tramo"/>
-        <property key="titleSize" value="8"/>
-        <property key="frameBorderSize" value="0.01"/>
-        <property key="frameColor" value="0,0,0,255"/>
-        <property key="titleColor" value="51,51,51,255"/>
-    </xml-tag>
-    <xml-tag>
-        <property key="className" value="FFrameText"/>
-        <property key="m_name" value="FFrame"/>
-        <property key="x" value="27.6"/>
-        <property key="y" value="19.0"/>
-        <property key="w" value="1.0"/>
-        <property key="h" value="0.38"/>
-        <property key="m_Selected" value="0"/>
-        <property key="tag"/>
-        <property key="m_rotation" value="0.0"/>
-        <property key="level" value="423"/>
-        <property key="num" value="192"/>
-        <property key="s" value=""/>
-        <property key="m_isFixed" value="false"/>
-        <property key="m_pos" value="0"/>
-        <property key="fontName" value="Arial Bold"/>
-        <property key="fontStyle" value="1"/>
-        <property key="textColor" value="51,51,51,255"/>
-        <property key="transicionPixelsMilimetros" value="true"/>
-        <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
-        <property key="fixedFontSize" value="true"/>
-        <property key="surrounded" value="false"/>
-        <property key="hasTitle" value="false"/>
-        <property key="title" value="numero_plano"/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>

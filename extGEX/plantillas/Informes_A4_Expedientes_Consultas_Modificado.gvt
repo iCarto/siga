@@ -37,7 +37,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.0"/>
+        <property key="x" value="22.2"/>
         <property key="y" value="18.88"/>
         <property key="w" value="2.1"/>
         <property key="h" value="0.2"/>
@@ -58,7 +58,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -88,7 +88,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -287,7 +287,7 @@
         <property key="m_name" value="FFrame"/>
         <property key="x" value="19.0"/>
         <property key="y" value="18.8"/>
-        <property key="w" value="2.8"/>
+        <property key="w" value="3.0"/>
         <property key="h" value="1.2"/>
         <property key="m_Selected" value="0"/>
         <property key="tag"/>
@@ -325,7 +325,7 @@
             </xml-tag>
         </xml-tag>
         <xml-tag>
-            <property key="points" value="21.8 ,20.0 ,19.0 ,18.8"/>
+            <property key="points" value="22.0 ,20.0 ,19.0 ,18.8"/>
             <property key="className" value="com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter"/>
         </xml-tag>
     </xml-tag>
@@ -431,7 +431,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -461,7 +461,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -491,7 +491,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -521,7 +521,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -551,7 +551,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -581,7 +581,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -611,7 +611,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -620,7 +620,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.0"/>
+        <property key="x" value="22.2"/>
         <property key="y" value="19.48"/>
         <property key="w" value="2.1"/>
         <property key="h" value="0.2"/>
@@ -641,7 +641,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -671,7 +671,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -701,7 +701,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -761,7 +761,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -820,7 +820,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -985,7 +985,7 @@
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
-        <property key="title" value="EL INGENIERO DE C.C Y P. DIRECTOR DEL PROYECTO"/>
+        <property key="title" value=""/>
         <property key="titleSize" value="8"/>
         <property key="frameBorderSize" value="0.01"/>
         <property key="frameColor" value="0,0,0,255"/>
@@ -1268,7 +1268,7 @@
         <property key="textColor" value="51,51,51,255"/>
         <property key="transicionPixelsMilimetros" value="true"/>
         <property key="cellPadding" value="0.0"/>
-        <property key="fontSize" value="9"/>
+        <property key="fontSize" value="8"/>
         <property key="fixedFontSize" value="true"/>
         <property key="surrounded" value="false"/>
         <property key="hasTitle" value="false"/>
@@ -1311,7 +1311,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.2"/>
+        <property key="x" value="22.4"/>
         <property key="y" value="19.0"/>
         <property key="w" value="4.8"/>
         <property key="h" value="0.38"/>
@@ -1341,7 +1341,7 @@
     <xml-tag>
         <property key="className" value="FFrameText"/>
         <property key="m_name" value="FFrame"/>
-        <property key="x" value="22.2"/>
+        <property key="x" value="22.4"/>
         <property key="y" value="19.6"/>
         <property key="w" value="2.5"/>
         <property key="h" value="0.38"/>

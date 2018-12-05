@@ -39,10 +39,15 @@ public class VariablesTemplatePanel extends JPanel implements IWindow, ActionLis
 	} else if(template.equals(AudasaPreferences.A3_POLICIA_MARGENES) ||
 		template.equals(AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA) ||
 		template.equals(AudasaPreferences.A4_POLICIA_MARGENES) ||
-		template.equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA)) {
+		template.equals(AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA) ||
+		template.equals(AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL) ||
+		template.equals(AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL_LEYENDA) ||
+		template.equalsIgnoreCase(AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL) ||
+		template.equals(AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL_LEYENDA)) {
 	    height = 200;
 	    componentsList = TemplatePanel.create(AudasaPreferences.A4_POLICIA_MARGENES);
-	} else if(template.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL)) {
+	} else if(template.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL) ||
+			template.equals(AudasaPreferences.A4_CONSULTAS_VERTICAL_LOCALIZADOR)) {
 		height = 200;
 		componentsList = TemplatePanel.create(AudasaPreferences.A4_CONSULTAS_VERTICAL);
 	} else {

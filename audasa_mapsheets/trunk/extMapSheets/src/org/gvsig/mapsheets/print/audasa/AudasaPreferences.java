@@ -15,35 +15,47 @@ public class AudasaPreferences {
     public static final String A3_CONSULTAS = "Expediente consultas (A3-Horizontal)";
     public static final String A3_CONSULTAS_LOCALIZADOR = "Expediente consultas (A3-Horizontal/leyenda)";
     public static final String A3_CONSULTAS_VERTICAL = "Expediente consultas (A3-Vertical)";
+    public static final String A3_CONSULTAS_VERTICAL_LOCALIZADOR = "Expediente consultas (A3-Vertical/leyenda)";
     public static final String A4_CONSULTAS = "Expediente consultas (A4-Horizontal)";
     public static final String A4_CONSULTAS_LOCALIZADOR = "Expediente consultas (A4-Horizontal/leyenda)";
     public static final String A4_CONSULTAS_VERTICAL = "Expediente consultas (A4-Vertical)";
+    public static final String A4_CONSULTAS_VERTICAL_LOCALIZADOR = "Expediente consultas (A4-Vertical/leyenda)";
     public static final String DIMENSIONES = "Estado dimensiones";
     public static final String A3_DIMENSIONES = "Estado dimensiones (A3-Horizontal)";
     public static final String A3_DIMENSIONES_LOCALIZADOR = "Estado dimensiones (A3-Horizontal/leyenda)";
     public static final String POLICIA_MARGENES = "Policía de márgenes";
     public static final String A3_POLICIA_MARGENES = "Policía de márgenes (A3-Horizontal)";
     public static final String A3_POLICIA_MARGENES_LEYENDA = "Policía de márgenes (A3-Horizontal/leyenda)";
+    public static final String A3_POLICIA_MARGENES_VERTICAL = "Policía de márgenes (A3-Vertical)";
+    public static final String A3_POLICIA_MARGENES_VERTICAL_LEYENDA = "Policía de márgenes (A3-Vertical/leyenda)";
     public static final String A4_POLICIA_MARGENES = "Policía de márgenes (A4-Horizontal)";
     public static final String A4_POLICIA_MARGENES_LEYENDA = "Policía de márgenes (A4-Horizontal/leyenda)";
+    public static final String A4_POLICIA_MARGENES_VERTICAL = "Policía de márgenes (A4-Vertical)";
+    public static final String A4_POLICIA_MARGENES_VERTICAL_LEYENDA = "Policía de márgenes (A4-Vertical/leyenda)";
 
     public static String[] getTemplates() {
-	String[] plantillas = new String[12];
+	String[] plantillas = new String[18];
 	plantillas[0] = AudasaPreferences.A4_CONSULTAS;
 	plantillas[1] = AudasaPreferences.A4_CONSULTAS_LOCALIZADOR;
 	plantillas[2] = AudasaPreferences.A4_CONSULTAS_VERTICAL;
+	plantillas[3] = AudasaPreferences.A4_CONSULTAS_VERTICAL_LOCALIZADOR;
 
-	plantillas[3] = AudasaPreferences.A3_CONSULTAS;
-	plantillas[4] = AudasaPreferences.A3_CONSULTAS_LOCALIZADOR;
-	plantillas[5] = AudasaPreferences.A3_CONSULTAS_VERTICAL;
+	plantillas[4] = AudasaPreferences.A3_CONSULTAS;
+	plantillas[5] = AudasaPreferences.A3_CONSULTAS_LOCALIZADOR;
+	plantillas[6] = AudasaPreferences.A3_CONSULTAS_VERTICAL;
+	plantillas[7] = AudasaPreferences.A3_CONSULTAS_VERTICAL_LOCALIZADOR;
 
-	plantillas[6] = AudasaPreferences.A3_DIMENSIONES;
-	plantillas[7] = AudasaPreferences.A3_DIMENSIONES_LOCALIZADOR;
+	plantillas[8] = AudasaPreferences.A3_DIMENSIONES;
+	plantillas[9] = AudasaPreferences.A3_DIMENSIONES_LOCALIZADOR;
 
-	plantillas[8] = AudasaPreferences.A4_POLICIA_MARGENES;
-	plantillas[9] = AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA;
-	plantillas[10] = AudasaPreferences.A3_POLICIA_MARGENES;
-	plantillas[11] = AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA;
+	plantillas[10] = AudasaPreferences.A4_POLICIA_MARGENES;
+	plantillas[11] = AudasaPreferences.A4_POLICIA_MARGENES_LEYENDA;
+	plantillas[12] = AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL;
+	plantillas[13] = AudasaPreferences.A4_POLICIA_MARGENES_VERTICAL_LEYENDA;
+	plantillas[14] = AudasaPreferences.A3_POLICIA_MARGENES;
+	plantillas[15] = AudasaPreferences.A3_POLICIA_MARGENES_LEYENDA;
+	plantillas[16] = AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL;
+	plantillas[17] = AudasaPreferences.A3_POLICIA_MARGENES_VERTICAL_LEYENDA;
 	return plantillas;
     }
 
@@ -175,11 +187,41 @@ public class AudasaPreferences {
 			    .getResource(
 				    "plantillas/Informes_A3_Policia_margenes_leyenda.gvt")
 			    .getFile());
-	} else if (sourceButton.endsWith(A4_POLICIA_MARGENES)) {
+	} else if (sourceButton.endsWith(A4_CONSULTAS_VERTICAL_LOCALIZADOR)) {
 	    return new File(PluginServices
 		    .getPluginServices("es.icarto.gvsig.extgex")
 		    .getClassLoader()
-		    .getResource("plantillas/Informes_A4_Policia_margenes.gvt")
+		    .getResource("plantillas/Informes_A4_Expedientes_Consultas_Modificado_Vertical.gvt")
+		    .getFile());
+	} else if (sourceButton.endsWith(A3_CONSULTAS_VERTICAL_LOCALIZADOR)) {
+	    return new File(PluginServices
+		    .getPluginServices("es.icarto.gvsig.extgex")
+		    .getClassLoader()
+		    .getResource("plantillas/Informes_A3_Expedientes_Consultas_Modificado_Vertical.gvt")
+		    .getFile());
+	} else if (sourceButton.endsWith(A4_POLICIA_MARGENES_VERTICAL)) {
+	    return new File(PluginServices
+		    .getPluginServices("es.icarto.gvsig.extgex")
+		    .getClassLoader()
+		    .getResource("plantillas/Informes_A4_Policia_margenes_Vertical.gvt")
+		    .getFile());
+	} else if (sourceButton.endsWith(A4_POLICIA_MARGENES_VERTICAL_LEYENDA)) {
+	    return new File(PluginServices
+		    .getPluginServices("es.icarto.gvsig.extgex")
+		    .getClassLoader()
+		    .getResource("plantillas/Informes_A4_Policia_margenes_leyenda_Vertical.gvt")
+		    .getFile());
+	} else if (sourceButton.endsWith(A3_POLICIA_MARGENES_VERTICAL)) {
+	    return new File(PluginServices
+		    .getPluginServices("es.icarto.gvsig.extgex")
+		    .getClassLoader()
+		    .getResource("plantillas/Informes_A3_Policia_margenes_Vertical.gvt")
+		    .getFile());
+	} else if (sourceButton.endsWith(A3_POLICIA_MARGENES_VERTICAL_LEYENDA)) {
+	    return new File(PluginServices
+		    .getPluginServices("es.icarto.gvsig.extgex")
+		    .getClassLoader()
+		    .getResource("plantillas/Informes_A3_Policia_margenes_leyenda_Vertical.gvt")
 		    .getFile());
 	} else {
 	    return new File(
