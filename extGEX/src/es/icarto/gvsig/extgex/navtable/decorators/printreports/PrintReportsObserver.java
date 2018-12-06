@@ -50,9 +50,7 @@ public class PrintReportsObserver implements ActionListener,
 	outputFile = sfd.showDialog();
 	if (outputFile != null) {
 	    // center in view
-	    BaseView view = (BaseView) PluginServices.getMDIManager()
-		    .getActiveWindow();
-	    mapContext = view.getMapControl().getMapContext();
+	    mapContext = layer.getMapContext();
 	    mapContext.addLayerDrawingListener(this);
 	    ViewPort vp = mapContext.getViewPort();
 	    Rectangle2D bbox = getBoundingBox();

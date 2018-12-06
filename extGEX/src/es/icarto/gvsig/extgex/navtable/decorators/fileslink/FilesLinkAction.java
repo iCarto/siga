@@ -15,12 +15,13 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class FilesLinkAction {
+    
+    private static final Logger logger = Logger.getLogger(FilesLinkAction.class);
 
     private SelectableDataSource recordset = null;
     private String baseDirectory = null;
     private String directoryLayerName = null;
     private String directoryFieldName = null;
-    protected static Logger logger = Logger.getLogger("extGEX");
 
     public FilesLinkAction(AbstractNavTable dialog, FilesLinkData data) {
 	this.recordset = data.getRecordset();

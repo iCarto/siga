@@ -17,11 +17,18 @@
 		<extension class-name="es.icarto.gvsig.extgex.InitializationExtension" active="true">
 		</extension>
 		
-		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationsExtension" description="FORMS_PANEL" active="true">
+		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationsExtension" active="true">
 			<tool-bar name="extgex.formularios" position="70">
-				<action-tool icon="extgex-expropiations" tooltip="Expediente de expropiaciones" action-command="ExpropiationsFileExtension" position="1"/>
+				<action-tool icon="es.icarto.gvsig.extgex.FormExpropiationsExtension" tooltip="Expediente de expropiaciones" position="1"/>
 			</tool-bar>
-			<menu text="SIGA/Expropiaciones/Expediente Expropiación" action-command="ExpropiationsFileExtension" icon="extgex-expropiations" position="30000"/>
+			<menu text="SIGA/Expropiaciones/es.icarto.gvsig.extgex.FormExpropiationsExtension.menu" icon="es.icarto.gvsig.extgex.FormExpropiationsExtension" position="30000"/>
+		</extension>
+		
+		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" active="true">
+			<tool-bar name="extgex.formularios" position="70">
+				<action-tool icon="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" tooltip="Expediente de expropiaciones - Ampliación" position="10"/>
+			</tool-bar>
+			<menu text="SIGA/Expropiaciones/es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension.menu" icon="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" position="30001"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.FormReversionsExtension" description="FORMS_PANEL" active="true">

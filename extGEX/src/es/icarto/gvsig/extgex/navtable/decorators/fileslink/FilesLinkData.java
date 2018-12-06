@@ -4,6 +4,7 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
+import es.icarto.gvsig.extgex.forms.expropiations.FormExpropiations;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.siga.PreferencesPage;
 
@@ -33,7 +34,7 @@ public class FilesLinkData {
     }
 
     public String getDirectoryFieldName() {
-	if (layer.getName().equalsIgnoreCase(DBNames.LAYER_FINCAS)) {
+	if (layer.getName().equalsIgnoreCase(FormExpropiations.TOCNAME) || layer.getName().equalsIgnoreCase(FormExpropiations.TOCNAME_AMPLIACION)) {
 	    return DBNames.FIELD_IDFINCA_FINCAS;
 	}else {
 	    return DBNames.FIELD_IDREVERSION_REVERSIONES;

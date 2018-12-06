@@ -8,13 +8,11 @@ import static es.icarto.gvsig.extgex.forms.expropiations.ImportePendienteTotalCa
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +32,11 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.jeta.forms.components.panel.FormPanel;
+import com.jeta.forms.gui.common.FormException;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgex.forms.GEXAlphanumericTableHandler;
-import es.icarto.gvsig.extgex.forms.GEXSubForm;
 import es.icarto.gvsig.extgex.navtable.NavTableComponentsFactory;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.extgex.utils.retrievers.LocalizadorFormatter;
@@ -45,8 +44,7 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.CustomTableModel;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalidator.listeners.DependentComboboxHandler;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
-import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
-import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
+import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
@@ -56,14 +54,15 @@ public class FormExpropiations extends BasicAbstractForm implements
     private static final String EXPROPIATIONS_AFECTADO_PM = "afectado_por_policia_margenes";
 
     public static final String TABLENAME = "exp_finca";
-    public static final Object TOCNAME = "Fincas";
+    public static final String TOCNAME = "Fincas";
+    public static final String TOCNAME_AMPLIACION = "Fincas_Ampliacion";
     public static final String PKFIELD = "id_finca";
 
     private static final String WIDGET_REVERSIONES = "tabla_reversiones_afectan";
     private static final String WIDGET_PM = "tabla_pm_afectan";
     
     public static final String[] bienesAfectadosColNames = { "superficie", "tipo"};
-    public static final String[] bienesAfectadosColAlias = { "Superficie", "Tipo"};
+    public static final String[] bienesAfectadosColAlias = { "<html>Superficie (m<sup>2</sup>)</html>", "Tipo"};
     public static final int[] bienesAfectadosColWidths = { 100, 100 };
 
     private JComboBox tramo;
@@ -91,13 +90,23 @@ public class FormExpropiations extends BasicAbstractForm implements
 	super(layer);
 	
 	addTableHandler(new GEXAlphanumericTableHandler("bienes_afectados", getWidgets(), getElementID(), bienesAfectadosColNames, bienesAfectadosColAlias, bienesAfectadosColWidths, this, BienesAfectadosSubForm.class));
+
 	
+	if (isAmpliacion()) {
+	    addTableHandler(new GEXAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class));    
+	}
+	
+    
 	addButtonsToActionsToolBar();
 
 	addCalculation(new ImporteTotalPagadoCalculation(this));
 	addCalculation(new ImportePendienteTotalCalculation(this));
 	addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);
 	initTooltips();
+    }
+    
+    private boolean isAmpliacion() {
+        return this.layer.getName().equalsIgnoreCase(TOCNAME_AMPLIACION);
     }
 
     private void initTooltips() {
@@ -300,14 +309,14 @@ public class FormExpropiations extends BasicAbstractForm implements
 	    while (rs.next()) {
 		reversionData[0] = ValueFactory.createValue(rs.getString(1));
 		if (rs.getObject(2) != null) {
-		    reversionData[1] = ValueFactory
-			    .createValue(getDoubleFormatted(rs.getDouble(2)));
+		    String v = SIGAFormatter.formatValue(rs.getDouble(2));
+		    reversionData[1] = ValueFactory.createValue(v);
 		} else {
 		    reversionData[1] = ValueFactory.createNullValue();
 		}
 		if (rs.getObject(3) != null) {
-		    reversionData[2] = ValueFactory
-			    .createValue(getDoubleFormatted(rs.getDouble(3)));
+		    String v = SIGAFormatter.formatValue(rs.getDouble(3));
+		    reversionData[2] = ValueFactory.createValue(v);
 		} else {
 		    reversionData[2] = ValueFactory.createNullValue();
 		}
@@ -317,8 +326,8 @@ public class FormExpropiations extends BasicAbstractForm implements
 		    reversionData[3] = ValueFactory.createNullValue();
 		}
 		if (rs.getObject(5) != null) {
-		    reversionData[4] = ValueFactory
-			    .createValue(getDateFormatted(rs.getDate(5)));
+		    String v = SIGAFormatter.formatValue(rs.getDate(5));
+		    reversionData[4] = ValueFactory.createValue(v);
 		} else {
 		    reversionData[4] = ValueFactory.createNullValue();
 		}
@@ -353,15 +362,6 @@ public class FormExpropiations extends BasicAbstractForm implements
 	return tableModel;
     }
 
-    private String getDateFormatted(Date date) {
-	SimpleDateFormat dateFormat = DateFormatNT.getDateFormat();
-	return dateFormat.format(date);
-    }
-
-    private String getDoubleFormatted(Double doubleValue) {
-	NumberFormat doubleFormat = DoubleFormatNT.getDisplayingFormat();
-	return doubleFormat.format(doubleValue);
-    }
 
     public void updatePMTable() {
 	ArrayList<String> columnasPM = new ArrayList<String>();
@@ -422,6 +422,26 @@ public class FormExpropiations extends BasicAbstractForm implements
     public void tableChanged(TableModelEvent e) {
 	super.setChangedValues(true);
 	super.saveB.setEnabled(true);
+    }
+    
+    @Override
+    public FormPanel getFormBody() {
+        String name = isAmpliacion() ? getBasicName() + "_ampliacion" : getBasicName();
+        if (formBody == null) {
+            InputStream stream = getClass().getClassLoader()
+                .getResourceAsStream("/forms/" + name + ".jfrm");
+            if (stream == null) {
+            stream = getClass().getClassLoader().getResourceAsStream(
+                "/forms/" + name + ".xml");
+            }
+            try {
+            formBody = new FormPanel(stream);
+            } catch (FormException e) {
+            e.printStackTrace();
+            }
+        }
+        return formBody;
+    
     }
 
 }
