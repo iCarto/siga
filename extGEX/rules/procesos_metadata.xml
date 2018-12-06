@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METADATA>
+ <LAYER alias="Proceso">
+    <TABLENAME>proceso</TABLENAME>
+    <PRIMARYKEY>
+        <PKELEMENT>id_proceso</PKELEMENT>
+    </PRIMARYKEY>
+    <RECORDSET>
+    
+    <FIELD>
+        <FIELDNAME>tipo</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>procesos_tipo</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+		</DOMAINREADER>
+      </FIELD>
+
+      <FIELD>
+        <FIELDNAME>importe</FIELDNAME>
+        <VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+      </FIELD>
+
+      <FIELD>
+        <FIELDNAME>estado</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>procesos_estado</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+		</DOMAINREADER>
+      </FIELD>
+    </RECORDSET>
+  </LAYER>
+  </METADATA>
