@@ -1,12 +1,11 @@
 package es.icarto.gvsig.extgex;
 
-import es.icarto.gvsig.commons.AbstractExtension;
+import es.icarto.gvsig.commons.SingleLayerAbstractExtension;
 import es.icarto.gvsig.extgex.locators.LocatorByFinca;
 import es.icarto.gvsig.extgex.preferences.DBNames;
-import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class LocatorByFincaExtension extends AbstractExtension {
+public class LocatorByFincaExtension extends SingleLayerAbstractExtension {
 
     @Override
     public void execute(String actionCommand) {
@@ -16,23 +15,17 @@ public class LocatorByFincaExtension extends AbstractExtension {
 
     @Override
     public boolean isEnabled() {
-	if ((DBSession.getCurrentSession() != null) && (getView() != null)
-		&& isLayerLoaded()) {
-	    return true;
-	}
-	return false;
+        return DBSession.isActive() && isViewActive() && isLayerLoaded();
     }
 
-    private boolean isLayerLoaded() {
-	TOCLayerManager toc = new TOCLayerManager();
-	if (toc.getLayerByName(DBNames.LAYER_FINCAS) != null) {
-	    return true;
-	}
-	return false;
-    }
 
     @Override
     public void initialize() {
 	// nothing to do here
+    }
+
+    @Override
+    protected String getLayerName() {
+        return DBNames.LAYER_FINCAS;
     }
 }

@@ -2,39 +2,29 @@ package es.icarto.gvsig.extgex;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-import es.icarto.gvsig.commons.AbstractExtension;
+import es.icarto.gvsig.commons.SingleLayerAbstractExtension;
+import es.icarto.gvsig.commons.gui.TOCLayerManager;
 import es.icarto.gvsig.extgex.locators.LocatorByPK;
-import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class LocatorByPKExtension extends AbstractExtension {
-
-    private static final String LAYER_PKS = "pks";
-
-    private FLyrVect pkLayer;
+public class LocatorByPKExtension extends SingleLayerAbstractExtension {
 
     @Override
     public void execute(String actionCommand) {
-	LocatorByPK pkLocator = new LocatorByPK(pkLayer);
-	pkLocator.openDialog();
+        TOCLayerManager toc = new TOCLayerManager(getView().getMapControl());
+        FLyrVect pkLayer = toc.getVectorialLayerByName(getLayerName());
+        LocatorByPK pkLocator = new LocatorByPK(pkLayer);
+        pkLocator.openDialog();
     }
 
     @Override
     public boolean isEnabled() {
-	if ((DBSession.getCurrentSession() != null) && (getView() != null)
-		&& isLayerLoaded()) {
-	    return true;
-	}
-	return false;
+        return DBSession.isActive() && isViewActive() && isLayerLoaded();
     }
 
-    private boolean isLayerLoaded() {
-	TOCLayerManager toc = new TOCLayerManager();
-	pkLayer = toc.getLayerByName(LAYER_PKS);
-	if (pkLayer != null) {
-	    return true;
-	}
-	return false;
+    @Override
+    protected String getLayerName() {
+        return "pks";
     }
 
 }

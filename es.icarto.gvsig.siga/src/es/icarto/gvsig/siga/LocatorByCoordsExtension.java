@@ -26,7 +26,7 @@ public class LocatorByCoordsExtension extends AbstractExtension {
 
     @Override
     public boolean isEnabled() {
-	return getView() != null;
+        return isViewActive();
     }
 
 }

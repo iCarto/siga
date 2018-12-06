@@ -43,7 +43,7 @@ public class ConstantReloadExtension extends AbstractExtension {
 
     @Override
     public boolean isEnabled() {
-	return getView() != null;
+        return isViewActive();
     }
 
 }

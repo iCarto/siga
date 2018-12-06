@@ -118,7 +118,7 @@ public class CropLayersExtension extends AbstractExtension {
 
     @Override
     public boolean isEnabled() {
-        if (getView() == null) {
+        if (!isViewActive()) {
             return false;
         }
 

@@ -144,7 +144,7 @@ public class ImportIncidenciasExtension extends AbstractExtension {
 
     @Override
     public boolean isEnabled() {
-	return getView() != null;
+        return isViewActive();
     }
 
 }
