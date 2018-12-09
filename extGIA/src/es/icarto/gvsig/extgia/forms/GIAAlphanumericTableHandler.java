@@ -87,6 +87,25 @@ public class GIAAlphanumericTableHandler extends BaseTableHandler {
 	    logger.error(e.getStackTrace(), e);
 	}
     }
+    
+    public GIAAlphanumericTableHandler(String tableName,
+            Map<String, JComponent> widgets, String foreignKeyId,
+            String[] colNames, String[] colAliases, int[] colWidths,
+            AbstractForm form, AbstractSubForm subForm) {
+        super(tableName, widgets, new String[] { foreignKeyId }, colNames,
+            colAliases);
+
+        FormFactory.checkAndLoadTableRegistered(tableName);
+        this.coldWidths = colWidths;
+        addButton = (JButton) form.getFormBody().getComponentByName(
+            tableName + "_add_button");
+        editButton = (JButton) form.getFormBody().getComponentByName(
+            tableName + "_edit_button");
+        deleteButton = (JButton) form.getFormBody().getComponentByName(
+            tableName + "_delete_button");
+
+        subform = subForm;
+        }
 
     // TODO
     @Override

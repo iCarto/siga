@@ -28,28 +28,37 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
+import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.jeta.forms.components.panel.FormPanel;
 import com.jeta.forms.gui.common.FormException;
 
 import es.icarto.gvsig.commons.utils.Field;
-import es.icarto.gvsig.extgex.forms.GEXAlphanumericTableHandler;
 import es.icarto.gvsig.extgex.navtable.NavTableComponentsFactory;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.extgex.utils.retrievers.LocalizadorFormatter;
+import es.icarto.gvsig.extgia.forms.GIAAlphanumericTableHandler;
+import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.CustomTableModel;
+import es.icarto.gvsig.navtableforms.gui.tables.AbstractSubForm;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalidator.listeners.DependentComboboxHandler;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
-public class FormExpropiations extends BasicAbstractForm implements
-	TableModelListener {
+public class FormExpropiations extends BasicAbstractForm implements TableModelListener {
+    
+
+    private static final Logger logger = Logger.getLogger(AbstractForm.class);
+
 
     private static final String EXPROPIATIONS_AFECTADO_PM = "afectado_por_policia_margenes";
 
@@ -86,14 +95,20 @@ public class FormExpropiations extends BasicAbstractForm implements
 
     private ArrayList<String> oldReversions;
 
+    private GIAAlphanumericTableHandler bienesExpropiadosTableHandler;
+
+    private TableModelListener bienesExpropiadosTableModelListener;
+
     public FormExpropiations(FLyrVect layer, IGeometry insertedGeom) {
 	super(layer);
 	
-	addTableHandler(new GEXAlphanumericTableHandler("bienes_afectados", getWidgets(), getElementID(), bienesAfectadosColNames, bienesAfectadosColAlias, bienesAfectadosColWidths, this, BienesAfectadosSubForm.class));
+	AbstractSubForm bienesExpropiadosSubForm = new BienesAfectadosSubForm();
+	bienesExpropiadosTableHandler = new GIAAlphanumericTableHandler("bienes_afectados", getWidgets(), getElementID(), bienesAfectadosColNames, bienesAfectadosColAlias, bienesAfectadosColWidths, this, bienesExpropiadosSubForm);
+	addTableHandler(bienesExpropiadosTableHandler);
 
 	
 	if (isAmpliacion()) {
-	    addTableHandler(new GEXAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class));    
+	    addTableHandler(new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class));    
 	}
 	
     
@@ -101,6 +116,12 @@ public class FormExpropiations extends BasicAbstractForm implements
 
 	addCalculation(new ImporteTotalPagadoCalculation(this));
 	addCalculation(new ImportePendienteTotalCalculation(this));
+	// superficie_expropiada_total_autocalculado - Trigger + Workaround con un listener a la tabla y un refresh
+	 
+	// importe_pendiente_total_autocalculado - importe_pendiente_terrenos + importe_pendiente_mejoras
+	// importe_pagado_total_autocalculado - deposito_previo_consignado_importe + deposito_previo_consignado_indemnizacion + deposito_previo_pagado_importe + mutuo_acuerdo_importe + anticipo_importe + mutuo_acuerdo_parcial_importe + limite_acuerdo_importe + pagos_varios_importe + indemnizacion_importe + justiprecio_importe - deposito_previo_levantado_importe
+
+
 	addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);
 	initTooltips();
     }
@@ -271,10 +292,66 @@ public class FormExpropiations extends BasicAbstractForm implements
 
     @Override
     protected void fillSpecificValues() {
+    updateAutomaticFieldSuperficieWhenSubFormDataChanges_pre();
 	super.fillSpecificValues();
 	ayuntamientoDomainHandler.updateComboBoxValues();
 	subtramoDomainHandler.updateComboBoxValues();
 	updateJTables();
+	
+	updateAutomaticFieldSuperficieWhenSubFormDataChanges_post();
+	
+    }
+
+    
+    
+    /*
+     * El campo superficie_expropiada_total_autocalculado debe actualizarse cuando cambien los
+     * datos del subformulario/tabla (añadir, editar o eliminar) Hay varias formas de intentar
+     * implementar esto:
+     * 
+     *  * Por ejemplo usar NOTIFY en un trigger de bd y en el formulario padre escuchar el canal con LISTEN
+     *  https://jdbc.postgresql.org/documentation/81/listennotify.html
+     *  https://tapoueh.org/blog/2018/07/postgresql-listen/notify/
+     *  
+     *  * Trigger para calcular en bd e implementando windowClosed en el subformulario más o menos así
+     *  el problema es que no funciona al borrar una fila porque el form no llega a abrirse
+     *  @Override
+        public void windowClosed() {
+            super.windowClosed();
+            
+            No llamamos a parentForm.refresh porque ni el reloadRecordset
+            ni el refresGUI por si mismos hacen que se actualice el LayerController
+            de este modo refreshGUI lee los valores de un LayerController que no 
+            está actualizado pero onPositionChange si que lo actualiza
+              
+            
+        }
+     *  
+     * Aquí lo implementamos como un listener sobre la propia tabla. Va en fillSpecificValues porqué 
+     * el TableHandler puede acabar creando un nuevo modelo de datos en este método y esta rara construcción
+     * es para tratar de asegurarnos que no quedan listeners pendientes al cambiar de registros y que siempre 
+     * se setea el listener 
+     */
+    private void updateAutomaticFieldSuperficieWhenSubFormDataChanges_pre() {
+        if (bienesExpropiadosTableModelListener != null) {
+            bienesExpropiadosTableHandler.getModel().removeTableModelListener(bienesExpropiadosTableModelListener);     
+        }
+    }
+    
+    private void updateAutomaticFieldSuperficieWhenSubFormDataChanges_post() {
+        bienesExpropiadosTableModelListener = new TableModelListener() {
+            
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                try {
+                    FormExpropiations.this.reloadRecordset();
+                } catch (ReadDriverException ex) {
+                    logger.error(ex.getStackTrace(), ex);
+                }
+                FormExpropiations.this.onPositionChange(null);    
+            }
+        };
+        bienesExpropiadosTableHandler.getModel().addTableModelListener(bienesExpropiadosTableModelListener);    
     }
 
     private void updateJTables() {
