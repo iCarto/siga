@@ -66,12 +66,6 @@ public class DBNames {
     public static final String FIELD_IDCULTIVO_EXPROPIACIONES = "id_cultivo";
     public static final String FIELD_SUPERFICIE_EXPROPIACIONES = "superficie_expropiada";
 
-    // table desafecciones
-    public static final String TABLE_DESAFECCIONES = "exp_desafecciones";
-    public static final String FIELD_SUPERFICIE_DESAFECCIONES = "superficie";
-    public static final String FIELD_OCUPACION_DESAFECCIONES = "ocupacion";
-    public static final String FIELD_FECHAACTA_DESAFECCIONES = "fecha_acta_desafeccion";
-
     // more tables
     public static final String LAYER_FINCAS = "Fincas";
     public static final String TABLE_EXPROPIACIONES = "expropiaciones";

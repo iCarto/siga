@@ -34,7 +34,6 @@ import com.vividsolutions.jts.geom.Point;
 
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.extgex.utils.retrievers.CultivosRetriever;
-import es.icarto.gvsig.extgex.utils.retrievers.DesafeccionRetriever;
 import es.icarto.gvsig.extgex.utils.retrievers.LocalizacionRetriever;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
@@ -63,10 +62,6 @@ public class PrintReportsData implements JRDataSource {
     private static final String JASPER_LOCALIZACION_TRAMO = "localizacion_tramo";
     private static final String JASPER_LOCALIZACION_AYUNTAMIENTO = "localizacion_ayuntamiento";
     private static final String JASPER_LOCALIZACION_PARROQUIASUBTRAMO = "localizacion_parroquia_subtramo";
-
-    private static final String JASPER_DESAFECCION_OCUPACION = "desafeccion_ocupacion";
-    private static final String JASPER_DESAFECCION_SUPERFICIE = "desafeccion_superficie";
-    private static final String JASPER_DESAFECCION_FECHAACTA = "desafeccion_fecha_acta";
 
     private boolean isDataSourceReady = false;
     private int currentPosition = -1;
@@ -170,15 +165,6 @@ public class PrintReportsData implements JRDataSource {
 	values.put(JASPER_TIPOCULTIVO_OTROS,
 		finca.hasCultivo(DBNames.VALUE_CULTIVOS_OTROS));
 
-	// desafeccion
-	DesafeccionRetriever desafeccion = new DesafeccionRetriever(
-		getIDFinca());
-	values.put(JASPER_DESAFECCION_OCUPACION,
-		desafeccion.getValue(DBNames.FIELD_OCUPACION_DESAFECCIONES));
-	values.put(JASPER_DESAFECCION_SUPERFICIE,
-		desafeccion.getValue(DBNames.FIELD_SUPERFICIE_DESAFECCIONES));
-	values.put(JASPER_DESAFECCION_FECHAACTA,
-		desafeccion.getValue(DBNames.FIELD_FECHAACTA_DESAFECCIONES));
     }
 
     private Date getDateValue(SelectableDataSource sds, int index)
