@@ -2,8 +2,8 @@ package es.icarto.gvsig.extgex.forms.expropiations;
 
 import java.awt.event.ActionEvent;
 
-import static es.icarto.gvsig.extgex.forms.expropiations.ImporteTotalPagadoCalculation.FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO; 
-import static es.icarto.gvsig.extgex.forms.expropiations.ImportePendienteTotalCalculation.FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO;
+import static es.icarto.gvsig.extgex.forms.expropiations.ImportePagadoTotalAutocalculado.FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO; 
+import static es.icarto.gvsig.extgex.forms.expropiations.ImportePendienteTotalAutocalculado.FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO;
 
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -108,18 +108,17 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
 	
 	if (isAmpliacion()) {
-	    addTableHandler(new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class));    
+	    addTableHandler(new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class));
+	    
+	} else {
+	    addCalculation(new ImportePendienteTotalAutocalculado(this));
+        addCalculation(new ImportePagadoTotalAutocalculado(this));
 	}
+	
+	// superficie_expropiada_total_autocalculado - Trigger + Workaround con un listener a la tabla y un refresh
 	
     
 	addButtonsToActionsToolBar();
-
-	addCalculation(new ImporteTotalPagadoCalculation(this));
-	addCalculation(new ImportePendienteTotalCalculation(this));
-	// superficie_expropiada_total_autocalculado - Trigger + Workaround con un listener a la tabla y un refresh
-	 
-	// importe_pendiente_total_autocalculado - importe_pendiente_terrenos + importe_pendiente_mejoras
-	// importe_pagado_total_autocalculado - deposito_previo_consignado_importe + deposito_previo_consignado_indemnizacion + deposito_previo_pagado_importe + mutuo_acuerdo_importe + anticipo_importe + mutuo_acuerdo_parcial_importe + limite_acuerdo_importe + pagos_varios_importe + indemnizacion_importe + justiprecio_importe - deposito_previo_levantado_importe
 
 
 	addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);

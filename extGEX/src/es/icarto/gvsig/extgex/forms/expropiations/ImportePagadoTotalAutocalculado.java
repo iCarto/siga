@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.icarto.gvsig.navtableforms.calculation.Calculation;
 
-public class ImporteTotalPagadoCalculation extends Calculation {
+public class ImportePagadoTotalAutocalculado extends Calculation {
 
     private static final String FINCAS_MUTUO_ACUERDO = "mutuo_acuerdo_importe";
     private static final String FINCAS_ANTICIPO = "anticipo_importe";
@@ -20,7 +20,8 @@ public class ImporteTotalPagadoCalculation extends Calculation {
     private static final String FINCAS_INDEMNIZACION_IMPORTE = "indemnizacion_importe";
     private static final String FINCAS_JUSTIPRECIO_IMPORTE = "justiprecio_importe";
 
-    public ImporteTotalPagadoCalculation(IValidatableForm form) {
+    // importe_pagado_total_autocalculado - deposito_previo_consignado_importe + deposito_previo_consignado_indemnizacion + deposito_previo_pagado_importe + mutuo_acuerdo_importe + anticipo_importe + mutuo_acuerdo_parcial_importe + limite_acuerdo_importe + pagos_varios_importe + indemnizacion_importe + justiprecio_importe - deposito_previo_levantado_importe
+    public ImportePagadoTotalAutocalculado(IValidatableForm form) {
 	super(form);
     }
 

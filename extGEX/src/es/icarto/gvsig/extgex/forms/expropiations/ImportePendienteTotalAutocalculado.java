@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.icarto.gvsig.navtableforms.calculation.Calculation;
 
-public class ImportePendienteTotalCalculation extends Calculation {
+public class ImportePendienteTotalAutocalculado extends Calculation {
 
     private static final String FINCAS_IMPORTE_PENDIENTE_MEJORAS = "importe_pendiente_mejoras";
     private static final String FINCAS_IMPORTE_PENDIENTE_TERRENOS = "importe_pendiente_terrenos";
     public static final String FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO = "importe_pendiente_total_autocalculado";
 
-    public ImportePendienteTotalCalculation(IValidatableForm form) {
+    public ImportePendienteTotalAutocalculado(IValidatableForm form) {
 	super(form);
     }
 
