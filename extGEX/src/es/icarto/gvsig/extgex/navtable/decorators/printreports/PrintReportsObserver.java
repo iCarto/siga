@@ -14,7 +14,6 @@ import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerDrawEvent;
 import com.iver.cit.gvsig.fmap.layers.LayerDrawingListener;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
@@ -37,10 +36,12 @@ public class PrintReportsObserver implements ActionListener,
     private File outputFile;
 
     private MapContext mapContext;
+    private final String reportName;
 
-    public PrintReportsObserver(FLyrVect layer, AbstractNavTable dialog) {
+    public PrintReportsObserver(FLyrVect layer, AbstractNavTable dialog, String reportName) {
 	this.layer = layer;
 	this.dialog = dialog;
+	this.reportName = reportName;
     }
 
     @Override
@@ -100,7 +101,7 @@ public class PrintReportsObserver implements ActionListener,
 	// nothing to do
 	java.net.URL reportPath = PluginServices
 		.getPluginServices("es.icarto.gvsig.extgex").getClassLoader()
-		.getResource("reports/audasa.jasper");
+		.getResource("reports/" + this.reportName);
 	PrintReportsAction report = new PrintReportsAction();
 	PrintReportsData data = new PrintReportsData();
 	data.prepareDataSource(layer.getName(), dialog.getPosition());

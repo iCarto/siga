@@ -138,7 +138,8 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 	JPanel actionsToolBar = this.getActionsToolBar();
 	NavTableComponentsFactory ntFactory = new NavTableComponentsFactory();
 	JButton filesLinkB = ntFactory.getFilesLinkButton(layer, this);
-	JButton printReportB = ntFactory.getPrintButton(layer, this);
+	String reportName = isAmpliacion() ? "exp_finca_ampliacion.jasper" : "exp_finca";
+	JButton printReportB = ntFactory.getPrintButton(layer, this, reportName);
 	if ((filesLinkB != null) && (printReportB != null)) {
 	    actionsToolBar.add(filesLinkB);
 	    actionsToolBar.add(printReportB);

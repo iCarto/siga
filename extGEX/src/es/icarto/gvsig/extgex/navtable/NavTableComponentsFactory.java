@@ -32,11 +32,11 @@ public class NavTableComponentsFactory {
 	return filesLinkB;
     }
 
-    public JButton getPrintButton(FLyrVect layer, AbstractNavTable dialog) {
+    public JButton getPrintButton(FLyrVect layer, AbstractNavTable dialog, String reportName) {
 	NavTableComponentsFactory ntFactory = new NavTableComponentsFactory();
 	JButton printReportB = ntFactory.createButton(PluginServices.getText(
 		this, "printReportsToolTip"), getIcon("/print-report.png"),
-		new PrintReportsObserver(layer, dialog));
+		new PrintReportsObserver(layer, dialog, reportName));
 	return printReportB;
     }
 
