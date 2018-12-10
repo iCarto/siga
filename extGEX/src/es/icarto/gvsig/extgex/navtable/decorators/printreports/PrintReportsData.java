@@ -33,7 +33,6 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.vividsolutions.jts.geom.Point;
 
 import es.icarto.gvsig.extgex.preferences.DBNames;
-import es.icarto.gvsig.extgex.utils.retrievers.CultivosRetriever;
 import es.icarto.gvsig.extgex.utils.retrievers.LocalizacionRetriever;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
@@ -41,15 +40,6 @@ public class PrintReportsData implements JRDataSource {
 
     // Variables defined in jasper report template. To be calculated in real
     // time.
-
-    private static final String JASPER_TIPOCULTIVO_OTROS = "tipo_cultivo_otros";
-    private static final String JASPER_TIPOCULTIVO_VINHA = "tipo_cultivo_vinha";
-    private static final String JASPER_TIPOCULTIVO_MONTE = "tipo_cultivo_monte";
-    private static final String JASPER_TIPOCULTIVO_LABRADIO = "tipo_cultivo_labradio";
-    private static final String JASPER_TIPOCULTIVO_PRADO = "tipo_cultivo_prado";
-    private static final String JASPER_TIPOCULTIVO_INCULTO = "tipo_cultivo_inculto";
-    private static final String JASPER_TIPOCULTIVO_TERRENO = "tipo_cultivo_terreno";
-    private static final String JASPER_TIPOCULTIVO_EDIFICACION = "tipo_cultivo_edificacion";
 
     private static final String JASPER_ESCALA = "escala";
     private static final String JASPER_IMAGEFROMVIEW = "image_from_view";
@@ -145,25 +135,6 @@ public class PrintReportsData implements JRDataSource {
 		localizacion.getValue(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS));
 	values.put(JASPER_COORDENADA_UTM_X, getCoordinateXFromView());
 	values.put(JASPER_COORDENADA_UTM_Y, getCoordinateYFromView());
-
-	// cultivos
-	CultivosRetriever finca = new CultivosRetriever(getIDFinca());
-	values.put(JASPER_TIPOCULTIVO_EDIFICACION,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_EDIFICACION));
-	values.put(JASPER_TIPOCULTIVO_INCULTO,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_INCULTO));
-	values.put(JASPER_TIPOCULTIVO_LABRADIO,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_LABRADIO));
-	values.put(JASPER_TIPOCULTIVO_MONTE,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_MONTE));
-	values.put(JASPER_TIPOCULTIVO_PRADO,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_PRADO));
-	values.put(JASPER_TIPOCULTIVO_TERRENO,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_TERRENO));
-	values.put(JASPER_TIPOCULTIVO_VINHA,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_VINHA));
-	values.put(JASPER_TIPOCULTIVO_OTROS,
-		finca.hasCultivo(DBNames.VALUE_CULTIVOS_OTROS));
 
     }
 

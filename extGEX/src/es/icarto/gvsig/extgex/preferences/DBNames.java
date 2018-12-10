@@ -7,7 +7,6 @@ public class DBNames {
     public static final String PM_SCHEMA = "audasa_pm";
 
     // IDs along the whole DB. They are the same within several tables
-    public static final String FIELD_IDCULTIVO = "id_cultivo";
     public static final String FIELD_IDFINCA = "id_finca";
     public static final String FIELD_IDPARROQUIA = "id_parroquia";
     public static final String FIELD_IDAYUNTAMIENTO = "id_ayuntamiento";
