@@ -96,8 +96,10 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     private ArrayList<String> oldReversions;
 
     private GIAAlphanumericTableHandler bienesExpropiadosTableHandler;
-
     private TableModelListener bienesExpropiadosTableModelListener;
+    
+    private GIAAlphanumericTableHandler procesosTableHandler;
+    private TableModelListener procesosTableModelListener;
 
     public FormExpropiations(FLyrVect layer, IGeometry insertedGeom) {
 	super(layer);
@@ -108,8 +110,9 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
 	
 	if (isAmpliacion()) {
-	    addTableHandler(new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class));
-	    
+	    procesosTableHandler = new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class);
+	    addTableHandler(procesosTableHandler);
+	    // importe_pagado_total_autocalculado - Cuando es ampliación Trigger + Listener
 	} else {
 	    addCalculation(new ImportePendienteTotalAutocalculado(this));
         addCalculation(new ImportePagadoTotalAutocalculado(this));
@@ -293,16 +296,24 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     @Override
     protected void fillSpecificValues() {
     updateAutomaticFieldSuperficieWhenSubFormDataChanges_pre();
+    if (isAmpliacion()) {
+        updateAutomaticFieldImporteWhenSubFormDataChanges_pre();
+    }
 	super.fillSpecificValues();
 	ayuntamientoDomainHandler.updateComboBoxValues();
 	subtramoDomainHandler.updateComboBoxValues();
 	updateJTables();
 	
 	updateAutomaticFieldSuperficieWhenSubFormDataChanges_post();
+	if (isAmpliacion()) {
+        updateAutomaticFieldImporteWhenSubFormDataChanges_post();
+    }
 	
     }
 
     
+    
+
     
     /*
      * El campo superficie_expropiada_total_autocalculado debe actualizarse cuando cambien los
@@ -353,6 +364,29 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
         };
         bienesExpropiadosTableHandler.getModel().addTableModelListener(bienesExpropiadosTableModelListener);    
     }
+    
+    private void updateAutomaticFieldImporteWhenSubFormDataChanges_pre() {
+        if (procesosTableModelListener != null) {
+            procesosTableHandler.getModel().removeTableModelListener(procesosTableModelListener);     
+        }
+    }
+
+    private void updateAutomaticFieldImporteWhenSubFormDataChanges_post() {
+        procesosTableModelListener = new TableModelListener() {
+            
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                try {
+                    FormExpropiations.this.reloadRecordset();
+                } catch (ReadDriverException ex) {
+                    logger.error(ex.getStackTrace(), ex);
+                }
+                FormExpropiations.this.onPositionChange(null);    
+            }
+        };
+        procesosTableHandler.getModel().addTableModelListener(procesosTableModelListener);    
+       
+    }
 
     private void updateJTables() {
 	oldReversions = new ArrayList<String>();
@@ -361,6 +395,8 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 	updatePMTable();
 
     }
+    
+    
 
 
     private void updateReversionsTable() {
