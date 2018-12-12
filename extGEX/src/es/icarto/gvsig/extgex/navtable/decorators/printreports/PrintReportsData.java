@@ -3,7 +3,6 @@ package es.icarto.gvsig.extgex.navtable.decorators.printreports;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
@@ -15,10 +14,7 @@ import net.sf.jasperreports.engine.JRField;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.values.DateValue;
-import com.hardcode.gdbms.engine.values.NullValue;
 import com.hardcode.gdbms.engine.values.StringValue;
-import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -28,12 +24,10 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.vividsolutions.jts.geom.Point;
 
 import es.icarto.gvsig.extgex.preferences.DBNames;
-import es.icarto.gvsig.extgex.utils.retrievers.LocalizacionRetriever;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
 public class PrintReportsData implements JRDataSource {
@@ -48,11 +42,7 @@ public class PrintReportsData implements JRDataSource {
 
     private static final String JASPER_COORDENADA_UTM_Y = "coordenada_utm_y";
     private static final String JASPER_COORDENADA_UTM_X = "coordenada_utm_x";
-    private static final String JASPER_LOCALIZACION_UC = "localizacion_uc";
-    private static final String JASPER_LOCALIZACION_TRAMO = "localizacion_tramo";
-    private static final String JASPER_LOCALIZACION_AYUNTAMIENTO = "localizacion_ayuntamiento";
-    private static final String JASPER_LOCALIZACION_PARROQUIASUBTRAMO = "localizacion_parroquia_subtramo";
-
+    
     private boolean isDataSourceReady = false;
     private int currentPosition = -1;
     private FLyrVect layer;
@@ -79,6 +69,10 @@ public class PrintReportsData implements JRDataSource {
 	isDataSourceReady = !isDataSourceReady;
 	return isDataSourceReady;
     }
+    
+    public Object getValue(String name) {
+        return values.get(name);
+    }
 
     @Override
     public Object getFieldValue(JRField field) throws JRException {
@@ -87,65 +81,17 @@ public class PrintReportsData implements JRDataSource {
 
     private void prepareDataSource() {
 	values = new HashMap<String, Object>();
-	try {
-	    SelectableDataSource sds = layer.getRecordset();
-	    Object value;
-	    for (int index = 0; index < sds.getFieldCount(); index++) {
-		if (java.sql.Types.INTEGER == sds.getFieldType(index)) {
-		    value = sds.getFieldValue(currentPosition, index)
-			    .toString();
-		    if (!value.equals("")) {
-			value = Integer.parseInt((String) value);
-		    } else {
-			value = null;
-		    }
-		} else if (java.sql.Types.DOUBLE == sds.getFieldType(index)) {
-		    value = sds.getFieldValue(currentPosition, index)
-			    .toString();
-		    if (!value.equals("")) {
-			value = Double.parseDouble((String) value);
-		    } else {
-			value = null;
-		    }
-		} else if (java.sql.Types.DATE == sds.getFieldType(index)) {
-		    value = getDateValue(sds, index);
-		} else {// string or anything else
-		    value = sds.getFieldValue(currentPosition, index);
-		}
-		values.put(sds.getFieldName(index), value);
-	    }
-	} catch (ReadDriverException e) {
-	    e.printStackTrace();
-	}
+	
 
 	// image
 	values.put(JASPER_IMAGEFROMVIEW, getImageFromView());
 	values.put(JASPER_ESCALA, getScaleFromView());
+	
+//	values.put(JASPER_COORDENADA_UTM_X, getCoordinateXFromView());
+//	values.put(JASPER_COORDENADA_UTM_Y, getCoordinateYFromView());
+	values.put(JASPER_COORDENADA_UTM_X, getX());
+	values.put(JASPER_COORDENADA_UTM_Y, getY());
 
-	// localizacion
-	LocalizacionRetriever localizacion = new LocalizacionRetriever(
-		getIDFinca());
-	values.put(JASPER_LOCALIZACION_UC,
-		localizacion.getValue(DBNames.FIELD_UC_FINCAS));
-	values.put(JASPER_LOCALIZACION_TRAMO,
-		localizacion.getValue(DBNames.FIELD_TRAMO_FINCAS));
-	values.put(JASPER_LOCALIZACION_AYUNTAMIENTO,
-		localizacion.getValue(DBNames.FIELD_AYUNTAMIENTO_FINCAS));
-	values.put(JASPER_LOCALIZACION_PARROQUIASUBTRAMO,
-		localizacion.getValue(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS));
-	values.put(JASPER_COORDENADA_UTM_X, getCoordinateXFromView());
-	values.put(JASPER_COORDENADA_UTM_Y, getCoordinateYFromView());
-
-    }
-
-    private Date getDateValue(SelectableDataSource sds, int index)
-	    throws ReadDriverException {
-	Value val = sds.getFieldValue(currentPosition, index);
-	if (val instanceof NullValue) {
-	    return null;
-	} else {
-	    return ((DateValue) val).getValue();
-	}
     }
 
     public String getIDFinca() {
@@ -187,6 +133,20 @@ public class PrintReportsData implements JRDataSource {
 	}
 	return utmFormat.format(centroid.getX());
     }
+    
+    private double getX() {
+        if (centroid == null) {
+            centroid = getCentroid();
+        }
+        return centroid.getX();
+    }
+    private double getY() {
+        if (centroid == null) {
+            centroid = getCentroid();
+        }
+        return centroid.getY();
+    }
+    
 
     private Point getCentroid() {
 	try {

@@ -116,32 +116,28 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 	} else {
 	    addCalculation(new ImportePendienteTotalAutocalculado(this));
         addCalculation(new ImportePagadoTotalAutocalculado(this));
+        getFormPanel().getTextField(FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO).setToolTipText("Imp. terrenos pendiente + Imp. mejoras pendiente");
 	}
-	
 	// superficie_expropiada_total_autocalculado - Trigger + Workaround con un listener a la tabla y un refresh
+	getFormPanel().getTextField(FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO).setToolTipText("<html>Depósito previo imp. consignado <br> + Depósito previo imp. indemnización <br> + Depósito previo imp. pagado <br> + Mútuo acuerdo importe <br> + Anticipo importe <br> + Mútuo acuerdo parcial importe <br> + Límite acuerdo importe <br> + Imp. pagos varios <br> + Otros pagos imp. indemnización <br> +  Imp. justiprecio <br> - Depósito previo imp. levantamiento</html>");
+    
 	
     
 	addButtonsToActionsToolBar();
 
 
 	addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);
-	initTooltips();
     }
     
     private boolean isAmpliacion() {
         return this.layer.getName().equalsIgnoreCase(TOCNAME_AMPLIACION);
     }
 
-    private void initTooltips() {
-	getFormPanel().getTextField(FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO).setToolTipText("<html>Depósito previo imp. consignado <br> + Depósito previo imp. indemnización <br> + Depósito previo imp. pagado <br> + Mútuo acuerdo importe <br> + Anticipo importe <br> + Mútuo acuerdo parcial importe <br> + Límite acuerdo importe <br> + Imp. pagos varios <br> + Otros pagos imp. indemnización <br> +  Imp. justiprecio <br> - Depósito previo imp. levantamiento</html>");
-	getFormPanel().getTextField(FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO).setToolTipText("Imp. terrenos pendiente + Imp. mejoras pendiente");
-    }
-
     private void addButtonsToActionsToolBar() {
 	JPanel actionsToolBar = this.getActionsToolBar();
 	NavTableComponentsFactory ntFactory = new NavTableComponentsFactory();
 	JButton filesLinkB = ntFactory.getFilesLinkButton(layer, this);
-	String reportName = isAmpliacion() ? "exp_finca_ampliacion.jasper" : "exp_finca";
+	String reportName = isAmpliacion() ? "exp_finca_ampliacion" : "exp_finca";
 	JButton printReportB = ntFactory.getPrintButton(layer, this, reportName);
 	if ((filesLinkB != null) && (printReportB != null)) {
 	    actionsToolBar.add(filesLinkB);

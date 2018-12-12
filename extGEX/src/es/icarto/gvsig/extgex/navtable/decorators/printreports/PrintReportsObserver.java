@@ -98,14 +98,18 @@ public class PrintReportsObserver implements ActionListener,
     @Override
     public void afterLayerGraphicDraw(LayerDrawEvent e)
 	    throws CancelationException {
-	// nothing to do
-	java.net.URL reportPath = PluginServices
-		.getPluginServices("es.icarto.gvsig.extgex").getClassLoader()
-		.getResource("reports/" + this.reportName);
-	PrintReportsAction report = new PrintReportsAction();
-	PrintReportsData data = new PrintReportsData();
-	data.prepareDataSource(layer.getName(), dialog.getPosition());
-	report.print(outputFile.getPath(), reportPath.getFile(), data);
-	mapContext.removeLayerDrawListener(this);
+        try {
+         // nothing to do
+            java.net.URL reportPath = PluginServices
+                .getPluginServices("es.icarto.gvsig.extgex").getClassLoader()
+                .getResource("reports/" + this.reportName + ".jasper");
+            PrintReportsAction report = new PrintReportsAction();
+            PrintReportsData data = new PrintReportsData();
+            data.prepareDataSource(layer.getName(), dialog.getPosition());
+            report.print(outputFile.getPath(), reportPath.getFile(), data);
+        } finally {
+            mapContext.removeLayerDrawListener(this);         
+        }
+	
     }
 }
