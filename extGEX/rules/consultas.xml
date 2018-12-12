@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METADATA>
+ <LAYER alias="Consultas">
+    <TABLENAME>consultas</TABLENAME>
+    <PRIMARYKEY>
+        <PKELEMENT>none</PKELEMENT>
+    </PRIMARYKEY>
+    <RECORDSET>
+      <FIELD>
+        <FIELDNAME>tramo</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>tramos</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>id_tramo</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>nombre_tramo</DRDBCOLUMNALIAS>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+        </DOMAINREADER>
+      </FIELD>
+      
+      <FIELD>
+        <FIELDNAME>uc</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>uc</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>id_uc</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>nombre_uc</DRDBCOLUMNALIAS>
+        	<DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+		</DOMAINREADER>
+      </FIELD>
+      <FIELD>
+        <FIELDNAME>ayuntamiento</FIELDNAME>
+		<DOMAINREADER>
+		    <DRTYPE>db</DRTYPE>
+		    <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>ayuntamientos</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>id_ayuntamiento</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>nombre_ayuntamiento</DRDBCOLUMNALIAS>
+        	<DRDBFOREIGNKEY>id_uc</DRDBFOREIGNKEY>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+       </DOMAINREADER>
+      </FIELD>
+      <FIELD>
+        <FIELDNAME>parroquia_subtramo</FIELDNAME>
+        <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_expropiaciones</DRDBSCHEMA>
+        	<DRDBTABLE>parroquias_subtramos</DRDBTABLE>
+        	<DRDBCOLUMNVALUE>id_parroquia</DRDBCOLUMNVALUE>
+        	<DRDBCOLUMNALIAS>nombre_parroquia</DRDBCOLUMNALIAS>
+        	<DRDBFOREIGNKEY>id_uc</DRDBFOREIGNKEY>
+        	<DRDBFOREIGNKEY>id_ayuntamiento</DRDBFOREIGNKEY>
+        	<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+        </DOMAINREADER>
+      </FIELD>
+      
+    </RECORDSET>
+  </LAYER>
+  </METADATA>

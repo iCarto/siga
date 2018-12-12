@@ -93,6 +93,10 @@ public abstract class ValidatableForm extends AbstractIWindow implements
 	if (formPanel == null) {
 	    InputStream stream = getClass().getClassLoader()
 		    .getResourceAsStream("/forms/" + getBasicName() + ".jfrm");
+	    if (stream == null) {
+	        stream = getClass().getClassLoader().getResourceAsStream(
+	            "/forms/" + getBasicName() + ".xml");
+	        }
 	    try {
 		formPanel = new FormPanel(stream);
 	    } catch (FormException e) {

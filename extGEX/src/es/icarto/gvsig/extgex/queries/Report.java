@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,7 @@ import com.lowagie.text.rtf.document.RtfDocumentSettings;
 import com.lowagie.text.rtf.style.RtfParagraphStyle;
 import com.lowagie.text.rtf.table.RtfCell;
 
+import es.icarto.gvsig.commons.queries.QueryFiltersI;
 import es.icarto.gvsig.commons.utils.Field;
 import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
@@ -69,7 +71,7 @@ public class Report {
     private final ResultTableModel resultsMap;
 
     public Report(int reportType, String fileName, ResultTableModel resultsMap,
-	    String[] filters) {
+	    QueryFiltersI filters) {
 	this.resultsMap = resultsMap;
 	if (reportType == RTF) {
 	    writeRtfReport(fileName, resultsMap, filters);
@@ -97,36 +99,25 @@ public class Report {
 	return image;
     }
 
-    private void writeFilters(Document document, String[] filters) {
-	try {
-	    Paragraph tramoP = new Paragraph("Tramo: " + filters[0],
-		    bodyBoldStyle);
-	    document.add(tramoP);
-	    Paragraph ucP = new Paragraph("UC: " + filters[1], bodyBoldStyle);
-	    document.add(ucP);
-	    Paragraph ayuntamientoP = new Paragraph("Ayuntamiento: "
-		    + filters[2], bodyBoldStyle);
-	    document.add(ayuntamientoP);
-	    if (filters[3] != null) {
-		Paragraph parroquiaP = new Paragraph("Parroquia/Subtramo: "
-			+ filters[3], bodyBoldStyle);
-		document.add(parroquiaP);
-	    }
-	    document.add(Chunk.NEWLINE);
-	} catch (DocumentException e) {
-	    logger.error(e.getStackTrace(), e);
-	}
+    private void writeFilters(Document document, QueryFiltersI filters) {
+        Collection<Field> location = filters.getLocation();
+        try {
+            for (Field f : location) {
+                Paragraph p = new Paragraph(f.getLongName() + f.getValue(), bodyBoldStyle);
+                    document.add(p);
+            }
+            document.add(Chunk.NEWLINE);
+        } catch (DocumentException e) {
+            logger.error(e.getStackTrace(), e);
+        }
     }
 
-    private String writeFiltersInHeader(String[] filters) {
-	if (filters[3] == null) {
-	    return "\n" + "Tramo: " + filters[0] + " UC: " + filters[1]
-		    + " Ayuntamiento: " + filters[2];
-	} else {
-	    return "\n" + "Tramo: " + filters[0] + " UC: " + filters[1]
-		    + " Ayuntamiento: " + filters[2] + " Parroquia/Subtramo: "
-		    + filters[3];
-	}
+    private String writeFiltersInHeader(QueryFiltersI filters) {
+        String s = "\n";
+        for (Field f : filters.getLocation()) {
+            s = s + f.getLongName() + f.getValue() + " ";
+        }
+        return s;
     }
 
     private void writeTitleAndSubtitle(Document document, String title,
@@ -198,7 +189,7 @@ public class Report {
     }
 
     private void writeRtfReportContent(Document document,
-	    ResultTableModel result, String[] filters) {
+	    ResultTableModel result, QueryFiltersI filters) {
 	try {
 	    // Header
 	    Image image = getHeaderImage();
@@ -257,7 +248,7 @@ public class Report {
     }
 
     private void writePdfReportContent(PdfWriter writer, Document document,
-	    ResultTableModel result, String[] filters) {
+	    ResultTableModel result, QueryFiltersI filters) {
 	try {
 	    boolean isFirstPage = true;
 
@@ -381,7 +372,7 @@ public class Report {
     }
 
     public void writeRtfReport(String fileName, ResultTableModel resultsMap,
-	    String[] filters) {
+	    QueryFiltersI filters) {
 	Document document = new Document();
 	document.setPageSize(PageSize.A4.rotate());
 	RtfWriter2 writer;
@@ -405,7 +396,7 @@ public class Report {
     }
 
     public void writePdfReport(String fileName, ResultTableModel resultsMap,
-	    String[] filters) {
+	    QueryFiltersI filters) {
 	Document document = new Document();
 	document.setPageSize(PageSize.A4.rotate());
 	try {

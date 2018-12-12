@@ -29,19 +29,17 @@ public class ResultTableModel extends DefaultTableModel {
     private final String description;
     private final String title;
     private final String subtitle;
-    private final String[] filters;
 
     private List<String> tables;
     private QueryFiltersI queryFilters;
 
     public ResultTableModel(String code, String description, String title,
-	    String subtitle, String[] filters) {
+	    String subtitle) {
 	super();
 	this.code = code;
 	this.description = description;
 	this.title = title;
 	this.subtitle = subtitle;
-	this.filters = filters;
     }
 
     public final String getCode() {
@@ -58,10 +56,6 @@ public class ResultTableModel extends DefaultTableModel {
 
     public final String getSubtitle() {
 	return subtitle;
-    }
-
-    public final String[] getFilters() {
-	return filters;
     }
 
     public void setQueryTables(List<String> tables) {

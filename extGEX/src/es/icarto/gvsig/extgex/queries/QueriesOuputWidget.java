@@ -10,6 +10,7 @@ import com.jeta.forms.components.panel.FormPanel;
 
 import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.queries.CSVReport;
+import es.icarto.gvsig.commons.queries.QueryFiltersI;
 import es.icarto.gvsig.commons.queries.XLSReport;
 import es.icarto.gvsig.commons.utils.FileUtils;
 
@@ -43,7 +44,7 @@ public class QueriesOuputWidget {
 	buttonGroup = null;
     }
 
-    public File toPDF(ResultTableModel table, String[] filters) {
+    public File toPDF(ResultTableModel table, QueryFiltersI filters) {
 	SaveFileDialog sfd = new SaveFileDialog("Archivos PDF", "pdf");
 	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
@@ -54,7 +55,7 @@ public class QueriesOuputWidget {
 	return f;
     }
 
-    private File toCSV(ResultTableModel table, final String[] filters) {
+    private File toCSV(ResultTableModel table, QueryFiltersI filters) {
 
 	SaveFileDialog sfd = new SaveFileDialog("CSV files", "csv");
 	sfd.setAskForOverwrite(true);
@@ -65,12 +66,12 @@ public class QueriesOuputWidget {
 	return f;
     }
 
-    public void toScreen(ResultTableModel table, String[] filters) {
+    public void toScreen(ResultTableModel table, QueryFiltersI filters) {
 	QueriesResultPanel resultPanel = new QueriesResultPanel(table, filters);
 	resultPanel.open();
     }
 
-    public File toHtml(ResultTableModel table, String[] filters) {
+    public File toHtml(ResultTableModel table, QueryFiltersI filters) {
 	SaveFileDialog sfd = new SaveFileDialog("HTML files", "html", "htm");
 	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
@@ -82,7 +83,7 @@ public class QueriesOuputWidget {
 	return f;
     }
 
-    public File toRTF(ResultTableModel table, String[] filters) {
+    public File toRTF(ResultTableModel table, QueryFiltersI filters) {
 	SaveFileDialog sfd = new SaveFileDialog("RTF files", "rtf");
 	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
@@ -93,7 +94,7 @@ public class QueriesOuputWidget {
 	return f;
     }
 
-    public File toXLSX(ResultTableModel table, final String[] filters) {
+    public File toXLSX(ResultTableModel table, QueryFiltersI filters) {
 	SaveFileDialog sfd = new SaveFileDialog("Archivos Excel", "xls");
 	sfd.setAskForOverwrite(true);
 	File f = sfd.showDialog();
@@ -104,12 +105,12 @@ public class QueriesOuputWidget {
 	return f;
     }
 
-    public File to(ResultTableModel table, String[] filters) {
+    public File to(ResultTableModel table, QueryFiltersI filters) {
 	String sel = buttonGroup.getSelection().getActionCommand();
 	return to(sel, table, filters);
     }
 
-    public File to(String sel, ResultTableModel table, String[] filters) {
+    public File to(String sel, ResultTableModel table, QueryFiltersI filters) {
 	File file = null;
 	if (sel.equals(PDF)) {
 	    file = toPDF(table, filters);

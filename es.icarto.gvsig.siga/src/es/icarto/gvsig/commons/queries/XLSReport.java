@@ -62,7 +62,9 @@ public class XLSReport {
 
 	for (Field l : filters.getLocation()) {
 	    Row row = sheet.createRow(rowIdx++);
-	    row.createCell(0).setCellValue(l.getLongName());
+	    String longName = l.getLongName().trim();
+	    longName = longName.endsWith(":") ? longName.substring(0, longName.length() - 1) : longName;
+	    row.createCell(0).setCellValue(longName);
 	    row.createCell(1).setCellValue(l.getValue().toString());
 	}
     }

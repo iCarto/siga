@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -30,33 +32,57 @@ public class QueriesWidgetCB implements QueriesWidget {
 		.getComponentByName(QueriesPanel.ID_CUSTOMQUERIES);
 	launchBt = (JButton) formPanel
 		.getComponentByName(QueriesPanel.ID_RUNQUERIES);
-	initQueriesWidget();
+    
+    
+	initQueriesWidget(formPanel);
 	fillQueriesWidget();
     }
 
-    private void initQueriesWidget() {
+    private void initQueriesWidget(final FormPanel formPanel) {
 	widget.addActionListener(new ActionListener() {
 
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		if (widget.getSelectedItem() != null) {
+    		if (widget.getSelectedItem() == null) {
+    		    return;
+    		}
+    		
 		    String key = ((KeyValue) widget.getSelectedItem()).getKey();
-
+		    JComboBox tramoCB = (JComboBox) formPanel.getComponentByName("tramo");
+		    DefaultComboBoxModel model = (DefaultComboBoxModel) tramoCB.getModel();
 		    if (key.startsWith("custom")) {
-			customBt.setEnabled(true);
-			launchBt.setEnabled(false);
+		        customBt.setEnabled(true);
+		        launchBt.setEnabled(false);
+		        if (model.getSize() == 15) {
+		            if (model.getElementAt(2).toString().equalsIgnoreCase("AMPLIACION CANGAS-TEIS")) {
+		                model.removeElementAt(2);
+		                model.removeElementAt(2);
+		            }
+		        }
+		        if (model.getSize() == 13) {
+		            model.addElement(new KeyValue("14", "AMPLIACION CANGAS-TEIS"));
+		            model.addElement(new KeyValue("13", "AMPLIACION SANTIAGO NORTE-SANTIAGO SUR"));   		            
+		        }
 		    } else {
-			customBt.setEnabled(false);
-			launchBt.setEnabled(true);
+		        customBt.setEnabled(false);
+		        launchBt.setEnabled(true);
+		        if (model.getSize() == 15) {
+		            if (tramoCB.getSelectedIndex() == 13 || tramoCB.getSelectedIndex() == 14) {
+		                tramoCB.setSelectedIndex(0);
+		            }
+		            model.removeElementAt(13); // AMPLIACION CANGAS-TEIS
+	                model.removeElementAt(13); // AMPLIACION SANTIAGO NORTE-SANTIAGO SUR
+		        }
 		    }
-		}
-	    }
+    	}
 	});
     }
 
     private void fillQueriesWidget() {
 	DBSession dbs = DBSession.getCurrentSession();
 	try {
+	    widget.addItem(new KeyValue("custom-exp_finca", "Expropiaciones"));
+	    
 	    String[] orderBy = new String[1];
 	    orderBy[0] = DBNames.FIELD_CODIGO_QUERIES;
 	    String[][] tableContent = dbs.getTable(DBNames.TABLE_QUERIES,
@@ -68,7 +94,7 @@ public class QueriesWidgetCB implements QueriesWidget {
 			tableContent[i][DBNames.INDEX_DESCRIPCION_QUERIES]);
 		widget.addItem(kv);
 	    }
-	    widget.addItem(new KeyValue("custom-exp_finca", "Expropiaciones"));
+	    
 	} catch (SQLException e) {
 	    logger.error(e.getMessage(), e);
 	}

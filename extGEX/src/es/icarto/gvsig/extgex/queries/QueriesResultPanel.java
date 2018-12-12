@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 import es.icarto.gvsig.commons.gui.gvWindow;
+import es.icarto.gvsig.commons.queries.QueryFiltersI;
 
 @SuppressWarnings("serial")
 public class QueriesResultPanel extends gvWindow implements ActionListener {
@@ -36,10 +37,10 @@ public class QueriesResultPanel extends gvWindow implements ActionListener {
     private final JComboBox fileTypeCB;
     String[] fileFormats = { QueriesOuputWidget.HTML, QueriesOuputWidget.RTF,
 	    QueriesOuputWidget.PDF, QueriesOuputWidget.CSV };
-    private final String[] filters;
+    private final QueryFiltersI filters;
     private final ResultTableModel table;
 
-    public QueriesResultPanel(ResultTableModel result, String[] filters) {
+    public QueriesResultPanel(ResultTableModel result, QueryFiltersI filters) {
 	super(800, 500, false);
 	this.table = result;
 	this.filters = filters;
