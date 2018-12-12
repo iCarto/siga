@@ -17,6 +17,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.icarto.gvsig.commons.utils.StrUtils;
 import es.udc.cartolab.gvsig.elle.constants.ConstantReload;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardComponent;
@@ -120,6 +121,7 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 		map.setWhereOnAllLayers(where);
 		map.setWhereOnAllOverviewLayers(where);
 		setWhereOnLoc(map);
+		setWhereOnExpropiacionAmpliacionLayers(map);
 
 		map.load(view.getProjection(), tablesAffectedByConstant);
 
@@ -141,6 +143,44 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 
 	writeCouncilsLoadedInStatusBar();
 
+    }
+
+    private void setWhereOnExpropiacionAmpliacionLayers(ELLEMap map) {
+        LayerProperties lp = map.getLayer("Fincas");
+        if (lp != null) {
+            if (StrUtils.isEmptyString(lp.getWhere())) {
+                lp.setWhere("WHERE tramo NOT IN ('13', '14')");
+            } else {
+                lp.setWhere(lp.getWhere() + " AND tramo NOT IN ('13', '14')");
+            }    
+        }
+
+        lp = map.getLayer("Fincas_Ampliacion");
+        if (lp != null) {
+            if (StrUtils.isEmptyString(lp.getWhere())) {
+                lp.setWhere("WHERE tramo IN ('13', '14')");
+            } else {
+                lp.setWhere(lp.getWhere() + " AND tramo IN ('13', '14')");
+            }    
+        }
+        
+        lp = map.getLayer("Linea_Expropiacion");
+        if (lp != null) {
+            if (StrUtils.isEmptyString(lp.getWhere())) {
+                lp.setWhere("WHERE NOT ampliacion");
+            } else {
+                lp.setWhere(lp.getWhere() + " AND NOT ampliacion");
+            }    
+        }
+
+        lp = map.getLayer("Linea_Expropiacion_Ampliacion");
+        if (lp != null) {
+            if (StrUtils.isEmptyString(lp.getWhere())) {
+                lp.setWhere("WHERE ampliacion");
+            } else {
+                lp.setWhere(lp.getWhere() + " AND ampliacion");
+            }    
+        }
     }
 
     private void setWhereOnLoc(ELLEMap map) {

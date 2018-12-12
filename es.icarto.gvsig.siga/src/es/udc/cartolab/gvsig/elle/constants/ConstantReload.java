@@ -25,7 +25,10 @@ import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.icarto.gvsig.commons.utils.StrUtils;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
+import es.udc.cartolab.gvsig.elle.gui.wizard.save.LayerProperties;
+import es.udc.cartolab.gvsig.elle.utils.ELLEMap;
 
 public class ConstantReload {
 
@@ -123,6 +126,43 @@ public class ConstantReload {
 	} else {
 	    lyrDef.setWhereClause(where);
 	}
+	
+	setWhereOnExpropiacionAmpliacionLayers(l, lyrDef);
+    }
+    
+    private void setWhereOnExpropiacionAmpliacionLayers(FLyrVect l, DBLayerDefinition lyrDef) {
+        
+        if (l.getName().equalsIgnoreCase("Fincas")) {
+            if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
+                lyrDef.setWhereClause("WHERE tramo NOT IN ('13', '14')");
+            } else {
+                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND tramo NOT IN ('13', '14')");
+            }    
+        }
+
+        if (l.getName().equalsIgnoreCase("Fincas_Ampliacion")) {
+            if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
+                lyrDef.setWhereClause("WHERE tramo IN ('13', '14')");
+            } else {
+                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND tramo IN ('13', '14')");
+            }    
+        }
+        
+        if (l.getName().equalsIgnoreCase("Linea_Expropiacion")) {
+            if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
+                lyrDef.setWhereClause("WHERE NOT ampliacion");
+            } else {
+                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND NOT ampliacion");
+            }    
+        }
+
+        if (l.getName().equalsIgnoreCase("Linea_Expropiacion_Ampliacion")) {
+            if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
+                lyrDef.setWhereClause("WHERE ampliacion");
+            } else {
+                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND ampliacion");
+            }    
+        }
     }
 
     private void reload(FLyrVect l) {
