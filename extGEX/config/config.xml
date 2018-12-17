@@ -104,11 +104,18 @@
 		
 
 		<!-- WMS EXTENSIONS -->
-		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasExtension" description="LOAD_FINCAS_WMS" active="true">
+		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasExtension" active="true">
 			<menu text="SIGA" position="30799" is_separator="true"/>			
-			<menu text="SIGA/WMS/Planos Expropiaciones" icon="images/planos_wms.png" position="30800"/>
+			<menu text="SIGA/WMS/Planos Expropiaciones" icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" position="30800"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/planos_wms.png" action-command="LoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="4"/>
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="4"/>
+			</tool-bar>
+		</extension>
+		
+		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" active="true">
+			<menu text="SIGA/WMS/Planos Expropiaciones - Ampliación" icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" position="30805"/>
+			<tool-bar name="SIGA_Tools" position="75">
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones Ampliación" position="6"/>
 			</tool-bar>
 		</extension>
 		
@@ -119,7 +126,7 @@
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" description="LOAD_PNOA_WMS" active="true">
 			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="LoadPNOAExtension" position="30820"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="5"/>
+				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="8"/>
 			</tool-bar>
 		</extension>
 		
