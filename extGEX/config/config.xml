@@ -26,14 +26,14 @@
 		
 		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" active="true">
 			<tool-bar name="extgex.formularios" position="70">
-				<action-tool icon="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" tooltip="Expediente de expropiaciones - Ampliación" position="10"/>
+				<action-tool icon="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" tooltip="Expediente de expropiaciones - Ampliación" position="2"/>
 			</tool-bar>
 			<menu text="SIGA/Expropiaciones/es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension.menu" icon="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" position="30001"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.FormReversionsExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="extgex.formularios" position="70">
-				<action-tool icon="extgex-reversions" tooltip="Expediente de reversiones" action-command="ReversionsFileExtension" position="2"/>
+				<action-tool icon="extgex-reversions" tooltip="Expediente de reversiones" action-command="ReversionsFileExtension" position="3"/>
 			</tool-bar>
 			<menu text="SIGA/Expropiaciones/Expediente Reversión" action-command="ReversionsFileExtension" icon="extgex-reversions" position="30050"/>
 		</extension>
@@ -115,9 +115,10 @@
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" active="true">
 			<menu text="SIGA/WMS/Planos Expropiaciones - Ampliación" icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" position="30805"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones Ampliación" position="6"/>
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones - Ampliación" position="5"/>
 			</tool-bar>
 		</extension>
+		
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadEstadoDimensionesExtension" description="LOAD_EstadoDimensiones_WMS" active="true">
 			<menu text="SIGA/WMS/Planos Estado de Dimensiones" action-command="LoadEstadoDimensionesExtension" position="30810"/>
@@ -126,7 +127,7 @@
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" description="LOAD_PNOA_WMS" active="true">
 			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="LoadPNOAExtension" position="30820"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="8"/>
+				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="6"/>
 			</tool-bar>
 		</extension>
 		

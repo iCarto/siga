@@ -56,7 +56,7 @@ public class InitializationExtension extends Extension {
 
 	    if (layer.getName().equals(FormReversions.TOCNAME)) {
 		endReversionesGeometry(layer);
-	    } else if (layer.getName().equals(FormExpropiations.TOCNAME)) {
+	    } else if (layer.getName().equals(FormExpropiations.TOCNAME) || layer.getName().equals(FormExpropiations.TOCNAME_AMPLIACION)) {
 		endFincasGeometry(layer, cadToolKey);
 	    } else if (layer.getName().equals(FormExpropiationLine.TOCNAME) || layer.getName().equals(FormExpropiationLine.TOCNAME_AMPLIACION)) {
 		endLineExpropiationGeometry(layer);

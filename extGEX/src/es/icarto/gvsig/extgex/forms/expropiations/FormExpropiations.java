@@ -110,17 +110,15 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
 	
 	if (isAmpliacion()) {
+	    setTitle("Fincas - Ampliación");
 	    procesosTableHandler = new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(), ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this, ProcesosSubForm.class);
 	    addTableHandler(procesosTableHandler);
 	    // importe_pagado_total_autocalculado - Cuando es ampliación Trigger + Listener
 	} else {
 	    addCalculation(new ImportePendienteTotalAutocalculado(this));
         addCalculation(new ImportePagadoTotalAutocalculado(this));
-        getFormPanel().getTextField(FINCAS_IMPORTE_PENDIENTE_TOTAL_AUTOCALCULADO).setToolTipText("Imp. terrenos pendiente + Imp. mejoras pendiente");
 	}
 	// superficie_expropiada_total_autocalculado - Trigger + Workaround con un listener a la tabla y un refresh
-	getFormPanel().getTextField(FINCAS_IMPORTE_PAGADO_TOTAL_AUTOCALCULADO).setToolTipText("<html>Depósito previo imp. consignado <br> + Depósito previo imp. indemnización <br> + Depósito previo imp. pagado <br> + Mútuo acuerdo importe <br> + Anticipo importe <br> + Mútuo acuerdo parcial importe <br> + Límite acuerdo importe <br> + Imp. pagos varios <br> + Otros pagos imp. indemnización <br> +  Imp. justiprecio <br> - Depósito previo imp. levantamiento</html>");
-    
 	
     
 	addButtonsToActionsToolBar();

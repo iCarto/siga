@@ -32,9 +32,11 @@ public class PreferencesPage extends AbstractPreferencePage {
 		.getAbsolutePath();
 	LOGO_PATH = new File("gvSIG/extensiones/es.icarto.gvsig.siga/images/")
 		.getAbsolutePath() + "/";
+	AUDASA_REPORT_LOGO = new File("gvSIG/extensiones/es.icarto.gvsig.siga/images/logo_audasa_report.png").getAbsolutePath();
     }
 
     public static final String AUDASA_LOGO = "gvSIG/extensiones/es.icarto.gvsig.siga/images/logo_audasa.png";
+    public static final String AUDASA_REPORT_LOGO;
     public static final String AUTOESTRADAS_LOGO = "gvSIG/extensiones/es.icarto.gvsig.siga/images/logo_autoestradas.png";
     public static final String SIGA_LOGO;
     public static final String SIGA_REPORT_LOGO;

@@ -16,6 +16,9 @@ public class FormExpropiationLine extends BasicAbstractForm {
     public FormExpropiationLine(FLyrVect layer, Boolean ampliacion) {
         super(layer);
         this.ampliacion = ampliacion;
+        if (this.ampliacion) {
+            setTitle("Línea de expropiación - Ampliación");
+        }
     }
 
     @Override

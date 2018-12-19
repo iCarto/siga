@@ -9,8 +9,6 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.extgex.forms.expropiations.FormExpropiations;
-import es.icarto.gvsig.extgex.preferences.DBNames;
-import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.elle.constants.IPositionRetriever;
 
 public class FormOpener implements ActionListener {
@@ -23,8 +21,7 @@ public class FormOpener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-	TOCLayerManager toc = new TOCLayerManager();
-	FLyrVect layer = toc.getLayerByName(DBNames.LAYER_FINCAS);
+	FLyrVect layer = retriever.getLayer();
 	// if(AlphanumericTableLoader.loadTables() &&
 	// (layer != null)) {
 	if (layer != null) {

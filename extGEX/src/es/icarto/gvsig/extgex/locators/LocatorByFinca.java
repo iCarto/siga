@@ -452,8 +452,7 @@ IPositionRetriever {
     @Override
     public int getPosition() {
 	try {
-	    TOCLayerManager tm = new TOCLayerManager();
-	    FLyrVect fincasLayer = tm.getLayerByName(DBNames.LAYER_FINCAS);
+	    FLyrVect fincasLayer = getLayer();
 	    SelectableDataSource rs = fincasLayer.getRecordset();
 	    String expression = "select * from " + rs.getName()
 		    + " where id_finca = '" + getFincaID() + "';";
@@ -480,8 +479,26 @@ IPositionRetriever {
 
     @Override
     public FLyrVect getLayer() {
-	TOCLayerManager toc = new TOCLayerManager();
-	return toc.getLayerByName(DBNames.LAYER_FINCAS);
+        TOCLayerManager toc = new TOCLayerManager();
+        return toc.getLayerByName(getLayerName());
+    }
+    
+    
+     private String getLayerName() {
+        return isAmpliacion() ? FormExpropiations.TOCNAME_AMPLIACION : FormExpropiations.TOCNAME;
+    }
+    
+    private boolean isAmpliacion() {
+        try {
+            String tramoID = getTramoId();
+            if ( tramoID.equalsIgnoreCase("13") || tramoID.equalsIgnoreCase("14") ) {
+                return true;
+            }
+        } catch (SQLException e) {
+            logger.error(e.getStackTrace(), e);
+        }
+       
+        return false;
     }
 
     @Override

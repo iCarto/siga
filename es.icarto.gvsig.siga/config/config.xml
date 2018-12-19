@@ -16,7 +16,7 @@
 			<menu text="SIGA" position="30949" is_separator="true"/>
 			<menu text="SIGA/Street View" icon="open-street-view" position="30950"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="open-street-view" position="6" tooltip="Abrir Street View" />
+				<action-tool icon="open-street-view" position="10" tooltip="Abrir Street View" />
 			</tool-bar>
 		</extension>
 		
@@ -31,7 +31,7 @@
 			<menu text="SIGA" position="30954" is_separator="true"/>
 			<menu text="SIGA/es.icarto.gvsig.siga.ImportIncidenciasExtension.menu" icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="30956"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="13" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
+				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="12" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
 			</tool-bar>
 		</extension>
 
