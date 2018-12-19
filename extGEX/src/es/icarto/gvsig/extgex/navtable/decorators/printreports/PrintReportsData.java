@@ -1,5 +1,7 @@
 package es.icarto.gvsig.extgex.navtable.decorators.printreports;
 
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.vividsolutions.jts.geom.Point;
 
+import es.icarto.gvsig.commons.utils.ImageUtils;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 
@@ -37,8 +40,8 @@ public class PrintReportsData implements JRDataSource {
 
     private static final String JASPER_ESCALA = "escala";
     private static final String JASPER_IMAGEFROMVIEW = "image_from_view";
-    private static final int JASPER_IMAGEWIDTH = 246;
-    private static final int JASPER_IMAGEHEIGHT = 163;
+    private static final int JASPER_IMAGEWIDTH = 250;
+    private static final int JASPER_IMAGEHEIGHT = 170;
 
     private static final String JASPER_COORDENADA_UTM_Y = "coordenada_utm_y";
     private static final String JASPER_COORDENADA_UTM_X = "coordenada_utm_x";
@@ -200,20 +203,17 @@ public class PrintReportsData implements JRDataSource {
     }
 
     private BufferedImage calculateImage() {
-	if (PluginServices.getMDIManager().getActiveWindow() instanceof BaseView) {
+    	if (! (PluginServices.getMDIManager().getActiveWindow() instanceof BaseView)) {
+    	    return null;
+    	}
 	    BaseView view = (BaseView) PluginServices.getMDIManager()
 		    .getActiveWindow();
 	    MapControl mapControl = view.getMapControl();
+	    
 	    ViewPort vp = mapControl.getViewPort();
-	    int widthImageFromJasperReport = JASPER_IMAGEWIDTH;
-	    int heightImageFromJasperReport = JASPER_IMAGEHEIGHT;
-	    int x = (vp.getImageWidth() / 2) - (widthImageFromJasperReport / 2);
-	    int y = (vp.getImageHeight() / 2)
-		    - (heightImageFromJasperReport / 2);
-	    return mapControl.getImage().getSubimage(x, y,
-		    widthImageFromJasperReport, heightImageFromJasperReport);
-	}
-	return null;
+	    int x = (vp.getImageWidth() / 2) - (JASPER_IMAGEWIDTH / 2);
+	    int y = (vp.getImageHeight() / 2) - (JASPER_IMAGEHEIGHT / 2);
+	    return mapControl.getImage().getSubimage(x, y, JASPER_IMAGEWIDTH, JASPER_IMAGEHEIGHT);
     }
 
     private boolean isGeometryNull() {

@@ -1,5 +1,6 @@
 package es.icarto.gvsig.extgex.navtable.decorators.printreports;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
@@ -8,8 +9,12 @@ import java.io.File;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
+import com.iver.cit.gvsig.fmap.ColorEvent;
+import com.iver.cit.gvsig.fmap.ExtentEvent;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.fmap.ProjectionEvent;
 import com.iver.cit.gvsig.fmap.ViewPort;
+import com.iver.cit.gvsig.fmap.ViewPortListener;
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerDrawEvent;
@@ -52,15 +57,10 @@ public class PrintReportsObserver implements ActionListener,
 	if (outputFile != null) {
 	    // center in view
 	    mapContext = layer.getMapContext();
-	    mapContext.addLayerDrawingListener(this);
-	    ViewPort vp = mapContext.getViewPort();
 	    Rectangle2D bbox = getBoundingBox();
-	    if (bbox.getWidth() < 200) {
-		bbox.setFrameFromCenter(bbox.getCenterX(), bbox.getCenterY(),
-			bbox.getCenterX() + 100, bbox.getCenterY() + 100);
-	    }
-	    vp.setExtent(bbox);
-	    vp.refreshExtent();
+	    mapContext.zoomToExtent(bbox);
+	    mapContext.addLayerDrawingListener(this);
+	    mapContext.setScaleView(1500);
 	}
     }
 
