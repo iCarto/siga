@@ -24,6 +24,8 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.XMLEntity;
 
+import es.icarto.gvsig.commons.utils.FileUtils;
+import es.icarto.gvsig.elle.style.LayerLabeling;
 import es.icarto.gvsig.elle.style.LayerSimbology;
 import es.udc.cartolab.gvsig.elle.gui.EllePreferencesPage;
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardException;
@@ -63,6 +65,19 @@ public class FileLegendsManager extends AbstractLegendsManager {
 		} catch (LegendDriverException e) {
 		    throw new WizardException(e);
 		}
+		
+		FLyrVect layer = lp.getLayer();
+		String type = "gvl";
+		String simbology = "";
+		try {
+            simbology = new LayerSimbology(layer).getAs(type);
+        } catch (LegendDriverException e) {
+            System.out.println(e.getStackTrace());
+        }
+        String label = new LayerLabeling(layer).get();
+        FileUtils.write(simbology, legendFile);
+        FileUtils.write(label, new File(path + lp.getLayername() + "." + "gvlabel"));
+        
 	    }
 	} else {
 	    throw new WizardException(PluginServices.getText(this, "no_config_error"));
