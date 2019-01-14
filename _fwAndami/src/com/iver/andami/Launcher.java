@@ -72,6 +72,7 @@ import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.Permissions;
 import java.security.Policy;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -550,7 +551,6 @@ public class Launcher {
 		}
 		
 		FileUtils.setAppHomeDir(appHomeDir);
-		logger.debug("User settings will be stored in: " + appHomeDir );
 		
 		File parent = new File( appHomeDir );
 		parent.mkdirs();    		
@@ -589,6 +589,8 @@ public class Launcher {
 		PluginServices.setArguments(args);
 
 		configureLocales(args);
+		
+		logger.info("Launching gvSIG: " + new Date());
 
 		//Se pone el lookAndFeel
 		try {
