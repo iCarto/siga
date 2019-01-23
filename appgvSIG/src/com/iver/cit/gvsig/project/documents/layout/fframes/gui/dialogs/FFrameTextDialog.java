@@ -164,6 +164,12 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 
     private Font m_font;
 
+    private JCheckBox chkBackgroundColor = null;
+
+    private JPanel backgroundColorPanel = null;
+
+    private ColorChooserPanel backgroundColorChooser;
+
     /**
      * This is the default constructor
      *
@@ -187,7 +193,7 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
      */
     private void initialize() {
 	this.setLayout(new BorderLayout());
-	this.setSize(419, 444);
+	this.setSize(419, 384);
 	this.add(getJContentPane(), java.awt.BorderLayout.CENTER);
 	getPRotation().setRotation(fframetext.getRotation());
     }
@@ -221,12 +227,13 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 	    jLabel.setSize(110, 16);
 	    jLabel.setLocation(244, 74);
 	    jContentPane.add(getJPanel1(), null);
-	    jContentPane.add(getJPanel(), null);
+	    // jContentPane.add(getJPanel(), null);
 	    jContentPane.add(getChkFontSize(), null);
 	    jContentPane.add(getTxtFontSize(), null);
 	    jContentPane.add(getPRotation(), null);
 	    jContentPane.add(getJPanel21(), null);
 	    // jContentPane.add(getAcceptCancelPanel(), null);
+	    jContentPane.add(getBackgroundColorJPanel(), null);
 	    jContentPane.add(getAcceptCancelPanel(), null);
 	}
 
@@ -359,111 +366,118 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
     }
 
     private AcceptCancelPanel getAcceptCancelPanel() {
-	if (accept == null) {
-	    ActionListener okAction, cancelAction;
-	    okAction = new java.awt.event.ActionListener() {
-		public void actionPerformed(java.awt.event.ActionEvent e) {
-		    newFFrameText = (FFrameText) fframetext
-			    .cloneFFrame(m_layout);
-		    newFFrameText.setPos(pos);
-		    //		    newFFrameText.setBoundBox(FLayoutUtilities.toSheetRect(
-		    //			    rect, m_layout.getLayoutControl().getAT()));
-		    newFFrameText.getText().clear();
-		    //
-		    for (int i = 0; i < getTaTexto().getLineCount(); i++) {
-			try {
-			    String s = getTaTexto().getText(
-				    getTaTexto().getLineStartOffset(i),
-				    getTaTexto().getLineEndOffset(i)
-				    - getTaTexto()
-				    .getLineStartOffset(i));
+        if (accept == null) {
+            ActionListener okAction, cancelAction;
+            okAction = new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    newFFrameText = (FFrameText) fframetext
+                            .cloneFFrame(m_layout);
+                    newFFrameText.setPos(pos);
+                    // newFFrameText.setBoundBox(FLayoutUtilities.toSheetRect(
+                    // rect, m_layout.getLayoutControl().getAT()));
+                    newFFrameText.getText().clear();
+                    //
+                    for (int i = 0; i < getTaTexto().getLineCount(); i++) {
+                        try {
+                            String s = getTaTexto().getText(
+                                    getTaTexto().getLineStartOffset(i),
+                                    getTaTexto().getLineEndOffset(i)
+                                            - getTaTexto()
+                                                    .getLineStartOffset(i));
 
-			    if (!s.equals("")) { //$NON-NLS-1$
-				newFFrameText.addText(s);
-			    }
-			} catch (Exception ex) {
-			}
-		    }
-		    newFFrameText.setTextColor(textcolor);
-		    // fframetext.setSizeFixed(!getChkEscalaVista().isSelected());
+                            if (!s.equals("")) { //$NON-NLS-1$
+                                newFFrameText.addText(s);
+                            }
+                        } catch (Exception ex) {
+                        }
+                    }
+                    newFFrameText.setTextColor(textcolor);
+                    // fframetext.setSizeFixed(!getChkEscalaVista().isSelected());
 
-		    // jaume
-		    boolean b = getChkSurroundingRectangle().isSelected();
-		    newFFrameText.setSurrounded(getChkSurroundingRectangle()
-			    .isSelected());
+                    // jaume
+                    boolean b = getChkSurroundingRectangle().isSelected();
+                    newFFrameText.setSurrounded(getChkSurroundingRectangle()
+                            .isSelected());
 
-		    if (b) {
-			// Hay rect�ngulo
-			newFFrameText
-			.setCellPadding(Double
-				.parseDouble(getTxtCellPadding()
-					.getText()) / 100);
-			double i;
-			try {
-			    i = Double.parseDouble(getTxtFrameSize().getText());
-			} catch (Exception ex) {
-			    i = 0;
-			}
-			if (i == 0) {
-			    i = 1;
-			}
-			newFFrameText.setFrameBorderSize(i / 100);
-			newFFrameText.setFrameColor(frameColor);
-		    }
-		    b = getChkFontSize().isSelected();
-		    newFFrameText.setFixedFontSize(b);
+                    if (b) {
+                        // Hay rect�ngulo
+                        newFFrameText
+                                .setCellPadding(Double
+                                        .parseDouble(getTxtCellPadding()
+                                                .getText()) / 100);
+                        double i;
+                        try {
+                            i = Double.parseDouble(getTxtFrameSize().getText());
+                        } catch (Exception ex) {
+                            i = 0;
+                        }
+                        if (i == 0) {
+                            i = 1;
+                        }
+                        newFFrameText.setFrameBorderSize(i / 100);
+                        newFFrameText.setFrameColor(frameColor);
+                    }
+                    b = getChkFontSize().isSelected();
+                    newFFrameText.setFixedFontSize(b);
 
-		    if (b) {
-			// El tama�o de la fuente es fijo
-			int i;
-			try {
-			    i = Integer.parseInt(getTxtFontSize().getText());
-			} catch (Exception ex) {
-			    i = 12;
-			}
-			newFFrameText.setFontSize(i);
-		    }
-		    newFFrameText.setFont(m_font);
-		    b = getChkTitle().isSelected();
-		    newFFrameText.setHasTitle(b);
-		    if (b) {
-			// Hay t�tulo
-			newFFrameText.setTitle(getTxtTitle().getText());
-			int i;
-			try {
-			    i = Integer.parseInt(getTxtTitleSize().getText());
-			} catch (Exception ex) {
-			    i = 12;
-			}
-			newFFrameText.setTitleSize(i);
+                    if (b) {
+                        // El tama�o de la fuente es fijo
+                        int i;
+                        try {
+                            i = Integer.parseInt(getTxtFontSize().getText());
+                        } catch (Exception ex) {
+                            i = 12;
+                        }
+                        newFFrameText.setFontSize(i);
+                    }
+                    newFFrameText.setFont(m_font);
+                    b = getChkTitle().isSelected();
+                    newFFrameText.setHasTitle(b);
+                    if (b) {
+                        // Hay t�tulo
+                        newFFrameText.setTitle(getTxtTitle().getText());
+                        int i;
+                        try {
+                            i = Integer.parseInt(getTxtTitleSize().getText());
+                        } catch (Exception ex) {
+                            i = 12;
+                        }
+                        newFFrameText.setTitleSize(i);
 
-			newFFrameText.setTitleColor(titleColor);
-		    }
+                        newFFrameText.setTitleColor(titleColor);
+                    }
 
-		    newFFrameText.setRotation(getPRotation().getRotation());
-		    fframetext=null;
-		    fframetext = newFFrameText;
-		    PluginServices.getMDIManager().closeWindow(
-			    FFrameTextDialog.this);
-		    //		    m_layout.refresh();
-		    isAcepted = true;
-		}
-	    };
-	    cancelAction = new java.awt.event.ActionListener() {
-		public void actionPerformed(java.awt.event.ActionEvent e) {
-		    newFFrameText=null;
-		    PluginServices.getMDIManager().closeWindow(
-			    FFrameTextDialog.this);
-		}
-	    };
-	    accept = new AcceptCancelPanel(okAction, cancelAction);
-	    accept.setPreferredSize(new java.awt.Dimension(300, 300));
-	    // accept.setBounds(new java.awt.Rectangle(243,387,160,28));
-	    accept.setEnabled(true);
-	    accept.setBounds(new java.awt.Rectangle(71, 410, 300, 32));
-	    accept.setVisible(true);
-	}
-	return accept;
+                    if (chkBackgroundColor.isSelected()) {
+                        newFFrameText.setBackgroundColor(backgroundColorChooser
+                                .getColor());
+                    } else {
+                        newFFrameText.setBackgroundColor(null);
+                    }
+
+                    newFFrameText.setRotation(getPRotation().getRotation());
+                    fframetext = null;
+                    fframetext = newFFrameText;
+                    PluginServices.getMDIManager().closeWindow(
+                            FFrameTextDialog.this);
+                    // m_layout.refresh();
+                    isAcepted = true;
+                }
+            };
+            cancelAction = new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    newFFrameText = null;
+                    PluginServices.getMDIManager().closeWindow(
+                            FFrameTextDialog.this);
+                }
+            };
+            accept = new AcceptCancelPanel(okAction, cancelAction);
+            accept.setPreferredSize(new java.awt.Dimension(300, 300));
+            // accept.setBounds(new java.awt.Rectangle(243,387,160,28));
+            accept.setEnabled(true);
+            accept.setBounds(new java.awt.Rectangle(71, 350, 300, 32));
+            accept.setVisible(true);
+        }
+        return accept;
     }
 
     /*
@@ -537,6 +551,8 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
 	    chkSurroundingRectangle
 	    .addItemListener(new java.awt.event.ItemListener() {
 		public void itemStateChanged(java.awt.event.ItemEvent e) {
+			getColorFrame().setEnabled(
+				    getChkSurroundingRectangle().isSelected());
 		    getTxtCellPadding().setEnabled(
 			    getChkSurroundingRectangle().isSelected());
 		    getTxtFrameSize().setEnabled(
@@ -660,30 +676,100 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
      * @return javax.swing.JPanel
      */
     private JPanel getJPanel() {
-	if (jPanel == null) {
-	    jPanel = new JPanel();
-	    jLabel3 = new JLabel();
-	    jPanel.setLayout(null);
-	    jPanel.setBounds(4, 294, 403, 89);
-	    jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-		    PluginServices.getText(this, "titulo_fframetext"),
-		    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-		    javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-		    null));
-	    jLabel3.setBounds(35, 64, 170, 20);
-	    jLabel3.setText(PluginServices.getText(this, "tamanyo_fuente"));
-	    jLabel3.setEnabled(fframetext.hasTitle());
-	    jPanel.add(getTxtTitleSize(), null);
-	    jPanel.add(jLabel3, null);
-	    jPanel.add(getChkTitle(), null);
-	    jPanel.add(getTxtTitle(), null);
-	    jLabel4 = new JLabel();
-	    jLabel4.setBounds(245, 64, 96, 20);
-	    jPanel.add(jLabel4, null);
-	    jLabel4.setText(PluginServices.getText(this, "pixeles"));
-	    jPanel.add(getColorTitle(), null);
-	}
-	return jPanel;
+        if (jPanel == null) {
+            jPanel = new JPanel();
+            jLabel3 = new JLabel();
+            jPanel.setLayout(null);
+            jPanel.setBounds(4, 294, 403, 89);
+            jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+                    PluginServices.getText(this, "titulo_fframetext"),
+                    javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                    javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+                    null));
+            jLabel3.setBounds(35, 64, 170, 20);
+            jLabel3.setText(PluginServices.getText(this, "tamanyo_fuente"));
+            jLabel3.setEnabled(fframetext.hasTitle());
+            jPanel.add(getTxtTitleSize(), null);
+            jPanel.add(jLabel3, null);
+            jPanel.add(getChkTitle(), null);
+            jPanel.add(getTxtTitle(), null);
+            jLabel4 = new JLabel();
+            jLabel4.setBounds(245, 64, 96, 20);
+            jPanel.add(jLabel4, null);
+            jLabel4.setText(PluginServices.getText(this, "pixeles"));
+            jPanel.add(getColorTitle(), null);
+        }
+        return jPanel;
+    }
+
+    /**
+     * This method initializes background color checkbox
+     *
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getChkBackgroundColor() {
+        if (chkBackgroundColor == null) {
+            chkBackgroundColor = new JCheckBox();
+            chkBackgroundColor.setText(PluginServices.getText(this,
+                    "usar_color_fondo"));
+            chkBackgroundColor
+                    .setSelected(this.fframetext.getBackgroundColor() != null);
+            chkBackgroundColor.setBounds(36, 17, 168, 19);
+            chkBackgroundColor
+                    .addChangeListener(new javax.swing.event.ChangeListener() {
+                        public void stateChanged(javax.swing.event.ChangeEvent e) {
+                            getBackgroundColorChooser().setEnabled(
+                                    chkBackgroundColor.isSelected());
+                        }
+                    });
+        }
+        return chkBackgroundColor;
+    }
+
+    /**
+     * This method initializes jButton1
+     *
+     * @return javax.swing.JButton
+     */
+    private ColorChooserPanel getBackgroundColorChooser() {
+        if (backgroundColorChooser == null) {
+            backgroundColorChooser = new ColorChooserPanel();
+            backgroundColorChooser.setAlpha(255);
+            backgroundColorChooser.setBounds(new java.awt.Rectangle(205, 10,
+                    80, 25));
+            if (this.fframetext.getBackgroundColor() != null) {
+                backgroundColorChooser.setColor(this.fframetext
+                        .getBackgroundColor());
+            } else {
+                backgroundColorChooser.setColor(Color.WHITE);
+		}
+            backgroundColorChooser.setEnabled(this.fframetext
+                    .getBackgroundColor() != null);
+        }
+        return backgroundColorChooser;
+    }
+
+    /**
+     * This method initializes background color panel
+     *
+     * @return javax.swing.JPanel
+     */
+    private JPanel getBackgroundColorJPanel() {
+        if (backgroundColorPanel == null) {
+            backgroundColorPanel = new JPanel();
+            backgroundColorPanel.setLayout(null);
+            backgroundColorPanel.setBounds(4, 294, 403, 49);
+            backgroundColorPanel
+                    .setBorder(javax.swing.BorderFactory.createTitledBorder(
+                            null,
+                            PluginServices.getText(this, "background_color"),
+                            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                            javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                            null, null));
+            backgroundColorPanel.add(getChkBackgroundColor(), null);
+            backgroundColorPanel.add(getBackgroundColorChooser(), null);
+        }
+        return backgroundColorPanel;
     }
 
     /**
@@ -803,18 +889,20 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
      * @return javax.swing.JButton
      */
     private ColorChooserPanel getColorFrame() {
-	if (m_colorChooser == null) {
-	    m_colorChooser = new ColorChooserPanel();
-	    m_colorChooser.setAlpha(255);
-	    m_colorChooser.setBounds(new java.awt.Rectangle(155, 15, 80, 25));
-	    m_colorChooser
-	    .addActionListener(new java.awt.event.ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    frameColor = m_colorChooser.getColor();
-		}
-	    });
-	}
-	return m_colorChooser;
+        if (m_colorChooser == null) {
+            m_colorChooser = new ColorChooserPanel();
+            m_colorChooser.setAlpha(255);
+            m_colorChooser.setBounds(new java.awt.Rectangle(155, 15, 80, 25));
+            m_colorChooser.setColor(frameColor);
+            m_colorChooser.setEnabled(this.fframetext.isSurrounded());
+            m_colorChooser
+                    .addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            frameColor = m_colorChooser.getColor();
+                        }
+                    });
+        }
+        return m_colorChooser;
     }
 
     /**
@@ -823,18 +911,19 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
      * @return javax.swing.JButton
      */
     private ColorChooserPanel getColorFont() {
-	if (m_colorFont == null) {
-	    m_colorFont = new ColorChooserPanel();
-	    m_colorFont.setAlpha(255);
-	    m_colorFont.setLocation(new java.awt.Point(158, 129));
-	    m_colorFont.setSize(new java.awt.Dimension(80, 25));
-	    m_colorFont.addActionListener(new java.awt.event.ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    textcolor = m_colorFont.getColor();
-		}
-	    });
-	}
-	return m_colorFont;
+        if (m_colorFont == null) {
+            m_colorFont = new ColorChooserPanel();
+            m_colorFont.setAlpha(255);
+            m_colorFont.setLocation(new java.awt.Point(158, 129));
+            m_colorFont.setColor(textcolor);
+            m_colorFont.setSize(new java.awt.Dimension(80, 25));
+            m_colorFont.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    textcolor = m_colorFont.getColor();
+                }
+            });
+        }
+        return m_colorFont;
     }
 
     /**
@@ -843,17 +932,18 @@ public class FFrameTextDialog extends JPanel implements IFFrameDialog {
      * @return javax.swing.JButton
      */
     private ColorChooserPanel getColorTitle() {
-	if (m_colorTitle == null) {
-	    m_colorTitle = new ColorChooserPanel();
-	    m_colorTitle.setAlpha(255);
-	    m_colorTitle.setBounds(new java.awt.Rectangle(155, 11, 80, 25));
-	    m_colorTitle.addActionListener(new java.awt.event.ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    titleColor = m_colorTitle.getColor();
-		}
-	    });
-	}
-	return m_colorTitle;
+        if (m_colorTitle == null) {
+            m_colorTitle = new ColorChooserPanel();
+            m_colorTitle.setAlpha(255);
+            m_colorTitle.setBounds(new java.awt.Rectangle(155, 11, 80, 25));
+            m_colorFont.setColor(titleColor);
+            m_colorTitle.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    titleColor = m_colorTitle.getColor();
+                }
+            });
+        }
+        return m_colorTitle;
     }
 
     /**

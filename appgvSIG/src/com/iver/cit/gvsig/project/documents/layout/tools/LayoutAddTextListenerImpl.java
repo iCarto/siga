@@ -43,13 +43,9 @@ package com.iver.cit.gvsig.project.documents.layout.tools;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.ImageIcon;
-
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
-import com.iver.cit.gvsig.project.documents.layout.FLayoutUtilities;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameText;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameTextFactory;
 import com.iver.cit.gvsig.project.documents.layout.fframes.FrameFactory;
@@ -88,7 +84,6 @@ public class LayoutAddTextListenerImpl extends LayoutAddRectangleListener {
 		Rectangle2D r = new Rectangle2D.Double(); //rectOrigin.x+m_PointAnt.x,rectOrigin.y+m_PointAnt.y,m_LastPoint.x-m_PointAnt.x,m_LastPoint.y-m_PointAnt.y);
 
 		r=getRectangle(TOLERANCE);
-		fframe.setBoundBox(FLayoutUtilities.toSheetRect(r, layout.getLayoutControl().getAT()));
 		FFrameTextDialog fframedialog = new FFrameTextDialog(layout, fframe);
 		 if (fframedialog != null) {
 	            fframedialog.setRectangle(fframe.getBoundingBox(layout.getLayoutControl().getAT()));

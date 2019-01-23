@@ -82,6 +82,8 @@ public class FFrameText extends FFrame {
     private boolean m_isFixed = false;
     private int m_pos = LEFT;
     private Color textColor = Color.BLACK;
+    private Color backgroundColor = null;
+    private Rectangle2D.Double m_correctedBoundingBox;
 
     //jaume
     private boolean surrounded = false; // The text field is surrounded by a rectangle
@@ -204,6 +206,15 @@ public class FFrameText extends FFrame {
         m_pos = p;
     }
 
+    @Override
+    public Rectangle2D.Double getBoundingBox(AffineTransform at) {
+        if (at == null && m_correctedBoundingBox != null) {
+            return m_correctedBoundingBox;
+        }
+
+        return super.getBoundingBox(at);
+    }
+
     /**
      * Método que dibuja sobre el graphics que se le pasa como parámetro, según
      * la transformada afin que se debe de aplicar y el rectángulo que se debe
@@ -214,12 +225,14 @@ public class FFrameText extends FFrame {
      * @param rv rectángulo sobre el que hacer un clip.
      * @param imgBase Imagen para acelerar el dibujado.
      */
-    public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
+    @Override
+	public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
         BufferedImage imgBase) {
-        g.setColor(Color.BLACK);
+		g.setColor(Color.BLACK);
 
         Rectangle2D.Double rec = getBoundingBox(at);
         Rectangle2D.Double raux = (Rectangle2D.Double) rec.clone();
+
         g.rotate(Math.toRadians(getRotation()), raux.x + (raux.width / 2),
             raux.y + (raux.height / 2));
 
@@ -293,6 +306,64 @@ public class FFrameText extends FFrame {
                     }
                 }
 
+                Rectangle2D textLocation = raux.getBounds2D();
+
+                double textX = textLocation.getX();
+                double textY = textLocation.getY();
+                double textWidth = textLocation.getWidth();
+                double textHeight = textLocation.getHeight() < scaledFontSize ? scaledFontSize : textLocation.getHeight();
+
+                if (isSurrounded()) {
+                    double scaledCellPadding = FLayoutUtilities.fromSheetDistance(cellPadding,
+                            at);
+                    double sizeBorder = FLayoutUtilities.fromSheetDistance(frameBorderSize,
+                            at);
+                    textX += (scaledCellPadding + sizeBorder) * 10;
+                    textWidth -= (scaledCellPadding + sizeBorder) * 20;
+                    if (textHeight < (scaledFontSize + ((scaledCellPadding + sizeBorder) * 20))) {
+                        textHeight = (scaledFontSize + ((scaledCellPadding + sizeBorder) * 20));
+                    }
+                }
+
+                textLocation.setRect(textX, textY, textWidth, textHeight);
+
+                if (isFontSizeFixed()) {
+                    Rectangle2D textBounds = getTextSize(textLocation,
+                            scaledFontSize, g);
+
+                    double minWidth = textBounds != null ? textBounds
+                            .getWidth() : 0;
+
+                    double minHeight = textBounds != null ? textBounds
+                            .getHeight() : 0;
+
+                    if (isSurrounded()) {
+                        double scaledCellPadding = FLayoutUtilities
+                                .fromSheetDistance(cellPadding, at);
+                        double sizeBorder = FLayoutUtilities.fromSheetDistance(
+                                frameBorderSize, at);
+
+                        minWidth += (scaledCellPadding + sizeBorder) * 20;
+                        minHeight += (scaledCellPadding + sizeBorder) * 20;
+                    }
+
+                    raux.setRect(
+                            raux.getX(),
+                            raux.getY(),
+                            raux.getWidth() < minWidth ? minWidth : raux
+                                    .getWidth(),
+                            raux.getHeight() < minHeight ? minHeight : raux
+                                    .getHeight());
+
+                    this.m_correctedBoundingBox = (Rectangle2D.Double) raux
+                            .clone();
+                }
+
+                if (this.backgroundColor != null) {
+                    g.setColor(this.backgroundColor);
+                    g.fillRect((int) raux.getX(), (int) raux.getY(), (int) raux.getWidth(), (int) raux.getHeight());
+                }
+
                 // Draw the frame involving the text if it exists
                 if (isSurrounded()) {
                     g.setColor(frameColor);
@@ -304,9 +375,10 @@ public class FFrameText extends FFrame {
                     double sizeBorder = FLayoutUtilities.fromSheetDistance(frameBorderSize,
                             at);
 
-//                  if (sizeBorder > 1) {
                     int bordermm = (int)(sizeBorder*10);
                     int scaledCellPaddingmm = (int)(scaledCellPadding*10);
+
+//                  if (sizeBorder > 1) {
 //                    System.out.println("borderSize = " + bordermm);
                         g.setStroke(new BasicStroke(bordermm));
 //                        int scaledBorderSize = (int) (sizeBorder * myScale);
@@ -315,18 +387,20 @@ public class FFrameText extends FFrame {
 //                            g.drawRect((int) raux.x - i, (int) raux.y - i,
 //                                (int) raux.width + (2 * i),
 //                                (int) raux.height + (2 * i));
-                        g.drawRect((int) (raux.x+bordermm/2-1), (int) (raux.y+bordermm/2-1),
-                                (int) (raux.width-bordermm+2),
-                                (int) (raux.height-bordermm+2));
+                        g.drawRect((int) (raux.x+bordermm/2), (int) (raux.y+bordermm/2),
+                                (int) (raux.width-bordermm),
+                                (int) (raux.height-bordermm));
                         g.setStroke(new BasicStroke(0));
                     //}
 
-                    // Recalibro el rectangulo para establecer el área donde se dibujan las fuentes
-                    // al área marcada con el ratón menos la distancia al marco especificada
-                    raux.setRect(raux.getX() + scaledCellPaddingmm + bordermm,
-                        raux.getY() + scaledCellPaddingmm + bordermm,
-                        raux.getWidth() - (scaledCellPaddingmm * 2) - bordermm * 2,
-                        raux.getHeight() - (scaledCellPaddingmm * 2) - bordermm * 2);
+                    this.m_correctedBoundingBox = (Rectangle2D.Double) raux.clone();
+
+                    // Recalibro el rectangulo para establecer el <E1>rea donde se dibujan las fuentes
+                    // al <E1>rea marcada con el rat<F3>n menos la distancia al marco especificada
+                    raux.setRect(raux.getX() + scaledCellPaddingmm + (bordermm / 2),
+                        raux.getY() + scaledCellPaddingmm + (bordermm / 2),
+                        raux.getWidth() - ((scaledCellPaddingmm  + bordermm)* 2),
+                        raux.getHeight() - ((scaledCellPaddingmm  + bordermm)* 2));
 
                     if (raux.getWidth()<=0 || raux.getHeight()<=0){
 						//JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"too_large_border")+": "+bordermm+ " + "+scaledCellPaddingmm);
@@ -346,7 +420,6 @@ public class FFrameText extends FFrame {
         }
         g.rotate(Math.toRadians(-getRotation()),
                 raux.x + (raux.width / 2), raux.y + (raux.height / 2));
-        raux = null;
     }
     private void drawError(Rectangle2D r, int sfs, Graphics2D g,String error) {
     	FontRenderContext frc = g.getFontRenderContext();
@@ -365,9 +438,87 @@ public class FFrameText extends FFrame {
      * @param g Graphics sobre el que dibujar el texto.
      */
     private void drawText(Rectangle2D r, int sfs, Graphics2D g) {
-        int minSFS = Integer.MAX_VALUE;
         FontRenderContext frc = g.getFontRenderContext();
-        int ht = (int) (r.getHeight() / m_text.size());
+        int minSFS = getLabelFontSize(r, sfs, frc);
+
+        TextLayout textLayout = null;
+
+        for (int i = 0; i < m_text.size(); i++) {
+            if (!((String) m_text.get(i)).equals("")) {
+            	m_f = new Font(m_f.getFontName(), m_f.getStyle(), minSFS);
+
+                textLayout = new TextLayout((String) m_text.get(i), m_f, frc);
+
+                Rectangle2D txtBound = textLayout.getBounds();
+                float difW = (float) (r.getWidth() - txtBound.getWidth());
+
+                switch (m_pos) {
+                    case (LEFT):
+                        textLayout.draw(g, (float) r.getX(),
+                                    (float) (r.getY()
+                                            + (r.getHeight() / 2)
+                                            + (minSFS * m_text.size() / 2.0)
+                                            + ((i + 1 - m_text.size()) * minSFS) - (minSFS * 0.125)));
+                        break;
+
+                    case (CENTER):
+                        textLayout.draw(g, (float) r.getX() + (difW / 2),
+                                    (float) (r.getY()
+                                            + (r.getHeight() / 2)
+                                            + (minSFS * m_text.size() / 2.0)
+                                            + ((i + 1 - m_text.size()) * minSFS) - (minSFS * 0.125)));
+                        break;
+
+                    case (RIGTH):
+                        textLayout.draw(g, (float) r.getX() + difW,
+                                    (float) (r.getY()
+                                            + (r.getHeight() / 2)
+                                            + (minSFS * m_text.size() / 2.0)
+                                            + ((i + 1 - m_text.size()) * minSFS) - (minSFS * 0.125)));
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Dibuja el texto sobre el graphics con el tamaño adecuado.
+     *
+     * @param r Rectángulo sobre el que dibujar.
+     * @param sfs Tamaño aproximado del texto.
+     * @param g Graphics sobre el que dibujar el texto.
+     */
+    private Rectangle2D getTextSize(Rectangle2D r, int sfs, Graphics2D g) {
+        FontRenderContext frc = g.getFontRenderContext();
+        int minSFS = getLabelFontSize(r, sfs, frc);
+
+        TextLayout textLayout = null;
+        Rectangle2D txtBound = null;
+
+        for (int i = 0; i < m_text.size(); i++) {
+            if (!((String) m_text.get(i)).equals("")) {
+                m_f = new Font(m_f.getFontName(), m_f.getStyle(), minSFS);
+
+                textLayout = new TextLayout((String) m_text.get(i), m_f, frc);
+
+                Rectangle2D lineBounds = textLayout.getBounds();
+                if (txtBound == null) {
+                    txtBound = lineBounds;
+                } else {
+                    double lineWidth = lineBounds.getWidth();
+                    txtBound.setRect(txtBound.getX(), txtBound.getY(),
+                            txtBound.getWidth() < lineWidth ? lineWidth
+                                    : txtBound.getWidth(), txtBound.getHeight()
+                                    + lineBounds.getHeight());
+                }
+            }
+        }
+
+        return txtBound;
+    }
+
+    private int getLabelFontSize(Rectangle2D r, int sfs, FontRenderContext frc) {
+        int minSFS = Integer.MAX_VALUE;
 
         if (isFontSizeFixed()) {
             minSFS = sfs;
@@ -392,46 +543,14 @@ public class FFrameText extends FFrame {
                 }
             }
         }
-
-        TextLayout textLayout = null;
-
-        for (int i = 0; i < m_text.size(); i++) {
-            if (!((String) m_text.get(i)).equals("")) {
-            	m_f = new Font(m_f.getFontName(), m_f.getStyle(), minSFS);
-
-                textLayout = new TextLayout((String) m_text.get(i), m_f, frc);
-
-                Rectangle2D txtBound = textLayout.getBounds();
-                float difW = (float) (r.getWidth() - txtBound.getWidth());
-
-                switch (m_pos) {
-                    case (LEFT):
-                        textLayout.draw(g, (float) r.getX(),
-                            (float) (r.getY() + (ht * (i + 0.8))));
-
-                        break;
-
-                    case (CENTER):
-                        textLayout.draw(g, (float) r.getX() + (difW / 2),
-                            (float) (r.getY() + (ht * (i + 0.8))));
-
-                        break;
-
-                    case (RIGTH):
-                        textLayout.draw(g, (float) r.getX() + difW,
-                            (float) (r.getY() + (ht * (i + 0.8)))); //- (ht / 2))));
-
-                        break;
-                }
-            }
-        }
+        return minSFS;
     }
 
     /*
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#print(java.awt.Graphics2D,
      *      java.awt.geom.AffineTransform)
      */
-    public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
+	public void print(Graphics2D g, AffineTransform at, FShape shape, PrintRequestAttributeSet properties) {
         this.properties=properties;
         draw(g, at, null, null);
         this.properties=null;
@@ -483,7 +602,7 @@ public class FFrameText extends FFrame {
      *
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getXMLEntity()
      */
-    public XMLEntity getXMLEntity() throws SaveException {
+	public XMLEntity getXMLEntity() throws SaveException {
         XMLEntity xml = super.getXMLEntity();
 
         try {
@@ -519,6 +638,10 @@ public class FFrameText extends FFrame {
                 StringUtilities.color2String(frameColor));
             xml.putProperty("titleColor",
                 StringUtilities.color2String(titleColor));
+            if (this.backgroundColor != null) {
+                xml.putProperty("backgroundColor",
+                        StringUtilities.color2String(this.backgroundColor));
+            }
         } catch (Exception e) {
             throw new SaveException(e, this.getClass().getName());
         }
@@ -530,7 +653,7 @@ public class FFrameText extends FFrame {
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
      *      com.iver.cit.gvsig.project.Project)
      */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
+	public void setXMLEntity03(XMLEntity xml, Layout l) {
         if (xml.getIntProperty("m_Selected") != 0) {
             this.setSelected(true);
         } else {
@@ -560,7 +683,7 @@ public class FFrameText extends FFrame {
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
      *      com.iver.cit.gvsig.project.Project)
      */
-    public void setXMLEntity(XMLEntity xml) {
+	public void setXMLEntity(XMLEntity xml) {
         if (xml.getIntProperty("m_Selected") != 0) {
             this.setSelected(true);
         } else {
@@ -641,12 +764,17 @@ public class FFrameText extends FFrame {
             cellPadding = 0.05;
             frameBorderSize = 0.01;
         }
+
+        if (xml.contains("backgroundColor")) {
+            this.backgroundColor = StringUtilities.string2Color(xml.getStringProperty(
+                        "backgroundColor"));
+        }
     }
 
     /**
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
      */
-    public String getNameFFrame() {
+	public String getNameFFrame() {
         return PluginServices.getText(this, "texto")+ num;
     }
 
@@ -667,6 +795,24 @@ public class FFrameText extends FFrame {
      */
     public boolean isSurrounded() {
         return surrounded;
+    }
+
+    /**
+     * Sets background color (null for no color)
+     *
+     * @param c
+     */
+    public void setBackgroundColor(Color c) {
+        backgroundColor = c;
+    }
+
+    /**
+     * Background color (null when no color)
+     *
+     * @return Color
+     */
+    public Color getBackgroundColor() {
+        return backgroundColor;
     }
 
     /**
