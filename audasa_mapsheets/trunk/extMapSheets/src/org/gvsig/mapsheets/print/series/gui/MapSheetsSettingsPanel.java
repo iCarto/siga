@@ -440,7 +440,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 	    templateCB.setSelectedItem(templateSelected);
 	    return;
 	}
-	
+
 	if (src == this.getAcceptButton()) {
 	    hasCancelled = false;
 	    try {
@@ -756,7 +756,7 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 
 	IProjectView pv = getView().getModel();
 	FLayers lyrs = pv.getMapContext().getLayers();
-	int[] types = { FShape.POLYGON, FShape.LINE };
+        int[] types = { FShape.POLYGON, FShape.LINE, FShape.POINT };
 	ArrayList list = null;
 
 	try {
