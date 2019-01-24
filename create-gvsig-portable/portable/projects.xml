@@ -53,7 +53,7 @@
 	<!--  es.icarto.gvsig.commons está antes de extCAD porqué ahora depende de él -->
 	<property name="custom-projects" value="
 		extNavTable,
-		extMapSheets,
+		es.icarto.gvsig.siga.mapsheets,
 		extDBConnection,
 		extELLE,
 		extNavTableForms,

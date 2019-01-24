@@ -18,7 +18,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/extRasterTools-SE"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/extMapSheets"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/es.icarto.gvsig.siga.mapsheets"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extELLE"/>

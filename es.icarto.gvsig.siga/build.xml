@@ -85,7 +85,7 @@
 
 
 		<property name="gvSIG-SIGA_projects" value="
-			extMapSheets,
+			es.icarto.gvsig.siga.mapsheets,
 			extDBConnection,
 			extELLE,
 			es.icarto.gvsig.siga,
