@@ -119,7 +119,7 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
 
 /**
  * Various static utility methods.
- * 
+ *
  * @author jldominguez
  *
  */
@@ -409,7 +409,7 @@ public class MapSheetsUtils {
     /**
      * Dirty utility method to clone a layer because other ways do not work
      * properly.
-     * 
+     *
      * @param ras
      * @return
      * @throws Exception
@@ -551,7 +551,6 @@ public class MapSheetsUtils {
 	// FLyrVect lyr = null; // setts.getFeaturesLayer();
 	SelectionSupport ss = lyr.getSelectionSupport();
 	ReadableVectorial rv = lyr.getSource();
-	double sca = 1.0 + 0.02 * overlap_pc;
 	FGeometryCollection filter_geo = null;
 	IGeometry shp = null;
 	IGeometry[] aux_g = new IGeometry[1];
@@ -561,16 +560,15 @@ public class MapSheetsUtils {
 
 	FBitSet fbs = ss.getSelection();
 
-	if (selected_only && fbs.length() != 0) {
+        if (selected_only) {
 
-	    boolean use_fbs = true;
-	    if (fbs.length() > 200) {
-		use_fbs = false;
-	    }
+            if (fbs.length() == 0) {
+                throw new Exception(PluginServices.getText(
+                        MapSheetsUtils.class, "No_selected_geometries_found"));
+            }
 
-	    ArrayList list = new ArrayList();
 	    for(int i=fbs.nextSetBit(0); i>=0; i=fbs.nextSetBit(i+1)) {
-		shp = rv.getShape(i).cloneGeometry();
+                shp = rv.getShape(i);
 		if (r_acum == null) {
 		    r_acum = shp.getBounds2D();
 		    r_acum = (Rectangle2D) r_acum.clone();
@@ -579,23 +577,15 @@ public class MapSheetsUtils {
 		    r_acum.add(shp.getBounds2D());
 		}
 
-		if (use_fbs) {
-		    if (filter_geo == null) {
-			aux_g[0] = shp;
-			filter_geo = new FGeometryCollection(aux_g);
-		    } else {
-			filter_geo.addGeometry(shp);
-		    }
-		}
+                if (filter_geo == null) {
+                    aux_g[0] = shp;
+                    filter_geo = new FGeometryCollection(aux_g);
+                } else {
+                    filter_geo.addGeometry(shp);
+                }
 	    }
 
 	} else {
-
-	    if (selected_only && fbs.length() == 0) {
-		throw new Exception(PluginServices.getText(
-			MapSheetsUtils.class,
-			"No_selected_geometries_found"));
-	    }
 
 	    int n = rv.getShapeCount();
 
@@ -673,7 +663,7 @@ public class MapSheetsUtils {
 
 
     /**
-     * 
+     *
      * @param useful_map_cm
      * @param aext
      * @param filter_geom
@@ -705,7 +695,7 @@ public class MapSheetsUtils {
 
 	long hor_sheet_count_long = 0;
 	double aux_w = -1;
-	while (aux_w < aext.getWidth() && hor_sheet_count_long < MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
+        while (aux_w < aext.getWidth()) {
 	    hor_sheet_count_long++;
 	    aux_w = hor_sheet_count_long * sheet_w_map_units
 		    - 0.01 * clearance_pc * sheet_w_map_units * (hor_sheet_count_long - 1);
@@ -713,21 +703,10 @@ public class MapSheetsUtils {
 
 	long ver_sheet_count_long = 0;
 	double aux_h = -1;
-	while (aux_h < aext.getHeight() && ver_sheet_count_long < MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
+        while (aux_h < aext.getHeight()) {
 	    ver_sheet_count_long++;
 	    aux_h = ver_sheet_count_long * sheet_h_map_units
 		    - 0.01 * clearance_pc * sheet_h_map_units * (ver_sheet_count_long - 1);
-	}
-
-	if (hor_sheet_count_long * ver_sheet_count_long > MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
-
-	    String msg = PluginServices.getText(MapSheetsUtils.class, "Too_many_sheets");
-	    msg = msg + ": "
-		    + hor_sheet_count_long + " x " + ver_sheet_count_long + " = "
-		    + (hor_sheet_count_long * ver_sheet_count_long)
-		    + " (max: " + MapSheetsCreationExtension.MAX_PRINTAB_MAPS + ")";
-
-	    throw new Exception(msg);
 	}
 
 	ArrayList resp1 = new ArrayList();
@@ -758,6 +737,16 @@ public class MapSheetsUtils {
 		}
 	    }
 	}
+
+        if (resp1.size() > MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
+
+            String msg = PluginServices.getText(MapSheetsUtils.class,
+                    "Too_many_sheets");
+            msg = msg + ": " + resp1.size() + " (max: "
+                    + MapSheetsCreationExtension.MAX_PRINTAB_MAPS + ")";
+
+            throw new Exception(msg);
+        }
 
 	resp[0] = resp1;
 	resp[1] = resp2;
@@ -1867,7 +1856,7 @@ public class MapSheetsUtils {
     }
 
     /**
-     * 
+     *
      * @param gr
      * @param iv
      * @return how it is after calling this
