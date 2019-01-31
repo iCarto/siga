@@ -108,12 +108,10 @@
 package org.gvsig.symbology.fmap.labeling;
 
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.StringReader;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -123,9 +121,6 @@ import java.util.TreeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
-import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.gt2.CoordSys;
 import org.gvsig.symbology.fmap.labeling.parse.LabelExpressionParser;
 import org.gvsig.symbology.fmap.labeling.parse.ParseException;
 import org.gvsig.symbology.fmap.labeling.placements.ILabelPlacement;
@@ -151,8 +146,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.adapter.RectangleAdapter;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -165,12 +158,6 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
-import com.vividsolutions.jts.geom.CoordinateSequence;
-import com.vividsolutions.jts.geom.CoordinateSequences;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Lineal;
 
 /**
  *
@@ -235,7 +222,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			x = 0;
 			y = 0;
 			printMode = false;
-		}		
+		}
 
 		TreeMap<String[], GeometryItem> labelsToPlace = null;
 		parseTime =0;
@@ -290,28 +277,22 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			BufferedImage overlapDetectImage = null;
 			Graphics2D overlapDetectGraphics = null;
 			if (bLabelsReallocatable) {
-				int width = viewPort.getImageWidth() + print_offset_x;
-
-				if(width<0){
-					width = 1;
-				}
-				int height = viewPort.getImageHeight() + print_offset_y;
-				if(height<0){
-					height = 1;
-				}
-				if (mapImage!=null)
-					overlapDetectImage = new BufferedImage(
-							mapImage.getWidth()  + print_offset_x,
-							mapImage.getHeight()  + print_offset_y,
-							BufferedImage.TYPE_INT_ARGB
-				);
-				else
-					overlapDetectImage = new BufferedImage(
-							viewPort.getImageWidth() + print_offset_x,
-							viewPort.getImageHeight() + print_offset_y,
-							BufferedImage.TYPE_INT_ARGB
-					);
-
+                                int width, height;
+                                if (mapImage != null) {
+                                    width = mapImage.getWidth() + print_offset_x;
+                                    height = mapImage.getHeight() + print_offset_y;
+                                } else {
+                                    width = viewPort.getImageWidth() + print_offset_x;
+                                    height = viewPort.getImageHeight() + print_offset_y;
+                                }
+                                if (width < 0) {
+                                    width = 1;
+                                }
+                                if (height < 0) {
+                                    height = 1;
+                                }
+                                overlapDetectImage = new BufferedImage(width, height,
+                                        BufferedImage.TYPE_INT_ARGB);
 				overlapDetectGraphics = overlapDetectImage.createGraphics();
 				overlapDetectGraphics.setRenderingHints(mapGraphics.getRenderingHints());
 			}
@@ -669,7 +650,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 						} else {
 							preTexts.add(labelContents.toString());
 						}
-					} else { 
+					} else {
 					    preTexts.add("");
 					}
 				}
@@ -866,8 +847,8 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			dpi = 72;
 		}
 
-		viewPort.setOffset(new Point2D.Double(0,0));	
-		
+		viewPort.setOffset(new Point2D.Double(0,0));
+
 		/* signal printing output */
 		printMode = true;
 
