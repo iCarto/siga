@@ -41,7 +41,7 @@ public class PrintReportsAction {
 	    parameters.put("LOGO_URL", PreferencesPage.AUDASA_REPORT_LOGO);
 	    parameters.put("MAP_URL", data.getValue("image_from_view"));
 	    parameters.put("COORDENADA_X", data.getValue("coordenada_utm_x"));
-	    parameters.put("COORDENADA_Y", data.getValue("coordenada_utm_x"));
+	    parameters.put("COORDENADA_Y", data.getValue("coordenada_utm_y"));
 
 	    JasperPrint print = JasperFillManager.fillReport(reportFilePathName, parameters, DBSession.getCurrentSession().getJavaConnection());
 	    

@@ -60,7 +60,7 @@ public class PrintReportsObserver implements ActionListener,
 	    Rectangle2D bbox = getBoundingBox();
 	    mapContext.zoomToExtent(bbox);
 	    mapContext.addLayerDrawingListener(this);
-	    mapContext.setScaleView(1500);
+	    mapContext.setScaleView(2000);
 	}
     }
 
