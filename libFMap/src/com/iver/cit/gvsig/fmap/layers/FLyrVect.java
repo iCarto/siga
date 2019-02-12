@@ -73,14 +73,17 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
+import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ILabelable;
 import com.iver.cit.gvsig.fmap.core.IRow;
+import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.IMultiLayerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
+import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
@@ -135,6 +138,11 @@ import com.iver.utiles.PostProcessSupport;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
+import com.vividsolutions.jts.awt.ShapeWriter;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Capa básica Vectorial.
@@ -170,7 +178,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     //private ArrayList linkProperties=null;
     private boolean waitTodraw=false;
     private static PathGenerator pathGenerator=PathGenerator.getInstance();
-    
+
     public boolean isWaitTodraw() {
 		return waitTodraw;
 	}
@@ -551,7 +559,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     								if (!bDrawCartographicSupport) {
     									geom.drawInts(graphics[symbolLevel], viewPort, sym, cancel);
     								} else {
-    									geom.drawInts(graphics[symbolLevel], viewPort, dpi, (CartographicSupport) csSym, cancel);
+    									geom.drawInts(graphics[symbolLevel], viewPort, dpi, csSym, cancel);
     								}
     							}
 
@@ -578,12 +586,13 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     								if (x<0 || y<0 || x>= image.getWidth() || y>=image.getHeight()) continue;
     								image.setRGB(x, y, sym.getOnePointRgb());
     							} else {
-    								if (!bDrawCartographicSupport) {
-    									geom.drawInts(g, viewPort, sym, cancel);
-    								} else {
-    									geom.drawInts(g, viewPort, dpi, csSym, cancel);
-    								}
-    							}
+                                                                if (!bDrawCartographicSupport) {
+                                                                    geom.drawInts(g, viewPort, sym, cancel);
+                                                                } else {
+                                                                    geom.drawInts(g, viewPort, dpi, csSym,
+                                                                            cancel);
+                                                                }
+                                                        }
     						}
     			}
 
@@ -763,11 +772,55 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
     					//System.err.println("passada "+mapPass+" pinte símboll "+sym.getDescription());
 
-    					if (csSym == null) {
-    						geom.drawInts(g, viewPort, sym, null);
-    					} else {
-    						geom.drawInts(g, viewPort, dpi, (CartographicSupport) csSym, cancel);
-    					}
+                        // We check if the geometry seems to intersect with the
+                        // view extent
+                        Rectangle2D extent = viewPort.getExtent();
+                        if (geom.fastIntersects(extent.getX(), extent.getY(),
+                                extent.getWidth(), extent.getHeight())) {
+                            // If it does, then we create a rectangle based on
+                            // the view extent and cut the geometries by it
+                            // before drawing them
+                            GeometryFactory geomF = new GeometryFactory();
+                            Geometry intersection = geom
+                                    .toJTSGeometry()
+                                    .intersection(
+                                            new Polygon(
+                                                    geomF.createLinearRing(new Coordinate[] {
+                                                            new Coordinate(
+                                                                    extent.getMinX(),
+                                                                    extent.getMaxY()),
+                                                            new Coordinate(
+                                                                    extent.getMaxX(),
+                                                                    extent.getMaxY()),
+                                                            new Coordinate(
+                                                                    extent.getMaxX(),
+                                                                    extent.getMinY()),
+                                                            new Coordinate(
+                                                                    extent.getMinX(),
+                                                                    extent.getMinY()),
+                                                            new Coordinate(
+                                                                    extent.getMinX(),
+                                                                    extent.getMaxY()) }),
+                                                    null, geomF));
+                            if (!intersection.isEmpty()) {
+                                FGeometry intersectedGeom = ShapeFactory
+                                        .createGeometry(FConverter.transformToInts(
+                                                geom.getGeometryType(),
+                                                new ShapeWriter().toShape(
+                                                        intersection)
+                                                        .getPathIterator(null),
+                                                AffineTransform
+                                                        .getTranslateInstance(
+                                                                0, 0)));
+                                if (csSym == null) {
+                                    intersectedGeom.drawInts(g, viewPort, sym,
+                                            null);
+                                } else {
+                                    intersectedGeom.drawInts(g, viewPort, dpi,
+                                            csSym, cancel);
+                                }
+                            }
+                        }
 
     				}
     				it.closeIterator();
@@ -1869,9 +1922,9 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	}
 	public String getTypeStringVectorLayer() throws ReadDriverException {
 		String typeString="";
-		int typeShape=((FLyrVect)this).getShapeType();
+		int typeShape=this.getShapeType();
 		if (FShape.MULTI==typeShape){
-			ReadableVectorial rv=((FLyrVect)this).getSource();
+			ReadableVectorial rv=this.getSource();
 			int i=0;
 			boolean isCorrect=false;
 			while(rv.getShapeCount()>i && !isCorrect){
@@ -1888,7 +1941,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
  				}
  			}
 		}else{
-			ReadableVectorial rv=((FLyrVect)this).getSource();
+			ReadableVectorial rv=this.getSource();
 			int i=0;
 			boolean isCorrect=false;
 			while(rv.getShapeCount()>i && !isCorrect){
@@ -1934,9 +1987,9 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	}
 	public int getTypeIntVectorLayer() throws ReadDriverException {
 		int typeInt=0;
-		int typeShape=((FLyrVect)this).getShapeType();
+		int typeShape=this.getShapeType();
 		if (FShape.MULTI==typeShape){
-			ReadableVectorial rv=((FLyrVect)this).getSource();
+			ReadableVectorial rv=this.getSource();
 			int i=0;
 			boolean isCorrect=false;
 			while(rv.getShapeCount()>i && !isCorrect){
@@ -1953,7 +2006,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 				}
 			}
 		}else{
-			ReadableVectorial rv=((FLyrVect)this).getSource();
+			ReadableVectorial rv=this.getSource();
 			int i=0;
 			boolean isCorrect=false;
 			while(rv.getShapeCount()>i && !isCorrect){

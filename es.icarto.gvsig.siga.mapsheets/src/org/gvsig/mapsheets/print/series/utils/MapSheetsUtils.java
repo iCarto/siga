@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.PrinterJob;
@@ -54,6 +55,7 @@ import org.gvsig.mapsheets.print.series.layout.MapSheetFrameView;
 import org.gvsig.mapsheets.print.series.layout.MapSheetsFrameText;
 import org.gvsig.mapsheets.print.series.layout.MapSheetsLayoutTemplate;
 import org.gvsig.mapsheets.print.series.print.MapSheetsPrint;
+import org.gvsig.raster.util.MathUtils;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -259,40 +261,61 @@ public class MapSheetsUtils {
 
 	File t_file = null;
 	String code = null;
-	for (int i=0; i<count; i++) {
+        for (int i = 0; i < count; i++) {
 
-	    if (progListen != null) {
-		progListen.progress(1+i, count+1);
-	    }
+            if (progListen != null) {
+                progListen.progress(1 + i, count + 1);
+            }
 
 
-	    ind_it = ((Integer) sel_ind.get(i)).intValue();
-	    try {
-		lay_template.update(ind_it);
-		code = drv.getFieldValue(ind_it,0).toString();
-		lay_template.updateAudasaSheetCode(code);
-	    } catch (Exception e) {
-		NotificationManager.addError(e);
-		return;
-	    }
+            ind_it = ((Integer) sel_ind.get(i)).intValue();
+            try {
+                lay_template.update(ind_it);
+                code = drv.getFieldValue(ind_it, 0).toString();
+                lay_template.updateAudasaSheetCode(code);
+            } catch (Exception e) {
+                NotificationManager.addError(e);
+                return;
+            }
 
-	    t_file = new File(
-		    targetFolder.getAbsolutePath()
-		    + File.separator
-		    + base_name + "_" + code + ".pdf");
+            t_file = new File(targetFolder.getAbsolutePath() + File.separator
+                    + base_name + "_" + code + ".pdf");
 
-	    if (canc.isCanceled()) {
-		// progListen.cancelled(PluginServices.getText(canc, "Cancelled_by_user"));
-		break;
-	    }
+            if (canc.isCanceled()) {
+                // progListen.cancelled(PluginServices.getText(canc,
+                // "Cancelled_by_user"));
+                break;
+            }
 
-	    try {
-		createSinglePdfMap(lay_template, t_file, back_lyr);
-	    } catch (Exception ex) {
-		ex.printStackTrace();
-		NotificationManager.addError(ex);
-	    }
-	}
+            // There is some problem when printing any sheet that is not the
+            // first one, which results in ignoring the configured left and top
+            // margins when inserting the drawn view. As a workaround, we
+            // manually apply those margins here by modifying the view's affine
+            // transform and setting new parameters for translations (cm to
+            // inches to pixels via the DPI).
+            if (i > 0) {
+                AffineTransform at = lay_template.getMainViewFrame().getATMap();
+                at.setTransform(
+                        at.getScaleX(),
+                        at.getShearY(),
+                        at.getShearX(),
+                        at.getScaleY(),
+                        at.getTranslateX()
+                                + MathUtils.convertCmsToPixels(
+                                        lay_template.getLeftCm(),
+                                        getDPI(lay_template)),
+                        at.getTranslateY()
+                                + MathUtils.convertCmsToPixels(
+                                        lay_template.getTopCm(),
+                                        getDPI(lay_template)));
+            }
+            try {
+                createSinglePdfMap(lay_template, t_file, back_lyr);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                NotificationManager.addError(ex);
+            }
+        }
 
 	if (lay_template.getMainViewFrame() instanceof MapSheetFrameView) {
 	    lay_template.getMainViewFrame().setHighlight(false);
@@ -355,52 +378,52 @@ public class MapSheetsUtils {
 	    File target_file,
 	    FLayer back_lyr) throws Exception {
 
-	Attributes _attributes = lyt_tem.getLayoutContext().getAtributes();
-	double w = 0;
-	double h = 0;
+        Attributes _attributes = lyt_tem.getLayoutContext().getAtributes();
+        double w = 0;
+        double h = 0;
 
-	w = ((_attributes.m_sizePaper.getAncho() * Attributes.DPISCREEN)
-		/ Attributes.PULGADA);
-	h = ((_attributes.m_sizePaper.getAlto() * Attributes.DPISCREEN)
-		/ Attributes.PULGADA);
+        w = ((_attributes.m_sizePaper.getAncho() * Attributes.DPISCREEN) / Attributes.PULGADA);
+        h = ((_attributes.m_sizePaper.getAlto() * Attributes.DPISCREEN) / Attributes.PULGADA);
 
-	FLayer clo_lyr = null;
+        FLayer clo_lyr = null;
 
-	if (back_lyr != null) {
-	    clo_lyr = cloneLayer(back_lyr);
-	    clo_lyr.setVisible(true);
-	    addBackLayer(lyt_tem, clo_lyr);
-	}
+        if (back_lyr != null) {
+            clo_lyr = cloneLayer(back_lyr);
+            clo_lyr.setVisible(true);
+            addBackLayer(lyt_tem, clo_lyr);
+        }
 
-	Document doc_ = new Document(new Rectangle((float) w, (float) h));
-	FileOutputStream fos = new FileOutputStream(target_file);
-	PdfWriter writer = PdfWriter.getInstance(doc_, fos);
+        Document doc_ = new Document(new Rectangle((float) w, (float) h));
+        FileOutputStream fos = new FileOutputStream(target_file);
+        PdfWriter writer = PdfWriter.getInstance(doc_, fos);
+        writer.setFullCompression();
 
-	// add map image
-	doc_.open();
-	// print to file
-	Print print = new Print();
-	print.setLayout(lyt_tem);
+        // add map image
+        doc_.open();
+        // print to file
+        Print print = new Print();
+        print.setLayout(lyt_tem);
 
-	PdfContentByte cb = writer.getDirectContent();
-	Graphics2D g2 = cb.createGraphicsShapes((float) w, (float) h);
-	print.print(g2, _attributes.getPageFormat(), 0);
+        PdfContentByte cb = writer.getDirectContent();
+        Graphics2D g2 = cb.createGraphicsShapes((float) w, (float) h);
+        print.print(g2, _attributes.getPageFormat(), 0);
 
-	g2.dispose();
+        g2.dispose();
 
-	doc_.close();
-	fos.close();
-	writer.close();
-	doc_=null;
-	fos=null;
-	writer=null;
-	print=null;
+        doc_.close();
+        fos.close();
+        writer.close();
+        doc_ = null;
+        fos = null;
+        writer = null;
+        print = null;
 
-	if (clo_lyr != null) {
-	    lyt_tem.getMainViewFrame().getMapContext().getLayers().removeLayer(clo_lyr);
-	}
+        if (clo_lyr != null) {
+            lyt_tem.getMainViewFrame().getMapContext().getLayers()
+                    .removeLayer(clo_lyr);
+        }
 
-	Runtime.getRuntime().gc();
+        Runtime.getRuntime().gc();
     }
 
 

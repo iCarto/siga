@@ -68,7 +68,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.cresques.cts.ICoordTrans;
-
 import org.gvsig.geoutils.sun.awt.geom.Crossings;
 import org.gvsig.geoutils.sun.awt.geom.Curve;
 
@@ -757,8 +756,8 @@ public class GeneralPathX implements Shape, Cloneable, Serializable {
     public Object clone() {
 	try {
 	    GeneralPathX copy = (GeneralPathX) super.clone();
-	    copy.pointTypes = (byte[]) pointTypes.clone();
-	    copy.pointCoords = (double[]) pointCoords.clone();
+	    copy.pointTypes = pointTypes.clone();
+	    copy.pointCoords = pointCoords.clone();
 	    return copy;
 	} catch (CloneNotSupportedException e) {
 	    // this shouldn't happen, since we are Cloneable

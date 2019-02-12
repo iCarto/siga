@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.14.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
-	<classpathentry kind="lib" path="lib/itextpdf-5.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.5.13.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
 	<classpathentry kind="output" path="bin"/>

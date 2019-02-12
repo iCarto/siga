@@ -259,7 +259,7 @@ public class FConverter {
 			case FShape.ELLIPSE:
 			case FShape.POLYGON | FShape.M:
             case FShape.POLYGON + FShape.Z:
-            	
+
 				arrayLines = new ArrayList();
 
 				ArrayList shells = new ArrayList();
@@ -749,7 +749,7 @@ holesForShells.add(new ArrayList());
 		}
 
 		if (geometry instanceof GeometryCollection) {
-			return toShape((GeometryCollection) geometry);
+			return toShape(geometry);
 		}
 
 		throw new IllegalArgumentException("Unrecognized Geometry class: " +
@@ -819,29 +819,30 @@ holesForShells.add(new ArrayList());
         return newGp;
     }
     public static FShape transformToInts(IGeometry gp, AffineTransform at) {
+        return transformToInts(gp.getGeometryType(), gp.getPathIterator(null),
+                at);
+    }
+
+    public static FShape transformToInts(int geometryType,
+            PathIterator theIterator, AffineTransform at) {
         GeneralPathX newGp = new GeneralPathX();
         double[] theData = new double[6];
         double[] aux = new double[6];
 
         // newGp.reset();
-        PathIterator theIterator;
         int theType;
-        int numParts = 0;
 
         Point2D ptDst = new Point2D.Double();
         Point2D ptSrc = new Point2D.Double();
         boolean bFirst = true;
         int xInt, yInt, antX = -1, antY = -1;
 
-
-        theIterator = gp.getPathIterator(null); //, flatness);
         int numSegmentsAdded = 0;
         while (!theIterator.isDone()) {
             theType = theIterator.currentSegment(theData);
 
             switch (theType) {
                 case PathIterator.SEG_MOVETO:
-                    numParts++;
                     ptSrc.setLocation(theData[0], theData[1]);
                     at.transform(ptSrc, ptDst);
                     antX = (int) ptDst.getX();
@@ -890,7 +891,7 @@ holesForShells.add(new ArrayList());
         } //end while loop
 
         FShape shp = null;
-        switch (gp.getGeometryType())
+        switch (geometryType)
         {
             case FShape.POINT: //Tipo punto
             case FShape.POINT + FShape.Z:

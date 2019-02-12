@@ -60,7 +60,7 @@ import com.iver.utiles.XMLEntity;
 /**
  * This subclass of Layout provides special behavior: can be associated to a grid;
  * some of its components will can be refreshed with data from a single sheet.
- * 
+ *
  * @author jldominguez
  *
  */
@@ -85,6 +85,10 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
     private boolean printSelectedOnly = false;
 
     private static int NextId = 1;
+
+    private double leftCm;
+
+    private double topCm;
 
     static {
 
@@ -273,6 +277,9 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	    double left_cm,
 	    double top_cm,
 	    boolean is_test) {
+
+        this.leftCm = left_cm;
+        this.topCm = top_cm;
 
 	Attributes atts = getLayoutContext().getAtributes();
 	double paper_w_cm = atts.m_sizePaper.getAncho();
@@ -491,7 +498,6 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	MapSheetFrameView msfv = getMainViewFrame();
 	MapSheetsUtils.checkFrameListensToViewPort(msfv);
 	updateView(msfv, gri.getGeom());
-
 	IFFrame[] ffs = this.getLayoutContext().getFFrames();
 	MapSheetsFrameText aux;
 	Value v;
@@ -917,6 +923,12 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	}
     }
 
+    public double getLeftCm() {
+        return this.leftCm;
+    }
 
+    public double getTopCm() {
+        return this.topCm;
+    }
 
 }

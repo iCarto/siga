@@ -22,14 +22,14 @@ public class PdfPrintTask implements Runnable, Cancellable {
 	private File baseFolder = null;
 	private String baseName = null;
 	private IProgressListener proListener;
-	
+
 	private boolean isCancel = false;
 	private boolean highlight = false;
-	
+
 	private MapSheetsLayoutTemplate layoutTemplate = null;
 	private boolean allSheets = false;
 	private FLayer backLayer = null;
-	
+
 	public PdfPrintTask(
 			MapSheetsLayoutTemplate lay_template,
 			boolean all_sheets,
@@ -47,15 +47,17 @@ public class PdfPrintTask implements Runnable, Cancellable {
 		proListener = pro_listener;
 		this.highlight = highlight;
 	}
-	
+
 	public static boolean WORKING = false;
 	public void run() {
-		
+
 		WORKING = true;
-		
+
 		if (proListener != null) {
 			proListener.started();
 		}
+
+        long t1 = System.currentTimeMillis();
 
 		MapSheetsUtils.createPdfMaps(
 				layoutTemplate,
@@ -66,9 +68,13 @@ public class PdfPrintTask implements Runnable, Cancellable {
 				baseName,
 				proListener,
 				this);
-		
+
+        long t2 = System.currentTimeMillis();
+        System.err.println("Tiempo de impresión de los PDF:" + (t2 - t1)
+                + " ms.");
+
 		WORKING = false;
-		
+
 		if (proListener != null) {
 			proListener.finished();
 		}
@@ -79,16 +85,16 @@ public class PdfPrintTask implements Runnable, Cancellable {
 	}
 
 	public void setCanceled(boolean canceled) {
-		
+
 		if (canceled) {
 			WORKING = false;
 		}
 		isCancel = canceled;
-		
+
 		if (proListener != null) {
 			proListener.cancelled(PluginServices.getText(this, "Cancelled_by_user"));
 		}
-		
+
 	}
 
 }
