@@ -121,6 +121,7 @@ import java.util.TreeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
+import org.apache.log4j.Logger;
 import org.gvsig.symbology.fmap.labeling.parse.LabelExpressionParser;
 import org.gvsig.symbology.fmap.labeling.parse.ParseException;
 import org.gvsig.symbology.fmap.labeling.placements.ILabelPlacement;
@@ -158,6 +159,7 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelLocationMetrics;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
+import com.vividsolutions.jts.geom.TopologyException;
 
 /**
  *
@@ -184,6 +186,9 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	private double sizeAfter;
 	private boolean printMode = false; /* indicate whether output is for a print product (PDF, PS, ...) */
 
+    private static Logger logger = Logger
+            .getLogger(GeneralLabelingStrategy.class.getName());
+
 	public void setLayer(FLayer layer) throws ReadDriverException {
 		FLyrVect l = (FLyrVect) layer;
 		this.layer = l;
@@ -208,8 +213,16 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			this.savedPerimeter = 0;
 		}
 	}
+
+    public void draw(BufferedImage mapImage, Graphics2D mapGraphics,
+            ViewPort viewPort, Cancellable cancel, double dpi)
+            throws ReadDriverException {
+        draw(mapImage, mapGraphics, viewPort, cancel, dpi, false);
+    }
+
 	public void draw(BufferedImage mapImage, Graphics2D mapGraphics,
-			ViewPort viewPort,	Cancellable cancel, double dpi) throws ReadDriverException {
+            ViewPort viewPort, Cancellable cancel, double dpi,
+            boolean checkIntersection) throws ReadDriverException {
 		int x = (int)viewPort.getOffset().getX();
 		int y = (int)viewPort.getOffset().getY();
 //		boolean bVisualFXEnabled = false; // if true, the user can see how the labeling is drawing up
@@ -310,6 +323,26 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 				IGeometry geom = feat.getGeometry();
 				if (geom==null || geom instanceof FNullGeometry) // we don't need to label null geometries
 					continue;
+
+                // In order to make files smaller, we won't print
+                // labels for geometries that don't seem to be in
+                // the view
+                Rectangle2D extent = viewPort.getExtent();
+                try {
+                if (checkIntersection
+                        && !geom.fastIntersects(extent.getX(), extent.getY(),
+                                extent.getWidth(), extent.getHeight())) {
+                    continue;
+                }
+                } catch (TopologyException e) {
+                    logger.warn(
+                            "Some error happened while trying to cut a polygon with the view extent before printing its label (layer '"
+                                    + this.layer.getName()
+                                    + "' / feature id "
+                                    + feat.getID()
+                                    + "). The label will be drawn in any case. ",
+                            e);
+                }
 
 				if (!setupLabel(feat, lc, cancel, usedFields, viewPort, dpi, duplicateMode)){ //, placedLabels)){
 					continue;
@@ -852,7 +885,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		/* signal printing output */
 		printMode = true;
 
-		draw(null,g,viewPort,cancel,dpi);
+        draw(null, g, viewPort, cancel, dpi, true);
 	}
 
 	public String[] getUsedFields() {
