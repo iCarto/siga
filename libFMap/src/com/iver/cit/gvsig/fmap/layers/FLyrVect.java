@@ -73,7 +73,6 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
-import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -143,6 +142,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.TopologyException;
 
 /**
  * Capa básica Vectorial.
@@ -775,6 +775,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                         // We check if the geometry seems to intersect with the
                         // view extent
                         Rectangle2D extent = viewPort.getExtent();
+                        IGeometry geomToPrint = null;
+                        try {
                         if (geom.fastIntersects(extent.getX(), extent.getY(),
                                 extent.getWidth(), extent.getHeight())) {
                             // If it does, then we create a rectangle based on
@@ -803,7 +805,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                                                                     extent.getMaxY()) }),
                                                     null, geomF));
                             if (!intersection.isEmpty()) {
-                                FGeometry intersectedGeom = ShapeFactory
+                                    geomToPrint = ShapeFactory
                                         .createGeometry(FConverter.transformToInts(
                                                 geom.getGeometryType(),
                                                 new ShapeWriter().toShape(
@@ -812,13 +814,24 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                                                 AffineTransform
                                                         .getTranslateInstance(
                                                                 0, 0)));
-                                if (csSym == null) {
-                                    intersectedGeom.drawInts(g, viewPort, sym,
-                                            null);
-                                } else {
-                                    intersectedGeom.drawInts(g, viewPort, dpi,
-                                            csSym, cancel);
-                                }
+                            }
+                        }
+                        } catch (TopologyException e) {
+                            logger.warn(
+                                    "Some error happened while trying to cut a polygon with the view extent before printing (layer '"
+                                            + this.getName()
+                                            + "' / feature id "
+                                            + feat.getID()
+                                            + "). The whole polygon will be drawn. ",
+                                    e);
+                            geomToPrint = geom;
+                        }
+                        if (geomToPrint != null) {
+                            if (csSym == null) {
+                                geomToPrint.drawInts(g, viewPort, sym, null);
+                            } else {
+                                geomToPrint.drawInts(g, viewPort, dpi, csSym,
+                                        cancel);
                             }
                         }
 
