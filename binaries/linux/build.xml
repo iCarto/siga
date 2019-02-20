@@ -223,6 +223,42 @@
 			<param name="ml.link" value="libz.so"/>
 			<param name="ml.failonerror" value="false"/>
 		</antcall>
+
+		<antcall target="makeLink">
+			<param name="ml.file" value="libstdc++.so.6.0.21"/>
+			<param name="ml.link" value="libstdc++.so.6"/>
+			<param name="ml.failonerror" value="false"/>
+		</antcall>
+
+		<antcall target="makeLink">
+			<param name="ml.file" value="libkrb5.so.3.3"/>
+			<param name="ml.link" value="libkrb5.so.3"/>
+			<param name="ml.failonerror" value="false"/>
+		</antcall>
+
+		<antcall target="makeLink">
+			<param name="ml.file" value="libk5crypto.so.3.1"/>
+			<param name="ml.link" value="libk5crypto.so.3"/>
+			<param name="ml.failonerror" value="false"/>
+		</antcall>
+
+		<antcall target="makeLink">
+			<param name="ml.file" value="libcom_err.so.2.1"/>
+			<param name="ml.link" value="libcom_err.so.2"/>
+			<param name="ml.failonerror" value="false"/>
+		</antcall>
+
+		<antcall target="makeLink">
+			<param name="ml.file" value="libkrb5support.so.0.1"/>
+			<param name="ml.link" value="libkrb5support.so.0"/>
+			<param name="ml.failonerror" value="false"/>
+		</antcall>
+
+		<antcall target="makeLink">
+			<param name="ml.file" value="libkeyutils.so.1.8"/>
+			<param name="ml.link" value="libkeyutils.so.1"/>
+			<param name="ml.failonerror" value="false"/>
+		</antcall>
 		<!--
 		<antcall target="makeLink">
 			<param name="ml.file" value="libhdf5_hl.so.0.0.0"/>
