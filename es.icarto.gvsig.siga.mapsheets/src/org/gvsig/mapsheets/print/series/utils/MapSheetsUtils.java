@@ -734,6 +734,29 @@ public class MapSheetsUtils {
 		    - 0.01 * clearance_pc * sheet_h_map_units * (ver_sheet_count_long - 1);
 	}
 
+        // If we don't filter by geom, we can already check the printable sheets
+        // limit
+        if (filter_geom == null
+                && hor_sheet_count_long * ver_sheet_count_long > MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
+            String msg = PluginServices.getText(MapSheetsUtils.class,
+                    "Too_many_sheets");
+            msg = msg + ": " + hor_sheet_count_long + " x "
+                    + ver_sheet_count_long + " = "
+                    + (hor_sheet_count_long * ver_sheet_count_long) + " (max: "
+                    + MapSheetsCreationExtension.MAX_PRINTAB_MAPS + ")";
+            throw new Exception(msg);
+        }
+
+        if (hor_sheet_count_long * ver_sheet_count_long > MapSheetsCreationExtension.MAX_GRID_SIZE) {
+            String msg = PluginServices.getText(MapSheetsUtils.class,
+                    "Grid_too_big");
+            msg = msg + ": " + hor_sheet_count_long + " x "
+                    + ver_sheet_count_long + " = "
+                    + (hor_sheet_count_long * ver_sheet_count_long) + " (max: "
+                    + MapSheetsCreationExtension.MAX_GRID_SIZE + ")";
+            throw new Exception(msg);
+        }
+
 	ArrayList resp1 = new ArrayList();
 	ArrayList resp2 = new ArrayList();
 	// Rectangle2D[(int) (hor_sheet_count_long * ver_sheet_count_long)];
@@ -763,7 +786,8 @@ public class MapSheetsUtils {
 	    }
 	}
 
-        if (resp1.size() > MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
+        if (filter_geom != null
+                && resp1.size() > MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
 
             String msg = PluginServices.getText(MapSheetsUtils.class,
                     "Too_many_sheets");

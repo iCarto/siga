@@ -55,6 +55,7 @@ public class MapSheetsCreationExtension extends Extension {
     public static Properties extensionProperties = new Properties();
 
     public static String CODE_ID_SEPARATOR = "_";
+    public static int MAX_GRID_SIZE = 2000;
     public static int MAX_PRINTAB_MAPS = 200;
 
     public static Color GRID_COLOR_BORDER = Color.BLACK;
@@ -139,6 +140,14 @@ public class MapSheetsCreationExtension extends Extension {
 	    logger.error("Bad number: " + aux + ", using default = "
 		    + MAX_PRINTAB_MAPS);
 	}
+
+        aux = pp.getProperty("grid.size.max");
+        try {
+            MAX_GRID_SIZE = Integer.parseInt(aux);
+        } catch (Exception ex) {
+            logger.error("Bad number: " + aux + ", using default = "
+                    + MAX_GRID_SIZE);
+        }
 
 	aux = pp.getProperty("grid.sheet.symbol.border.color");
 	GRID_COLOR_BORDER = MapSheetsUtils.argbToColor(aux);
