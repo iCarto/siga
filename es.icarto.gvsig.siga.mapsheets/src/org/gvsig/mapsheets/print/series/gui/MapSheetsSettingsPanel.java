@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -43,14 +42,12 @@ import org.gvsig.mapsheets.print.series.gui.utils.NumericDocument;
 import org.gvsig.mapsheets.print.series.utils.MapSheetsUtils;
 import org.gvsig.tools.file.PathGenerator;
 
-import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -448,6 +445,24 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 		if (getGridCustomRB().isSelected()) {
 		    newgrid = MapSheetsUtils.loadMapSheetsGrid(gridFileChooser
 			    .getSelectedFile());
+
+                    // before adding the new layer, delete all MapSheetGrids in
+                    // TOC
+                    FLayers layersInTOC = getView().getMapControl()
+                            .getMapContext().getLayers();
+                    for (int i = 0; i < layersInTOC.getLayersCount(); i++) {
+                        if (layersInTOC.getLayer(i) instanceof MapSheetGrid) {
+                            getView().getMapControl().getMapContext()
+                                    .getLayers()
+                                    .removeLayer(layersInTOC.getLayer(i));
+                        }
+                    }
+                    getView().getMapControl().getMapContext().getLayers()
+                            .addLayer(newgrid);
+                    MapSheetsUtils.setOnlyActive(newgrid, getView()
+                            .getMapControl().getMapContext().getLayers());
+
+                    PluginServices.getMDIManager().closeWindow(this);
 		} else {
 		    double grid_width;
 		    double grid_height;
@@ -497,56 +512,12 @@ public class MapSheetsSettingsPanel extends JPanel implements IWindow,
 			lyrv = (FLyrVect) lci.getLayer();
 		    }
 
-		    ArrayList[] igs_codes = MapSheetsUtils.createFrames(
-			    this.coverView.isSelected(),
-			    this.selectedOnly.isSelected(), use_map_r,
-			    getView().getMapControl().getViewPort(), s, opc,
-			    getView().getProjection(), lyrv);
-
-		    ArrayList igs = igs_codes[0];
-		    ArrayList cods = igs_codes[1];
-		    HashMap atts_hm = null;
-
-		    newgrid = MapSheetGrid.createMapSheetGrid(MapSheetGrid
-			    .createNewName(), getView().getProjection(),
-			    MapSheetGrid.createDefaultLyrDesc());
-
-		    int sz = igs.size();
-		    for (int i = 0; i < sz; i++) {
-			atts_hm = new HashMap();
-
-			atts_hm.put(MapSheetGrid.ATT_NAME_CODE,
-				ValueFactory.createValue((String) cods.get(i)));
-			atts_hm.put(MapSheetGrid.ATT_NAME_ROT_RAD,
-				ValueFactory.createValue(new Double(0)));
-			atts_hm.put(MapSheetGrid.ATT_NAME_OVERLAP,
-				ValueFactory.createValue(new Double(opc)));
-			atts_hm.put(MapSheetGrid.ATT_NAME_SCALE,
-				ValueFactory.createValue(new Double(s)));
-			atts_hm.put(MapSheetGrid.ATT_NAME_DIMX_CM,
-				ValueFactory.createValue(new Double(w)));
-			atts_hm.put(MapSheetGrid.ATT_NAME_DIMY_CM,
-				ValueFactory.createValue(new Double(h)));
-
-			newgrid.addSheet((IGeometry) igs.get(i), atts_hm);
-		    }
+                    GridTaskWindow.startGridTask(this.coverView.isSelected(),
+                            this.selectedOnly.isSelected(), use_map_r,
+                            getView().getMapControl().getViewPort(), s, opc,
+                            getView().getProjection(), lyrv, w, h, getView(),
+                            this);
 		}
-
-		// before adding the new layer, delete all MapSheetGrids in TOC
-		FLayers layersInTOC = getView().getMapControl().getMapContext()
-			.getLayers();
-		for (int i = 0; i < layersInTOC.getLayersCount(); i++) {
-		    if (layersInTOC.getLayer(i) instanceof MapSheetGrid) {
-			getView().getMapControl().getMapContext().getLayers()
-				.removeLayer(layersInTOC.getLayer(i));
-		    }
-		}
-		getView().getMapControl().getMapContext().getLayers()
-			.addLayer(newgrid);
-		MapSheetsUtils.setOnlyActive(newgrid, getView().getMapControl()
-			.getMapContext().getLayers());
-
-		PluginServices.getMDIManager().closeWindow(this);
 
 	    } catch (Exception exc) {
 		JOptionPane.showMessageDialog(this, exc.getMessage(),

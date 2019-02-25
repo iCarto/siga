@@ -535,6 +535,14 @@ public class MapSheetsUtils {
     private static BufferedImage aux_bim = new BufferedImage(5,5,BufferedImage.TYPE_3BYTE_BGR);
     private static Graphics auxGraphics = aux_bim.getGraphics();
 
+    public static ArrayList[] createFrames(boolean cover_view_selected,
+            boolean selected_only, Rectangle2D useful_map_cm, ViewPort vp,
+            long scale, int overlap_pc, IProjection iproj, FLyrVect ler)
+            throws Exception {
+        return createFrames(cover_view_selected, selected_only, useful_map_cm,
+                vp, scale, overlap_pc, iproj, ler, null, null);
+    };
+
     public static ArrayList[] createFrames(
 	    boolean cover_view_selected,
 	    boolean selected_only,
@@ -543,7 +551,8 @@ public class MapSheetsUtils {
 	    long scale,
 	    int overlap_pc,
 	    IProjection iproj,
-	    FLyrVect ler) throws Exception {
+ FLyrVect ler,
+            IProgressListener progListen, Cancellable canc) throws Exception {
 
 	if (cover_view_selected) {
 	    return createCoverFrames(
@@ -552,7 +561,7 @@ public class MapSheetsUtils {
 		    null,
 		    scale,
 		    overlap_pc,
-		    iproj);
+ iproj, progListen, canc);
 	} else {
 	    return createFeatureFrames(
 		    useful_map_cm,
@@ -560,7 +569,7 @@ public class MapSheetsUtils {
 		    selected_only,
 		    ler,
 		    scale,
-		    iproj);
+ iproj, progListen, canc);
 	}
 
     }
@@ -571,7 +580,8 @@ public class MapSheetsUtils {
 	    boolean selected_only,
 	    FLyrVect lyr,
 	    long scale,
-	    IProjection iproj) throws Exception {
+            IProjection iproj, IProgressListener progListen, Cancellable canc)
+            throws Exception {
 
 	// FLyrVect lyr = null; // setts.getFeaturesLayer();
 	SelectionSupport ss = lyr.getSelectionSupport();
@@ -638,7 +648,8 @@ public class MapSheetsUtils {
 	    }
 	}
 
-	return createCoverFrames(use_map_size_cm, r_acum, filter_geo, scale, overlap_pc, iproj);
+        return createCoverFrames(use_map_size_cm, r_acum, filter_geo, scale,
+                overlap_pc, iproj, progListen, canc);
     }
 
     private static ArrayList[] createCoverFrames(
@@ -647,7 +658,8 @@ public class MapSheetsUtils {
 	    IGeometry filter_geom,
 	    long scale,
 	    int overlap_pc,
-	    IProjection iproj) throws Exception {
+ IProjection iproj, IProgressListener progListen,
+            Cancellable canc) throws Exception {
 
 	ArrayList[] grid_codes = getGrid(
 		useful_map_cm,
@@ -655,7 +667,7 @@ public class MapSheetsUtils {
 		filter_geom,
 		scale,
 		overlap_pc,
-		iproj);
+ iproj, progListen, canc);
 
 	ArrayList rects = grid_codes[0];
 	ArrayList geoms = new ArrayList();
@@ -704,7 +716,8 @@ public class MapSheetsUtils {
 	    IGeometry filter_geom,
 	    long req_scale,
 	    double clearance_pc,
-	    IProjection proj) throws Exception {
+	    IProjection proj,
+            IProgressListener progListen, Cancellable canc) throws Exception {
 
 	// double should_be_one = proj.getScale(0, 0.01
 	// * useful_map_cm.getWidth(), useful_map_cm.getWidth(), 2.54);
@@ -770,10 +783,20 @@ public class MapSheetsUtils {
 
 	String name_col = "";
 
-	for (int i=0; i<hor_sheet_count_long; i++) {
+        double previousProg = 0;
+        int totalSteps = (int) (hor_sheet_count_long * ver_sheet_count_long) + 1;
+
+        hor: for (int i = 0; i < hor_sheet_count_long; i++) {
 	    item_x = aext.getMinX() - ini_offset_w + i * inc_w;
 	    name_col = nextLetter(name_col);
 	    for (int j=0; j<ver_sheet_count_long; j++) {
+
+                if (canc != null && canc.isCanceled()) {
+                    // progListen.cancelled(PluginServices.getText(canc,
+                    // "Cancelled_by_user"));
+                    break hor;
+                }
+
 		item_y = aext.getMaxY() + ini_offset_h - j * inc_h - sheet_h_map_units;
 		item_rect = new Rectangle2D.Double(
 			item_x, item_y,
@@ -783,8 +806,18 @@ public class MapSheetsUtils {
 		    resp1.add(item_rect);
 		    resp2.add(name_col.toUpperCase() + MapSheetsCreationExtension.CODE_ID_SEPARATOR + (j+1));
 		}
+
+                if (progListen != null) {
+                    int step = (int) (i * ver_sheet_count_long) + j + 1;
+                    if (previousProg + 0.05 <= ((double) step) / totalSteps) {
+                        previousProg = step / totalSteps;
+                        progListen.progress(step, totalSteps);
+                    }
+                }
 	    }
 	}
+
+        progListen.progress(totalSteps, totalSteps);
 
         if (filter_geom != null
                 && resp1.size() > MapSheetsCreationExtension.MAX_PRINTAB_MAPS) {
