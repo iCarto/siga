@@ -27,6 +27,8 @@ import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -892,8 +894,7 @@ public class MapSheetsUtils {
 	for (int i=0; i<count; i++) {
 	    lyr = ll.getLayer(i);
 	    if (lyr instanceof FLayers) {
-		ArrayList addlist = getLayers((FLayers) lyr, tt, only_vect);
-		resp.addAll(addlist);
+                resp.addAll(getLayers((FLayers) lyr, tt, only_vect));
 	    } else {
 		if (lyr instanceof FLyrVect || (!only_vect)) {
 
@@ -908,6 +909,13 @@ public class MapSheetsUtils {
 		}
 	    }
 	}
+        Collections.sort(resp, new Comparator<Object>() {
+            @Override
+            public int compare(Object lhs, Object rhs) {
+                return ((FLayer) lhs).getName().compareToIgnoreCase(
+                        ((FLayer) rhs).getName());
+            }
+        });
 	return resp;
     }
 
