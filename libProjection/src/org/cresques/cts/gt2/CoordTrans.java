@@ -25,20 +25,15 @@ package org.cresques.cts.gt2;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cresques.cts.ICoordTrans;
 import org.cresques.cts.IProjection;
-import org.geotools.pt.CoordinatePoint;
-import org.geotools.referencing.CRS;
-import org.geotools.referencing.operation.DefaultCoordinateOperationFactory;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
-import org.opengis.referencing.operation.CoordinateOperation;
-import org.opengis.referencing.operation.OperationNotFoundException;
-import org.opengis.referencing.operation.TransformException;
-
-
-//import org.geotools.pt.MismatchedDimensionException;
+import org.locationtech.proj4j.CRSFactory;
+import org.locationtech.proj4j.CoordinateTransform;
+import org.locationtech.proj4j.CoordinateTransformFactory;
+import org.locationtech.proj4j.ProjCoordinate;
 
 /**
  * Transforma coordenadas entre dos sistemas
@@ -46,10 +41,13 @@ import org.opengis.referencing.operation.TransformException;
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 class CoordTrans implements ICoordTrans {
-    private DefaultCoordinateOperationFactory trFactory = new DefaultCoordinateOperationFactory();
-    private CoordinateOperation op = null;
+    private CoordinateTransformFactory ctFactory = new CoordinateTransformFactory();
+    private CRSFactory csFactory = new CRSFactory();
+    private CoordinateTransform trans = null;
     private CoordSys from = null;
     private CoordSys to = null;
+
+    private static final Map<String, Map<String, CoordinateTransform>> TRANS_CACHE = new HashMap<String, Map<String, CoordinateTransform>>();
 
     private ICoordTrans invertedCT = null;
 
@@ -57,19 +55,19 @@ class CoordTrans implements ICoordTrans {
         this.from = from;
         this.to = to;
 
-        try {
-            op = trFactory.createOperation(CRS.decode(from.getAbrev()),
-                    CRS.decode(to.getAbrev()));
-        } catch (OperationNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchAuthorityCodeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (FactoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (!TRANS_CACHE.containsKey(from.getFullCode())) {
+            TRANS_CACHE.put(from.getFullCode(),
+                    new HashMap<String, CoordinateTransform>());
         }
+        if (!TRANS_CACHE.get(from.getFullCode()).containsKey(to.getFullCode())) {
+            TRANS_CACHE.get(from.getFullCode()).put(
+                    to.getFullCode(),
+                    ctFactory.createTransform(
+                            csFactory.createFromName(from.getFullCode()),
+                            csFactory.createFromName(to.getFullCode())));
+        }
+
+        this.trans = TRANS_CACHE.get(from.getFullCode()).get(to.getFullCode());
     }
 
     public IProjection getPOrig() {
@@ -87,23 +85,16 @@ class CoordTrans implements ICoordTrans {
     }
 
     public Point2D convert(Point2D ptOrig, Point2D ptDest) {
-        CoordinatePoint pt1 = new CoordinatePoint(ptOrig);
-        CoordinatePoint pt2 = new CoordinatePoint(0D, 0D);
-        ptDest = null;
-
-        try {
-            op.getMathTransform().transform(pt1, pt2);
-            ptDest = pt2.toPoint2D();
-        } catch (TransformException e) {
-            // TODO Bloque catch generado automáticamente
-            e.printStackTrace();
-        }
-
-        return ptDest;
+        ProjCoordinate p = new ProjCoordinate();
+        ProjCoordinate p2 = new ProjCoordinate();
+        p.x = ptOrig.getX();
+        p.y = ptOrig.getY();
+        trans.transform(p, p2);
+        return new Point2D.Double(p2.x, p2.y);
     }
 
     public String toString() {
-        return op.toString();
+        return trans.toString();
     }
 
     /* (non-Javadoc)
