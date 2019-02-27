@@ -115,6 +115,7 @@ public class CaracteristicasQueries {
 	case Bajantes:
 	case Cunetas:
 	case Arquetas:
+	case Pozos:
 	    return getLocalizationTablesWithSentido();
 
 	case Firme:
@@ -227,6 +228,8 @@ public class CaracteristicasQueries {
 		break;
 	case Arquetas:
 		query = ConsultasFieldNames.arquetasCSVFieldNames();
+	case Pozos:
+        query = ConsultasFieldNames.pozosCSVFieldNames();
 	}
 	return "SELECT " + query + getFromClauseCaracteristicas(element)
 		+ filters.getWhereClauseByLocationWidgets() + " ORDER BY gid";

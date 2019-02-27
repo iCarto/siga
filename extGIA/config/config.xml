@@ -31,15 +31,16 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_desague" action-command="Obras_Desague" position="30416"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_paso" action-command="Obras_Paso" position="30417"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pasos_mediana" action-command="Pasos_Mediana" position="30418"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/senhalizacion_variable" action-command="Senhalizacion_Variable" position="30419"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/senhalizacion_vertical" action-command="Senhalizacion_Vertical" position="30420"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/taludes" action-command="Taludes" position="30421"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/transformadores" action-command="Transformadores" position="30422"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/tuneles" action-command="Tuneles" position="30423"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/valla_cierre" action-command="Valla_Cierre" position="30424"/>			
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/separator" position="30425" is_separator="true"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/ramales" action-command="Ramales" position="30426"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/competencias" action-command="Competencias" position="30427"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pozos" action-command="Pozos" position="30419"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/senhalizacion_variable" action-command="Senhalizacion_Variable" position="30420"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/senhalizacion_vertical" action-command="Senhalizacion_Vertical" position="30421"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/taludes" action-command="Taludes" position="30422"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/transformadores" action-command="Transformadores" position="30423"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/tuneles" action-command="Tuneles" position="30424"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/valla_cierre" action-command="Valla_Cierre" position="30425"/>			
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/separator" position="30427" is_separator="true"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/ramales" action-command="Ramales" position="30429"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/competencias" action-command="Competencias" position="30431"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgia.ToolBarFormLauncherExtension" active="true">
