@@ -93,7 +93,7 @@ public class ReprojectGeoprocessController extends AbstractGeoprocessController 
 
 	private GeoprocessingReprojectPanel panel;
 	private ReprojectGeoprocess reproject;
-	
+
 	public void setView(IGeoprocessUserEntries viewPanel) {
 		this.panel = (GeoprocessingReprojectPanel) viewPanel;
 	}
@@ -127,8 +127,10 @@ public class ReprojectGeoprocessController extends AbstractGeoprocessController 
 		}
 		reproject = (ReprojectGeoprocess) getGeoprocess();
 		reproject.setFirstLayer(inputLayer);
-		SHPLayerDefinition definition = 
+		SHPLayerDefinition definition =
 			(SHPLayerDefinition) reproject.createLayerDefinition();
+        IProjection projection = panel.getTargetProjection();
+        definition.setProjection(projection);
 		definition.setFile(outputFile);
 		ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
 		IWriter writer = null;
@@ -139,12 +141,11 @@ public class ReprojectGeoprocessController extends AbstractGeoprocessController 
 			String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
 			panel.error(errorDescription, error);
 			return false;
-		} 
+		}
 		reproject.setResultLayerProperties(writer, schemaManager);
 		HashMap params = new HashMap();
 		boolean onlySelected = panel.isFirstOnlySelected();
 		params.put("firstlayerselection", new Boolean(onlySelected));
-		IProjection projection = panel.getTargetProjection();
 		IProjection previousProj = inputLayer.getProjection();
 		if(previousProj.equals(projection)){
 			String error = PluginServices.getText(this, "Error_entrada_datos");
@@ -153,14 +154,14 @@ public class ReprojectGeoprocessController extends AbstractGeoprocessController 
 			return false;
 		}
 		params.put("targetProjection", projection);
-		
+
 		try {
 			reproject.setParameters(params);
 			reproject.checkPreconditions();
 			IMonitorableTask task1 = reproject.createTask();
 			if(task1 == null){
 				return false;
-				
+
 			}
 			AddResultLayerTask task2 = new AddResultLayerTask(reproject);
 			task2.setLayers(layers);
@@ -168,7 +169,7 @@ public class ReprojectGeoprocessController extends AbstractGeoprocessController 
 					task2);
 			if (globalTask.preprocess())
 				PluginServices.cancelableBackgroundExecution(globalTask);
-			
+
 		} catch (GeoprocessException e) {
 			String error = PluginServices.getText(this, "Error_ejecucion");
 			String errorDescription = PluginServices.getText(this, "Error_fallo_geoproceso");

@@ -103,14 +103,11 @@ package com.iver.cit.gvsig.geoprocess.core.fmap;
 import java.io.File;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.cresques.cts.IProjection;
 
 import com.hardcode.gdbms.driver.exceptions.SchemaEditionException;
-import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.drivers.ILayerDefinition;
+import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.ISchemaManager;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
@@ -120,7 +117,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 /**
  * Base class with all commong logic to geoprocesses
  * @author azabala
@@ -159,6 +155,8 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 
 
 	protected FLayer createLayerFrom(IWriter writer) throws GeoprocessException{
+        SHPLayerDefinition tableDef = (SHPLayerDefinition) ((ShpWriter) writer)
+                .getTableDefinition();
 		FLyrVect solution = null;
 		//Para evitar todos estos casts, hay que meter la
 		//interfaz FileWriter
@@ -169,7 +167,8 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 			fileNameStart = 0;
 		layerName = fileName.substring(fileNameStart, fileName.length() /*-1*/);
 		File file = new File(fileName);
-		IProjection proj = firstLayer.getProjection();
+        IProjection proj = (tableDef.getProjection() != null) ? tableDef
+                .getProjection() : firstLayer.getProjection();
 		//TODO La proyeccion se deberia leer del WRITER
 		try {
 			IndexedShpDriver driver = new IndexedShpDriver();
