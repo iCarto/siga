@@ -15,6 +15,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.AreasServicioCa
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ArquetasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BajantesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.BarreraRigidaCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.CentrosMandoCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ComunicacionesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.CunetasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.DrenCazCaracteristicasReport;
@@ -96,7 +97,7 @@ public class ConsultasFieldNames {
             + "bordillos, bumpers, tunel_peaje, marquesina_tipo, marquesina_sup, sup_total, "
             + "observaciones, numero_vias";
         case Enlaces:
-            return "id_enlace, nombre, tr.item, pk, n_salida, tipo_enlace, " + "alumbrado, observaciones";
+            return "id_enlace, nombre, tr.item, pk, n_salida, tipo_enlace, alumbrado, observaciones";
         case Juntas:
             return "id_junta, tr.item, tv.item, nv.item, pk, numero_junta, ancho, modulo, "
             + "elemento, codigo_elemento, descripcion, observaciones";
@@ -155,7 +156,9 @@ public class ConsultasFieldNames {
         case Arquetas:
             return "gid, tr.item, tv.item, nv.item, pk, observaciones";
         case Pozos:
-            return "gid, tr.item, tv.item, nv.item, pk, fecha_actualizacion, denominacion, numero_concesion, fecha_concesion, observaciones";
+            return "gid, tr.item, tv.item, nv.item, pk, denominacion, numero_concesion, fecha_concesion, observaciones";
+        case Centros_Mando:
+            return "gid, tr.item,  tv.item,  nv.item, pk, grupo, cups, observaciones";
         }
         return null;
     }
@@ -531,11 +534,14 @@ public class ConsultasFieldNames {
     }
 
     public static String pozosCSVFieldNames() {
-        return "gid as \"ID Pozo\"," + localizationCSVFieldNames() + "pk as \"PK\"," + "ramal as \"Ramal\","
-                + "st.item as \"Sentido\"," + "margen as \"Margen\"," + "direccion as \"Dirección\","
-                + "mu.item as \"Municipio\"," + "denominacion as \"Denominación\","
-                + "numero_concesion as \"Número de concesión\", fecha_concesion as \"Fecha Concesión\","
-                + "observaciones as \"Observaciones\"";
+        return "gid as \"ID Pozo\","
+                + localizationCSVFieldNames()
+                + "pk as \"PK\", denominacion as \"Denominación\", numero_concesion as \"Número de concesión\", fecha_concesion as \"Fecha Concesión\", observaciones as \"Observaciones\"";
+    }
+
+    public static String centrosMandoCSVFieldNames() {
+        return "gid as \"ID Centro Mando\"," + localizationCSVFieldNames()
+                + "pk as \"PK\", grupo AS \"Grupo\", cups AS \"CUPS\", observaciones AS \"Observaciones\"";
     }
 
     public static void createCaracteristicasReport(String[] element, String outputFile, DefaultTableModel tableModel,
@@ -625,6 +631,10 @@ public class ConsultasFieldNames {
             break;
         case Pozos:
             new PozosCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+            break;
+        case Centros_Mando:
+            new CentrosMandoCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+            break;
         }
     }
 
