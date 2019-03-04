@@ -33,6 +33,7 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_paso" action-command="Obras_Paso" position="30431"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pasos_mediana" action-command="Pasos_Mediana" position="30433"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pozos" action-command="Pozos" position="30435"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pretiles" action-command="Pretiles" position="30436"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/senhalizacion_variable" action-command="Senhalizacion_Variable" position="30437"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/senhalizacion_vertical" action-command="Senhalizacion_Vertical" position="30439"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/taludes" action-command="Taludes" position="30441"/>

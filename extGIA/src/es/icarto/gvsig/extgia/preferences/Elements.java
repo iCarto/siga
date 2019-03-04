@@ -31,6 +31,7 @@ import es.icarto.gvsig.extgia.forms.obras_desague.ObrasDesagueForm;
 import es.icarto.gvsig.extgia.forms.obras_paso.ObrasPasoForm;
 import es.icarto.gvsig.extgia.forms.pasos_mediana.PasosMedianaForm;
 import es.icarto.gvsig.extgia.forms.pozos.PozosForm;
+import es.icarto.gvsig.extgia.forms.pretiles.PretilesForm;
 import es.icarto.gvsig.extgia.forms.ramales.RamalesForm;
 import es.icarto.gvsig.extgia.forms.senhalizacion_variable.SenhalizacionVariableForm;
 import es.icarto.gvsig.extgia.forms.senhalizacion_vertical.SenhalizacionVerticalForm;
@@ -236,7 +237,8 @@ public enum Elements {
     Cunetas("gid", CunetasForm.class, null, null, null, "cunetas_imagenes", null, Help.ignoreGeom),
     Arquetas("gid", ArquetasForm.class, null, null, null, "arquetas_imagenes", null, Help.ignoreGeom),
     Pozos("gid", PozosForm.class, null, null, null, "pozos_imagenes", null, Help.ignoreGeom),
-    Centros_Mando("gid", CentrosMandoForm.class, null, null, null, "centros_mando_imagenes", null, Help.ignoreGeom);
+    Centros_Mando("gid", CentrosMandoForm.class, null, null, null, "centros_mando_imagenes", null, Help.ignoreGeom),
+    Pretiles("gid", PretilesForm.class, null, null, null, "pretiles_imagenes", null, Help.ignoreGeom);
 
     public final String pk;
     public final Class<? extends AbstractForm> form;
