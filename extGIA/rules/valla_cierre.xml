@@ -320,7 +320,7 @@
 
 		<FIELD>
 			<FIELDNAME>longitud</FIELDNAME>
-			<VALIDATIONRULE>integer_positive</VALIDATIONRULE>
+			<VALIDATIONRULE>double_positive</VALIDATIONRULE>
 		</FIELD>
 
 		<FIELD>
