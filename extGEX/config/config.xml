@@ -127,6 +127,13 @@
             </tool-bar>
 		</extension>
 		
+		<extension class-name="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" active="true">
+            <menu text="SIGA/WMS/dimensiones_ampliacion_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" position="30811"/>
+            <tool-bar name="SIGA_Tools" position="75">
+                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" tooltip="dimensiones_ampliacion_tooltip" position="7"/>
+            </tool-bar>
+        </extension>
+		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" description="LOAD_PNOA_WMS" active="true">
 			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="LoadPNOAExtension" position="30820"/>
 			<tool-bar name="SIGA_Tools" position="75">
