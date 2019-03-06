@@ -120,14 +120,17 @@
 		</extension>
 		
 		
-		<extension class-name="es.icarto.gvsig.extgex.WMSLoadEstadoDimensionesExtension" description="LOAD_EstadoDimensiones_WMS" active="true">
-			<menu text="SIGA/WMS/Planos Estado de Dimensiones" action-command="LoadEstadoDimensionesExtension" position="30810"/>
+		<extension class-name="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" active="true">
+			<menu text="SIGA/WMS/dimensiones_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" position="30810"/>
+			<tool-bar name="SIGA_Tools" position="75">
+                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" tooltip="dimensiones_tooltip" position="6"/>
+            </tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" description="LOAD_PNOA_WMS" active="true">
 			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="LoadPNOAExtension" position="30820"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="6"/>
+				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="9"/>
 			</tool-bar>
 		</extension>
 		
