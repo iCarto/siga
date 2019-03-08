@@ -23,55 +23,52 @@ import es.udc.cartolab.gvsig.elle.utils.MapFilter;
 import es.udc.cartolab.gvsig.users.preferences.UsersPreferencePage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class SIGAConfigExtension extends Extension implements
-	IPreferenceExtension {
+public class SIGAConfigExtension extends Extension implements IPreferenceExtension {
 
-    private static final Logger logger = Logger
-	    .getLogger(SIGAConfigExtension.class);
+    private static final Logger logger = Logger.getLogger(SIGAConfigExtension.class);
 
     private InfoEmpresa infoEmpresa;
 
     @Override
     public void initialize() {
-	setVersion();
-	UsersPreferencePage.LOGO = PreferencesPage.SIGA_LOGO;
+        setVersion();
+        UsersPreferencePage.LOGO = PreferencesPage.SIGA_LOGO;
     }
 
     private void setVersion() {
-	About about = (About) PluginServices.getExtension(About.class);
-	FPanelAbout panelAbout = about.getAboutPanel();
-	Properties props = new Properties();
-	try {
-	    String file = PluginServices.getPluginServices(this)
-		    .getPluginDirectory().getAbsolutePath()
-		    + File.separator + "VERSION";
-	    props.load(new FileInputStream(file));
-	} catch (Exception e) {
-	    logger.error(e.getStackTrace(), e);
-	}
-	String version = props.getProperty("version");
-	panelAbout.setCustomVersion(version);
+        About about = (About) PluginServices.getExtension(About.class);
+        FPanelAbout panelAbout = about.getAboutPanel();
+        Properties props = new Properties();
+        try {
+            String file = PluginServices.getPluginServices(this).getPluginDirectory().getAbsolutePath()
+                    + File.separator + "VERSION";
+            props.load(new FileInputStream(file));
+        } catch (Exception e) {
+            logger.error(e.getStackTrace(), e);
+        }
+        String version = props.getProperty("version");
+        panelAbout.setCustomVersion(version);
+        logger.info("SIGA VERSION: " + version);
     }
 
     @Override
     public void postInitialize() {
-	ConfigExtension configExt = (ConfigExtension) PluginServices
-		.getExtension(ConfigExtension.class);
-	configExt.setWizardTitle(PreferencesPage.APP_NAME);
-	configExt.setMapFilter(new MapFilter() {
-	    @Override
-	    public String[] filter(String[] maps) {
-		List<String> mapsToShow = new ArrayList<String>();
-		for (int i = 0; i < maps.length; i++) {
-		    if (maps[i].startsWith("BDD_")) {
-			mapsToShow.add(maps[i]);
-		    }
-		}
-		Collections.sort(mapsToShow);
-		return mapsToShow.toArray(new String[0]);
-	    }
-	});
-	DBSession.setFormatter(new SIGAFormatter());
+        ConfigExtension configExt = (ConfigExtension) PluginServices.getExtension(ConfigExtension.class);
+        configExt.setWizardTitle(PreferencesPage.APP_NAME);
+        configExt.setMapFilter(new MapFilter() {
+            @Override
+            public String[] filter(String[] maps) {
+                List<String> mapsToShow = new ArrayList<String>();
+                for (int i = 0; i < maps.length; i++) {
+                    if (maps[i].startsWith("BDD_")) {
+                        mapsToShow.add(maps[i]);
+                    }
+                }
+                Collections.sort(mapsToShow);
+                return mapsToShow.toArray(new String[0]);
+            }
+        });
+        DBSession.setFormatter(new SIGAFormatter());
     }
 
     @Override
@@ -80,26 +77,26 @@ public class SIGAConfigExtension extends Extension implements
 
     @Override
     public boolean isEnabled() {
-	return false;
+        return false;
     }
 
     @Override
     public boolean isVisible() {
-	return false;
+        return false;
     }
 
     @Override
     public IPreference[] getPreferencesPages() {
-	IPreference[] preferences = new IPreference[1];
-	preferences[0] = new PreferencesPage();
-	return preferences;
+        IPreference[] preferences = new IPreference[1];
+        preferences[0] = new PreferencesPage();
+        return preferences;
     }
 
     public InfoEmpresa getInfoEmpresa() {
-	if (infoEmpresa == null) {
-	    infoEmpresa = new InfoEmpresa();
-	}
-	return infoEmpresa;
+        if (infoEmpresa == null) {
+            infoEmpresa = new InfoEmpresa();
+        }
+        return infoEmpresa;
     }
 
 }
