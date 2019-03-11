@@ -56,7 +56,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * This class writes a Metadata tag. This tag is just a 
+ * This class writes a Metadata tag. This tag is just a
  * free XML subset and has metadata information about
  * the object tha contains it. It is used to add
  * elements a Feature
@@ -64,7 +64,7 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  * @see http://code.google.com/apis/kml/documentation/kml_tags_21.html#metadata
  */
 public class MetadataWriter {
-	
+
 	/**
 	 * Writes a Metadata init tag and its attributes
 	 * @param writer
@@ -76,7 +76,7 @@ public class MetadataWriter {
 	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor hanlder) throws IOException{
 		writer.writeStartElement(Kml2_1_Tags.EXTENDEDDATA);
 	}
-	
+
 	/**
 	 * It writes the end Metadata tag
 	 * @param writer
@@ -88,5 +88,18 @@ public class MetadataWriter {
 	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
 		writer.writeEndElement();
 	}
+
+    public void addData(IXmlStreamWriter writer,
+            GPEKmlWriterHandlerImplementor handler, String name, String value)
+            throws IOException {
+        writer.writeStartElement(Kml2_1_Tags.DATA);
+        writer.writeStartAttribute(Kml2_1_Tags.DATA_NAME);
+        writer.writeValue(name);
+        writer.writeEndAttributes();
+        writer.writeStartElement(Kml2_1_Tags.DATA_VALUE);
+        writer.writeValue(value);
+        writer.writeEndElement();
+        writer.writeEndElement();
+    }
 }
 

@@ -94,26 +94,26 @@ import javax.xml.namespace.QName;
  */
 public class Kml2_1_Tags {
 	public static final String NAMESPACE_21 = "http://earth.google.com/kml/2.1";
-	
+
 	public static final QName ROOT = new QName(NAMESPACE_21, "kml");
-	
+
 	public static final QName PLACEMARK = new QName(NAMESPACE_21, "Placemark");
 	public static final QName OPEN = new QName(NAMESPACE_21, "open");
 	public static final QName GROUNDOVERLAY = new QName(NAMESPACE_21, "GroundOverlay");
-		
+
 	public static final QName POINT = new QName(NAMESPACE_21, "Point");
 	public static final QName COORDINATES = new QName(NAMESPACE_21, "coordinates");
 	public static final QName LINESTRING = new QName(NAMESPACE_21, "LineString");
 	public static final QName LINEARRING = new QName(NAMESPACE_21, "LinearRing");
-	public static final QName POLYGON = new QName(NAMESPACE_21, "Polygon");	
-	public static final QName OUTERBOUNDARYIS = new QName(NAMESPACE_21, "outerBoundaryIs");	
-	public static final QName INNERBOUNDARYIS = new QName(NAMESPACE_21, "innerBoundaryIs");	
+	public static final QName POLYGON = new QName(NAMESPACE_21, "Polygon");
+	public static final QName OUTERBOUNDARYIS = new QName(NAMESPACE_21, "outerBoundaryIs");
+	public static final QName INNERBOUNDARYIS = new QName(NAMESPACE_21, "innerBoundaryIs");
 	public static final QName MULTIGEOMETRY = new QName(NAMESPACE_21, "MultiGeometry");
-	
+
 	public static final QName DOCUMENT = new QName(NAMESPACE_21, "Document");
 	public static final QName FOLDER = new QName(NAMESPACE_21, "Folder");
 	public static final QName STYLE = new QName(NAMESPACE_21, "Style");
-	
+
 	public static final QName ICON_STYLE = new QName(NAMESPACE_21, "IconStyle");
 	public static final QName LINE_STYLE = new QName(NAMESPACE_21, "LineStyle");
 	public static final QName POLY_STYLE = new QName(NAMESPACE_21, "PolyStyle");
@@ -125,24 +125,24 @@ public class Kml2_1_Tags {
 	public static final QName ICON = new QName(NAMESPACE_21, "Icon");
 	public static final QName HREF = new QName(NAMESPACE_21, "href");
 	public static final QName SCALE = new QName(NAMESPACE_21, "scale");
-		
+
 	//Separator between coordinates
 	public static final String COORDINATES_SEPARATOR = ",";
 	public static final String TUPLES_SEPARATOR = "\n";
-		
+
 	//PlaceMark params
 	public static final QName NAME = new QName(NAMESPACE_21, "name");
 	public static final QName DESCRIPTION = new QName(NAMESPACE_21, "description");
 	public static final QName VISIBILITY = new QName(NAMESPACE_21, "visibility");
 	public static final QName LOOKAT = new QName(NAMESPACE_21, "LookAt");
 	public static final QName STYLEURL = new QName(NAMESPACE_21, "styleUrl");
-	
+
 	//Param added to each feature to create the legend
 	public static final String FOLDER_NAME = "Folder Name";
-	
+
 	//Name for the default legend
 	public static final String DEFAULT_LEGEND = "Default";
-	
+
 	//LookAt params
 	public static final QName LONGITUDE = new QName(NAMESPACE_21, "longitude");
 	public static final QName LATITUDE = new QName(NAMESPACE_21, "latitude");
@@ -150,7 +150,7 @@ public class Kml2_1_Tags {
 	public static final QName RANGE = new QName(NAMESPACE_21, "range");
 	public static final QName TILT = new QName(NAMESPACE_21, "tilt");
 	public static final QName HEADING = new QName(NAMESPACE_21, "heading");
-	
+
 	//LatLonBox params
 	public static final QName LATLONALTBOX = new QName(NAMESPACE_21, "LatLonAltBox");
 	public static final QName LATLONBOX = new QName(NAMESPACE_21, "LatLonBox");
@@ -163,22 +163,25 @@ public class Kml2_1_Tags {
 	public static final QName MAXALTITUDE = new QName(NAMESPACE_21, "maxAltitude");
 	public static final QName ALTITUDEMODE = new QName(NAMESPACE_21, "altitudeMode");
 	public static final QName ROTATION = new QName(NAMESPACE_21, "rotation");
-		
+
 	//Others
 	public static final String UNKNOWN_VERSION = "UnknownVersion";
 	public static final String DEFAULT_SRS = "EPSG:4326";
-	public static final QName ID = new QName(NAMESPACE_21,"id"); 
-	public static final QName GEOMETRY_ID = new QName(NAMESPACE_21,"id"); 
+	public static final QName ID = new QName(NAMESPACE_21,"id");
+	public static final QName GEOMETRY_ID = new QName(NAMESPACE_21,"id");
 	public static final QName METADATA = new QName(NAMESPACE_21, "Metadata");
-	
+
 	//To be used in the elements with blanc spaces
 	public static final String DEFAULT_BLANC_SPACE = "_";
 
 	public static final QName EXTENDEDDATA = new QName(NAMESPACE_21, "ExtendedData");
+    public static final QName DATA = new QName(NAMESPACE_21, "Data");
+    public static final QName DATA_NAME = new QName(NAMESPACE_21, "name");
+    public static final QName DATA_VALUE = new QName(NAMESPACE_21, "value");
 
 	public static final QName STYLEMAP = new QName(NAMESPACE_21, "StyleMap");
 	public static final QName PAIR = new QName(NAMESPACE_21, "Pair");
 	public static final QName KEY = new QName(NAMESPACE_21, "key");
 
-	
+
 }

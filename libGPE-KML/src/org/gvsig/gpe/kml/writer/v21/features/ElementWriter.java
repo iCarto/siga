@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.xml.namespace.QName;
 
 import org.gvsig.gpe.kml.writer.GPEKmlWriterHandlerImplementor;
-import org.gvsig.gpe.xml.stream.EventType;
 import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
@@ -58,12 +57,12 @@ import org.gvsig.gpe.xml.stream.IXmlStreamWriter;
  *
  */
 /**
- * It parses an element. An element is a tag inside of a 
+ * It parses an element. An element is a tag inside of a
  * metadata tag
  * @author Jorge Piera LLodrá (jorge.piera@iver.es)
  */
 public class ElementWriter {
-	
+
 	/**
 	 * It writes an Element tag
 	 * @param writer
@@ -78,17 +77,21 @@ public class ElementWriter {
 	 * Element type
 	 * @throws IOException
 	 */
-	public void start(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler, QName name, Object value) throws IOException{
+    public boolean start(IXmlStreamWriter writer,
+            GPEKmlWriterHandlerImplementor handler, QName name, Object value)
+            throws IOException {
 		// We only save fields like description or styleUrl
 		if ((name.getLocalPart().equalsIgnoreCase("Description")) ||
 				(name.getLocalPart().equalsIgnoreCase("styleUrl"))) {
 			if (value != null){
-				writer.writeStartElement(name);			
+				writer.writeStartElement(name);
 				writer.writeValue(value.toString());
 			}
+	                return true;
 		}
+                return false;
 	}
-	
+
 	/**
 	 * It writes an end Element tag
 	 * @param writer
@@ -101,7 +104,7 @@ public class ElementWriter {
 	 */
 	public void end(IXmlStreamWriter writer, GPEKmlWriterHandlerImplementor handler) throws IOException{
 		if (writer.getLastEvent().isValue())
-			writer.writeEndElement();		
+			writer.writeEndElement();
 	}
-	
+
 }

@@ -1,7 +1,8 @@
 package org.gvsig.gpe.kml.writer;
 
 import java.io.IOException;
-import java.util.Stack;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -122,16 +123,17 @@ import org.gvsig.gpe.xml.writer.GPEXmlWriterHandlerImplementor;
  */
 public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandlerImplementor{
 	private int layerLevel = 0;
-//	private Stack currentElementStream = null;	
-//	private Stack currentElementName = null;	
+//	private Stack currentElementStream = null;
+//	private Stack currentElementName = null;
 	private IWriterProfile profile = null;
-	
+    private Map<String, String> data = new HashMap<String, String>();
+
 	public GPEKmlWriterHandlerImplementor() {
 		super();
 //		currentElementStream = new Stack();
 //		currentElementName = new Stack();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.xml.writer.GPEXmlWriterHandler#createOutputStream()
@@ -139,7 +141,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 	protected IXmlStreamWriter createWriter() throws IOException {
 		return new StaxXmlStreamWriter(getOutputStream());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#getDefaultFormat()
@@ -147,13 +149,13 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 	public String getDefaultFormat() {
 		return "KML";
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getFormat()
 	 */
 	public String getFormat() {
-		return "text/xml; subtype=kml/2.1";		
+		return "text/xml; subtype=kml/2.1";
 	}
 
 	/*
@@ -164,7 +166,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 		super.initialize();
 		try {
 			writer.setDefaultNamespace(Kml2_1_Tags.NAMESPACE_21);
-			writer.writeStartElement(Kml2_1_Tags.ROOT);	
+			writer.writeStartElement(Kml2_1_Tags.ROOT);
 			writer.writeStartAttribute(XMLTags.XML_NAMESPACE_URI, XMLTags.XML_NAMESPACE_PREFIX);
 			writer.writeValue(Kml2_1_Tags.NAMESPACE_21);
 			writer.writeEndAttributes();
@@ -172,7 +174,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.GPEWriterHandler#close()
@@ -184,9 +186,9 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 			writer.close();
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
-	}	
-	
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.GPEWriterHandlerImplementor#startLayer(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -197,14 +199,14 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 				getProfile().getDocumentWriter().start(writer, this, id, name, description);
 			}else{
 				getProfile().getFolderWriter().start(writer, this, id, name, description);
-			}			
+			}
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 		layerLevel++;
 	}
-	
-	
+
+
 	/**
 	 * This method is only used in order to save the legend for KML files
 	 * It should be called after startLayer method
@@ -233,9 +235,9 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 			}
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startFeature(java.lang.String, java.lang.String)
@@ -243,13 +245,14 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 	public void startFeature(String id, String namespace, String name) {
 //		currentElementStream.push(new IXMLStreamWriter(new StringWriter()));
 //		currentElementName.push(new Stack());
+        data = new HashMap<String, String>();
 		try{
 			getProfile().getPlaceMarkWriter().start(writer, this, id, name);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}	
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endFeature()
@@ -260,39 +263,46 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 		try{
 			getProfile().getMetadataWriter().start(writer, this);
 //			writer.write(elementWriter.toString());
+            for (String name : data.keySet()) {
+                getProfile().getMetadataWriter().addData(writer, this, name,
+                        data.get(name));
+            }
 			getProfile().getMetadataWriter().end(writer, this);
 			getProfile().getPlaceMarkWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}			
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.GPEWriterHandler#startElement(java.lang.String, java.lang.Object, java.lang.Object)
 	 */
-	public void startElement(String namespace, String name, Object value) {		
+	public void startElement(String namespace, String name, Object value) {
 		try {
 			QName aux = new QName(namespace, name);
-			getProfile().getElementWriter().start(writer, this, aux, value);
+            if (!(getProfile().getElementWriter().start(writer, this, aux,
+                    value))) {
+                data.put(name, value.toString());
+            }
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.GPEWriterHandler#endElement()
 	 */
 	public void endElement() {
 		try {
-			getProfile().getElementWriter().end(writer, this);		   
+			getProfile().getElementWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startPoint(java.lang.String, org.gvsig.gpe.writer.ICoordinateSequence, java.lang.String)
@@ -302,141 +312,141 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 			getProfile().getPointTypeWriter().start(writer, this, id, coords);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.GPEWriterHandler#endPoint()
 	 */
 	public void endPoint() {
 		try {
-			getProfile().getPointTypeWriter().end(writer, this);			
+			getProfile().getPointTypeWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startLineString(java.lang.String, org.gvsig.gpe.writer.ICoordinateSequence, java.lang.String)
 	 */
 	public void startLineString(String id, ICoordinateSequence coords, String srs) {
 		try {
-			getProfile().getLineStringTypeWriter().start(writer, this, id, coords);			
+			getProfile().getLineStringTypeWriter().start(writer, this, id, coords);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endLineString()
 	 */
 	public void endLineString() {
 		try {
-			getProfile().getLineStringTypeWriter().end(writer, this);			
+			getProfile().getLineStringTypeWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startLinearRing(java.lang.String, org.gvsig.gpe.writer.ICoordinateSequence, java.lang.String)
 	 */
 	public void startLinearRing(String id, ICoordinateSequence coords, String srs) {
 		try {
-			getProfile().getLinearRingWriter().start(writer, this, coords);			
+			getProfile().getLinearRingWriter().start(writer, this, coords);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endLinearRing()
 	 */
 	public void endLinearRing() {
 		try {
-			getProfile().getLinearRingWriter().end(writer, this);			
+			getProfile().getLinearRingWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startPolygon(java.lang.String, org.gvsig.gpe.writer.ICoordinateSequence, java.lang.String)
 	 */
 	public void startPolygon(String id, ICoordinateSequence coords, String srs) {
 		try {
-			getProfile().getPolygonTypeWriter().start(writer, this, id, coords);			
+			getProfile().getPolygonTypeWriter().start(writer, this, id, coords);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endPolygon()
 	 */
 	public void endPolygon() {
 		try {
-			getProfile().getPolygonTypeWriter().end(writer, this);			
+			getProfile().getPolygonTypeWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startInnerBoundary(java.lang.String, org.gvsig.gpe.writer.ICoordinateSequence, java.lang.String)
 	 */
 	public void startInnerBoundary(String id, ICoordinateSequence coords, String srs) {
 		try {
-			getProfile().getInnerBoundaryIsWriter().start(writer, this, coords);			
+			getProfile().getInnerBoundaryIsWriter().start(writer, this, coords);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endInnerBoundary()
 	 */
 	public void endInnerBoundary() {
 		try {
-			getProfile().getInnerBoundaryIsWriter().end(writer, this);			
+			getProfile().getInnerBoundaryIsWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#startBbox(java.lang.String, org.gvsig.gpe.writer.ICoordinateSequence, java.lang.String)
 	 */
 	public void startBbox(String id, ICoordinateSequence coords, String srs) {
 		try {
-			getProfile().getRegionWriter().start(writer, this, coords);			
+			getProfile().getRegionWriter().start(writer, this, coords);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}	
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endBbox()
 	 */
 	public void endBbox() {
 		try {
-			getProfile().getRegionWriter().end(writer, this);			
+			getProfile().getRegionWriter().end(writer, this);
 		} catch (IOException e) {
 			getErrorHandler().addError(e);
-		}		
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startMultiPoint(java.lang.String, java.lang.String)
@@ -448,7 +458,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endMuliPoint()
@@ -460,7 +470,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 			getErrorHandler().addError(e);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startMultiPoint(java.lang.String, java.lang.String)
@@ -470,7 +480,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTIPOINTCREATION,getName()));
 		startMultiGeometry(id, srs);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endMuliPoint()
@@ -479,7 +489,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 		super.endMultiPoint();
 		endMultiGeometry();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startMultiPoint(java.lang.String, java.lang.String)
@@ -489,7 +499,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTILINESTRINGCREATION,getName()));
 		startMultiGeometry(id, srs);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endMuliPoint()
@@ -497,7 +507,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 	public void endMultiLineString() {
 		endMultiGeometry();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#startMultiPoint(java.lang.String, java.lang.String)
@@ -507,7 +517,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 				new FeatureNotSupportedWarning(FeatureNotSupportedWarning.MULTIPOLYGONCREATION,getName()));
 		startMultiGeometry(id, srs);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.gpe.writers.GPEWriterHandler#endMuliPoint()
@@ -529,7 +539,7 @@ public abstract class GPEKmlWriterHandlerImplementor extends GPEXmlWriterHandler
 	public void setProfile(IWriterProfile profile) {
 		this.profile = profile;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.gvsig.gpe.writer.IGPEWriterHandlerImplementor#getFileExtension()
 	 */
