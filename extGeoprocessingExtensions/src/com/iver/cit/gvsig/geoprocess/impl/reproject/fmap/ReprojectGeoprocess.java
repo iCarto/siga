@@ -72,7 +72,6 @@ import java.util.Map;
 import org.cresques.cts.ICoordTrans;
 import org.cresques.cts.IProjection;
 
-
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
@@ -92,8 +91,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
 import com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor;
-import com.iver.cit.gvsig.fmap.operations.strategies.Strategy;
-import com.iver.cit.gvsig.fmap.operations.strategies.StrategyManager;
+import com.iver.cit.gvsig.fmap.operations.strategies.SimpleStrategy;
 import com.iver.cit.gvsig.geoprocess.core.fmap.AbstractGeoprocess;
 import com.iver.cit.gvsig.geoprocess.core.fmap.DefinitionUtils;
 import com.iver.cit.gvsig.geoprocess.core.fmap.FeatureFactory;
@@ -298,12 +296,11 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			IProjection to = targetProjection;
 
 //			ICoordTrans ct = new CoordTrans((CoordSys) to, (CoordSys) from);
-			ICoordTrans ct = from.getCT((IProjection)to);
+			ICoordTrans ct = from.getCT(to);
 			ReprojectVisitor visitor = new ReprojectVisitor(resultLayerDefinition,
 					processor, selection, ct);
-			Strategy strategy = StrategyManager.getStrategy(firstLayer);
 			try {
-				strategy.process(visitor, this);
+                new SimpleStrategy(firstLayer).process(visitor, this);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -325,7 +322,7 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 		 */
 		public void finished() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
