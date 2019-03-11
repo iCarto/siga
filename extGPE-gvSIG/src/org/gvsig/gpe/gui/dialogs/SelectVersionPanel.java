@@ -86,9 +86,9 @@ public class SelectVersionPanel extends JPanel{
 	private JComboBox writerCombo;
 	private JLabel writerLabel;
 
-	public SelectVersionPanel(){
+	public SelectVersionPanel(boolean schemaEnabled){
 		initComponents();
-		initLabels();
+		initLabels(schemaEnabled);
 		initCombos();
 	}
 
@@ -104,7 +104,7 @@ public class SelectVersionPanel extends JPanel{
 	/**
 	 * Initializes all the labels
 	 */
-	private void initLabels(){
+	private void initLabels(boolean schemaEnabled){
 		//Labels
 		fileLabel.setText(PluginServices.getText(this, "gpe_select_file") + ":");
 		formatLabel.setText(PluginServices.getText(this, "gpe_select_format") + ":");
@@ -127,7 +127,7 @@ public class SelectVersionPanel extends JPanel{
 			fileButton.setText("...");
 			schemaButton.setText("...");
 		}
-		setSchemaEnabled(true);
+		setSchemaEnabled(schemaEnabled);
 	}
 
 	/**

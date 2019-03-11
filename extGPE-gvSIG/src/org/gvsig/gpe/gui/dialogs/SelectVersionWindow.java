@@ -56,10 +56,14 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 public class SelectVersionWindow extends SelectVersionPanel implements IWindow{
 	private WindowInfo info = null;
 
-	public SelectVersionWindow(){
-		super();
+    public SelectVersionWindow(boolean schemaEnabled) {
+        super(schemaEnabled);
 	}
-	
+
+    public SelectVersionWindow() {
+        this(true);
+    }
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.iver.andami.ui.mdiManager.IWindow#getWindowInfo()

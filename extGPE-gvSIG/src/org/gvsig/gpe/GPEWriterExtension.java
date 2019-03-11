@@ -76,6 +76,7 @@ public class GPEWriterExtension extends Extension{
 	 */
 	public void execute(String format) {
 		ArrayList writers = null;
+		boolean schemaEnabled = true;
 		if (format.equals("GML")){
 			writers =GPERegister.getWriterHandlerByFormat("text/xml; subtype=gml/3.1.2");
 			ArrayList auxWriters = GPERegister.getWriterHandlerByFormat("text/xml; subtype=gml/2.1.2");
@@ -84,9 +85,10 @@ public class GPEWriterExtension extends Extension{
 			}
 		}else if(format.equals("KML")){
 			writers = GPERegister.getWriterHandlerByFormat("text/xml; subtype=kml/2.1");
+			schemaEnabled = false;
 		}
 		//Creates the window
-		SelectVersionWindow window = new SelectVersionWindow();	
+		SelectVersionWindow window = new SelectVersionWindow(schemaEnabled);
 		
 		for (int i=0 ; i<writers.size() ; i++){
 			window.addWriter((GPEWriterHandler)writers.get(i));			
