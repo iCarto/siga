@@ -79,7 +79,6 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ILabelable;
 import com.iver.cit.gvsig.fmap.core.IRow;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.IMultiLayerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
@@ -137,7 +136,6 @@ import com.iver.utiles.PostProcessSupport;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
-import com.vividsolutions.jts.awt.ShapeWriter;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -805,15 +803,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                                                                     extent.getMaxY()) }),
                                                     null, geomF));
                             if (!intersection.isEmpty()) {
-                                    geomToPrint = ShapeFactory
-                                        .createGeometry(FConverter.transformToInts(
-                                                geom.getGeometryType(),
-                                                new ShapeWriter().toShape(
-                                                        intersection)
-                                                        .getPathIterator(null),
-                                                AffineTransform
-                                                        .getTranslateInstance(
-                                                                0, 0)));
+                                    geomToPrint = FConverter
+                                            .jts_to_igeometry(intersection);
                             }
                         }
                         } catch (TopologyException e) {
