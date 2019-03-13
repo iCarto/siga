@@ -190,9 +190,9 @@ public class AddLayer extends Extension {
 
     /**
      * Creates FOpenDialog, and adds file tab, and additional registered tabs
-     * 
+     *
      * @param mapControl
-     * 
+     *
      * @return FOpenDialog
      */
 	private AddLayerDialog createFOpenDialog(MapControl mapControl) {
@@ -276,6 +276,7 @@ public class AddLayer extends Extension {
 	 * Devuelve true si se han a�adido capas.
 	 */
 	public boolean addLayers(MapControl mapControl) {
+        AddLayerDialog.setLastProjection(mapControl.getProjection());
 		// create and show the modal fopen dialog
 	fopen = createFOpenDialog(mapControl);
 		PluginServices.getMDIManager().addWindow(fopen);
