@@ -560,6 +560,17 @@ public class FFrameText extends FFrame {
     /**
      * Rellenar el texto que se quiere añadir al Layout.
      *
+     * @param s
+     *            String a añadir.
+     */
+    public void setText(String s) {
+        clearText();
+        addText(s);
+    }
+
+    /**
+     * Rellenar el texto que se quiere añadir al Layout.
+     *
      * @param s String a añadir.
      */
     public void addText(String s) {
