@@ -24,7 +24,13 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import org.gvsig.raster.buffer.BufferFactory;
 import org.gvsig.raster.dataset.IBuffer;
@@ -39,7 +45,6 @@ import org.gvsig.raster.grid.Grid;
 import org.gvsig.raster.grid.GridTransparency;
 import org.gvsig.raster.grid.filter.FilterListChangeEvent;
 import org.gvsig.raster.grid.filter.FilterListChangeListener;
-import org.gvsig.raster.grid.filter.RasterFilter;
 import org.gvsig.raster.grid.filter.RasterFilterList;
 import org.gvsig.raster.grid.filter.bands.ColorTableFilter;
 import org.gvsig.raster.util.Cancellable;
@@ -332,9 +337,19 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 		drawer.setBufferSize((int)Math.round(widthImage), (int)Math.round(heightImage)); // Ancho y alto del buffer
 		geoImage = drawer.drawBufferOverImageObject(replicateBand, getRenderBands(), cancelWrapper); // Acción de renderizado
 
+        // Transform image to gif format in order to compress it
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write((BufferedImage) geoImage, "gif", baos);
+            geoImage = ImageIO
+                    .read(new ByteArrayInputStream(baos.toByteArray()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 		// Borramos el buffer de transparencia para que siempre se tenga que regenerar.
                 getLastTransparency().setAlphaBand(null);
-		
+
 		//En el caso de no tenga rotación y el tamaño de pixel sea positivo en X y negativo en Y no aplicamos ninguna
 		//transformación. Esto no es necesario hacerlo, sin ello se visualiza igual. Unicamente se hace porque de esta
 		//forma el raster resultante mejora un poco en calidad en ciertos niveles de zoom ya que al aplicar transformaciones
@@ -500,14 +515,14 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 		 * @param renderBands: bandas y su posición
 		 */
 	public void setRenderBands(int[] renderBands) {
-		if(	renderBands[0] != this.renderBands[0] || 
-			renderBands[1] != this.renderBands[1] || 
+		if(	renderBands[0] != this.renderBands[0] ||
+			renderBands[1] != this.renderBands[1] ||
 			renderBands[2] != this.renderBands[2])
 			callVisualPropertyChanged(renderBands);
 		this.renderBands = renderBands;
 		if (filterList != null) {
 			for (int i = 0; i < filterList.lenght(); i++)
-				((RasterFilter) filterList.get(i)).addParam("renderBands", renderBands);
+				filterList.get(i).addParam("renderBands", renderBands);
 		}
 	}
 
