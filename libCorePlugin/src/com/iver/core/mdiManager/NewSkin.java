@@ -188,6 +188,8 @@ public class NewSkin extends Extension implements MDIManager{
      * @see com.iver.andami.ui.mdiManager.MDIManager#addWindow(com.iver.andami.ui.mdiManager.IWindow)
      */
     public IWindow addWindow(IWindow p) throws SingletonDialogAlreadyShownException {
+        final int originalX = p.getWindowInfo().getX();
+        final int originalY = p.getWindowInfo().getY();
         // se obtiene la información de la vista
         WindowInfo wi = wis.getWindowInfo(p);
 
@@ -216,6 +218,8 @@ public class NewSkin extends Extension implements MDIManager{
                 JInternalFrame frame = fws.getJInternalFrame(p);
                 sws.openSingletonWindow((SingletonWindow) p, frame);
                 addJInternalFrame(frame, wi);
+                p.getWindowInfo().setX(originalX);
+                p.getWindowInfo().setY(originalY);
                 wss.add(p, new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         IWindow v = wis.getWindowById(Integer.parseInt(e
@@ -231,7 +235,7 @@ public class NewSkin extends Extension implements MDIManager{
                         .getFrame((SingletonWindow) p);
                 activateJInternalFrame(frame);
                 wss.setActive(p);
-                return fws.getWindow((JInternalFrame) frame);
+                return fws.getWindow(frame);
             }
         } else {
             if (wi.isModal()) {
@@ -501,7 +505,7 @@ public class NewSkin extends Extension implements MDIManager{
         Iterator i = fws.getWindowIterator();
 
         while (i.hasNext()) {
-            eliminar.add((IWindow) i.next());
+            eliminar.add(i.next());
         }
 
         for (Iterator iter = eliminar.iterator(); iter.hasNext();) {
@@ -591,7 +595,7 @@ public class NewSkin extends Extension implements MDIManager{
      */
     private void closeJInternalFrame(JInternalFrame frame) {
         try {
-            IWindow s = (IWindow) fws.getWindow(frame);
+            IWindow s = fws.getWindow(frame);
 
             frame.setClosed(true);
             callWindowClosed(s);
@@ -747,7 +751,7 @@ public class NewSkin extends Extension implements MDIManager{
             // e.getInternalFrame().getTitle());
 
             JInternalFrame c = (JInternalFrame) e.getSource();
-            WindowInfo wi = wis.getWindowInfo((IWindow) fws.getWindow(c));
+            WindowInfo wi = wis.getWindowInfo(fws.getWindow(c));
 
             IWindow win = fws.getWindow(c);
             callWindowClosed(win);
@@ -857,11 +861,11 @@ public class NewSkin extends Extension implements MDIManager{
         Iterator i = fws.getWindowIterator();
 
         while (i.hasNext()) {
-            windows.add((IWindow) i.next());
+            windows.add(i.next());
         }
         return (IWindow[]) windows.toArray(new IWindow[0]);
     }
-    
+
     @Override
     public <T extends IWindow> List<T> getAllWindows(IWindowFilter filter) {
         ArrayList<T> windows = new ArrayList<T>();
@@ -938,14 +942,14 @@ public class NewSkin extends Extension implements MDIManager{
     	JInternalFrame f = fws.getJInternalFrame(w);
     	f.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
     	JDesktopPane pnl = f.getDesktopPane();
-    	
+
     	// Under rare circumstances, corrupt views get written into the
     	// gvSIG project file. If we have one of those: just skip it!
     	// Next time the user saves the project file, it will be eliminated.
     	if ( f == null || pnl == null ) {
 			return;
     	}
-    	
+
     	pnl.remove(f);
     	int width;
     	int height;

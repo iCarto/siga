@@ -12,9 +12,9 @@ import es.icarto.gvsig.siga.PreferencesPage;
 
 @SuppressWarnings("serial")
 public abstract class BasicAbstractWindow extends AbstractIWindow {
-    
+
     protected FormPanel formPanel;
-    
+
     public BasicAbstractWindow() {
 	super();
 //	ormlite = new ORMLite(getClass().getClassLoader()
@@ -32,7 +32,7 @@ public abstract class BasicAbstractWindow extends AbstractIWindow {
 //	fillValues();
 //	setListeners();
     }
-    
+
     public FormPanel getFormPanel() {
 	if (formPanel == null) {
 	    InputStream stream = getClass().getClassLoader()
@@ -49,13 +49,15 @@ public abstract class BasicAbstractWindow extends AbstractIWindow {
 	}
 	return formPanel;
     }
-    
+
     protected abstract String getBasicName();
-    
+
     protected void addImageHandler(String imgComponent, String absPath) {
 	ImageComponent image = (ImageComponent) formPanel.getComponentByName(imgComponent);
-	ImageIcon icon = new ImageIcon(absPath);
-	image.setIcon(icon);
+        if (image != null) {
+            ImageIcon icon = new ImageIcon(absPath);
+            image.setIcon(icon);
+        }
     }
 
 }
