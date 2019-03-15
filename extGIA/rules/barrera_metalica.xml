@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LAYER alias="pretiles">
-	<TABLENAME>pretiles</TABLENAME>
+<LAYER alias="barrera_metalica">
+	<TABLENAME>barrera_metalica</TABLENAME>
 	<PRIMARYKEY>
 		<PKELEMENT>gid</PKELEMENT>
 	</PRIMARYKEY>
@@ -11,7 +11,7 @@
         <FIELDNAME>gid</FIELDNAME>
         <VALIDATIONRULE>INTEGER_POSITIVE</VALIDATIONRULE>
     </FIELD>
-        
+    
     <FIELD>
 		<FIELDNAME>area_mantenimiento</FIELDNAME>
 		<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
@@ -217,18 +217,6 @@
         </DOMAINREADER>
     </FIELD>
     
-    
-    <FIELD>
-		<FIELDNAME>tipo</FIELDNAME>
-		<DOMAINREADER>
-			<DRTYPE>db</DRTYPE>
-			<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-			<DRDBTABLE>pretiles_tipo</DRDBTABLE>
-			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
-		</DOMAINREADER>
-	</FIELD>
-	
 	<FIELD>
 		<FIELDNAME>clase_contencion</FIELDNAME>
 		<DOMAINREADER>
@@ -241,7 +229,6 @@
 		</DOMAINREADER>
 	</FIELD>
     
-    
     <FIELD>
 		<FIELDNAME>nivel_contencion</FIELDNAME>
 		<DOMAINREADER>
@@ -252,7 +239,6 @@
 			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
 		</DOMAINREADER>
 	</FIELD>
-    
     
     <FIELD>
 		<FIELDNAME>anchura_trabajo</FIELDNAME>
@@ -269,7 +255,7 @@
         <FIELDNAME>deflexion</FIELDNAME>
         <VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
     </FIELD>
-    
+        
     <FIELD>
         <FIELDNAME>longitud</FIELDNAME>
         <VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>

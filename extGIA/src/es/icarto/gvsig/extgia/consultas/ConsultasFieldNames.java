@@ -162,6 +162,8 @@ public class ConsultasFieldNames {
             return "gid, tr.item,  tv.item,  nv.item, pk, grupo, cups, observaciones";
         case Pretiles:
             return "gid, tr.item,  tv.item,  nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
+        case Barrera_Metalica:
+            return "gid, tr.item,  tv.item, nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
         }
         return null;
     }
@@ -551,6 +553,12 @@ public class ConsultasFieldNames {
         return "gid as \"ID Pretil\","
                 + localizationCSVFieldNames()
                 + "pk_inicial as \"PK Inicial\", pk_final as \"PK Final\", tipo AS \"Tipo\", sistema_contencion AS \"Sistema contención OC 35/2014\", longitud AS \"Lontitud (m)\", observaciones AS \"Observaciones\"";
+    }
+
+    public static String barreraMetalicaCSVFieldNames() {
+        return "gid as \"ID Barrera metálica\","
+                + localizationCSVFieldNames()
+                + "pk_inicial as \"PK inicial (km)\", pk_final as \"PK final (km)\", tipo as \"Tipo\", sistema_contencion as \"Sistema contención OC 35/2014\", longitud as \"Longitud (m)\", observaciones as \"Observaciones\"";
     }
 
     public static void createCaracteristicasReport(String[] element, String outputFile, DefaultTableModel tableModel,

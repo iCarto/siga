@@ -17,7 +17,8 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/areas_servicio" action-command="Areas_Servicio" position="30402"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/arquetas" action-command="Arquetas" position="30403"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/bajantes" action-command="Bajantes" position="30404"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/barrera_rigida" action-command="Barrera_Rigida" position="30405"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/barrera_metalica" action-command="Barrera_Metalica" position="30405"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/barrera_rigida" action-command="Barrera_Rigida" position="30406"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/centros_mando" action-command="Centros_Mando" position="30407"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/comunicaciones" action-command="Comunicaciones" position="30409"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/cunetas" action-command="Cunetas" position="30411"/>

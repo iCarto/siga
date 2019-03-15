@@ -14,6 +14,7 @@ import es.icarto.gvsig.extgia.forms.areas_peaje.AreasPeajeForm;
 import es.icarto.gvsig.extgia.forms.areas_servicio.AreasServicioForm;
 import es.icarto.gvsig.extgia.forms.arquetas.ArquetasForm;
 import es.icarto.gvsig.extgia.forms.bajantes.BajantesForm;
+import es.icarto.gvsig.extgia.forms.barrera_metalica.BarreraMetalicaForm;
 import es.icarto.gvsig.extgia.forms.barrera_rigida.BarreraRigidaForm;
 import es.icarto.gvsig.extgia.forms.centros_mando.CentrosMandoForm;
 import es.icarto.gvsig.extgia.forms.competencias.CompetenciasForm;
@@ -238,7 +239,16 @@ public enum Elements {
     Arquetas("gid", ArquetasForm.class, null, null, null, "arquetas_imagenes", null, Help.ignoreGeom),
     Pozos("gid", PozosForm.class, null, null, null, "pozos_imagenes", null, Help.ignoreGeom),
     Centros_Mando("gid", CentrosMandoForm.class, null, null, null, "centros_mando_imagenes", null, Help.ignoreGeom),
-    Pretiles("gid", PretilesForm.class, null, null, null, "pretiles_imagenes", null, Help.ignoreGeom);
+    Pretiles("gid", PretilesForm.class, null, null, null, "pretiles_imagenes", null, Help.ignoreGeom),
+    Barrera_Metalica(
+                                                                                                                                                                            "gid",
+                                                                                                                                                                            BarreraMetalicaForm.class,
+                                                                                                                                                                            null,
+                                                                                                                                                                            null,
+                                                                                                                                                                            null,
+                                                                                                                                                                            "barrera_metalica_imagenes",
+                                                                                                                                                                            null,
+                                                                                                                                                                            Help.ignoreGeom);
 
     public final String pk;
     public final Class<? extends AbstractForm> form;

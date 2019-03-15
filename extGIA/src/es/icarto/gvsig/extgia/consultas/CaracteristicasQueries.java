@@ -41,25 +41,25 @@ public class CaracteristicasQueries {
         switch (Elements.valueOf(element)) {
         case Senhalizacion_Vertical:
             return " FROM "
-            + DBFieldNames.GIA_SCHEMA
-            + "."
-            + element
-            + "_"
-            + tipoConsulta
-            + " AS sub JOIN "
-            + DBFieldNames.GIA_SCHEMA
-            + "."
-            + element
-            + " AS el ON sub."
-            + elementId
-            + "= el."
-            + elementId
-            + " LEFT OUTER JOIN audasa_extgia.senhalizacion_vertical_senhales se ON (el.id_elemento_senhalizacion = se.id_elemento_senhalizacion) "
-            + CaracteristicasQueries.get(element);
+                    + DBFieldNames.GIA_SCHEMA
+                    + "."
+                    + element
+                    + "_"
+                    + tipoConsulta
+                    + " AS sub JOIN "
+                    + DBFieldNames.GIA_SCHEMA
+                    + "."
+                    + element
+                    + " AS el ON sub."
+                    + elementId
+                    + "= el."
+                    + elementId
+                    + " LEFT OUTER JOIN audasa_extgia.senhalizacion_vertical_senhales se ON (el.id_elemento_senhalizacion = se.id_elemento_senhalizacion) "
+                    + CaracteristicasQueries.get(element);
         default:
             return " FROM " + DBFieldNames.GIA_SCHEMA + "." + element + "_" + tipoConsulta + " AS sub JOIN "
-            + DBFieldNames.GIA_SCHEMA + "." + element + " AS el ON sub." + elementId + "= el." + elementId
-            + CaracteristicasQueries.get(element);
+                    + DBFieldNames.GIA_SCHEMA + "." + element + " AS el ON sub." + elementId + "= el." + elementId
+                    + CaracteristicasQueries.get(element);
         }
 
     }
@@ -68,7 +68,7 @@ public class CaracteristicasQueries {
         switch (Elements.valueOf(element)) {
         case Senhalizacion_Vertical:
             return " FROM  audasa_extgia.senhalizacion_vertical_senhales se LEFT OUTER JOIN audasa_extgia.senhalizacion_vertical el ON (el.id_elemento_senhalizacion = se.id_elemento_senhalizacion) "
-            + get(element);
+                    + get(element);
         default:
             return " FROM audasa_extgia." + element + " el " + get(element);
         }
@@ -99,6 +99,7 @@ public class CaracteristicasQueries {
         case Pozos:
         case Centros_Mando:
         case Pretiles:
+        case Barrera_Metalica:
             return getLocalizationTablesWithSentido();
 
         case Firme:
@@ -214,6 +215,9 @@ public class CaracteristicasQueries {
             break;
         case Pretiles:
             query = ConsultasFieldNames.pretilesCSVFieldNames();
+            break;
+        case Barrera_Metalica:
+            query = ConsultasFieldNames.barreraMetalicaCSVFieldNames();
             break;
         }
         return "SELECT " + query + getFromClauseCaracteristicas(element) + filters.getWhereClauseByLocationWidgets()
