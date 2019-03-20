@@ -95,7 +95,7 @@ public class LayoutAddTextListenerImpl extends LayoutAddRectangleListener {
 		fframe.setFontSize(12);
 		fframe.setFont(new Font("Arial", Font.BOLD, 9));
 		fframe.setSurrounded(Boolean.TRUE);
-		fframe.setFrameBorderSize(0.005);
+		fframe.setFrameBorderSize(0.002);
 		fframe.setCellPadding(0.01);
 		fframe.setPos(FFrameText.CENTER);
 		fframe.setBackgroundColor(Color.WHITE);
