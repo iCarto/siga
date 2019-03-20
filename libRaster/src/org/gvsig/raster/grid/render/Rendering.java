@@ -222,6 +222,12 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 		}
 	}
 
+    public synchronized Image draw(Graphics2D g, ViewPortData vp, Object cancel)
+            throws RasterDriverException, InvalidSetViewException,
+            InterruptedException {
+        return draw(g, vp, cancel, false);
+    }
+
 	/**
 	 * Dibuja el raster sobre el Graphics. Para ello debemos de pasar el viewPort que corresponde a la
 	 * vista. Este viewPort es ajustado a los tamaños máximos y mínimos de la imagen por la función
@@ -248,11 +254,12 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 	 *
 	 * @param g Graphics sobre el que se pinta
 	 * @param vp ViewPort de la extensión a dibujar
-	 * @param cancel 
+	 * @param cancel
 	 * @throws InvalidSetViewException
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	public synchronized Image draw(Graphics2D g, ViewPortData vp, Object cancel)
+    public synchronized Image draw(Graphics2D g, ViewPortData vp,
+            Object cancel, boolean compress)
 		throws RasterDriverException, InvalidSetViewException, InterruptedException {
 		Image geoImage = null;
 		if (bufferFactory == null) {
@@ -337,14 +344,16 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 		drawer.setBufferSize((int)Math.round(widthImage), (int)Math.round(heightImage)); // Ancho y alto del buffer
 		geoImage = drawer.drawBufferOverImageObject(replicateBand, getRenderBands(), cancelWrapper); // Acción de renderizado
 
-        // Transform image to gif format in order to compress it
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write((BufferedImage) geoImage, "gif", baos);
-            geoImage = ImageIO
-                    .read(new ByteArrayInputStream(baos.toByteArray()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (compress) {
+            // Transform image to gif format in order to compress it
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write((BufferedImage) geoImage, "gif", baos);
+                geoImage = ImageIO.read(new ByteArrayInputStream(baos
+                        .toByteArray()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 		// Borramos el buffer de transparencia para que siempre se tenga que regenerar.

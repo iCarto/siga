@@ -930,7 +930,14 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 	}
 
-	private void drawFixedSize(Graphics2D g, ViewPort vp, Cancellable cancel, double scale) throws ReadDriverException, LoadLayerException {
+    private void drawFixedSize(Graphics2D g, ViewPort vp, Cancellable cancel,
+            double scale) throws ReadDriverException, LoadLayerException {
+        drawFixedSize(g, vp, cancel, scale, false);
+    }
+
+    private void drawFixedSize(Graphics2D g, ViewPort vp, Cancellable cancel,
+            double scale, boolean compress) throws ReadDriverException,
+            LoadLayerException {
 		callCount++; // mess code, it is not unusual a wms server to response an error which is completely
 					 // temporal and the response is available if we retry requesting.
 					 //
@@ -985,7 +992,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			visualStatus.fileNames[0] = filePath;
 
 			try {
-				rasterProcess(filePath, g, vp, scale, cancel, 0);
+                rasterProcess(filePath, g, vp, scale, cancel, 0, compress);
 				this.updateDrawVersion();
 			} catch (FilterTypeException e) {
 			}
@@ -1001,7 +1008,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					NotificationManager.addWarning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n", null); // mess code
 					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
 					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
-					drawFixedSize(g, vp, cancel, scale); // mess code
+                    drawFixedSize(g, vp, cancel, scale, compress); // mess code
 				} // mess code
 
 				if (callCount == 1) { // mess code
@@ -1021,7 +1028,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					NotificationManager.addWarning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n", null); // mess code
 					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
 					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
-					drawFixedSize(g, vp, cancel, scale); // mess code
+                    drawFixedSize(g, vp, cancel, scale, compress); // mess code
 				} // mess code
 				if (callCount == 1) { // mess code
 					if (!isPrinting)
@@ -1037,6 +1044,12 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		callCount--; // mess code
 	}
 
+    private void rasterProcess(String filePath, Graphics2D g, ViewPort vp,
+            double scale, Cancellable cancel, int nLyr)
+            throws ReadDriverException, LoadLayerException, FilterTypeException {
+        rasterProcess(filePath, g, vp, scale, cancel, nLyr, false);
+    }
+
 	/**
 	 * Carga y dibuja el raster usando la librería
 	 * @param filePath Ruta al fichero en disco
@@ -1047,7 +1060,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	 * @throws ReadDriverException
 	 * @throws LoadLayerException
 	 */
-	private void rasterProcess(String filePath, Graphics2D g, ViewPort vp, double scale, Cancellable cancel, int nLyr) throws ReadDriverException, LoadLayerException, FilterTypeException {
+    private void rasterProcess(String filePath, Graphics2D g, ViewPort vp,
+            double scale, Cancellable cancel, int nLyr, boolean compress)
+            throws ReadDriverException, LoadLayerException, FilterTypeException {
                 closeAndFree();
 	        //Cargamos el dataset con el raster de disco.
 		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getProjection());
@@ -1100,7 +1115,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 		//Dibujamos
 		disableUpdateDrawVersion();
-		layerRaster[nLyr].draw(null, g, vp, cancel, scale);
+        layerRaster[nLyr].draw(null, g, vp, cancel, scale, compress);
 		enableUpdateDrawVersion();
 
 		//La primera vez asignamos la lista de filtros asociada al renderizador. Guardamos una referencia
@@ -1163,13 +1178,21 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		getRender().setRenderBands(renderBands);
 	}
 
+    private boolean drawTile(Graphics2D g, ViewPort vp, Cancellable cancel,
+            int tile, double scale, int nLyr) throws LoadLayerException,
+            ReadDriverException {
+        return drawTile(g, vp, cancel, tile, scale, nLyr, false);
+    }
+
 	/**
 	 * This is the method used to draw a tile in a WMS mosaic layer.
 	 * @throws LoadLayerException
 	 * @throws ReadDriverException
 	 * @return true when a tile has been painted
 	 */
-	private boolean drawTile(Graphics2D g, ViewPort vp, Cancellable cancel, int tile, double scale, int nLyr) throws LoadLayerException, ReadDriverException {
+    private boolean drawTile(Graphics2D g, ViewPort vp, Cancellable cancel,
+            int tile, double scale, int nLyr, boolean compress)
+            throws LoadLayerException, ReadDriverException {
 		callCount++;
 		// Compute the query geometry
 		// 1. Check if it is within borders
@@ -1256,7 +1279,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			String filePath = f.getAbsolutePath();
 			visualStatus.fileNames[tile] = filePath;
 			try {
-				rasterProcess(filePath, g, vp, scale, cancel, nLyr);
+                rasterProcess(filePath, g, vp, scale, cancel, nLyr, compress);
 //				this.updateDrawVersion();
 			} catch (FilterTypeException e) {
 			}
@@ -1274,7 +1297,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
 					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
 
-					drawFixedSize(g, vp, cancel, scale); // mess code
+                    drawFixedSize(g, vp, cancel, scale, compress); // mess code
 				} // mess code
 			}
 			if (callCount == 1) { // mess code
@@ -1286,7 +1309,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					Logger.getAnonymousLogger().warning("\n[ FLyrWMS.drawFixedSize() ]  Failed in trying " + callCount + "/" + MAX_RETRY_TIMES + ")\n"); // mess code
 					// I'll try again requesting up to MAX_RETRY_TIMES times before throw an error // mess code
 					// (this is mess code, should be replaced by a layer status handler which is scheduled for version > 1.0) // mess code
-					drawTile(g, vp, cancel, tile, scale, nLyr);
+                    drawTile(g, vp, cancel, tile, scale, nLyr, compress);
 				} // mess code
 				if (callCount == 1) { // mess code
 //		azabala			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(), e.getMessage());
@@ -1451,7 +1474,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		if (isVisible() && isWithinScale(scale)) {
 			isPrinting = true;
 			if (!mustTilePrint) {
-				draw(null, g, viewPort, cancel,scale);
+                draw(null, g, viewPort, cancel, scale, true);
 			} else {
 				// Para no pedir imagenes demasiado grandes, vamos
 				// a hacer lo mismo que hace EcwFile: chunkear.
@@ -1466,7 +1489,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					// Parte que dibuja
 					try {
 						ViewPort vp = tiles.getTileViewPort(viewPort, tileNr);
-						drawTile(g, vp, cancel, tileNr, scale, tileNr);
+                        drawTile(g, vp, cancel, tileNr, scale, tileNr, true);
 					} catch (NoninvertibleTransformException e) {
 						e.printStackTrace();
 					} catch (LoadLayerException e) {

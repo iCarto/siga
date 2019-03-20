@@ -558,25 +558,33 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 				return false;
 		return true;
 	}
-	
+
+    public synchronized void draw(BufferedImage image, Graphics2D g,
+            ViewPort vp, Cancellable cancel, double scale)
+            throws ReadDriverException {
+        draw(image, g, vp, cancel, scale, false);
+    }
+
 	/**
 	 * @throws ReadDriverException
 	 * @see com.iver.cit.gvsig.fmap.layers.LayerOperations#draw(java.awt.image.BufferedImage,
 	 * 		java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort,
 	 * 		com.iver.utiles.swing.threads.Cancellable)
 	 */
-	public synchronized void draw(BufferedImage image, Graphics2D g, ViewPort vp, Cancellable cancel, double scale) throws ReadDriverException {
+    public synchronized void draw(BufferedImage image, Graphics2D g,
+            ViewPort vp, Cancellable cancel, double scale, boolean compress)
+            throws ReadDriverException {
 		//System.out.println("FLyrRasterSE CANCEL=" + cancel.isCanceled());
 		this.image = image;
 		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
-		
+
 		if(!layerInitialize)
 			try {
 				init();
 			} catch (LoadLayerException e1) {
 				throw new ReadDriverException("Error initializing the layer", e1);
 			}
-		
+
 		task.setEvent(null);
 
 		try {
@@ -608,7 +616,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 							try {
 								ViewPort vport = tiles.getTileViewPort(vp, tileNr);
 //								g.setClip(tiles.getClip(tileNr).x, tiles.getClip(tileNr).y, tiles.getClip(tileNr).width - 5, tiles.getClip(tileNr).height);
-								draw(image, g, vport, cancel);
+                                draw(image, g, vport, cancel, compress);
 							} catch (RasterDriverException e) {
 								throw new ReadDriverException("", e);
 							} catch (InvalidSetViewException e) {
@@ -624,7 +632,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 						}
 					} else {
 						try {
-							draw(image, g, vp, cancel);
+                            draw(image, g, vp, cancel, compress);
 						} catch (RasterDriverException e) {
 							throw new ReadDriverException("", e);
 						} catch (InvalidSetViewException e) {
@@ -655,7 +663,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 						// drawing part
 						try {
 							ViewPort vport = tiles.getTileViewPort(vp, tileNr);
-							draw(image, g, vport, cancel);
+                            draw(image, g, vport, cancel, compress);
 						} catch (RasterDriverException e) {
 							throw new ReadDriverException("", e);
 						} catch (InvalidSetViewException e) {
@@ -671,7 +679,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 					}
 				} else {
 					try {
-						draw(image, g, vp, cancel);
+                        draw(image, g, vp, cancel, compress);
 					} catch (RasterDriverException e) {
 						throw new ReadDriverException("", e);
 					} catch (InvalidSetViewException e) {
@@ -698,14 +706,22 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 		System.err.println("*********************************************");*/
 	}
 
-	private void draw(BufferedImage image, Graphics2D g, ViewPort vp, Cancellable cancel) throws RasterDriverException, InvalidSetViewException, InterruptedException {
+    private void draw(BufferedImage image, Graphics2D g, ViewPort vp,
+            Cancellable cancel) throws RasterDriverException,
+            InvalidSetViewException, InterruptedException {
+        draw(image, g, vp, cancel, false);
+    }
+
+    private void draw(BufferedImage image, Graphics2D g, ViewPort vp,
+            Cancellable cancel, boolean compress) throws RasterDriverException,
+            InvalidSetViewException, InterruptedException {
 		Rectangle2D adjustedExtent = vp.getAdjustedExtent();
 		if (adjustedExtent == null) return;
 		Extent e = new Extent(adjustedExtent);
 		Dimension imgSz = vp.getImageSize();
 		ViewPortData vp2 = new ViewPortData(vp.getProjection(), e, imgSz );
 		vp2.setMat(vp.getAffineTransform());
-		getRender().draw(g, vp2, cancel);		
+        getRender().draw(g, vp2, cancel, compress);
 	}
 
 	/**
@@ -1099,7 +1115,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 			return;
 
 		if (!mustTilePrint) {
-			draw(null, g, viewPort, cancel,scale);
+            draw(null, g, viewPort, cancel, scale, true);
 		} else {
 			// Para no pedir imagenes demasiado grandes, vamos
 			// a hacer lo mismo que hace EcwFile: chunkear.
@@ -1120,7 +1136,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 				// Parte que dibuja
 				try {
 					ViewPort vp = tiles.getTileViewPort(viewPort, tileNr);
-					draw(null, g, vp, cancel, scale);
+                    draw(null, g, vp, cancel, scale, true);
 				} catch (NoninvertibleTransformException e) {
 					throw new ReadDriverException("Error en la transformación.", e);
 				}
@@ -1194,7 +1210,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 					vp.setImageSize(tam);
 					vp.setExtent(rectCuadricula);
 					vp.setAffineTransform(mat);
-					draw(null, g, vp, cancel, scale);
+                    draw(null, g, vp, cancel, scale, true);
 
 				} catch (NoninvertibleTransformException e) {
 					throw new ReadDriverException("Error en la transformación.", e);
