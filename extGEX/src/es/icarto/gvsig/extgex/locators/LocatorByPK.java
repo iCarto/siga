@@ -72,6 +72,8 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
     private static final String TRAMO_FIELD = "tramo";
     private static final String PK_FIELD = "pks";
 
+    private static final String PK_REGEX = "\\d++,?\\d*";
+
     public ButtonGroup radioGroup;
 
     public final String ID_RADIO_AP = "ap";
@@ -87,6 +89,7 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
     private JSpinner pkNumberSpinner;
 
     private String currentPkValue = null;
+    private String latestTypedPkValue = null;
     private boolean lastPkTypedInvalid = false;
 
     public final String ID_GOTOPK = "goToPKButton";
@@ -204,8 +207,8 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
                 }
                 SpinnerListModel model = new LinearSearchSpinnerListModel(pks);
                 pkNumberSpinner.setModel(model);
-                pkNumberSpinner
-                        .setEditor(new LinearSearchListEditor(pkNumberSpinner));
+                pkNumberSpinner.setEditor(new LinearSearchListEditor(
+                        pkNumberSpinner, PK_REGEX));
                 final JFormattedTextField textField = ((JSpinner.DefaultEditor) pkNumberSpinner
                         .getEditor()).getTextField();
                 textField.addKeyListener(new KeyAdapter() {
@@ -214,6 +217,9 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                             if (!lastPkTypedInvalid) {
                                 zoomToSelectedPk();
+                            } else {
+                                zoomToClosestPk();
+                                latestTypedPkValue = null;
                             }
                             textField.selectAll();
                         }
@@ -222,6 +228,7 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
                     @Override
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                            latestTypedPkValue = textField.getText();
                             currentPkValue = null;
                             lastPkTypedInvalid = false;
                         }
@@ -304,6 +311,51 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
                         zoom(pkLayer, i);
                         break;
                     }
+                }
+                return;
+            } catch (ReadDriverException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void zoomToClosestPk() {
+        if (latestTypedPkValue != null) {
+            Double typedNr = null;
+            try {
+                typedNr = Double.parseDouble(latestTypedPkValue.replace(",",
+                        "."));
+            } catch (NumberFormatException e) {
+                // We ignore the parsing error
+            }
+            if (typedNr == null) {
+                return;
+            }
+            Integer closestPk = null;
+            Double smallestDiff = null;
+            try {
+                String tramo = tramoCB.getSelectedItem().toString();
+                SelectableDataSource pkRecordset = pkLayer.getRecordset();
+                int tramoIndex = pkRecordset.getFieldIndexByName(TRAMO_FIELD);
+                int pkIndex = pkRecordset.getFieldIndexByName(PK_FIELD);
+                for (int i = 0; i < pkRecordset.getRowCount(); i++) {
+                    Double pkValue = ((NumericValue) pkRecordset.getFieldValue(
+                            i, pkIndex)).doubleValue();
+                    Value tramoValue = pkRecordset.getFieldValue(i, tramoIndex);
+                    if (tramoValue.toString().compareToIgnoreCase(tramo) == 0) {
+                        double diff = Math.abs(typedNr - pkValue);
+                        if (smallestDiff == null || diff < smallestDiff) {
+                            smallestDiff = diff;
+                            closestPk = i;
+                        }
+                    }
+                }
+                if (closestPk != null) {
+                    pkNumberSpinner.setValue(((NumericValue) pkRecordset
+                            .getFieldValue(closestPk, pkIndex)).toString()
+                            .replace(".",
+                            ","));
+                    zoom(pkLayer, closestPk);
                 }
                 return;
             } catch (ReadDriverException e1) {
