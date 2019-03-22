@@ -37,6 +37,7 @@ import es.icarto.gvsig.extgex.queries.QueriesPanel;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.elle.constants.IPositionRetriever;
 import es.udc.cartolab.gvsig.elle.utils.ELLEMap;
+import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
@@ -459,10 +460,11 @@ IPositionRetriever {
 	    DataSource rsFiltered = rs.getDataSourceFactory().executeSQL(
 		    expression, DataSourceFactory.MANUAL_OPENING);
 	    long[] result = rsFiltered.getWhereFilter();
-	    return (int) result[0];
+            if (result.length > 0) {
+                return (int) result[0];
+            }
 	} catch (ReadDriverException e) {
 	    e.printStackTrace();
-	    return -1;
 	} catch (DriverLoadException e) {
 	    e.printStackTrace();
 	} catch (ParseException e) {
@@ -474,7 +476,7 @@ IPositionRetriever {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	return -1;
+        return AbstractNavTable.EMPTY_REGISTER;
     }
 
     @Override
@@ -482,12 +484,12 @@ IPositionRetriever {
         TOCLayerManager toc = new TOCLayerManager();
         return toc.getLayerByName(getLayerName());
     }
-    
-    
+
+
      private String getLayerName() {
         return isAmpliacion() ? FormExpropiations.TOCNAME_AMPLIACION : FormExpropiations.TOCNAME;
     }
-    
+
     private boolean isAmpliacion() {
         try {
             String tramoID = getTramoId();
@@ -497,7 +499,7 @@ IPositionRetriever {
         } catch (SQLException e) {
             logger.error(e.getStackTrace(), e);
         }
-       
+
         return false;
     }
 

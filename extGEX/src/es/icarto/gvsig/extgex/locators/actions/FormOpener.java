@@ -10,6 +10,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.extgex.forms.expropiations.FormExpropiations;
 import es.udc.cartolab.gvsig.elle.constants.IPositionRetriever;
+import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class FormOpener implements ActionListener {
 
@@ -25,9 +26,10 @@ public class FormOpener implements ActionListener {
 	// if(AlphanumericTableLoader.loadTables() &&
 	// (layer != null)) {
 	if (layer != null) {
+            int position = retriever.getPosition();
 	    FormExpropiations form = new FormExpropiations(layer, null);
-	    if (form.init()) {
-		form.setPosition(retriever.getPosition());
+            if (position != AbstractNavTable.EMPTY_REGISTER && form.init()) {
+                form.setPosition(position);
 		PluginServices.getMDIManager().addWindow(form);
 	    }
 	} else {
