@@ -108,9 +108,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	// I mean, when you add twice or more the same layer using
 	// the same connection
 
-	private static int CURSOR_ID = 0;
+//	private static int CURSOR_ID = 0;
 
-	private int myCursorId;
+//	private int myCursorId;
 
 	private PostGISWriter writer = new PostGISWriter();
 
@@ -187,8 +187,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		// To avoid problems when using wkb_cursor with same layer.
 		// I mean, when you add twice or more the same layer using
 		// the same connection
-		CURSOR_ID++;
-		myCursorId = CURSOR_ID;
+//		CURSOR_ID++;
+//		myCursorId = CURSOR_ID;
 	}
 
 	/*
@@ -285,9 +285,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
-			myCursorId++;
-			cursorName = "wkb_cursor_" + myCursorId + getTableName();
-
+//			myCursorId++;
+			cursorName = "wkb_cursor_"
+		            + Long.toString(Math.abs(new Random().nextLong()))
+		            + getTableName();
+			if (cursorName.length() > 64) {
+			    cursorName = cursorName.substring(0, 63);
+			}
+			
+			
 			st.execute("declare " + cursorName + " binary scroll cursor with hold for " + sqlTotal);
 
 			rs = st.executeQuery("fetch forward " + FETCH_SIZE + " in " + cursorName);
