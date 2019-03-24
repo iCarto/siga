@@ -261,6 +261,7 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
     public synchronized Image draw(Graphics2D g, ViewPortData vp,
             Object cancel, boolean compress)
 		throws RasterDriverException, InvalidSetViewException, InterruptedException {
+        compress = false;
 		Image geoImage = null;
 		if (bufferFactory == null) {
 			System.err.println("Rendering.java: bufferFactory = null");
