@@ -131,7 +131,7 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 			// should be unreachable code
 			throw new Error ("file_not_found");
 		} catch (MarshalException e) {
-			throw new Error ("file_corrupt");
+			throw new Error ("file_corrupt. layer: " + layer.getName() + ". file: " + file);
 		} catch (ValidationException e) {
 			// should be unreachable code
 			throw new Error ("ValidationException");
