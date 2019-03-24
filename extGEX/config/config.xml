@@ -106,59 +106,59 @@
 		<!-- WMS EXTENSIONS -->
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasExtension" active="true">
 			<menu text="SIGA" position="30799" is_separator="true"/>			
-			<menu text="SIGA/WMS/Planos Expropiaciones" icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" position="30800"/>
+			<menu text="SIGA/WMS/Planos Expropiaciones" icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasExtension" position="30800"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="4"/>
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="4"/>
 			</tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" active="true">
-			<menu text="SIGA/WMS/Planos Expropiaciones - Ampliación" icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" position="30805"/>
+			<menu text="SIGA/WMS/Planos Expropiaciones - Ampliación" icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" position="30805"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones - Ampliación" position="5"/>
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones - Ampliación" position="5"/>
 			</tool-bar>
 		</extension>
 		
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" active="true">
-			<menu text="SIGA/WMS/dimensiones_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" position="30810"/>
+			<menu text="SIGA/WMS/dimensiones_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" position="30810"/>
 			<tool-bar name="SIGA_Tools" position="75">
-                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" tooltip="dimensiones_tooltip" position="6"/>
+                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" tooltip="dimensiones_tooltip" position="6"/>
             </tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" active="true">
-            <menu text="SIGA/WMS/dimensiones_ampliacion_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" position="30811"/>
+            <menu text="SIGA/WMS/dimensiones_ampliacion_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" position="30811"/>
             <tool-bar name="SIGA_Tools" position="75">
-                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" tooltip="dimensiones_ampliacion_tooltip" position="7"/>
+                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" tooltip="dimensiones_ampliacion_tooltip" position="7"/>
             </tool-bar>
         </extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" description="LOAD_PNOA_WMS" active="true">
-			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="LoadPNOAExtension" position="30820"/>
+			<menu text="SIGA/WMS/Ortofotos PNOA (Local)" icon="images/wms.png" action-command="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" position="30820"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="images/wms.png" action-command="LoadPNOAExtension" tooltip="Cargar WMS PNOA (Local)" position="9"/>
+				<action-tool icon="images/wms.png" action-command="es.icarto.gvsig.extgex.WMSLoadPNOALocalExtension" tooltip="Cargar WMS PNOA (Local)" position="9"/>
 			</tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPNOAExtension" description="LOAD_PNOA_WMS" active="true">
-			<menu text="SIGA/WMS/Ortofotos PNOA (Internet)" action-command="LoadPNOAExtension" position="30830"/>
+			<menu text="SIGA/WMS/Ortofotos PNOA (Internet)" action-command="es.icarto.gvsig.extgex.WMSLoadPNOAExtension" position="30830"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadVueloAmericanoExtension" description="LOAD_VUELO_AMERICANO_WMS" active="true">
-			<menu text="SIGA/WMS/Ortofotos 1956-1957 (Vuelo Americano)" action-command="LoadVueloAmericanoExtension" position="30840"/>
+			<menu text="SIGA/WMS/Ortofotos 1956-1957 (Vuelo Americano)" action-command="es.icarto.gvsig.extgex.WMSLoadVueloAmericanoExtension" position="30840"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadCatastroExtension" description="LOAD_LOAD_CATASTRO_WMS" active="true">
-			<menu text="SIGA/WMS/Catastro" action-command="LoadCatastroExtension" position="30850"/>
+			<menu text="SIGA/WMS/Catastro" action-command="es.icarto.gvsig.extgex.WMSLoadCatastroExtension" position="30850"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPUSectoresExtension" description="LOAD_PUSectores_WMS" active="true">
-			<menu text="SIGA/WMS/Planeamiento Urbanístico (Sectores)" action-command="LoadPUSectoresExtension" position="30860"/>
+			<menu text="SIGA/WMS/Planeamiento Urbanístico (Sectores)" action-command="es.icarto.gvsig.extgex.WMSLoadPUSectoresExtension" position="30860"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPUClasesDeSueloExtension" description="LOAD_PUClasesDeSuelo_WMS" active="true">
-			<menu text="SIGA/WMS/Planeamiento Urbanístico (Clases de Suelo)" action-command="LoadPUClasesDeSueloExtension" position="30870"/>
+			<menu text="SIGA/WMS/Planeamiento Urbanístico (Clases de Suelo)" action-command="es.icarto.gvsig.extgex.WMSLoadPUClasesDeSueloExtension" position="30870"/>
 		</extension>
 
 

@@ -8,7 +8,7 @@ public class WMSLoadDimensionesAmpliacionExtension extends AbstractExtension {
 
     @Override
     public void execute(String actionCommand) {
-        LoadWMS loadWMS = new LoadWMS("planos_dimensiones_ampliacion");
+        LoadWMS loadWMS = new LoadWMS("Planos_Estado_Dimensiones_Ampliacion_WMS");
         loadWMS.Load();
     }
 

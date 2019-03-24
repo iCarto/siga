@@ -7,7 +7,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 public class WMSLoadDimensionesExtension extends AbstractExtension {
     @Override
     public void execute(String actionCommand) {
-        LoadWMS loadWMS = new LoadWMS("dimensiones");
+        LoadWMS loadWMS = new LoadWMS("Planos_Estado_Dimensiones_WMS");
         loadWMS.Load();
     }
 
