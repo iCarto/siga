@@ -27,11 +27,11 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
 import org.gvsig.raster.buffer.BufferFactory;
 import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.IRasterDataSource;
@@ -74,6 +74,8 @@ import org.gvsig.raster.util.RasterUtilities;
  * @author Nacho Brodin (nachobrodin@gmail.com)
  */
 public class Rendering implements PropertyListener, FilterListChangeListener {
+
+    private static final Logger logger = Logger.getLogger(Rendering.class);
 
 	/**
 	 * Grid para la gestión del buffer
@@ -261,7 +263,6 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
     public synchronized Image draw(Graphics2D g, ViewPortData vp,
             Object cancel, boolean compress)
 		throws RasterDriverException, InvalidSetViewException, InterruptedException {
-        compress = false;
 		Image geoImage = null;
 		if (bufferFactory == null) {
 			System.err.println("Rendering.java: bufferFactory = null");
@@ -352,8 +353,10 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
                 ImageIO.write((BufferedImage) geoImage, "gif", baos);
                 geoImage = ImageIO.read(new ByteArrayInputStream(baos
                         .toByteArray()));
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.warn(
+                        "Couldn't compress raster image because an unexpected error occurred:",
+                        e);
             }
         }
 
