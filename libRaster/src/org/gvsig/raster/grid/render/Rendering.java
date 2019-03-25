@@ -18,13 +18,18 @@
  */
 package org.gvsig.raster.grid.render;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
+import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -350,7 +355,8 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
             // Transform image to gif format in order to compress it
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write((BufferedImage) geoImage, "gif", baos);
+                ImageIO.write(convertRGBAToIndexed((BufferedImage) geoImage),
+                        "gif", baos);
                 geoImage = ImageIO.read(new ByteArrayInputStream(baos
                         .toByteArray()));
             } catch (Exception e) {
@@ -672,4 +678,40 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 		System.err.println("TODO: REVISAR EL DIBUJADO!!!. Hay una llamada a Rendering.draw sin cancel");
 		return draw(g, vp, null);
 	}
+
+    public static BufferedImage convertRGBAToIndexed(BufferedImage src) {
+        BufferedImage dest = new BufferedImage(src.getWidth(), src.getHeight(),
+                BufferedImage.TYPE_BYTE_INDEXED);
+        Graphics g = dest.getGraphics();
+        g.setColor(new Color(231, 20, 189));
+        g.fillRect(0, 0, dest.getWidth(), dest.getHeight()); // fill with a
+                                                             // hideous color
+                                                             // and make it
+                                                             // transparent
+        dest = makeTransparent(dest, 0, 0);
+        dest.createGraphics().drawImage(src, 0, 0, null);
+        return dest;
+    }
+
+    public static BufferedImage makeTransparent(BufferedImage image, int x,
+            int y) {
+        ColorModel cm = image.getColorModel();
+        if (!(cm instanceof IndexColorModel))
+            return image; // sorry...
+        IndexColorModel icm = (IndexColorModel) cm;
+        WritableRaster raster = image.getRaster();
+        int pixel = raster.getSample(x, y, 0); // pixel is offset in ICM's
+                                               // palette
+        int size = icm.getMapSize();
+        byte[] reds = new byte[size];
+        byte[] greens = new byte[size];
+        byte[] blues = new byte[size];
+        icm.getReds(reds);
+        icm.getGreens(greens);
+        icm.getBlues(blues);
+        IndexColorModel icm2 = new IndexColorModel(8, size, reds, greens,
+                blues, pixel);
+        return new BufferedImage(icm2, raster, image.isAlphaPremultiplied(),
+                null);
+    }
 }
