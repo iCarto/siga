@@ -69,10 +69,10 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
     public static final List<String> ORDERED_AG_ROADS = new ArrayList<String>(
             Arrays.asList("AG-55", "AG-57", "AG-57N"));
 
+    public static final String PK_REGEX = "\\d++,?\\d*";
+
     private static final String TRAMO_FIELD = "tramo";
     private static final String PK_FIELD = "pks";
-
-    private static final String PK_REGEX = "\\d++,?\\d*";
 
     public ButtonGroup radioGroup;
 
