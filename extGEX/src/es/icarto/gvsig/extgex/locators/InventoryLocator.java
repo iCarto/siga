@@ -50,6 +50,7 @@ import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.edition.EditionEvent;
+import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
@@ -71,8 +72,12 @@ public class InventoryLocator extends BasicAbstractWindow implements
 
     private static final Logger logger = Logger.getLogger(InventoryLocator.class);
 
+    private static final String ID_ALL_ELEMENTS = "-1";
+
     private static final String TRAMO_FIELD = "tramo";
     private static final String PK_FIELD = "pks";
+
+    private static final String TRONCO_VALUE = "Tronco";
 
     private static final List<Elements> ELEMENTS_TO_IGNORE = Arrays.asList(
             Elements.Ramales, Elements.Competencias, Elements.Comunicaciones);
@@ -318,7 +323,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
             Integer troncoIdx = null;
             for (KeyValue tipoVia : HIERARCHY_TRAMOS_VIAS_TIPOS.get(tramo)) {
                 tipoViaCB.addItem(tipoVia);
-                if (tipoVia.getValue().equals("Tronco")) {
+                if (tipoVia.getValue().equals(TRONCO_VALUE)) {
                     troncoIdx = tipoViaCB.getItemCount() - 1;
                 }
             }
@@ -335,7 +340,9 @@ public class InventoryLocator extends BasicAbstractWindow implements
     private void tipoViaChanged() {
         KeyValue tipoVia = ((KeyValue) tipoViaCB.getSelectedItem());
         if (tipoVia != null) {
-            if (tipoVia.getValue().equals("Tronco")) {
+            // If road type is "Tronco", a PK must be selected. Otherwise, road
+            // name must be selected.
+            if (tipoVia.getValue().equals(TRONCO_VALUE)) {
                 nombreViaCB.removeAllItems();
                 nombreViaCB.setEnabled(false);
                 pkNumberSpinner.setEnabled(true);
@@ -470,6 +477,8 @@ public class InventoryLocator extends BasicAbstractWindow implements
             String where = " where tramo = "
                     + TRAMOS_IDS.get(selectedTramo.toString());
             if (pkNumberSpinner.isEnabled()) {
+                // If a PK was selected, then we must first filter elements by
+                // their proximity to the PK.
                 String pkValue = (String) pkNumberSpinner.getValue();
                 if (pkValue == null) {
                     return;
@@ -495,6 +504,8 @@ public class InventoryLocator extends BasicAbstractWindow implements
                     where += " and tipo_via = " + tipoVia.getKey();
                 }
             } else {
+                // If no PK was selected, elements are filtered by road type and
+                // name.
                 KeyValue tipoVia = ((KeyValue) tipoViaCB.getSelectedItem());
                 KeyValue nombreVia = ((KeyValue) nombreViaCB.getSelectedItem());
                 if (tipoVia == null || nombreVia == null) {
@@ -522,12 +533,21 @@ public class InventoryLocator extends BasicAbstractWindow implements
                                 .getFieldIndexByName(elemento.descriptiveField);
                 if (currentElementos.getRowCount() > 0) {
                     elementoCB.removeAllItems();
+                    // If there is more than one element, we add first a generic
+                    // one for zooming / opening form on all of them.
+                    if (currentElementos.getRowCount() > 1) {
+                        elementoCB.addItem(new KeyValue(ID_ALL_ELEMENTS,
+                                "-- Todas las coincidencias ("
+                                        + new Long(currentElementos
+                                                .getRowCount()).toString()
+                                        + ") --"));
+                    }
                     for (int i = 0; i < currentElementos.getRowCount(); i++) {
                         String key = currentElementos.getFieldValue(i, pkIndex)
                                 .toString();
                         String descr = descrIndex != null ? currentElementos
                                 .getFieldValue(i, descrIndex).toString()
-                                + " - " + key : key;
+                                + " || " + key : key;
                         elementoCB.addItem(new KeyValue(key, descr));
                     }
                     elementoCB.setEnabled(true);
@@ -553,14 +573,51 @@ public class InventoryLocator extends BasicAbstractWindow implements
         if (e.getSource() == tipoElementoCB) {
             if (((ElementKeyValue) tipoElementoCB.getSelectedItem())
                     .getElemento().hasViaInfo) {
-                tipoViaCB.setEnabled(true);
-                nombreViaCB.setEnabled(true);
-                fillTipoVia();
+                // If previously selected element didn't have road info, then we
+                // must fill those combos. Otherwise, we simply reload the
+                // resulting elements.
+                if (!tipoViaCB.isEnabled()) {
+                    tipoViaCB.setEnabled(true);
+                    fillTipoVia();
+                } else {
+                    fillElementosCB();
+                }
             } else {
-                tipoViaCB.setEnabled(false);
-                nombreViaCB.setEnabled(false);
-                pkNumberSpinner.setEnabled(true);
-                fillPK();
+                boolean reloadAllCombos = false;
+                // If previously selected element had road info, then we try to
+                // revert to "Tronco" road type. If the selected road doesn't
+                // have that road type, then we reload all combos.
+                if (tipoViaCB.isEnabled()) {
+                    Integer troncoIdx = null;
+                    for (int i = 0, len = tipoViaCB.getItemCount(); i<len; i++) {
+                        if (((KeyValue) tipoViaCB.getItemAt(i)).getValue()
+                                .equals(TRONCO_VALUE)) {
+                            troncoIdx = i;
+                            break;
+                        }
+                    }
+                    tipoViaCB.setEnabled(false);
+                    nombreViaCB.setEnabled(false);
+                    if (troncoIdx != null) {
+                        tipoViaCB.setSelectedIndex(troncoIdx);
+                    } else {
+                        // If the selected tramo has no "Tronco" type, we reload
+                        // all combos as a workaround.
+                        fillTramo();
+                        reloadAllCombos = true;
+                    }
+                }
+                if (!reloadAllCombos) {
+                    // If we haven't reloaded all combos and previously selected
+                    // road type wasn't "Tronco", we reload the PK spinner.
+                    // Otherwise, we simply reload the resulting elements combo.
+                    if (!pkNumberSpinner.isEnabled()) {
+                        pkNumberSpinner.setEnabled(true);
+                        fillPK();
+                    } else {
+                        fillElementosCB();
+                    }
+                }
             }
         } else if (e.getSource() == tramoCB) {
             if (((ElementKeyValue) tipoElementoCB.getSelectedItem())
@@ -574,9 +631,9 @@ public class InventoryLocator extends BasicAbstractWindow implements
         } else if (e.getSource() == nombreViaCB) {
             fillElementosCB();
         } else if (e.getSource() == zoomBt) {
-            zoomToSelectedElement();
+            zoom();
         } else if (e.getSource() == formBt) {
-            openFormOnSelectedElement();
+            openForm();
         }
     }
 
@@ -587,7 +644,138 @@ public class InventoryLocator extends BasicAbstractWindow implements
         }
     }
 
-    private void zoomToSelectedElement() {
+    private void zoom() {
+        KeyValue idToFindKV = (KeyValue) elementoCB.getSelectedItem();
+        if (idToFindKV != null) {
+            if (idToFindKV.getKey().equals(ID_ALL_ELEMENTS)) {
+                zoomToAllElements();
+            } else {
+                zoomToElement();
+            }
+        }
+    }
+
+    private void zoomToElement() {
+        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
+                .getSelectedItem());
+        if (elementoKV != null) {
+            selectElement();
+            zoomToSelection(toc.getVectorialLayerByName(elementoKV
+                    .getElemento().layerName));
+        }
+    }
+
+    private void selectElement() {
+        KeyValue idToFindKV = (KeyValue) elementoCB.getSelectedItem();
+        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
+                .getSelectedItem());
+        if (idToFindKV != null && elementoKV != null) {
+            String idToFind = idToFindKV.getKey();
+            Elements elemento = elementoKV.getElemento();
+            try {
+                FLyrVect layer = toc
+                        .getVectorialLayerByName(elemento.layerName);
+                SelectableDataSource recordset = layer.getRecordset();
+                int idIndex = recordset.getFieldIndexByName(elemento.pk);
+                Integer idx = null;
+                for (int i = 0; i < recordset.getRowCount(); i++) {
+                    if (idToFind.equals(recordset.getFieldValue(i, idIndex)
+                            .toString())) {
+                        idx = i;
+                        break;
+                    }
+                }
+                if (idx != null) {
+                    FBitSet selection = new FBitSet();
+                    selection.set(idx);
+                    recordset.clearSelection();
+                    recordset.setSelection(selection);
+                }
+                return;
+            } catch (ReadDriverException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void zoomToAllElements() {
+        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
+                .getSelectedItem());
+        if (elementoKV != null && elementoCB.getItemCount() > 1) {
+            selectAllElements();
+            zoomToSelection(toc.getVectorialLayerByName(elementoKV
+                    .getElemento().layerName));
+        }
+    }
+
+    private void selectAllElements() {
+        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
+                .getSelectedItem());
+        if (elementoKV != null && elementoCB.getItemCount() > 1) {
+            List<String> idsToFind = new ArrayList<String>();
+            for (int i = 1, len = elementoCB.getItemCount(); i < len; i++) {
+                idsToFind.add(((KeyValue) elementoCB.getItemAt(i)).getKey());
+            }
+
+            Elements elemento = elementoKV.getElemento();
+            FLyrVect layer = toc.getVectorialLayerByName(elemento.layerName);
+            try {
+                SelectableDataSource recordset = layer.getRecordset();
+                int idIndex = recordset.getFieldIndexByName(elemento.pk);
+                List<Integer> idxs = new ArrayList<Integer>();
+                for (int i = 0; i < recordset.getRowCount(); i++) {
+                    if (idsToFind.contains(recordset.getFieldValue(i, idIndex)
+                            .toString())) {
+                        idxs.add(i);
+                    }
+                }
+                FBitSet selection = new FBitSet();
+                for (int i = 0; i < idxs.size(); i++) {
+                    selection.set(idxs.get(i));
+                }
+                recordset.clearSelection();
+                recordset.setSelection(selection);
+            } catch (ReadDriverException e1) {
+                e1.printStackTrace();
+            }
+            return;
+        }
+    }
+
+    private void openForm() {
+        KeyValue idToFindKV = (KeyValue) elementoCB.getSelectedItem();
+        if (idToFindKV != null) {
+            if (idToFindKV.getKey().equals(ID_ALL_ELEMENTS)) {
+                openFormAllElements();
+            } else {
+                openFormElement();
+            }
+        }
+    }
+
+    private void openFormAllElements() {
+        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
+                .getSelectedItem());
+        if (elementoKV != null && elementoCB.getItemCount() > 1) {
+            selectAllElements();
+            openForm(true);
+            zoomToSelection(toc.getVectorialLayerByName(elementoKV
+                    .getElemento().layerName));
+        }
+    }
+
+    private void openFormElement() {
+        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
+                .getSelectedItem());
+        if (elementoKV != null) {
+            selectElement();
+            openForm(false);
+            zoomToSelection(toc.getVectorialLayerByName(elementoKV
+                    .getElemento().layerName));
+        }
+    }
+
+    private void openForm(boolean onlySelected) {
         KeyValue idToFindKV = (KeyValue) this.elementoCB.getSelectedItem();
         ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
                 .getSelectedItem());
@@ -598,12 +786,28 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 FLyrVect layer = toc
                         .getVectorialLayerByName(elemento.layerName);
                 SelectableDataSource pkRecordset = layer.getRecordset();
-                int idIndex = pkRecordset.getFieldIndexByName(elemento.pk);
-                for (int i = 0; i < pkRecordset.getRowCount(); i++) {
-                    if (idToFind.equals(pkRecordset.getFieldValue(i, idIndex)
-                            .toString())) {
-                        zoom(layer, i);
-                        break;
+                Integer position = null;
+                if (!onlySelected) {
+                    int idIndex = pkRecordset.getFieldIndexByName(elemento.pk);
+                    for (int i = 0; i < pkRecordset.getRowCount(); i++) {
+                        if (idToFind.equals(pkRecordset.getFieldValue(i,
+                                idIndex).toString())) {
+                            position = i;
+                            break;
+                        }
+                    }
+                }
+                if (position != null || onlySelected) {
+                    AbstractForm form = LaunchGIAForms
+                            .getExistingOrNewFormDependingOfLayer(layer);
+                    if (form != null) {
+                        if (!form.isShowing() && form.init()) {
+                            PluginServices.getMDIManager().addWindow(form);
+                        }
+                        form.setOnlySelected(onlySelected);
+                        if (position != null) {
+                            form.setPosition(position);
+                        }
                     }
                 }
                 return;
@@ -613,40 +817,45 @@ public class InventoryLocator extends BasicAbstractWindow implements
         }
     }
 
-    private void openFormOnSelectedElement() {
-        KeyValue idToFindKV = (KeyValue) this.elementoCB.getSelectedItem();
-        ElementKeyValue elementoKV = ((ElementKeyValue) tipoElementoCB
-                .getSelectedItem());
-        if (idToFindKV != null && elementoKV != null) {
-            String idToFind = idToFindKV.getKey();
-            Elements elemento = elementoKV.getElemento();
-            try {
-                FLyrVect layer = toc
-                        .getVectorialLayerByName(elemento.layerName);
-                SelectableDataSource pkRecordset = layer.getRecordset();
-                int idIndex = pkRecordset.getFieldIndexByName(elemento.pk);
-                Integer position = null;
-                for (int i = 0; i < pkRecordset.getRowCount(); i++) {
-                    if (idToFind.equals(pkRecordset.getFieldValue(i, idIndex)
-                            .toString())) {
-                        position = i;
-                        break;
+    private static void zoomToSelection(FLyrVect layer) {
+        try {
+            Rectangle2D rectangleAll = null;
+            FBitSet selection = layer.getSelectionSupport().getSelection();
+            ReadableVectorial source = (layer).getSource();
+            source.start();
+            for (int i = 0, len = source.getShapeCount(); i < len; i++) {
+                if (selection.get(i)) {
+                    IGeometry g = source.getShape(i);
+                    /*
+                     * fix to avoid zoom problems when layer and view
+                     * projections aren't the same.
+                     */
+                    if (layer.getCoordTrans() != null) {
+                        g.reProject(layer.getCoordTrans());
+                    }
+                    Rectangle2D rectangle = g.getBounds2D();
+                    if (rectangle.getWidth() < 200) {
+                        rectangle.setFrameFromCenter(rectangle.getCenterX(),
+                                rectangle.getCenterY(),
+                                rectangle.getCenterX() + 100,
+                                rectangle.getCenterY() + 100);
+                    }
+                    if (rectangleAll == null) {
+                        rectangleAll = rectangle;
+                    } else {
+                        rectangleAll.add(rectangle);
                     }
                 }
-                if (position != null) {
-                    AbstractForm form = LaunchGIAForms
-                            .getFormDependingOfLayer(layer);
-                    if (form != null) {
-                        if (form.init()) {
-                            PluginServices.getMDIManager().addWindow(form);
-                        }
-                        form.setPosition(position);
-                    }
-                }
-                return;
-            } catch (ReadDriverException e1) {
-                e1.printStackTrace();
             }
+            source.stop();
+            if (rectangleAll != null) {
+                layer.getMapContext().getViewPort().setExtent(rectangleAll);
+                layer.getMapContext().setScaleView(4000);
+            }
+        } catch (InitializeDriverException e) {
+            e.printStackTrace();
+        } catch (ReadDriverException e) {
+            e.printStackTrace();
         }
     }
 
@@ -684,46 +893,13 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 if (closestPk != null) {
                     pkNumberSpinner.setValue(((NumericValue) pkRecordset
                             .getFieldValue(closestPk, pkIndex)).toString()
-                            .replace(".",
-                            ","));
+                            .replace(".", ","));
                 }
                 return;
             } catch (ReadDriverException e1) {
                 e1.printStackTrace();
             }
         }
-    }
-
-    private void zoom(FLyrVect layer, int pos) {
-	try {
-	    Rectangle2D rectangle = null;
-	    IGeometry g;
-	    ReadableVectorial source = (layer).getSource();
-	    source.start();
-	    g = source.getShape(pos);
-	    source.stop();
-	    /*
-	     * fix to avoid zoom problems when layer and view projections aren't
-	     * the same.
-	     */
-	    if (layer.getCoordTrans() != null) {
-		g.reProject(layer.getCoordTrans());
-	    }
-	    rectangle = g.getBounds2D();
-	    if (rectangle.getWidth() < 200) {
-		rectangle.setFrameFromCenter(rectangle.getCenterX(),
-			rectangle.getCenterY(), rectangle.getCenterX() + 100,
-			rectangle.getCenterY() + 100);
-	    }
-	    if (rectangle != null) {
-		layer.getMapContext().getViewPort().setExtent(rectangle);
-		layer.getMapContext().setScaleView(4000);
-	    }
-	} catch (InitializeDriverException e) {
-	    e.printStackTrace();
-	} catch (ReadDriverException e) {
-	    e.printStackTrace();
-	}
     }
 
     @Override

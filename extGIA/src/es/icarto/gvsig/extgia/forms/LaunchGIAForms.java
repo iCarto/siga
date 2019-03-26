@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.extgia.batch.BatchAbstractSubForm;
@@ -59,6 +60,29 @@ public class LaunchGIAForms {
 	    logger.error(e.getStackTrace(), e);
 	}
 	return form;
+    }
+
+    public static AbstractForm getExistingFormDependingOfLayer(FLyrVect layer) {
+        final String layerName = layer.getName();
+        if (isGIALayerName(layerName)) {
+            Class<? extends AbstractForm> formClass = Elements
+                    .valueOf(layerName).form;
+            for (IWindow window : PluginServices.getMDIManager()
+                    .getAllWindows()) {
+                try {
+                    return formClass.cast(window);
+                } catch (ClassCastException e) {
+                    continue;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static AbstractForm getExistingOrNewFormDependingOfLayer(
+            FLyrVect layer) {
+        AbstractForm form = getExistingFormDependingOfLayer(layer);
+        return form != null ? form : getFormDependingOfLayer(layer);
     }
 
     public static boolean callFormDependingOfLayer(FLyrVect layer,
