@@ -189,7 +189,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
         this.toc = toc;
         this.pkLayer = toc.getVectorialLayerByName(PK_LAYER_NAME);
         setWindowInfoProperties(WindowInfo.PALETTE);
-        this.setWindowTitle("Localizar PK");
+        this.setWindowTitle("Localizar elementos de inventario");
         initWidgets();
     }
 
@@ -483,7 +483,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 if (pkValue == null) {
                     return;
                 }
-                List<Integer> ids = getElementIdsAtDistanceFromPks(
+                List<String> ids = getElementIdsAtDistanceFromPks(
                         elemento.layerName, elemento.pk,
                         selectedTramo.toString(),
                         Double.parseDouble(pkValue.replace(",", ".")),
@@ -491,11 +491,11 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 if (ids.size() == 0) {
                     return;
                 }
-                where += " and " + elemento.pk + " in (" + ids.get(0);
+                where += " and " + elemento.pk + " in ('" + ids.get(0);
                 for (int i = 1, len = ids.size(); i < len; i++) {
-                    where += ", " + ids.get(i);
+                    where += "', '" + ids.get(i);
                 }
-                where += ")";
+                where += "')";
                 if (elemento.hasViaInfo) {
                     KeyValue tipoVia = ((KeyValue) tipoViaCB.getSelectedItem());
                     if (tipoVia == null) {
@@ -759,8 +759,6 @@ public class InventoryLocator extends BasicAbstractWindow implements
         if (elementoKV != null && elementoCB.getItemCount() > 1) {
             selectAllElements();
             openForm(true);
-            zoomToSelection(toc.getVectorialLayerByName(elementoKV
-                    .getElemento().layerName));
         }
     }
 
@@ -805,6 +803,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
                             PluginServices.getMDIManager().addWindow(form);
                         }
                         form.setOnlySelected(onlySelected);
+                        form.setAlwaysZoom(true);
                         if (position != null) {
                             form.setPosition(position);
                         }
@@ -924,7 +923,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
         return wInfo;
     }
 
-    private List<Integer> getElementIdsAtDistanceFromPks(String elementsTable,
+    private List<String> getElementIdsAtDistanceFromPks(String elementsTable,
             String idField, String tramo, Double pk, Double distance) {
         String query = "SELECT DISTINCT "
                 + idField
@@ -936,15 +935,15 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 + pk.toString() + " AND tramo = '" + tramo + "'), "
                 + distance.toString() + ") AND tramo = "
                 + TRAMOS_IDS.get(tramo) + ";";
-        List<Integer> results = new ArrayList<Integer>();
+        List<String> results = new ArrayList<String>();
         try {
             ResultSet rs = DBSession.getCurrentSession().getJavaConnection()
                     .prepareStatement(query).executeQuery();
             while (rs.next()) {
-                results.add(rs.getInt(1));
+                results.add(rs.getString(1));
             }
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error("Query failed: `" + query + "´", e);
         }
         return results;
     }

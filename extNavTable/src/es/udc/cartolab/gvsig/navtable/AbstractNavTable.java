@@ -80,11 +80,11 @@ import es.udc.cartolab.gvsig.navtable.utils.EditionListener;
 
 /**
  * <img src="images/NavTableWindow.png">
- * 
+ *
  * If there is an image on
  * 'gvSIG/extensiones/es.udc.cartolab.gvsig.navtable/images/navtable_header.png'
  * it will be loaded on the NorthPanel.
- * 
+ *
  */
 
 public abstract class AbstractNavTable extends JPanel implements IWindow,
@@ -281,7 +281,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
     /**
      * It fills NavTable with empty values. Used when "Selected" option is set
      * on, but there are any selection registers.
-     * 
+     *
      */
     public abstract void fillEmptyValues();
 
@@ -323,6 +323,20 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 	return navigation.isOnlySelected();
     }
 
+    public void setAlwaysZoom(boolean bool) {
+        boolean changedToZoom = !alwaysZoomCB.isSelected() && bool;
+        if (alwaysZoomCB.isEnabled()) {
+            if (changedToZoom && isSomeRowToWorkOn()) {
+                zoom();
+            }
+            alwaysZoomCB.setSelected(bool);
+        }
+    }
+
+    public boolean isAlwaysZoom() {
+        return alwaysZoomCB.isEnabled() && alwaysZoomCB.isSelected();
+    }
+
     private void initNorthPanelButtons() {
 	// alwaysSelectCB and onlySelectedCB are init in SelectionHandler
 	alwaysZoomCB = getNavTableCheckBox(alwaysZoomCB, "alwaysZoomCheckBox");
@@ -342,7 +356,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
     /**
      * Gets the file of the image header for the upper panel. Subclasses can
      * override this method to get their custom image header.
-     * 
+     *
      * @return the File of the image.
      */
     protected File getHeaderFile() {
@@ -470,7 +484,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 
     /**
      * Shows a warning to the user if there's unsaved data.
-     * 
+     *
      */
     protected boolean showWarning() {
 	if (getPosition() == EMPTY_REGISTER) {
@@ -507,7 +521,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
     /**
      * Zooms to the current feature. The feature will fill the visualization
      * area.
-     * 
+     *
      */
     public void zoom() {
 	Rectangle2D rectangle = null;
@@ -555,7 +569,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
      * It forces the application to use the current scale when navigating
      * between features. It also centers the visualization to the feature when
      * navigating.
-     * 
+     *
      */
     private void fixScale() {
 	long scale = layer.getMapContext().getScaleView();
@@ -591,7 +605,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 
     /**
      * Removes all selections of the layer.
-     * 
+     *
      */
     public void clearSelection() {
 	getRecordset().clearSelection();
@@ -640,7 +654,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 
     /**
      * Repaints the window.
-     * 
+     *
      */
     public void refreshGUI() {
 	boolean navEnabled = false;
@@ -907,7 +921,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 
     /**
      * Reloads recordset from layer, if possible.
-     * 
+     *
      * @throws ReadDriverException
      */
     public void reloadRecordset() throws ReadDriverException {
@@ -1020,7 +1034,7 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 	    navigation.setSortKeys(null);
 	}
     }
-    
+
     private void refresh() {
 	try {
 	    reloadRecordset();
