@@ -151,7 +151,7 @@
                 icon="view-select-by-rectangle"
                 text="Vista/seleccion/seleccionar_por_rectangulo" position="40110"/>
             <menu action-command="SELECTIONBYSHAPE"
-                text="Vista/seleccion/seleccionar_por_capa" position="40120"/>
+                text="Vista/seleccion/Seleccion_por_capa" position="40120"/>
             <menu action-command="separator"
                 text="Vista/seleccion/invert_selection" position="40149" is_separator="true"/>
             <menu action-command="INVERT_SELECTION"
