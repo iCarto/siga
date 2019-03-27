@@ -1,0 +1,64 @@
+<project name="jGridShift" default="dist" basedir=".">
+    <description>
+        Genera el jar con libProjection y sus dependencias
+    </description>
+  <!-- set global properties for this build -->
+	<property name="src" location="src"/>
+	<property name="lib" location="lib"/>
+	<property name="build" location="bin"/>
+	<property name="dist"  location="dist"/>
+	<property name="jarName" value="jGridShift-1.0.jar"/>
+	<property name="targetDir" location="../libFMap/lib"/>
+	<!--<property name="compile-classpath" value="${lib}/geoapi-2.0.jar:${lib}/geojava.jar:${lib}/gt2-legacy.jar:${lib}/gt2-main.jar:${i18nLibs}/gvsig-i18n.jar" />-->
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...
+	</echo>
+  </target>
+
+	<target name="batch-build"
+			description="generate the distribution, move to fmap"
+			depends="dist, move-to-fmap">
+	</target>
+
+  <target name="dist" depends="init, compile, create-jar"
+        description="generate the distribution" >
+  </target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${dist}"/>
+	    <jar jarfile="${dist}/${jarName}" basedir="${build}"/>
+	</target>
+
+	<target name="move-to-fmap" description="Move jars and required libraries to fmap">
+	    <move todir="${targetDir}/">
+	    	<fileset dir="${dist}" includes="**/**"/>
+	    </move>
+	</target>
+
+	<target name="clean"
+			description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+	<target name="clean-project"
+			description="clean up"
+			depends="clean">
+	</target>
+
+</project>
+

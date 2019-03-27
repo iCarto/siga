@@ -13,6 +13,8 @@
 	-->
 
 	<property name="gvSIG_dist_projects_on_main_svn" value="
+		jGridShift,
+		proj4j,
 		libExceptions,
 		libInternationalization,
 		libIverUtiles,

@@ -32,6 +32,8 @@
 	-->
 
 	<property name="gvSIG_projects" value="
+		jGridShift,
+		proj4j,
 		libExceptions,
 		libInternationalization,
 		libIverUtiles,
