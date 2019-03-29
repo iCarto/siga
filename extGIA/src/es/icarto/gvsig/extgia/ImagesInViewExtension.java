@@ -1,22 +1,16 @@
 package es.icarto.gvsig.extgia;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLayers;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.extgia.forms.ViewPointListener;
-import es.icarto.gvsig.extgia.preferences.Elements;
+import es.icarto.gvsig.extgia.images_in_view.SearchableLayers;
 
 public class ImagesInViewExtension extends AbstractExtension {
 
-    private final List<FLyrVect> searchableLayers = new ArrayList<FLyrVect>();
+    private final SearchableLayers searchableLayers = new SearchableLayers();
 
     @Override
     public void initialize() {
@@ -38,19 +32,10 @@ public class ImagesInViewExtension extends AbstractExtension {
          */
         ViewPointListener listener = new ViewPointListener(mc);
         listener.setCursorImage(id + ".cursor");
-        listener.setLayers(searchableLayers);
+        listener.setLayers(searchableLayers.getLayers());
         mc.addMapTool(id, new PointBehavior(listener));
 
         mc.setTool(id);
-    }
-
-    private Elements isGIALayerName(String layerName) {
-        for (Elements e : Elements.values()) {
-            if (e.layerName.equals(layerName)) {
-                return e;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -59,19 +44,9 @@ public class ImagesInViewExtension extends AbstractExtension {
         if (view == null) {
             return false;
         }
+        searchableLayers.search(view);
+        return searchableLayers.layersFound();
 
-        FLayers layers = view.getMapControl().getMapContext().getLayers();
-        FLayer[] actives = layers.getActives();
-        searchableLayers.clear();
-        for (FLayer layer : actives) {
-            if (layer instanceof FLyrVect) {
-                Elements e = isGIALayerName(layer.getName());
-                if ((e != null) && (e.imagenesTableName != null)) {
-                    searchableLayers.add((FLyrVect) layer);
-                }
-            }
-        }
-        return searchableLayers.size() > 0;
     }
 
 }
