@@ -48,7 +48,7 @@ DocumentListener {
 	setWindowClosed(new IWindowClosed() {
 	    @Override
 	    public void windowClosed(IWindow window) {
-		model.getZoomTo().resetPoint();
+		model.getZoomTo().clearAllGraphics();;
 	    }
 	});
     }
