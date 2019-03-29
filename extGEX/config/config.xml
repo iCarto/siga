@@ -82,6 +82,14 @@
 
 		<!-- TOOLS EXTENSIONS -->
 		
+		<extension class-name="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" active="true">
+			<menu text="SIGA" position="30690" is_separator="true"/>			
+			<menu text="SIGA/localization/es.icarto.gvsig.extgex.SlopesAndCurvesExtension.menu" icon="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" action-command="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" position="30691"/>
+			<tool-bar name="SIGA_Tools" position="75">
+				<action-tool icon="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" action-command="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" tooltip="es.icarto.gvsig.extgex.SlopesAndCurvesExtension.tooltip" position="1"/>
+			</tool-bar>
+		</extension>
+		
 		<extension class-name="es.icarto.gvsig.extgex.LocatorByPKExtension" active="true">
 			<menu text="SIGA" position="30699" is_separator="true"/>			
 			<menu text="SIGA/localization/es.icarto.gvsig.extgex.LocatorByPKExtension.menu" icon="es.icarto.gvsig.extgex.LocatorByPKExtension" position="30710"/>

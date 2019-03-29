@@ -23,6 +23,10 @@ public class KeyValueRetriever {
     private String value = null;
     private ArrayList<KeyValue> foreignKeys = null;
     private String orderByField = null;
+    
+    protected KeyValueRetriever() {
+        // Don't use this. Just a hack for SlopesAndCurvesKeyValueRetriever
+    }
 
     public KeyValueRetriever(FLyrVect layer,
 	    String alias,
