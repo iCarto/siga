@@ -460,6 +460,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 logger.error(e.getStackTrace(), e);
             }
         }
+        fillElementosCB();
     }
 
     private void fillElementosCB() {
@@ -473,9 +474,13 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 .getSelectedItem());
         if (selectedTramo != null && elementoKV != null
                 && TRAMOS_IDS.containsKey(selectedTramo.toString())) {
+            try {
             Elements elemento = elementoKV.getElemento();
             String where = " where tramo = "
                     + TRAMOS_IDS.get(selectedTramo.toString());
+            FLyrVect layer = toc
+                    .getVectorialLayerByName(elemento.layerName);
+                SelectableDataSource sds = layer.getRecordset();
             if (pkNumberSpinner.isEnabled()) {
                 // If a PK was selected, then we must first filter elements by
                 // their proximity to the PK.
@@ -491,18 +496,17 @@ public class InventoryLocator extends BasicAbstractWindow implements
                 if (ids.size() == 0) {
                     return;
                 }
-                where += " and " + elemento.pk + " in ('" + ids.get(0);
+                int fieldType = sds.getFieldType(sds
+                        .getFieldIndexByName(elemento.pk));
+                boolean isPkText = fieldType == java.sql.Types.VARCHAR
+                        || fieldType == java.sql.Types.NVARCHAR
+                        || fieldType == java.sql.Types.LONGVARCHAR
+                        || fieldType == java.sql.Types.LONGNVARCHAR;
+                where += " and " + elemento.pk + " in (" + (isPkText ? "'" : "") + ids.get(0);
                 for (int i = 1, len = ids.size(); i < len; i++) {
-                    where += "', '" + ids.get(i);
+                    where += (isPkText ? "'" : "") + ", " + (isPkText ? "'" : "") + ids.get(i);
                 }
-                where += "')";
-                if (elemento.hasViaInfo) {
-                    KeyValue tipoVia = ((KeyValue) tipoViaCB.getSelectedItem());
-                    if (tipoVia == null) {
-                        return;
-                    }
-                    where += " and tipo_via = " + tipoVia.getKey();
-                }
+                where +=  (isPkText ? "'" : "") + ")";
             } else {
                 // If no PK was selected, elements are filtered by road type and
                 // name.
@@ -515,10 +519,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
                         + " and nombre_via = '" + nombreVia.getKey() + "'";
             }
             DataSourceFactory dsf;
-            try {
-                FLyrVect layer = toc
-                        .getVectorialLayerByName(elemento.layerName);
-                dsf = layer.getRecordset().getDataSourceFactory();
+                dsf = sds.getDataSourceFactory();
                 String sqlQuery = "select * from "
                         + layer.getRecordset().getName() + where + " order by "
                         + elemento.pk + ";";
@@ -953,7 +954,7 @@ public class InventoryLocator extends BasicAbstractWindow implements
         private final Elements elemento;
 
         public ElementKeyValue(Elements elemento) {
-            super(elemento.layerName, elemento.stylizedName);
+            super(elemento.layerName, elemento.getStylizedName());
             this.elemento = elemento;
         }
 

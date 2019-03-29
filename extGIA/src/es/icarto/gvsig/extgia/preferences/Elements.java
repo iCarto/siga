@@ -1,7 +1,13 @@
 package es.icarto.gvsig.extgia.preferences;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import es.icarto.gvsig.extgia.batch.BatchAbstractSubForm;
 import es.icarto.gvsig.extgia.batch.elements.BatchBarreraRigidaTrabajos;
@@ -41,6 +47,7 @@ import es.icarto.gvsig.extgia.forms.transformadores.TransformadoresForm;
 import es.icarto.gvsig.extgia.forms.tuneles.TunelesForm;
 import es.icarto.gvsig.extgia.forms.valla_cierre.VallaCierreForm;
 import es.icarto.gvsig.navtableforms.AbstractForm;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 final class Help {
     public static final List<String> ignoreGeom = Arrays.asList(new String[] { "the_geom", "geom" });
@@ -57,7 +64,7 @@ public enum Elements {
             "areas_descanso_trabajos",
             "areas_descanso_imagenes",
             "areas_descanso_reconocimientos",
-            Help.ignoredGidGeom, "nombre", "Áreas de descanso", true),
+            Help.ignoredGidGeom, "nombre", true),
     Areas_Mantenimiento(
                     "id_area_mantenimiento",
                     AreasMantenimientoForm.class,
@@ -66,7 +73,7 @@ public enum Elements {
                     null,
                     "areas_mantenimiento_imagenes",
                     null,
-                    Help.ignoredGidGeom, "nombre", "Áreas de mantenimiento", true),
+                    Help.ignoredGidGeom, "nombre", true),
     Areas_Peaje(
                             "id_area_peaje",
                             AreasPeajeForm.class,
@@ -75,7 +82,7 @@ public enum Elements {
                             "areas_peaje_trabajos",
                             "areas_peaje_imagenes",
                             "areas_peaje_reconocimientos",
-                            Help.ignoredGidGeom, "nombre", "Áreas de peaje", true),
+                            Help.ignoredGidGeom, "nombre", true),
     Areas_Servicio(
                                     "id_area_servicio",
                                     AreasServicioForm.class,
@@ -84,9 +91,9 @@ public enum Elements {
                                     "areas_servicio_trabajos",
                                     "areas_servicio_imagenes",
                                     "areas_servicio_reconocimientos",
-                                    Help.ignoredGidGeom, "nombre", "Áreas de servicio", true),
-    Arquetas("gid", ArquetasForm.class, null, null, null, "arquetas_imagenes", null, Help.ignoreGeom, null, "Arquetas", true),
-    Bajantes("gid", BajantesForm.class, null, null, null, "bajantes_imagenes", null, Help.ignoreGeom, null, "Bajantes", true),
+                                    Help.ignoredGidGeom, "nombre", true),
+    Arquetas("gid", ArquetasForm.class, null, null, null, "arquetas_imagenes", null, Help.ignoreGeom, null, true),
+    Bajantes("gid", BajantesForm.class, null, null, null, "bajantes_imagenes", null, Help.ignoreGeom, null, true),
     Barrera_Rigida(
                                             "id_barrera_rigida",
                                             BarreraRigidaForm.class,
@@ -95,7 +102,7 @@ public enum Elements {
                                             "barrera_rigida_trabajos",
                                             "barrera_rigida_imagenes",
                                             "barrera_rigida_reconocimientos",
-                                            Help.ignoredGidGeom, "codigo", "Barreras rígidas", true),
+                                            Help.ignoredGidGeom, "codigo", true),
     Barrera_Metalica(
                                             "gid",
                                             BarreraMetalicaForm.class,
@@ -104,12 +111,12 @@ public enum Elements {
                                             null,
                                             "barrera_metalica_imagenes",
                                             null,
-                                            Help.ignoreGeom, null, "Barreras metálicas", true),
-    Centros_Mando("gid", CentrosMandoForm.class, null, null, null, "centros_mando_imagenes", null, Help.ignoreGeom, null, "Centros de mando", true),
-    Competencias("gid", CompetenciasForm.class, null, null, null, null, null, Help.ignoreGeom, null, "Competencias", true),
-    Comunicaciones("gid", ComunicacionesForm.class, null, null, null, "comunicaciones_imagenes", null, Help.ignoreGeom, null, "Comunicaciones", false),
-    Cunetas("gid", CunetasForm.class, null, null, null, "cunetas_imagenes", null, Help.ignoreGeom, null, "Cunetas", true),
-    Dren_Caz("gid", DrenCazForm.class, null, null, null, "dren_caz_imagenes", null, Help.ignoreGeom, null, "Dren-Caz", true),
+                                            Help.ignoreGeom, null, true),
+    Centros_Mando("gid", CentrosMandoForm.class, null, null, null, "centros_mando_imagenes", null, Help.ignoreGeom, null, true),
+    Competencias("gid", CompetenciasForm.class, null, null, null, null, null, Help.ignoreGeom, null, true),
+    Comunicaciones("gid", ComunicacionesForm.class, null, null, null, "comunicaciones_imagenes", null, Help.ignoreGeom, null, false),
+    Cunetas("gid", CunetasForm.class, null, null, null, "cunetas_imagenes", null, Help.ignoreGeom, null, true),
+    Dren_Caz("gid", DrenCazForm.class, null, null, null, "dren_caz_imagenes", null, Help.ignoreGeom, null, true),
     Enlaces(
                                                     "id_enlace",
                                                     EnlacesForm.class,
@@ -118,7 +125,7 @@ public enum Elements {
                                                     null,
                                                     "enlaces_imagenes",
                                                     "enlaces_reconocimientos",
-                                                    Help.ignoredGidGeom, "nombre", "Enlaces", true),
+                                                    Help.ignoredGidGeom, "nombre", true),
     Firme(
                                                             "id_firme",
                                                             FirmeForm.class,
@@ -127,7 +134,7 @@ public enum Elements {
                                                             "firme_trabajos",
                                                             "firme_imagenes",
                                                             "firme_reconocimientos",
-                                                            Help.ignoredGidGeom, "unidad_constructiva", "Firmes", false),
+                                                            Help.ignoredGidGeom, "unidad_constructiva", false),
     Isletas(
                                                                     "id_isleta",
                                                                     IsletasForm.class,
@@ -136,7 +143,7 @@ public enum Elements {
                                                                     "isletas_trabajos",
                                                                     "isletas_imagenes",
                                                                     "isletas_reconocimientos",
-                                                                    Help.ignoredGidGeom, null, "Isletas", true),
+                                                                    Help.ignoredGidGeom, null, true),
     Juntas(
                                                                             "id_junta",
                                                                             JuntasForm.class,
@@ -145,7 +152,7 @@ public enum Elements {
                                                                             "juntas_trabajos",
                                                                             "juntas_imagenes",
                                                                             "juntas_reconocimientos",
-                                                                            Help.ignoredGidGeom, null, "Juntas", true),
+                                                                            Help.ignoredGidGeom, null, true),
     Lecho_Frenado(
                                                                                     "id_lecho_frenado",
                                                                                     LechoFrenadoForm.class,
@@ -154,7 +161,7 @@ public enum Elements {
                                                                                     "lecho_frenado_trabajos",
                                                                                     "lecho_frenado_imagenes",
                                                                                     "lecho_frenado_reconocimientos",
-                                                                                    Help.ignoredGidGeom, null, "Lechos de frenado", true),
+                                                                                    Help.ignoredGidGeom, null, true),
     Lineas_Suministro(
                                                                                             "id_linea_suministro",
                                                                                             LineasSuministroForm.class,
@@ -163,7 +170,7 @@ public enum Elements {
                                                                                             "lineas_suministro_trabajos",
                                                                                             "lineas_suministro_imagenes",
                                                                                             "lineas_suministro_reconocimientos",
-                                                                                            Help.ignoredGidGeom, "denominacion", "Líneas de suministro", true),
+                                                                                            Help.ignoredGidGeom, "denominacion", true),
     Muros(
                                                                                                     "id_muro",
                                                                                                     MurosForm.class,
@@ -172,7 +179,7 @@ public enum Elements {
                                                                                                     "muros_trabajos",
                                                                                                     "muros_imagenes",
                                                                                                     "muros_reconocimientos",
-                                                                                                    Help.ignoredGidGeom, null, "Muros", true),
+                                                                                                    Help.ignoredGidGeom, null, true),
     Obras_Desague(
                                                                                                             "id_obra_desague",
                                                                                                             ObrasDesagueForm.class,
@@ -181,7 +188,7 @@ public enum Elements {
                                                                                                             "obras_desague_trabajos",
                                                                                                             "obras_desague_imagenes",
                                                                                                             null,
-                                                                                                            Help.ignoredGidGeom, null, "Obras de desagüe", true),
+                                                                                                            Help.ignoredGidGeom, null, true),
     Obras_Paso(
                                                                                                                     "id_obra_paso",
                                                                                                                     ObrasPasoForm.class,
@@ -190,7 +197,7 @@ public enum Elements {
                                                                                                                     "obras_paso_trabajos",
                                                                                                                     "obras_paso_imagenes",
                                                                                                                     null,
-                                                                                                                    Help.ignoredGidGeom, "nombre", "Obras de pasos", true),
+                                                                                                                    Help.ignoredGidGeom, "nombre", true),
     Pasos_Mediana(
                                                                                                                             "id_paso_mediana",
                                                                                                                             PasosMedianaForm.class,
@@ -199,10 +206,10 @@ public enum Elements {
                                                                                                                             "pasos_mediana_trabajos",
                                                                                                                             "pasos_mediana_imagenes",
                                                                                                                             "pasos_mediana_reconocimientos",
-                                                                                                                            Help.ignoredGidGeom, null, "Pasos de mediana", true),
-    Pozos("gid", PozosForm.class, null, null, null, "pozos_imagenes", null, Help.ignoreGeom, "denominacion", "Pozos", true),
-    Pretiles("gid", PretilesForm.class, null, null, null, "pretiles_imagenes", null, Help.ignoreGeom, null, "Pretiles", true),
-    Ramales("gid", RamalesForm.class, null, null, null, "ramales_imagenes", null, Help.ignoreGeom, null, "Ramales", true),
+                                                                                                                            Help.ignoredGidGeom, null, true),
+    Pozos("gid", PozosForm.class, null, null, null, "pozos_imagenes", null, Help.ignoreGeom, "denominacion", true),
+    Pretiles("gid", PretilesForm.class, null, null, null, "pretiles_imagenes", null, Help.ignoreGeom, null, true),
+    Ramales("gid", RamalesForm.class, null, null, null, "ramales_imagenes", null, Help.ignoreGeom, null, true),
     Senhalizacion_Variable(
                                                                                                                                     "id_senhal_variable",
                                                                                                                                     SenhalizacionVariableForm.class,
@@ -211,7 +218,7 @@ public enum Elements {
                                                                                                                                     "senhalizacion_variable_trabajos",
                                                                                                                                     "senhalizacion_variable_imagenes",
                                                                                                                                     "senhalizacion_variable_reconocimientos",
-                                                                                                                                    Help.ignoredGidGeom, null, "Señalización variable", true),
+                                                                                                                                    Help.ignoredGidGeom, null, true),
     Senhalizacion_Vertical(
                                                                                                                                             "id_elemento_senhalizacion",
                                                                                                                                             SenhalizacionVerticalForm.class,
@@ -220,7 +227,7 @@ public enum Elements {
                                                                                                                                             "senhalizacion_vertical_trabajos",
                                                                                                                                             "senhalizacion_vertical_imagenes",
                                                                                                                                             "senhalizacion_vertical_reconocimientos",
-                                                                                                                                            Help.ignoredGidGeom, null, "Señalización vertical", true),
+                                                                                                                                            Help.ignoredGidGeom, null, true),
     Taludes(
                                                                                                                                                     "id_talud",
                                                                                                                                                     TaludesForm.class,
@@ -229,7 +236,7 @@ public enum Elements {
                                                                                                                                                     "taludes_trabajos",
                                                                                                                                                     "taludes_imagenes",
                                                                                                                                                     "taludes_reconocimientos",
-                                                                                                                                                    Help.ignoredGidGeom, null, "Taludes", true),
+                                                                                                                                                    Help.ignoredGidGeom, null, true),
     Transformadores(
                                                                                                                                                             "id_transformador",
                                                                                                                                                             TransformadoresForm.class,
@@ -238,8 +245,8 @@ public enum Elements {
                                                                                                                                                             "transformadores_trabajos",
                                                                                                                                                             "transformadores_imagenes",
                                                                                                                                                             "transformadores_reconocimientos",
-                                                                                                                                                            Help.ignoredGidGeom, "denominacion", "Transformadores", true),
-                                                                                                                                                            Tuneles("gid", TunelesForm.class, null, null, null, "tuneles_imagenes", null, Help.ignoreGeom, "nombre", "Túneles", true),
+                                                                                                                                                            Help.ignoredGidGeom, "denominacion", true),
+                                                                                                                                                            Tuneles("gid", TunelesForm.class, null, null, null, "tuneles_imagenes", null, Help.ignoreGeom, "nombre", true),
     Valla_Cierre(
                                                                                                                                                                     "id_valla",
                                                                                                                                                                     VallaCierreForm.class,
@@ -248,13 +255,16 @@ public enum Elements {
                                                                                                                                                                     "valla_cierre_trabajos",
                                                                                                                                                                     "valla_cierre_imagenes",
                                                                                                                                                                     "valla_cierre_reconocimientos",
-                                                                                                                                                                    Help.ignoredGidGeom, null, "Vallas de cierre", true);
+                                                                                                                                                                    Help.ignoredGidGeom, null, true);
+
+    private static final Logger logger = Logger.getLogger(Elements.class);
+
+    private static Map<String, String> NAMES;
 
     public final String pk;
     public final Class<? extends AbstractForm> form;
     public final Class<? extends BatchAbstractSubForm> batchForm;
     public final String layerName;
-    public final String stylizedName;
     public final String descriptiveField;
     public final String batchTrabajosBasicName;
     public final String trabajosTableName;
@@ -267,12 +277,11 @@ public enum Elements {
             String batchTrabajosBasicName, String dbTableName,
             String imagenesTablename, String batchReconocimientosBasicName,
             List<String> ignoredColumnsInReportrs, String descriptiveField,
-            String stylizedName, boolean hasViaInfo) {
+            boolean hasViaInfo) {
         this.pk = pk;
         this.form = form;
         this.batchForm = batchForm;
         this.layerName = this.toString();
-        this.stylizedName = stylizedName;
         this.descriptiveField = descriptiveField;
         this.hasViaInfo = hasViaInfo;
         this.batchTrabajosBasicName = batchTrabajosBasicName;
@@ -280,5 +289,32 @@ public enum Elements {
         this.imagenesTableName = imagenesTablename;
         this.batchReconocimientosBasicName = batchReconocimientosBasicName;
         this.ignoredColumnsInReports = ignoredColumnsInReportrs;
+    }
+
+    private static void initializeNames() {
+        String query = "SELECT DISTINCT id, item FROM audasa_extgia_dominios.elemento;";
+
+        try {
+            ResultSet rs = DBSession.getCurrentSession().getJavaConnection()
+                    .prepareStatement(query).executeQuery();
+            NAMES = new HashMap<String, String>();
+            while (rs.next()) {
+                String id = rs.getString(1);
+                String name = rs.getString(2);
+                if (id != null && name != null && !NAMES.containsKey(id)) {
+                    NAMES.put(id, name);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+    }
+
+    public String getStylizedName() {
+        if (NAMES == null) {
+            initializeNames();
+        }
+        return (NAMES.containsKey(this.name())) ? NAMES.get(this.name()) : this
+                .name();
     }
 }
