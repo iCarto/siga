@@ -13,11 +13,12 @@ public class ZoomTo {
 
     private final MapControl mapControl;
     private PostgisTransformation transform;
-    private final OverlayPoint overlayPoint;
+    private final OverlayPoint overlayPoint; // Probably should be in its own class
 
     public ZoomTo(MapControl mapControl) {
         this.mapControl = mapControl;
         this.overlayPoint = new OverlayPoint(mapControl);
+        this.overlayPoint.setSize(8);
     }
 
     public void setTranformation(PostgisTransformation transform) {
