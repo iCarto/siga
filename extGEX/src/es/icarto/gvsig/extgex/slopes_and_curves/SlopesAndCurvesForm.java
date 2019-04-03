@@ -3,6 +3,8 @@ package es.icarto.gvsig.extgex.slopes_and_curves;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DecimalFormatSymbols;
@@ -14,12 +16,14 @@ import java.util.Locale;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -99,7 +103,7 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                fillData();
+                fillPK(true);
             }
         }
 
@@ -142,6 +146,9 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
         public void initWidgets() {
             minMaxPKLabel = (JLabel) formPanel.getComponentByName("minMaxPKLabel");
             pkNumberSpinner = (JSpinner) formPanel.getComponentByName(ID_PKNUMBER);
+            Float cero = new Float(0f);
+            SpinnerNumberModel model = new SpinnerNumberModel(cero, cero, cero, new Float("0.01"));
+            pkNumberSpinner.setModel(model);
             resetEditor();
             pkNumberSpinner.addChangeListener(new ChangeListener() {
                 @Override
@@ -153,7 +160,7 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
 
         }
 
-        private void setValue(Number v) {
+        public void setValue(Number v) {
             pkNumberSpinner.setValue(v);
         }
 
@@ -204,13 +211,32 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
             return pkNumberSpinner.getValue().toString();
         }
 
+        public Float getFloatValue() {
+            if (pkNumberSpinner.getValue() == null) {
+                return -1f;
+            }
+            return (Float) pkNumberSpinner.getValue();
+        }
+
         private void resetEditor() {
             NumberEditor editor = new JSpinner.NumberEditor(pkNumberSpinner, "0.000");
             Locale myLocale = new Locale("es", "ES");
             editor.getFormat().setDecimalFormatSymbols(new DecimalFormatSymbols(myLocale));
             editor.getFormat().setGroupingUsed(false);
-            pkNumberSpinner.setEditor(editor);
+            final JFormattedTextField textField = editor.getTextField();
+            textField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            textField.selectAll();
+                        }
+                    });
+                }
 
+            });
+            pkNumberSpinner.setEditor(editor);
         }
 
         public void setEnabled(boolean b) {
@@ -322,7 +348,7 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
         tramoCB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fillPK();
+                fillPK(false);
             }
         });
 
@@ -396,17 +422,37 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
             tramoCB.addItem(s);
         }
 
-        fillPK();
+        fillPK(false);
     }
 
-    private void fillPK() {
+    private void fillPK(boolean tryToKeepPreviousValue) {
         if (tramoCB.getSelectedItem() == null) {
             return;
         }
+        Float prevValue = pkSpinner.getFloatValue();
+
         String tramo = tramoCB.getSelectedItem().toString();
         int sentido = sentidoRadioButton.getCode();
         Float[] minMaxPk = ejeCalibrado.getMinMaxPk(tramo, sentido);
         pkSpinner.resetRange(minMaxPk[0], minMaxPk[1]);
+
+        if (tryToKeepPreviousValue) {
+            Float min = minMaxPk[0];
+            Float max = minMaxPk[1];
+            float distMin = min - prevValue;
+            float distMax = prevValue - max;
+            if (distMin < 0 && distMax < 0) {
+                pkSpinner.setValue(prevValue);
+            } else {
+                if (Math.abs(distMin) < Math.abs(distMax)) {
+                    pkSpinner.setValue(min);
+                } else {
+                    pkSpinner.setValue(max);
+                }
+            }
+        }
+
+        fillData();
     }
 
     @Override

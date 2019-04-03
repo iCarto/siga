@@ -82,11 +82,10 @@
 
 		<!-- TOOLS EXTENSIONS -->
 		
-		<extension class-name="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" active="true">
-			<menu text="SIGA" position="30690" is_separator="true"/>			
-			<menu text="SIGA/localization/es.icarto.gvsig.extgex.SlopesAndCurvesExtension.menu" icon="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" action-command="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" position="30691"/>
+		<extension class-name="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" active="true">		
+			<menu text="SIGA/es.icarto.gvsig.extgex.SlopesAndCurvesExtension.menu" icon="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" action-command="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" position="30951"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" action-command="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" tooltip="es.icarto.gvsig.extgex.SlopesAndCurvesExtension.tooltip" position="1"/>
+				<action-tool icon="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" action-command="es.icarto.gvsig.extgex.SlopesAndCurvesExtension" tooltip="es.icarto.gvsig.extgex.SlopesAndCurvesExtension.tooltip" position="12"/>
 			</tool-bar>
 		</extension>
 		
@@ -123,14 +122,14 @@
 			<menu text="SIGA" position="30799" is_separator="true"/>			
 			<menu text="SIGA/WMS/Planos Expropiaciones" icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasExtension" position="30800"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="4"/>
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasExtension" tooltip="Cargar Planos Expropiaciones" position="5"/>
 			</tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" active="true">
 			<menu text="SIGA/WMS/Planos Expropiaciones - Ampliación" icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" position="30805"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones - Ampliación" position="5"/>
+				<action-tool icon="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadFincasAmpliacionExtension" tooltip="Cargar Planos Expropiaciones - Ampliación" position="6"/>
 			</tool-bar>
 		</extension>
 		
@@ -138,14 +137,14 @@
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" active="true">
 			<menu text="SIGA/WMS/dimensiones_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" position="30810"/>
 			<tool-bar name="SIGA_Tools" position="75">
-                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" tooltip="dimensiones_tooltip" position="6"/>
+                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesExtension" tooltip="dimensiones_tooltip" position="7"/>
             </tool-bar>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" active="true">
             <menu text="SIGA/WMS/dimensiones_ampliacion_menu" icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" position="30811"/>
             <tool-bar name="SIGA_Tools" position="75">
-                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" tooltip="dimensiones_ampliacion_tooltip" position="7"/>
+                <action-tool icon="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" action-command="es.icarto.gvsig.extgex.WMSLoadDimensionesAmpliacionExtension" tooltip="dimensiones_ampliacion_tooltip" position="8"/>
             </tool-bar>
         </extension>
 		
