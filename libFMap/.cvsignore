@@ -1,5 +1,0 @@
-bin
-build-doc
-bin-test
-dist/*
-dist/lib/*
