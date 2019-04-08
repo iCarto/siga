@@ -40,12 +40,15 @@
 	<target name="create-jar" description="Crea el jar de la aplicacion">
 		<mkdir dir="${dist}"/>
 	    <jar jarfile="${dist}/${jarName}" basedir="${build}"/>
-	</target>
+	</target>	
 
 	<target name="move-to-fmap" description="Move jars and required libraries to fmap">
 	    <move todir="${targetDir}/">
 	    	<fileset dir="${dist}" includes="**/**"/>
 	    </move>
+		<copy todir="../_fwAndami/lib">
+			<fileset dir="lib" includes="*"/>
+		</copy>
 	</target>
 
 	<target name="clean"
