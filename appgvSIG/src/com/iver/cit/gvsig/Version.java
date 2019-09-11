@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.iver.cit.gvsig.DEMO.SingleView;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
 public class Version {
