@@ -13,42 +13,40 @@ import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 
 public class BarreraRigidaCalculateIDValue extends CalculateComponentValue {
 
-    public BarreraRigidaCalculateIDValue(AbstractForm form,
-	    HashMap<String, JComponent> allFormWidgets,
-	    String resultComponentName, String... operatorComponentsNames) {
-	super(form, allFormWidgets, resultComponentName, operatorComponentsNames);
-	// TODO Auto-generated constructor stub
+    public BarreraRigidaCalculateIDValue(AbstractForm form, HashMap<String, JComponent> allFormWidgets,
+            String resultComponentName, String... operatorComponentsNames) {
+        super(form, allFormWidgets, resultComponentName, operatorComponentsNames);
     }
 
     /**
-     * ("BR")&-&("Número de Barrera")&(Primera letra de
-     * "Base de contratista") ; EJ: BR-001N
-     * 
-     * @param validate
-     *            . True if the operatorComponents validate their checks
-     * 
+     * ("BR")&("-")&("Número de Barrera")&((Primera letra de
+     * "Base de contratista")|("X" si es AG)) ; EJ: BR-001N, BR-001X
+     *
      */
     @Override
     public void setValue(boolean validate) {
-	JTextField numeroBarreraWidget = (JTextField) operatorComponents
-		.get(DBFieldNames.NUMERO_BARRERA_RIGIDA);
-	JComboBox baseContratistaWidget = (JComboBox) operatorComponents
-		.get(DBFieldNames.BASE_CONTRATISTA);
+        JTextField numeroWidget = (JTextField) operatorComponents.get(DBFieldNames.NUMERO_BARRERA_RIGIDA);
+        JComboBox baseContratistaWidget = (JComboBox) operatorComponents.get(DBFieldNames.BASE_CONTRATISTA);
+        JComboBox tramoWidget = (JComboBox) operatorComponents.get(DBFieldNames.TRAMO);
 
-	if (numeroBarreraWidget.getText().isEmpty()) {
-	    validate = false;
-	}
+        if (numeroWidget.getText().isEmpty()) {
+            validate = false;
+        }
 
-	String barreraRigidaID = "";
-	if (validate) {
+        String id = "";
+        if (validate) {
+            boolean isAG = ((KeyValue) tramoWidget.getSelectedItem()).getValue().startsWith("AG");
+            String lastLetter = ((KeyValue) baseContratistaWidget.getSelectedItem()).getValue().substring(0, 1);
+            if (isAG) {
+                lastLetter = "X";
+            }
 
-	    barreraRigidaID = String.format("%s-%03d%s", "BR", Integer
-		    .valueOf(numeroBarreraWidget.getText()),
-		    ((KeyValue) baseContratistaWidget.getSelectedItem())
-		    .getValue().substring(0, 1));
-	}
-	resultComponent.setText(barreraRigidaID);
-	form.getFormController().setValue(resultComponentName, barreraRigidaID);
+            String tipoValue = "BR";
+            Integer numeroValue = Integer.valueOf(numeroWidget.getText());
+            id = String.format("%s-%03d%s", tipoValue, numeroValue, lastLetter);
+        }
+        resultComponent.setText(id);
+        form.getFormController().setValue(resultComponentName, id);
 
     }
 
