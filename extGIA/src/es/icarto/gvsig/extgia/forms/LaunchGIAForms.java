@@ -23,7 +23,6 @@ import es.icarto.gvsig.extgia.batch.reconocimientos.BatchLineasSuministroReconoc
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchMurosReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchPasosMedianaReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchSenhalizacionVariableReconocimientos;
-import es.icarto.gvsig.extgia.batch.reconocimientos.BatchSenhalizacionVerticalReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchTaludesReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchTransformadoresReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchVallaCierreReconocimientos;
@@ -202,10 +201,6 @@ public class LaunchGIAForms {
 	    break;
 	case Senhalizacion_Variable:
 	    subform = new BatchSenhalizacionVariableReconocimientos(
-		    formFileName, dbTableName);
-	    break;
-	case Senhalizacion_Vertical:
-	    subform = new BatchSenhalizacionVerticalReconocimientos(
 		    formFileName, dbTableName);
 	    break;
 	case Taludes:

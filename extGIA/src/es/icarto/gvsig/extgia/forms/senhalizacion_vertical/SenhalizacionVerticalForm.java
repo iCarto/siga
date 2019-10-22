@@ -50,12 +50,6 @@ public class SenhalizacionVerticalForm extends AbstractFormWithLocationWidgets {
 		DBFieldNames.trabajosVegetacionColAlias,
 		DBFieldNames.trabajosColWidths, this));
 
-	addTableHandler(new GIAAlphanumericTableHandler(
-		getReconocimientosDBTableName(), getWidgets(), getElementID(),
-		DBFieldNames.reconocimientosColNames,
-		DBFieldNames.reconocimientosColAlias, null, this,
-		SenhalizacionVerticalReconocimientosSubForm.class));
-
 	addTableHandler(new SenhalesTableHandler(
 		"senhalizacion_vertical_senhales", getWidgets(),
 		getElementID(), senhalesColNames, senhalesColAlias, new int[] {

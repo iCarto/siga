@@ -226,7 +226,7 @@ public enum Elements {
                                                                                                                                             "batch_senhalizacion_vertical_trabajos",
                                                                                                                                             "senhalizacion_vertical_trabajos",
                                                                                                                                             "senhalizacion_vertical_imagenes",
-                                                                                                                                            "senhalizacion_vertical_reconocimientos",
+                                                                                                                                            null,
                                                                                                                                             Help.ignoredGidGeom, null, true),
     Taludes(
                                                                                                                                                     "id_talud",
