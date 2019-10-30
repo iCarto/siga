@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.EventListener;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -16,7 +18,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
+import org.apache.log4j.Logger;
+
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
@@ -25,13 +32,19 @@ import es.icarto.gvsig.extgia.forms.GIAAlphanumericTableHandler;
 import es.icarto.gvsig.extgia.forms.ramales.RamalesForm;
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
+import es.icarto.gvsig.navtableforms.AbstractForm;
+import es.icarto.gvsig.navtableforms.gui.tables.handler.BaseTableHandler;
 import es.icarto.gvsig.navtableforms.gui.tables.handler.VectorialTableHandler;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
 public class EnlacesForm extends AbstractFormWithLocationWidgets {
+	
+	private static final Logger logger = Logger.getLogger(AbstractForm.class);
 
     public static final String TABLENAME = "enlaces";
+    private TableModelListener ramalesTableModelListener;
+    private VectorialTableHandler ramalesTableHandler;
 
     JTextField enlaceIDWidget;
     CalculateComponentValue enlaceid;
@@ -54,9 +67,10 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
 		"enlaces_carreteras_enlazadas", getWidgets(), getElementID(),
 		carreterasColNames, carreterasColAlias, null, this));
 
-	addTableHandler(new VectorialTableHandler(RamalesForm.TABLENAME,
-		getWidgets(), new String[] { TRAMO, TIPO_VIA, NOMBRE_VIA },
-		RamalesForm.colNames, RamalesForm.colAlias));
+	ramalesTableHandler = new VectorialTableHandler(RamalesForm.TABLENAME,
+			getWidgets(), new String[] { TRAMO, TIPO_VIA, NOMBRE_VIA },
+			RamalesForm.colNames, RamalesForm.colAlias);
+	addTableHandler(ramalesTableHandler);
     }
 
     @Override
@@ -139,6 +153,13 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
     }
 
     @Override
+    protected void fillSpecificValues() {
+    	updateAutomaticFieldLongitudRamalesWhenSubFormDataChanges_pre();
+        super.fillSpecificValues();
+        updateAutomaticFieldLongitudRamalesWhenSubFormDataChanges_post();
+    }
+    
+    @Override
     public JTable getReconocimientosJTable() {
 	// TODO Auto-generated method stub
 	return null;
@@ -174,6 +195,28 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
     @Override
     public String getElementIDValue() {
 	return enlaceIDWidget.getText();
+    }
+    
+    private void updateAutomaticFieldLongitudRamalesWhenSubFormDataChanges_pre() {
+        if (ramalesTableModelListener != null) {
+          ramalesTableHandler.getModel().removeTableModelListener(ramalesTableModelListener);   
+        }
+    }
+
+    private void updateAutomaticFieldLongitudRamalesWhenSubFormDataChanges_post() {
+        ramalesTableModelListener = new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                try {
+                    EnlacesForm.this.reloadRecordset();
+                } catch (ReadDriverException ex) {
+                    logger.error(ex.getStackTrace(), ex);
+                }
+                EnlacesForm.this.onPositionChange(null);
+            }
+        };
+        ramalesTableHandler.getModel().addTableModelListener(ramalesTableModelListener); 
     }
 
 }
