@@ -44,7 +44,7 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
     CalculateComponentValue enlaceid;
 
     public static String[] carreterasColNames = { "id_carretera_enlazada", "clave_carretera", "pk", "titular",
-    "tipo_cruce" };
+            "tipo_cruce" };
 
     public static String[] carreterasColAlias = { "ID Carretera", "Clave", "PK", "Titular", "Tipo Cruce" };
 
@@ -59,7 +59,7 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
                 carreterasColNames, carreterasColAlias, null, this));
 
         ramalesTableHandler = new VectorialTableHandler(RamalesForm.TABLENAME, getWidgets(), new String[] { TRAMO,
-            TIPO_VIA, NOMBRE_VIA }, RamalesForm.colNames, RamalesForm.colAlias);
+                TIPO_VIA, NOMBRE_VIA }, RamalesForm.colNames, RamalesForm.colAlias);
         addTableHandler(ramalesTableHandler);
     }
 
@@ -70,7 +70,7 @@ public class EnlacesForm extends AbstractFormWithLocationWidgets {
 
         enlaceIDWidget = (JTextField) widgets.get(DBFieldNames.ID_ENLACE);
 
-        enlaceid = new EnlacesCalculateIDValue(this, getWidgetComponents(), DBFieldNames.ID_ENLACE,
+        enlaceid = new EnlacesCalculateIDValue(this, getWidgets(), DBFieldNames.ID_ENLACE,
                 DBFieldNames.AREA_MANTENIMIENTO, DBFieldNames.BASE_CONTRATISTA, DBFieldNames.TRAMO,
                 DBFieldNames.TIPO_VIA, DBFieldNames.MUNICIPIO, DBFieldNames.PK);
         enlaceid.setListeners();
