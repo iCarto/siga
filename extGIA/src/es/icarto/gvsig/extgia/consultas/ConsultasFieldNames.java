@@ -24,6 +24,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.FirmeCaracteris
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.IsletasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.JuntasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.LechoFrenadoCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.LineasDistribucionUFDCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.LineasSuministroCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.MurosCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ObrasDesagueCaracteristicasReport;
@@ -164,6 +165,8 @@ public class ConsultasFieldNames {
             return "gid, tr.item,  tv.item,  nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
         case Barrera_Metalica:
             return "gid, tr.item,  tv.item, nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
+        case Lineas_Distribucion_UFD:
+    	    return "gid, tr.item,  tv.item, nv.item, pk, denominacion, matricula, linea, tipo, tension, longitud, observaciones";
         }
         return null;
     }
@@ -560,6 +563,12 @@ public class ConsultasFieldNames {
                 + localizationCSVFieldNames()
                 + "pk_inicial as \"PK inicial (km)\", pk_final as \"PK final (km)\", tipo as \"Tipo\", sistema_contencion as \"Sistema contención OC 35/2014\", longitud as \"Longitud (m)\", observaciones as \"Observaciones\"";
     }
+    
+    public static String lineasDistribucionUFDCSVFieldNames() {
+    	return "gid as \"ID Línea distribucion UFD\","
+    			+ localizationCSVFieldNames()
+    			+ "pk as \"PK (Km)\", denominacion as \"Denominación\", matricula as \"Matrícula\", linea as \"Línea\", tipo as \"Tipo\", tension as \"Tensión\", longitud as \"Longitud (m)\", observaciones as \"Observaciones\"";
+    }
 
     public static void createCaracteristicasReport(String[] element, String outputFile, DefaultTableModel tableModel,
             ConsultasFilters<Field> filters, QueryType tipo) {
@@ -654,6 +663,9 @@ public class ConsultasFieldNames {
             break;
         case Pretiles:
             new PretilesCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+            break;
+        case Lineas_Distribucion_UFD:
+            new LineasDistribucionUFDCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
             break;
         }
     }

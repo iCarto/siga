@@ -32,6 +32,7 @@ import es.icarto.gvsig.extgia.forms.firme.FirmeForm;
 import es.icarto.gvsig.extgia.forms.isletas.IsletasForm;
 import es.icarto.gvsig.extgia.forms.juntas.JuntasForm;
 import es.icarto.gvsig.extgia.forms.lecho_frenado.LechoFrenadoForm;
+import es.icarto.gvsig.extgia.forms.lineas_distribucion_ufd.LineasDistribucionUFDForm;
 import es.icarto.gvsig.extgia.forms.lineas_suministro.LineasSuministroForm;
 import es.icarto.gvsig.extgia.forms.muros.MurosForm;
 import es.icarto.gvsig.extgia.forms.obras_desague.ObrasDesagueForm;
@@ -162,6 +163,15 @@ public enum Elements {
                                                                                     "lecho_frenado_imagenes",
                                                                                     "lecho_frenado_reconocimientos",
                                                                                     Help.ignoredGidGeom, null, true),
+    Lineas_Distribucion_UFD(															"gid",
+    																					LineasDistribucionUFDForm.class,
+    																					BatchAbstractSubForm.class,
+    																					null, 
+    																					null, 
+    																					"lineas_distribucion_ufd_imagenes", 
+    																					null,
+    																					Help.ignoreGeom, null, true),
+
     Lineas_Suministro(
                                                                                             "id_linea_suministro",
                                                                                             LineasSuministroForm.class,

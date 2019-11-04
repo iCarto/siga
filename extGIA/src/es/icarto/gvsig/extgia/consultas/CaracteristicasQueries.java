@@ -88,6 +88,7 @@ public class CaracteristicasQueries {
         case Obras_Desague:
         case Areas_Peaje:
         case Lecho_Frenado:
+        case Lineas_Distribucion_UFD:
         case Senhalizacion_Variable:
         case Transformadores:
         case Tuneles:
@@ -218,6 +219,9 @@ public class CaracteristicasQueries {
             break;
         case Barrera_Metalica:
             query = ConsultasFieldNames.barreraMetalicaCSVFieldNames();
+            break;
+        case Lineas_Distribucion_UFD:
+            query = ConsultasFieldNames.lineasDistribucionUFDCSVFieldNames();
             break;
         }
         return "SELECT " + query + getFromClauseCaracteristicas(element) + filters.getWhereClauseByLocationWidgets()
