@@ -36,7 +36,7 @@ public class BarreraMetalicaCaracteristicasReport extends PDFCaracteristicasRepo
         columnsWidth[6] = 55f;
         columnsWidth[7] = 55f;
         columnsWidth[8] = 55f;
-        columnsWidth[8] = 85f;
+        columnsWidth[9] = 85f;
 
         return columnsWidth;
     }
