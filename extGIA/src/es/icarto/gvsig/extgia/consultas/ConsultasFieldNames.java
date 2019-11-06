@@ -27,8 +27,8 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.LechoFrenadoCar
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.LineasDistribucionUFDCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.LineasSuministroCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.MurosCaracteristicasReport;
-import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ObrasDesagueCaracteristicasReport;
-import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ObrasPasoCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.ObrasDrenajeCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.EstructurasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.PasosMedianaCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.PozosCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.PretilesCaracteristicasReport;
@@ -118,11 +118,11 @@ public class ConsultasFieldNames {
             return "id_firme, fecha_inauguracion, fecha_apertura, unidad_constructiva, "
                     + "pk_inicial, pk_final, explanada_cm, zahorra_artificial_cm, suelo_cemento_cm, "
                     + "grava_cemento_cm, mbc_base_cm, mbc_intermedia_cm, mbc_rodadura_cm, observaciones";
-        case Obras_Paso:
-            return "id_obra_paso, tr.item, tv.item, nv.item, pk, codigo, nombre,"
-                    + "tipo_obra, tipologia, longitud, anchura, altura," + "galibo_v_c, galibo_v_d, observaciones";
-        case Obras_Desague:
-            return "id_obra_desague, tr.item, tv.item, nv.item, pk, tipologia, material, "
+        case Estructuras:
+            return "id_estructura, tr.item, tv.item, nv.item, pk, codigo, nombre,"
+                    + "tipo_estructura, tipologia, longitud, anchura, altura," + "galibo_v_c, galibo_v_d, observaciones";
+        case Obras_Drenaje:
+            return "id_obra_drenaje, tr.item, tv.item, nv.item, pk, tipologia, material, "
                     + "objeto, fecha_construccion, n_elementos, seccion, longitud, observaciones";
         case Muros:
             return "id_muro, tr.item, tv.item, nv.item, pk_inicial, pk_final, material, longitud, "
@@ -420,11 +420,11 @@ public class ConsultasFieldNames {
                 + "observaciones as \"Observaciones\"";
     }
 
-    public static String obrasPasoCSVFieldNames() {
-        return "gid, " + "el.id_obra_paso as \"ID Obra Paso\"," + "fecha_actualizacion as \"Fecha Actualización\","
+    public static String estructurasCSVFieldNames() {
+        return "gid, " + "el.id_estructura as \"ID Estructura\"," + "fecha_actualizacion as \"Fecha Actualización\","
                 + localizationCSVFieldNames() + "pk as \"PK\"," + "ramal as \"Ramal\"," + "st.item as \"Sentido\","
                 + "direccion as \"Dirección\"," + "mu.item as \"Municipio\"," + "codigo as \"Código\","
-                + "nombre as \"Nombre\"," + "fecha_construccion as \"Fecha construcción\"," + "tipo_obra as \"Tipo\","
+                + "nombre as \"Nombre\"," + "fecha_construccion as \"Fecha construcción\"," + "tipo_estructura as \"Tipo\","
                 + "tipologia as \"Tipología\"," + "utm_x as \"Coordenada X (UTM)\","
                 + "utm_y as \"Coordenada Y (UTM)\"," + "utm_z as \"Cota (UTM)\"," + "longitud as \"Longitud (m)\","
                 + "anchura as \"Anchura (m)\"," + "altura as \"Altura (m)\"," + "luz_maxima as \"Luz Máxima (m)\","
@@ -433,8 +433,8 @@ public class ConsultasFieldNames {
                 + "observaciones as \"Observaciones\"";
     }
 
-    public static String obrasDesagueCSVFieldNames() {
-        return "gid, " + "el.id_obra_desague as \"ID Obra Desagüe\","
+    public static String obrasDrenajeCSVFieldNames() {
+        return "gid, " + "el.id_obra_drenaje as \"ID Obra Drenaje\","
                 + "fecha_actualizacion as \"Fecha Actualización\"," + localizationCSVFieldNames() + "pk as \"PK\","
                 + "ramal as \"Ramal\"," + "st.item as \"Sentido\"," + "direccion as \"Dirección\","
                 + "mu.item as \"Municipio\"," + "tipologia as \"Tipología\"," + "material as \"Material\","
@@ -610,11 +610,11 @@ public class ConsultasFieldNames {
         case Firme:
             new FirmeCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
             break;
-        case Obras_Paso:
-            new ObrasPasoCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+        case Estructuras:
+            new EstructurasCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
             break;
-        case Obras_Desague:
-            new ObrasDesagueCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+        case Obras_Drenaje:
+            new ObrasDrenajeCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
             break;
         case Muros:
             new MurosCaracteristicasReport(element, outputFile, tableModel, filters, tipo);

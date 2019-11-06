@@ -9,9 +9,9 @@ import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
 import es.icarto.gvsig.extgia.consultas.PDFCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.QueryType;
 
-public class ObrasPasoCaracteristicasReport extends PDFCaracteristicasReport {
+public class EstructurasCaracteristicasReport extends PDFCaracteristicasReport {
 
-    public ObrasPasoCaracteristicasReport(String element[], String fileName,
+    public EstructurasCaracteristicasReport(String element[], String fileName,
 	    DefaultTableModel tableModel, ConsultasFilters<Field> filters,
 	    QueryType tipo) {
 	super(element, fileName, tableModel, filters, tipo);
@@ -19,7 +19,7 @@ public class ObrasPasoCaracteristicasReport extends PDFCaracteristicasReport {
 
     @Override
     protected String[] getColumnNames() {
-	String[] columnNames = { "ID Obra Paso", "Tramo", "Tipo Vía",
+	String[] columnNames = { "ID Estructura", "Tramo", "Tipo Vía",
 		"Nombre Vía", "PK", "Código", "Nombre", "Tipo", "Tipología",
 		"Longitud (m)", "Anchura (m)", "Altura (m)",
 		"Gálibo V Cre. (m)", "Gálibo V Dec. (m)", "Observaciones" };

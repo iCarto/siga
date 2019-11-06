@@ -24,6 +24,7 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/cunetas" action-command="Cunetas" position="30411"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/dren_caz" action-command="Dren_Caz" position="30413"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/enlaces" action-command="Enlaces" position="30415"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/estructuras" action-command="Estructuras" position="30416"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/firme" action-command="Firme" position="30417"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/isletas" action-command="Isletas" position="30419"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/juntas" action-command="Juntas" position="30421"/>
@@ -31,8 +32,7 @@
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/lineas_distribucion_ufd" action-command="Lineas_Distribucion_UFD" position="30424"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/lineas_suministro" action-command="Lineas_Suministro" position="30425"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/muros" action-command="Muros" position="30427"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_desague" action-command="Obras_Desague" position="30429"/>
-			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_paso" action-command="Obras_Paso" position="30431"/>
+			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/obras_drenaje" action-command="Obras_Drenaje" position="30429"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pasos_mediana" action-command="Pasos_Mediana" position="30433"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pozos" action-command="Pozos" position="30435"/>
 			<menu text="SIGA/es.icarto.gvsig.extgia.FormLauncherExtension.menu_folder/pretiles" action-command="Pretiles" position="30436"/>

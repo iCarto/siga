@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LAYER alias="obras_desague_trabajos">
+<LAYER alias="estructuras_trabajos">
 
 	<FIELD>
 		<FIELDNAME>fecha</FIELDNAME>

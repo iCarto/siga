@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia.forms.obras_paso;
+package es.icarto.gvsig.extgia.forms.estructuras;
 
 import java.util.Map;
 
@@ -15,14 +15,14 @@ import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
 
 @SuppressWarnings("serial")
-public class ObrasPasoForm extends AbstractFormWithLocationWidgets {
+public class EstructurasForm extends AbstractFormWithLocationWidgets {
 
-    public static final String TABLENAME = "obras_paso";
+    public static final String TABLENAME = "estructuras";
 
-    JTextField obraPasoIDWidget;
-    CalculateComponentValue obraPasoid;
+    JTextField estructuraIDWidget;
+    CalculateComponentValue estructuraid;
 
-    public ObrasPasoForm(FLyrVect layer) {
+    public EstructurasForm(FLyrVect layer) {
 	super(layer);
 
 	addTableHandler(new GIAAlphanumericTableHandler(
@@ -35,10 +35,10 @@ public class ObrasPasoForm extends AbstractFormWithLocationWidgets {
     protected void fillSpecificValues() {
 	super.fillSpecificValues();
 
-	if (obraPasoIDWidget.getText().isEmpty()) {
-	    obraPasoid = new ObrasPasoCalculateIDValue(this,
+	if (estructuraIDWidget.getText().isEmpty()) {
+	    estructuraid = new EstructurasCalculateIDValue(this,
 		    getWidgetComponents(), getElementID(), getElementID());
-	    obraPasoid.setValue(true);
+	    estructuraid.setValue(true);
 	}
 
 	repaint();
@@ -49,12 +49,12 @@ public class ObrasPasoForm extends AbstractFormWithLocationWidgets {
 	super.setListeners();
 	Map<String, JComponent> widgets = getWidgets();
 
-	obraPasoIDWidget = (JTextField) widgets.get(getElementID());
+	estructuraIDWidget = (JTextField) widgets.get(getElementID());
     }
 
     @Override
     public Elements getElement() {
-	return Elements.Obras_Paso;
+	return Elements.Estructuras;
     }
 
     @Override
@@ -81,12 +81,12 @@ public class ObrasPasoForm extends AbstractFormWithLocationWidgets {
 
     @Override
     public String getElementID() {
-	return "id_obra_paso";
+	return "id_estructura";
     }
 
     @Override
     public String getElementIDValue() {
-	return obraPasoIDWidget.getText();
+	return estructuraIDWidget.getText();
     }
 
 }

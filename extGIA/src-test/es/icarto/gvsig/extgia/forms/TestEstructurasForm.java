@@ -1,10 +1,10 @@
 package es.icarto.gvsig.extgia.forms;
 
-import es.icarto.gvsig.extgia.forms.obras_paso.ObrasPasoForm;
+import es.icarto.gvsig.extgia.forms.estructuras.EstructurasForm;
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.navtableforms.CommonMethodsForTestDBForms;
 
-public class TestObrasPasoForm extends CommonMethodsForTestDBForms {
+public class TestEstructurasForm extends CommonMethodsForTestDBForms {
 
     @Override
     protected String getSchema() {
@@ -13,7 +13,7 @@ public class TestObrasPasoForm extends CommonMethodsForTestDBForms {
 
     @Override
     protected String getTableName() {
-	return ObrasPasoForm.TABLENAME;
+	return EstructurasForm.TABLENAME;
     }
 
 }

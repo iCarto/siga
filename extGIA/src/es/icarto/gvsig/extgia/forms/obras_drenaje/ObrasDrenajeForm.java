@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia.forms.obras_desague;
+package es.icarto.gvsig.extgia.forms.obras_drenaje;
 
 import java.util.Map;
 
@@ -15,14 +15,14 @@ import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
 
 @SuppressWarnings("serial")
-public class ObrasDesagueForm extends AbstractFormWithLocationWidgets {
+public class ObrasDrenajeForm extends AbstractFormWithLocationWidgets {
 
-    public static final String TABLENAME = "obras_desague";
+    public static final String TABLENAME = "obras_drenaje";
 
-    JTextField obraDesagueIDWidget;
-    CalculateComponentValue obraDesagueid;
+    JTextField obraDrenajeIDWidget;
+    CalculateComponentValue obraDrenajeid;
 
-    public ObrasDesagueForm(FLyrVect layer) {
+    public ObrasDrenajeForm(FLyrVect layer) {
 	super(layer);
 
 	addTableHandler(new GIAAlphanumericTableHandler(
@@ -35,10 +35,10 @@ public class ObrasDesagueForm extends AbstractFormWithLocationWidgets {
     protected void fillSpecificValues() {
 	super.fillSpecificValues();
 
-	if (obraDesagueIDWidget.getText().isEmpty()) {
-	    obraDesagueid = new ObrasDesagueCalculateIDValue(this,
+	if (obraDrenajeIDWidget.getText().isEmpty()) {
+	    obraDrenajeid = new ObrasDrenajeCalculateIDValue(this,
 		    getWidgetComponents(), getElementID(), getElementID());
-	    obraDesagueid.setValue(true);
+	    obraDrenajeid.setValue(true);
 	}
     }
 
@@ -47,12 +47,12 @@ public class ObrasDesagueForm extends AbstractFormWithLocationWidgets {
 	super.setListeners();
 	Map<String, JComponent> widgets = getWidgets();
 
-	obraDesagueIDWidget = (JTextField) widgets.get(getElementID());
+	obraDrenajeIDWidget = (JTextField) widgets.get(getElementID());
     }
 
     @Override
     public Elements getElement() {
-	return Elements.Obras_Desague;
+	return Elements.Obras_Drenaje;
     }
 
     @Override
@@ -79,11 +79,11 @@ public class ObrasDesagueForm extends AbstractFormWithLocationWidgets {
 
     @Override
     public String getElementID() {
-	return "id_obra_desague";
+	return "id_obra_drenaje";
     }
 
     @Override
     public String getElementIDValue() {
-	return obraDesagueIDWidget.getText();
+	return obraDrenajeIDWidget.getText();
     }
 }

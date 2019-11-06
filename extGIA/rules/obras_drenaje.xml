@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LAYER alias="obras_desague">
-	<TABLENAME>obras_desague</TABLENAME>
+<LAYER alias="obras_drenaje">
+	<TABLENAME>obras_drenaje</TABLENAME>
 	<PRIMARYKEY>
-		<PKELEMENT>id_obra_desague</PKELEMENT>
+		<PKELEMENT>id_obra_drenaje</PKELEMENT>
 	</PRIMARYKEY>
 	<RECORDSET>
 
@@ -194,7 +194,7 @@
 			<DOMAINREADER>
 				<DRTYPE>db</DRTYPE>
 				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-				<DRDBTABLE>tipologia_obra_desague</DRDBTABLE>
+				<DRDBTABLE>tipologia_obra_drenaje</DRDBTABLE>
 				<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
 				<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
 			</DOMAINREADER>
@@ -205,7 +205,7 @@
 			<DOMAINREADER>
 				<DRTYPE>db</DRTYPE>
 				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-				<DRDBTABLE>material_obra_desague</DRDBTABLE>
+				<DRDBTABLE>material_obra_drenaje</DRDBTABLE>
 				<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
 				<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
 			</DOMAINREADER>

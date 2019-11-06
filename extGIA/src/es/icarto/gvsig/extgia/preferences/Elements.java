@@ -28,6 +28,7 @@ import es.icarto.gvsig.extgia.forms.comunicaciones.ComunicacionesForm;
 import es.icarto.gvsig.extgia.forms.cunetas.CunetasForm;
 import es.icarto.gvsig.extgia.forms.dren_caz.DrenCazForm;
 import es.icarto.gvsig.extgia.forms.enlaces.EnlacesForm;
+import es.icarto.gvsig.extgia.forms.estructuras.EstructurasForm;
 import es.icarto.gvsig.extgia.forms.firme.FirmeForm;
 import es.icarto.gvsig.extgia.forms.isletas.IsletasForm;
 import es.icarto.gvsig.extgia.forms.juntas.JuntasForm;
@@ -35,8 +36,7 @@ import es.icarto.gvsig.extgia.forms.lecho_frenado.LechoFrenadoForm;
 import es.icarto.gvsig.extgia.forms.lineas_distribucion_ufd.LineasDistribucionUFDForm;
 import es.icarto.gvsig.extgia.forms.lineas_suministro.LineasSuministroForm;
 import es.icarto.gvsig.extgia.forms.muros.MurosForm;
-import es.icarto.gvsig.extgia.forms.obras_desague.ObrasDesagueForm;
-import es.icarto.gvsig.extgia.forms.obras_paso.ObrasPasoForm;
+import es.icarto.gvsig.extgia.forms.obras_drenaje.ObrasDrenajeForm;
 import es.icarto.gvsig.extgia.forms.pasos_mediana.PasosMedianaForm;
 import es.icarto.gvsig.extgia.forms.pozos.PozosForm;
 import es.icarto.gvsig.extgia.forms.pretiles.PretilesForm;
@@ -190,22 +190,22 @@ public enum Elements {
                                                                                                     "muros_imagenes",
                                                                                                     "muros_reconocimientos",
                                                                                                     Help.ignoredGidGeom, null, true),
-    Obras_Desague(
-                                                                                                            "id_obra_desague",
-                                                                                                            ObrasDesagueForm.class,
+    Obras_Drenaje(
+                                                                                                            "id_obra_drenaje",
+                                                                                                            ObrasDrenajeForm.class,
                                                                                                             BatchAbstractSubForm.class,
-                                                                                                            "obras_desague_trabajos",
-                                                                                                            "obras_desague_trabajos",
-                                                                                                            "obras_desague_imagenes",
+                                                                                                            "obras_drenaje_trabajos",
+                                                                                                            "obras_drenaje_trabajos",
+                                                                                                            "obras_drenaje_imagenes",
                                                                                                             null,
                                                                                                             Help.ignoredGidGeom, null, true),
-    Obras_Paso(
-                                                                                                                    "id_obra_paso",
-                                                                                                                    ObrasPasoForm.class,
+    Estructuras(
+                                                                                                                    "id_estructura",
+                                                                                                                    EstructurasForm.class,
                                                                                                                     BatchAbstractSubForm.class,
-                                                                                                                    "obras_paso_trabajos",
-                                                                                                                    "obras_paso_trabajos",
-                                                                                                                    "obras_paso_imagenes",
+                                                                                                                    "estructuras_trabajos",
+                                                                                                                    "estructuras_trabajos",
+                                                                                                                    "estructuras_imagenes",
                                                                                                                     null,
                                                                                                                     Help.ignoredGidGeom, "nombre", true),
     Pasos_Mediana(

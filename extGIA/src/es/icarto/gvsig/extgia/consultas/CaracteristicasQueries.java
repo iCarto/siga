@@ -84,8 +84,8 @@ public class CaracteristicasQueries {
         case Juntas:
         case Isletas:
         case Barrera_Rigida:
-        case Obras_Paso:
-        case Obras_Desague:
+        case Estructuras:
+        case Obras_Drenaje:
         case Areas_Peaje:
         case Lecho_Frenado:
         case Lineas_Distribucion_UFD:
@@ -160,11 +160,11 @@ public class CaracteristicasQueries {
         case Barrera_Rigida:
             query = "SELECT " + ConsultasFieldNames.barreraRigidaCSVFieldNames() + query;
             break;
-        case Obras_Paso:
-            query = "SELECT " + ConsultasFieldNames.obrasPasoCSVFieldNames() + query;
+        case Estructuras:
+            query = "SELECT " + ConsultasFieldNames.estructurasCSVFieldNames() + query;
             break;
-        case Obras_Desague:
-            query = ConsultasFieldNames.obrasDesagueCSVFieldNames();
+        case Obras_Drenaje:
+            query = ConsultasFieldNames.obrasDrenajeCSVFieldNames();
             break;
         case Areas_Peaje:
             query = ConsultasFieldNames.areasPeajeCSVFieldNames();

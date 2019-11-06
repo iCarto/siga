@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia.forms.obras_paso;
+package es.icarto.gvsig.extgia.forms.estructuras;
 
 import java.util.HashMap;
 
@@ -8,9 +8,9 @@ import es.icarto.gvsig.extgia.forms.CalculateComponentValue;
 import es.icarto.gvsig.extgia.utils.SqlUtils;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 
-public class ObrasPasoCalculateIDValue extends CalculateComponentValue {
+public class EstructurasCalculateIDValue extends CalculateComponentValue {
 
-    public ObrasPasoCalculateIDValue(AbstractForm form,
+    public EstructurasCalculateIDValue(AbstractForm form,
 	    HashMap<String, JComponent> allFormWidgets,
 	    String resultComponentName, String... operatorComponentsNames) {
 	super(form, allFormWidgets, resultComponentName, operatorComponentsNames);
@@ -19,10 +19,10 @@ public class ObrasPasoCalculateIDValue extends CalculateComponentValue {
 
     @Override
     public void setValue(boolean validate) {
-	String obraPasoID = String.valueOf(SqlUtils.
-		getNextIdOfSequence("audasa_extgia.obras_paso_id_obra_paso_seq"));
-	resultComponent.setText(obraPasoID);
-	form.getFormController().setValue(resultComponentName, obraPasoID);
+	String estructuraID = String.valueOf(SqlUtils.
+		getNextIdOfSequence("audasa_extgia.estructuras_id_estructura_seq"));
+	resultComponent.setText(estructuraID);
+	form.getFormController().setValue(resultComponentName, estructuraID);
 
     }
 
