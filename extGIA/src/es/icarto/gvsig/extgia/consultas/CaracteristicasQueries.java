@@ -113,6 +113,7 @@ public class CaracteristicasQueries {
             return getLocalizationTablesWithSentidoAndPF();
 
         case Comunicaciones:
+        case Fibra_Optica_Derivaciones:
             return getJoinedArea() + getJoinedBase() + getJoinedTramo() + getJoinedMunicipio();
         case Enlaces:
         default:
@@ -222,6 +223,9 @@ public class CaracteristicasQueries {
             break;
         case Lineas_Distribucion_UFD:
             query = ConsultasFieldNames.lineasDistribucionUFDCSVFieldNames();
+            break;
+        case Fibra_Optica_Derivaciones:
+            query = ConsultasFieldNames.FibraOpticaDerivacionesCSVFieldNames();
             break;
         }
         return "SELECT " + query + getFromClauseCaracteristicas(element) + filters.getWhereClauseByLocationWidgets()

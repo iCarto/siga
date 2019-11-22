@@ -21,6 +21,7 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.CunetasCaracter
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.DrenCazCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.EnlacesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.EstructurasCaracteristicasReport;
+import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.FibraOpticaDerivacionesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.FirmeCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.IsletasCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.JuntasCaracteristicasReport;
@@ -168,6 +169,8 @@ public class ConsultasFieldNames {
             return "gid, tr.item,  tv.item, nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
         case Lineas_Distribucion_UFD:
             return "gid, tr.item,  tv.item, nv.item, pk, denominacion, matricula, linea, tipo, tension, longitud, observaciones";
+        case Fibra_Optica_Derivaciones:
+    	    return "gid, tr.item, pk, expediente, companhia, observaciones";
         }
         return null;
     }
@@ -570,6 +573,11 @@ public class ConsultasFieldNames {
                 + localizationCSVFieldNames()
                 + "pk as \"PK (Km)\", denominacion as \"Denominación\", matricula as \"Matrícula\", linea as \"Línea\", tipo as \"Tipo\", tension as \"Tensión\", longitud as \"Longitud (m)\", observaciones as \"Observaciones\"";
     }
+    
+    public static String FibraOpticaDerivacionesCSVFieldNames() {
+        return "gid as \"ID Fibra óptica derivaciones\", pk as \"PK (Km)\", expediente as \"Número de expediente\", companhia as \"Compañía\", observaciones as \"Observaciones\"";
+                
+    }
 
     public static void createCaracteristicasReport(String[] element, String outputFile, DefaultTableModel tableModel,
             ConsultasFilters<Field> filters, QueryType tipo) {
@@ -667,6 +675,9 @@ public class ConsultasFieldNames {
             break;
         case Lineas_Distribucion_UFD:
             new LineasDistribucionUFDCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
+            break;
+        case Fibra_Optica_Derivaciones:
+            new FibraOpticaDerivacionesCaracteristicasReport(element, outputFile, tableModel, filters, tipo);
             break;
         }
     }
