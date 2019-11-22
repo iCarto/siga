@@ -7,10 +7,10 @@ import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
-public class InfoEmpresa {
+public abstract class InfoEmpresa {
 
-    private DefaultTableModel result;
-
+    protected DefaultTableModel result;
+	
     public InfoEmpresa() {
 	if (!DBSession.isActive()) {
 	    result = new DefaultTableModel();
@@ -18,12 +18,9 @@ public class InfoEmpresa {
 	infoFromDB();
     }
 
-    public void infoFromDB() {
-	ConnectionWrapper con = new ConnectionWrapper(DBSession
-		.getCurrentSession().getJavaConnection());
-	String query = "SELECT distinct(tr.id), tr.item, ie.report_logo, ie.title, ie.subtitle FROM audasa_extgia_dominios.tramo tr LEFT OUTER JOIN audasa_aplicaciones.info_empresa as ie ON tr.empresa = ie.id";
-	result = con.execute(query);
-    }
+    public abstract void infoFromDB();
+    
+    public abstract int getFieldTramoIndex();
 
     public String getTitle(Object tramo) {
 	String itemTramo = getItemTramo(tramo);
@@ -59,11 +56,21 @@ public class InfoEmpresa {
 	return PreferencesPage.SIGA_REPORT_LOGO;
     }
 
-    private String getItemTramo(Object tramo) {
+    protected String getItemTramo(Object tramo) {
 	if (tramo instanceof KeyValue) {
 	    return ((KeyValue) tramo).getValue();
 	}
 	return (tramo == null) ? "" : tramo.toString();
+    }
+    
+    public String getCompany(Object tramo) {
+    String itemTramo = getItemTramo(tramo);
+    for (int i = 0; i < result.getRowCount(); i++) {
+    	if (result.getValueAt(i, getFieldTramoIndex()).equals(itemTramo)) {
+    	return result.getValueAt(i, 5).toString();
+    	}
+    }
+    return null;
     }
 
 }

@@ -6,7 +6,6 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 import es.icarto.gvsig.extgex.forms.expropiations.FormExpropiations;
 import es.icarto.gvsig.extgex.preferences.DBNames;
-import es.icarto.gvsig.siga.PreferencesPage;
 
 public class FilesLinkData {
 
@@ -23,10 +22,6 @@ public class FilesLinkData {
 	    e.printStackTrace();
 	    return null;
 	}
-    }
-
-    public String getBaseDirectory() {
-	return PreferencesPage.getBaseDirectory();
     }
 
     public String getDirectoryLayerName() {

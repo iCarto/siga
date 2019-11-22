@@ -51,8 +51,10 @@ import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.extgia.utils.SqlUtils;
 import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkButton;
+import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkListener;
 import es.icarto.gvsig.siga.SIGAConfigExtension;
 import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 
 @SuppressWarnings("serial")
@@ -74,8 +76,8 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
 
     private JLabel empresaLb;
     private JLabel concesionariaLb;
-    private JComboBox tramoCB;
-    private final InfoEmpresa infoEmpresa;
+    protected JComboBox tramoCB;
+    protected final InfoEmpresaGIA infoEmpresa;
 
     public AbstractFormWithLocationWidgets(FLyrVect layer) {
         super(layer);
@@ -129,12 +131,16 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
 
         SIGAConfigExtension ext = (SIGAConfigExtension) PluginServices.getExtension(SIGAConfigExtension.class);
         infoEmpresa = ext.getInfoEmpresa();
+        
+        tramoCB = getFormPanel().getComboBox(TRAMO);
+        filesLinkButton = new FilesLinkButton(this, new FilesLinkDataImp(getElement(), infoEmpresa.getCompany(tramoCB.getSelectedItem())));
+        
     }
 
     @Override
     protected void initWidgets() {
         super.initWidgets();
-        tramoCB = getFormPanel().getComboBox(TRAMO);
+        
         empresaLb = getFormPanel().getLabel("etiqueta_empresa");
         concesionariaLb = getFormPanel().getLabel("etiqueta_concesion");
         JDateChooser dateWidget = (JDateChooser) getFormPanel().getComponentByName("fecha_actualizacion");
@@ -147,12 +153,14 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
             uiComponent.setBackground(new Color(236, 233, 216));
             uiComponent.setFont(new Font("Arial", Font.BOLD, 11));
         }
+        
+        
     }
 
     @Override
     protected void setListeners() {
         super.setListeners();
-        imagesInForms.setListeners();
+        imagesInForms.setListeners(tramoCB.getSelectedItem());
 
         if (SqlUtils.elementHasType(dataName, "inspecciones")) {
             if (addReconocimientosBatchButton == null) {
@@ -201,7 +209,8 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
             saveRecordsBatchListener = new SaveRecordsBatchListener();
             saveRecordsBatchButton.addActionListener(saveRecordsBatchListener);
         }
-
+    
+        addNewButtonsToActionsToolBar(getElement());
     }
 
     public class SaveRecordsBatchListener implements ActionListener {
@@ -295,15 +304,17 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
         saveRecordsBatchButton.removeActionListener(saveRecordsBatchListener);
 
         imagesInForms.removeListeners();
+        
 
         super.removeListeners();
     }
 
     protected void addNewButtonsToActionsToolBar(final Elements element) {
         JPanel actionsToolBar = this.getActionsToolBar();
-
-        filesLinkButton = new FilesLinkButton(this, new FilesLinkDataImp(element));
+        
+        if (filesLinkButton != null) {
         actionsToolBar.add(filesLinkButton);
+        }
     }
 
     @Override
@@ -330,11 +341,12 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
         super.fillSpecificValues();
         imagesInForms.fillSpecificValues(getPrimaryKeyValue());
         fillEmpresaLB();
-
-        if (filesLinkButton == null) {
-            addNewButtonsToActionsToolBar(getElement());
+        
+        for (ActionListener filesButtonActionListener: filesLinkButton.getActionListeners()) {
+        	filesLinkButton.removeActionListener(filesButtonActionListener);
         }
-
+        filesLinkButton.addActionListener(new FilesLinkListener(this, new FilesLinkDataImp(getElement(), infoEmpresa.getCompany(tramoCB.getSelectedItem()))));
+       
         fillSentidoInRamalesTable();
     }
 

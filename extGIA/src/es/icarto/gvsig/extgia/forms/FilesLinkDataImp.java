@@ -4,16 +4,20 @@ import java.io.File;
 
 import com.iver.andami.Launcher;
 
+import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkData;
 import es.icarto.gvsig.siga.PreferencesPage;
+import es.icarto.gvsig.siga.models.InfoEmpresa;
 
 public class FilesLinkDataImp implements FilesLinkData {
     private final Elements element;
+    private final String empresaName;
 
-    public FilesLinkDataImp(Elements element) {
+    public FilesLinkDataImp(Elements element, String empresaName) {
 	this.element = element;
+	this.empresaName = empresaName;
     }
 
     @Override
@@ -25,7 +29,11 @@ public class FilesLinkDataImp implements FilesLinkData {
     public String getBaseDirectory() {
 	String baseDirectory = null;
 	try {
-	    baseDirectory = PreferencesPage.getBaseDirectory();
+		if (empresaName.equalsIgnoreCase(DBFieldNames.AUDASA_COMPANY)) {
+	    baseDirectory = PreferencesPage.getAPInventoryBaseDirectory();
+		}else if (empresaName.equalsIgnoreCase(DBFieldNames.AUTOESTRADAS_COMPANY)){
+		baseDirectory = PreferencesPage.getAGInventoryBaseDirectory();
+		}
 	} catch (Exception e) {
 	}
 
@@ -33,8 +41,7 @@ public class FilesLinkDataImp implements FilesLinkData {
 	    baseDirectory = Launcher.getAppHomeDir();
 	}
 
-	baseDirectory = baseDirectory + File.separator + "FILES"
-		+ File.separator + "inventario" + File.separator + element;
+	baseDirectory = baseDirectory + element;
 
 	return baseDirectory;
     }
@@ -43,7 +50,7 @@ public class FilesLinkDataImp implements FilesLinkData {
     public String getFolder(AbstractForm form) {
 	String registerValue = form.getFormController().getValue(
 		getRegisterField());
-
+	
 	String folderName = getBaseDirectory() + File.separator + registerValue;
 	return folderName;
     }

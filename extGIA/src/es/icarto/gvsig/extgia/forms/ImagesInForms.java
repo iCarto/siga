@@ -46,7 +46,7 @@ public class ImagesInForms {
         this.deleteImageButtonName = deleteImageButtonName;
     }
 
-    public void setListeners() {
+    public void setListeners(Object tramo) {
         imageComponent = (ImageComponent) formPanel.getComponentByName("element_image");
         addImageButton = (JButton) formPanel.getComponentByName("add_image_button");
 
@@ -64,7 +64,7 @@ public class ImagesInForms {
 
         if (addImageListener == null) {
             addImageListener = new AddImageListener(imageComponent, addImageButton, dao, saveImageButton,
-                    deleteImageButton);
+                    deleteImageButton, tramo);
             if (this.form != null) {
                 addImageListener.setForm(this.form);
             }

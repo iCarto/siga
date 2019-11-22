@@ -27,6 +27,10 @@ public class DBFieldNames {
 	"Unidad", "Medición", "Observaciones" };
 
     public static final String GIA_SCHEMA = "audasa_extgia";
+    
+  //companies
+  	public static final String AUDASA_COMPANY = "Audasa";
+  	public static final String AUTOESTRADAS_COMPANY = "Autoestradas";
 
     // LOCATION
     public static final String AREA_MANTENIMIENTO = "area_mantenimiento";

@@ -21,6 +21,8 @@ import es.icarto.gvsig.commons.utils.FileUtils;
 import es.icarto.gvsig.commons.utils.ImageUtils;
 import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
 import es.icarto.gvsig.extgia.forms.FilesLinkDataImp;
+import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 
 public class AddImageListener implements ActionListener {
 
@@ -31,6 +33,7 @@ public class AddImageListener implements ActionListener {
     private final JButton addImageButton;
     private final JButton saveImageButton;
     private final JButton deleteImageButton;
+    private final Object tramo;
 
     private String pkValue;
 
@@ -41,12 +44,13 @@ public class AddImageListener implements ActionListener {
     }
 
     public AddImageListener(ImageComponent imageComponent, JButton addImageButton, ImagesDAO dao,
-            JButton saveImageButton, JButton deleteImageButton) {
+            JButton saveImageButton, JButton deleteImageButton, Object tramo) {
         this.imageComponent = imageComponent;
         this.addImageButton = addImageButton;
         this.saveImageButton = saveImageButton;
         this.deleteImageButton = deleteImageButton;
         this.dao = dao;
+        this.tramo = tramo;
     }
 
     @Override
@@ -126,7 +130,8 @@ public class AddImageListener implements ActionListener {
 
     public String getDestFolder() {
         if (form != null) {
-            FilesLinkDataImp data = new FilesLinkDataImp(form.getElement());
+        	InfoEmpresaGIA infoEmpresa = new InfoEmpresaGIA();
+            FilesLinkDataImp data = new FilesLinkDataImp(form.getElement(), infoEmpresa.getCompany(tramo));
             return data.getFolder(form);
         }
         return null;

@@ -12,19 +12,23 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
+import es.icarto.gvsig.extgex.preferences.DBNames;
+import es.icarto.gvsig.siga.PreferencesPage;
+import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class FilesLinkAction {
+	
+	private static final String PM_TRAMO_FIELD = "loc_tramo";
 
     private SelectableDataSource recordset = null;
-    private String baseDirectory = null;
     private String directoryLayerName = null;
     private String directoryFieldName = null;
-    protected static Logger logger = Logger.getLogger("extGEX");
+    protected static Logger logger = Logger.getLogger("extPM");
 
     public FilesLinkAction(AbstractNavTable dialog, FilesLinkData data) {
 	this.recordset = data.getRecordset();
-	this.baseDirectory = data.getBaseDirectory();
 	this.directoryLayerName = data.getDirectoryLayerName();
 	this.directoryFieldName = data.getDirectoryFieldName();
     }
@@ -48,9 +52,21 @@ public class FilesLinkAction {
 		    .getFieldIndexByName(getDirectoryFieldName());
 	    String registerValue = recordset.getFieldValue(registerIndex,
 		    fieldIdx).toString();
+	    
+	    InfoEmpresaGIA infoEmpresa = new InfoEmpresaGIA();
+	    int tramoField = recordset.getFieldIndexByName(PM_TRAMO_FIELD);
+	    String tramoValue = recordset.getFieldValue(registerIndex, 
+	    		tramoField).toString();
+	    
+	    String baseDirectory = null;
+	    if (infoEmpresa.getCompany(tramoValue).equalsIgnoreCase(DBNames.AUDASA_COMPANY)) {
+	    baseDirectory = PreferencesPage.getAPExpropiationsBaseDirectory();	
+	    }else if (infoEmpresa.getCompany(tramoValue).equalsIgnoreCase(DBNames.AUTOESTRADAS_COMPANY)){
+	    baseDirectory = PreferencesPage.getAGExpropiationsBaseDirectory();
+	    }
 
-	    String folderPath = this.baseDirectory + File.separator + "FILES"
-		    + File.separator + directoryLayerName;
+	    String folderPath = baseDirectory
+		    + directoryLayerName;
 	    String folderName = folderPath + File.separator + registerValue;
 	    File folder = new File(folderName);
 	    logger.debug("Folder name is: " + folderName);

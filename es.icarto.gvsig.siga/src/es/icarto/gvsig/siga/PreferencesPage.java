@@ -43,12 +43,18 @@ public class PreferencesPage extends AbstractPreferencePage {
     public static final String LOGO_PATH;
     public static final String IMG_UNAVAILABLE = "gvSIG/extensiones/es.icarto.gvsig.siga/images/img_no_disponible.jpg";
 
-    public static final String FILES_FOLDER_KEY = "FilesDir";
+    public static final String AG_INVENTORY_FOLDER_KEY = "AGInventoryFolder";
+    public static final String AP_INVENTORY_FOLDER_KEY = "APInventoryFolder";
+    public static final String AG_EXPROPIATIONS_FOLDER_KEY = "AGExpropiationsFolder";
+    public static final String AP_EXPROPIATIONS_FOLDER_KEY = "APExpropiationsFolder";
     public static final String EXPROPIATATIONS_FOLDER_KEY = "es.icarto.gvsig.extgex.ExpropiationsFolderExtension.folder";
 
     private final String id;
 
-    private FolderChooser filesFolder;
+    private FolderChooser agInventoryFolder;
+    private FolderChooser apInventoryFolder;
+    private FolderChooser agExpropiationsFolder;
+    private FolderChooser apExpropiationsFolder;
     private FolderChooser expropiationsFolder;
 
     private final PluginServices pluginServices;
@@ -64,10 +70,19 @@ public class PreferencesPage extends AbstractPreferencePage {
 
     private void initPanel() {
 	JPanel panel = new JPanel(new MigLayout("wrap 3"));
-
-	filesFolder = new FolderChooser(panel, PluginServices.getText(this,
-		"files_directory"), "");
-
+	
+	agExpropiationsFolder = new FolderChooser(panel, PluginServices.getText(this,
+			"AG Expropiaciones"), "");
+	
+	agInventoryFolder = new FolderChooser(panel, PluginServices.getText(this,
+			"AG Inventario"), "");
+	
+	apExpropiationsFolder = new FolderChooser(panel, PluginServices.getText(this,
+			"AP Expropiaciones"), "");
+	
+	apInventoryFolder = new FolderChooser(panel, PluginServices.getText(this,
+			"AP Inventario"), "");
+	
 	expropiationsFolder = new FolderChooser(panel,
 		"Directorio de expropiaciones", "");
 	add(panel);
@@ -84,8 +99,24 @@ public class PreferencesPage extends AbstractPreferencePage {
 	XMLEntity xml = pluginServices.getPersistentXML();
 
 	String baseMsg = "%s no es un directorio válido";
-	if (!filesFolder.isFolder()) {
-	    String msg = String.format(baseMsg, filesFolder.getFolderPath());
+	
+	if (!agInventoryFolder.isFolder()) {
+	    String msg = String.format(baseMsg, agInventoryFolder.getFolderPath());
+	    throw new StoreException(msg);
+	}
+	
+	if (!apInventoryFolder.isFolder()) {
+	    String msg = String.format(baseMsg, apInventoryFolder.getFolderPath());
+	    throw new StoreException(msg);
+	}
+	
+	if (!agExpropiationsFolder.isFolder()) {
+	    String msg = String.format(baseMsg, agExpropiationsFolder.getFolderPath());
+	    throw new StoreException(msg);
+	}
+	
+	if (!apExpropiationsFolder.isFolder()) {
+	    String msg = String.format(baseMsg, agExpropiationsFolder.getFolderPath());
 	    throw new StoreException(msg);
 	}
 
@@ -95,8 +126,11 @@ public class PreferencesPage extends AbstractPreferencePage {
 	    throw new StoreException(msg);
 	}
 
-	xml.putProperty(FILES_FOLDER_KEY, filesFolder.getFolderPath());
-
+	xml.putProperty(AG_INVENTORY_FOLDER_KEY, agInventoryFolder.getFolderPath());
+	xml.putProperty(AP_INVENTORY_FOLDER_KEY, apInventoryFolder.getFolderPath());
+	xml.putProperty(AG_EXPROPIATIONS_FOLDER_KEY, agExpropiationsFolder.getFolderPath());
+	xml.putProperty(AP_EXPROPIATIONS_FOLDER_KEY, apExpropiationsFolder.getFolderPath());
+	
 	xml.putProperty(EXPROPIATATIONS_FOLDER_KEY,
 		expropiationsFolder.getFolderPath());
 
@@ -129,7 +163,10 @@ public class PreferencesPage extends AbstractPreferencePage {
     @Override
     public void initializeValues() {
 	XMLEntity xml = pluginServices.getPersistentXML();
-	filesFolder.setSelectedFile(getValue(xml, FILES_FOLDER_KEY));
+	agInventoryFolder.setSelectedFile(getValue(xml, AG_INVENTORY_FOLDER_KEY));
+	apInventoryFolder.setSelectedFile(getValue(xml, AP_INVENTORY_FOLDER_KEY));
+	agExpropiationsFolder.setSelectedFile(getValue(xml, AG_EXPROPIATIONS_FOLDER_KEY));
+	apExpropiationsFolder.setSelectedFile(getValue(xml, AP_EXPROPIATIONS_FOLDER_KEY));
 	expropiationsFolder.setSelectedFile(getValue(xml,
 		EXPROPIATATIONS_FOLDER_KEY));
     }
@@ -146,14 +183,41 @@ public class PreferencesPage extends AbstractPreferencePage {
 	// save always
 	return true;
     }
-
-    public static String getBaseDirectory() {
-	PluginServices ps = PluginServices.getPluginServices(PLUGIN_NAME);
-	XMLEntity xml = ps.getPersistentXML();
-	if (xml.contains(FILES_FOLDER_KEY)) {
-	    baseDirectory = xml.getStringProperty(FILES_FOLDER_KEY);
-	}
-	return baseDirectory;
+    
+    public static String getAGInventoryBaseDirectory() {
+    PluginServices ps = PluginServices.getPluginServices(PLUGIN_NAME);
+    XMLEntity xml = ps.getPersistentXML();
+    if (xml.contains(AG_INVENTORY_FOLDER_KEY)) {
+    	baseDirectory = xml.getStringProperty(AG_INVENTORY_FOLDER_KEY);
+    }
+    return baseDirectory;
+    }
+     
+    public static String getAPInventoryBaseDirectory() {
+    PluginServices ps = PluginServices.getPluginServices(PLUGIN_NAME);
+    XMLEntity xml = ps.getPersistentXML();
+    if (xml.contains(AP_INVENTORY_FOLDER_KEY)) {
+    	baseDirectory = xml.getStringProperty(AP_INVENTORY_FOLDER_KEY);
+    }
+    return baseDirectory;
+    }
+    
+    public static String getAGExpropiationsBaseDirectory() {
+    PluginServices ps = PluginServices.getPluginServices(PLUGIN_NAME);
+    XMLEntity xml = ps.getPersistentXML();
+    if (xml.contains(AG_EXPROPIATIONS_FOLDER_KEY)) {
+    	baseDirectory = xml.getStringProperty(AG_EXPROPIATIONS_FOLDER_KEY);
+    }
+    return baseDirectory;
+    }
+    
+    public static String getAPExpropiationsBaseDirectory() {
+    PluginServices ps = PluginServices.getPluginServices(PLUGIN_NAME);
+    XMLEntity xml = ps.getPersistentXML();
+    if (xml.contains(AP_EXPROPIATIONS_FOLDER_KEY)) {
+    	baseDirectory = xml.getStringProperty(AP_EXPROPIATIONS_FOLDER_KEY);
+    }
+    return baseDirectory;
     }
 
 }

@@ -81,7 +81,7 @@ public class ComunicacionesForm extends AbstractFormWithLocationWidgets {
     private final class FilesLinkDataImpCom extends FilesLinkDataImp {
 
 	public FilesLinkDataImpCom(Elements element) {
-	    super(element);
+	    super(element, infoEmpresa.getCompany(tramoCB.getSelectedItem()));
 	}
 
 	@Override
