@@ -9,13 +9,11 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.siga.PreferencesPage;
-import es.icarto.gvsig.siga.models.InfoEmpresa;
 import es.icarto.gvsig.siga.models.InfoEmpresaGEX;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 

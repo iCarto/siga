@@ -4,8 +4,6 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
-import es.icarto.gvsig.siga.PreferencesPage;
-
 public class FilesLinkData {
 
     private FLyrVect layer = null;
@@ -21,10 +19,6 @@ public class FilesLinkData {
 	    e.printStackTrace();
 	    return null;
 	}
-    }
-
-    public String getBaseDirectory() {
-	return PreferencesPage.getBaseDirectory();
     }
 
     public String getDirectoryLayerName() {

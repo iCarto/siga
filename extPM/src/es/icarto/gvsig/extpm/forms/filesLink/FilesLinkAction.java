@@ -14,7 +14,6 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.siga.PreferencesPage;
-import es.icarto.gvsig.siga.models.InfoEmpresa;
 import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 

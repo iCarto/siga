@@ -53,7 +53,6 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkButton;
 import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkListener;
 import es.icarto.gvsig.siga.SIGAConfigExtension;
-import es.icarto.gvsig.siga.models.InfoEmpresa;
 import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 
