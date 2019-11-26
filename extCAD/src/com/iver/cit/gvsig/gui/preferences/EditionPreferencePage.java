@@ -29,6 +29,7 @@ import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -71,7 +72,7 @@ import com.iver.cit.gvsig.project.documents.view.snapping.ISnapper;
 public class EditionPreferencePage extends AbstractPreferencePage {
 
     private JLabel jLabel = null;
-    private ImageIcon icon;
+    private final ImageIcon icon;
     private JTextField jTxtTolerance = null;
     private JLabel jLabel1 = null;
     private JSeparator jSeparator = null;
@@ -82,15 +83,15 @@ public class EditionPreferencePage extends AbstractPreferencePage {
     private JPanel jPanelCache = null;
     VectorialLayerEdited layerEdited;
     private JPanel jPanelSnappers = null;
-    private JCheckBox eielVertexEIELSnapCB = new JCheckBox();
-    private JCheckBox eielLineEIELSnapCB = new JCheckBox();
+    private final JCheckBox eielVertexEIELSnapCB = new JCheckBox();
+    private final JCheckBox eielLineEIELSnapCB = new JCheckBox();
     // private JCheckBox vertexSnapCB = new JCheckBox();
     // private JCheckBox lineSnapCB = new JCheckBox();
-    private JCheckBox followGeometryCB = new JCheckBox();
+    private final JCheckBox followGeometryCB = new JCheckBox();
     private boolean changed = false;
-    private JCheckBox deleteButtonOptionCB = new JCheckBox();
-    private FLayers layers;
-    private MapContext mapContext;
+    private final JCheckBox deleteButtonOptionCB = new JCheckBox();
+    protected FLayers layers;
+    protected MapContext mapContext;
 
     private class MyRecord {
 	public Boolean bSelec = new Boolean(false);
@@ -99,7 +100,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
     }
 
     private class MyTableModel extends AbstractTableModel {
-	private ArrayList<MyRecord> records = new ArrayList<MyRecord>();
+	private final ArrayList<MyRecord> records = new ArrayList<MyRecord>();
 
 	public MyTableModel(FLayers layers) {
 	    addLayer(layers);
@@ -137,7 +138,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-	    MyRecord rec = (MyRecord) records.get(rowIndex);
+	    MyRecord rec = records.get(rowIndex);
 	    if (columnIndex == 0) {
 		return rec.bSelec;
 	    }
@@ -164,7 +165,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-	    MyRecord rec = (MyRecord) records.get(rowIndex);
+	    MyRecord rec = records.get(rowIndex);
 	    if (columnIndex == 0) {
 		rec.bSelec = (Boolean) aValue;
 	    }
@@ -396,14 +397,26 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 	    jPanelSnappers.add(snapperLabel);
 	    jPanelSnappers.add(eielVertexEIELSnapCB);
 	    jPanelSnappers.add(eielLineEIELSnapCB);
-	    jPanelSnappers.add(followGeometryCB);
+	    if (addFollowGeometryOption()) {
+		jPanelSnappers.add(followGeometryCB);
+	    }
 	    // jPanelSnappers.add(vertexSnapCB);
 	    // jPanelSnappers.add(lineSnapCB);
-	    jPanelSnappers.add(deleteButtonLabel);
-	    jPanelSnappers.add(deleteButtonOptionCB);
+	    if (addDeleteButtonOption()) {
+		jPanelSnappers.add(deleteButtonLabel);
+		jPanelSnappers.add(deleteButtonOptionCB);
+	    }
 	    // jPanelSnappers.add(getJScrollPane(), java.awt.BorderLayout.EAST);
 	}
 	return jPanelSnappers;
+    }
+
+    protected boolean addDeleteButtonOption() {
+	return true;
+    }
+
+    protected boolean addFollowGeometryOption() {
+	return true;
     }
 
     protected void deleteSnapper(String string) {
@@ -523,12 +536,12 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 	initializeSnap(tm, layersToSnap);
     }
 
-    private void initializeSnap(TableModel tm, ArrayList layersToSnap) {
+    protected void initializeSnap(TableModel tm, List layersToSnap) {
 	initializeSnap(tm, layers, layersToSnap, 0);
     }
 
     private int initializeSnap(TableModel tm, FLayers layers,
-	    ArrayList layersToSnap, int firstPos) {
+	    List layersToSnap, int firstPos) {
 	int pos = firstPos;
 	for (int i = 0; i < layers.getLayersCount(); i++) {
 	    FLayer layer = layers.getLayer(i);
@@ -724,7 +737,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 	deleteButtonOptionCB.setSelected(cadStatus.isDeleteButtonActivated());
     }
 
-    private JTextField getJTxtTolerance() {
+    protected JTextField getJTxtTolerance() {
 	if (jTxtTolerance == null) {
 	    jTxtTolerance = new JTextField();
 	    jTxtTolerance.setPreferredSize(new java.awt.Dimension(28, 20));
@@ -771,7 +784,7 @@ public class EditionPreferencePage extends AbstractPreferencePage {
 	return jScrollPane;
     }
 
-    private JTable getJTableSnapping() {
+    protected JTable getJTableSnapping() {
 	if (jTableSnapping == null) {
 	    jTableSnapping = new JTable();
 	    // TableColumnModel cm = new DefaultTableColumnModel();

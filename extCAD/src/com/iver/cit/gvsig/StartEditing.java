@@ -98,7 +98,9 @@ public class StartEditing extends Extension {
 
 	    VectorialLayerEdited vle = (VectorialLayerEdited) editionManager
 		    .getLayerEdited(lv);
-	    vle.setLegend(legendOriginal);
+	    if (vle != null) {
+		vle.setLegend(legendOriginal);
+	    }
 
 	    vea.getCommandRecord().addCommandListener(mapControl);
 

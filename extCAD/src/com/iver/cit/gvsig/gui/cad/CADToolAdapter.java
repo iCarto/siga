@@ -66,7 +66,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * <p>
  * Allows user interact with different CAD tools, on a layer being edited.
  * </p>
- * 
+ *
  * <p>
  * There are two ways of interacting:
  * <ul>
@@ -79,7 +79,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * <code>Enter</code>. If the command isn't valid, will notify it.</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * The edition has been implemented as a <i>finite machine</i>, with three kind
  * of transitions between states according the parameters introduced:
@@ -120,7 +120,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * rewritten in the console notifying the user that isn't correct.</li>
  * </ul>
  * </p>
- * 
+ *
  * @see Behavior
  * @see MapControl
  */
@@ -128,7 +128,7 @@ public class CADToolAdapter extends Behavior {
     /**
      * Stores the CAD tools to edit the layers of the associated
      * <code>MapControl</code>.
-     * 
+     *
      * @see #addCADTool(String, CADTool)
      * @see #getCadTool()
      * @see #getCADTool(String)
@@ -138,7 +138,7 @@ public class CADToolAdapter extends Behavior {
     /**
      * Reference to the object used to manage the edition of the layers of the
      * associated <code>MapControl</code>.
-     * 
+     *
      * @see EditionManager
      * @see #getEditionManager()
      */
@@ -182,7 +182,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * <i>Stack with CAD tools.</i>
-     * 
+     *
      * <i>For each CAD tool we use, the last item added in this stack will
      * display a different icon according to the current operation and its
      * status.</i>
@@ -208,7 +208,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Represents the cursor's point selected in <i>map coordinates</i>.
-     * 
+     *
      * @see MapControl#toMapPoint
      */
     private Point2D mapAdjustedPoint;
@@ -228,7 +228,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Represents the cursor's point selected in <i>screen coordinates</i>.
-     * 
+     *
      * @see ViewPort#fromMapPoint(Point2D)
      */
     private Point2D adjustedPoint;
@@ -240,7 +240,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Determines if the snap tools are enabled or disabled.
-     * 
+     *
      * @see #isRefentEnabled()
      * @see #setRefentEnabled(boolean)
      */
@@ -252,7 +252,7 @@ public class CADToolAdapter extends Behavior {
      * <code>MapControl</code> is within the area around a control point of a
      * geometry.
      * </p>
-     * 
+     *
      * <p>
      * The area is calculated as a circle centered at the control point and with
      * radius the pixels tolerance defined in the preferences.
@@ -263,7 +263,7 @@ public class CADToolAdapter extends Behavior {
     /**
      * Optional grid that could be applied on the <code>MapControl</code>'s view
      * port.
-     * 
+     *
      * @see #getGrid()
      * @see #setAdjustGrid(boolean)
      */
@@ -287,7 +287,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Maximum tolerance in the approximation of a curved line by a polyline.
-     * 
+     *
      * @see #initializeFlatness()
      */
     private static boolean flatnessInitialized = false;
@@ -322,7 +322,7 @@ public class CADToolAdapter extends Behavior {
      * Draws the selected geometries to edit. And, if the <i>snapping</i> is
      * enabled, draws also its effect over them.
      * </p>
-     * 
+     *
      * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#paintComponent(java.awt.Graphics)
      */
     @Override
@@ -380,8 +380,8 @@ public class CADToolAdapter extends Behavior {
      * cad tool setting as end transition point the event's one.</li>
      * </ul>
      * </p>
-     * 
-     * 
+     *
+     *
      * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mouseClicked(java.awt.event.MouseEvent)
      * @see CADExtension#showPopup(MouseEvent)
      */
@@ -443,7 +443,7 @@ public class CADToolAdapter extends Behavior {
     /**
      * Selects the vertex of a geometry at the point selected on the
      * <code>MapControl</code> by pressing the first mouse's button.
-     * 
+     *
      * @see com.iver.cit.gvsig.fmap.tools.Behavior.Behavior#mousePressed(java.awt.event.MouseEvent)
      */
     @Override
@@ -500,17 +500,17 @@ public class CADToolAdapter extends Behavior {
      * Adjusts the <code>point</code> to the grid if its enabled, and sets
      * <code>mapHandlerAdjustedPoint</code> with that new value.
      * </p>
-     * 
+     *
      * <p>
      * The value returned is the distance between those points: the original and
      * the adjusted one.
      * </p>
-     * 
+     *
      * @param point
      *            point to adjust
      * @param mapHandlerAdjustedPoint
      *            <code>point</code> adjusted
-     * 
+     *
      * @return distance from <code>point</code> to the adjusted one. If there is
      *         no adjustment, returns <code>Double.MAX_VALUE</code>.
      */
@@ -720,7 +720,7 @@ public class CADToolAdapter extends Behavior {
      * Displays the current coordinates of the mouse's cursor on the associated
      * <code>MapControl</code> object, at the status bar of the application's
      * main frame.
-     * 
+     *
      * @param pPix
      *            current 2D mouse's cursor coordinates on the
      *            <code>MapControl</code>
@@ -806,7 +806,7 @@ public class CADToolAdapter extends Behavior {
      * On the other hand, a light-yellowed background tool tip text with the
      * type of <i>control point</i> will be displayed.</li>
      * </p>
-     * 
+     *
      * @param g
      *            <code>MapControl</code>'s graphics where the data will be
      *            drawn
@@ -829,17 +829,17 @@ public class CADToolAdapter extends Behavior {
      * Tries to find the nearest geometry or grid control point by the position
      * of the current snap tool.
      * </p>
-     * 
+     *
      * <p>
      * Prioritizes the grid control points than the geometries ones.
      * </p>
-     * 
+     *
      * <p>
      * If finds any near, stores the <i>map</i> and <i>pixel</i> coordinates for
      * the snap, and enables the <code>bForceCoord</code> attribute for the next
      * draw of the mouse's cursor.
      * </p>
-     * 
+     *
      * @param point
      *            current mouse 2D position
      */
@@ -914,7 +914,7 @@ public class CADToolAdapter extends Behavior {
      * coordinate, determining the kind of <i>transition</i> according the
      * parameters written.
      * </p>
-     * 
+     *
      * <p>
      * After, invokes one of the three possible <i>transition</i> methods of the
      * <i>finite machine</i> of edition:
@@ -958,7 +958,7 @@ public class CADToolAdapter extends Behavior {
      * rewritten in the console notifying the user that isn't correct.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param text
      *            command written by user in the edition's console
      */
@@ -1042,24 +1042,24 @@ public class CADToolAdapter extends Behavior {
      * One of the three kind of transaction methods of the <i>finite machine</i>
      * of edition.
      * </p>
-     * 
+     *
      * <p>
      * This one deals <code>values</code> as two numbers that, according
      * <code>type</code> calculate a new point 2D in the current layer edited in
      * the associated <code>MapControl</code>.
      * </p>
-     * 
+     *
      * <p>
      * There are different ways of calculating the new point 2D coordinates,
      * according the value of <code>type</code>, see
      * {@link #textEntered(String) #textEntered(String)}.
      * </p>
-     * 
+     *
      * <p>
      * After applying the changes, updates the controls available for managing
      * the current data.
      * </p>
-     * 
+     *
      * @param values
      *            numbers needed to calculate the new point coordinates
      *            according <code>type</code>
@@ -1070,7 +1070,7 @@ public class CADToolAdapter extends Behavior {
      *            kind of information that is <code>values</code>. According
      *            this parameter, will calculate the new point in a different
      *            way
-     * 
+     *
      * @see CADTool#transition(double, double, InputEvent)
      * @see #transition(double)
      * @see #transition(String)
@@ -1103,8 +1103,8 @@ public class CADToolAdapter extends Behavior {
 		previousPoint = values;
 		break;
 	    case POLAR_SCU:// Relativo
-			   // Comprobar que tenemos almacenado el punto anterior
-			   // y crear nuevo con coordenadas relativas a él.
+		// Comprobar que tenemos almacenado el punto anterior
+		// y crear nuevo con coordenadas relativas a él.
 		double[] auxPolarSCU = values;
 		if (previousPoint != null) {
 		    Point2D point = UtilFunctions.getPoint(new Point2D.Double(
@@ -1153,22 +1153,22 @@ public class CADToolAdapter extends Behavior {
      * One of the three kind of transaction methods of the <i>finite machine</i>
      * of edition.
      * </p>
-     * 
+     *
      * <p>
      * This one deals <code>value</code> as a single number used as a parameter
      * for the current tool state. Ultimately, if isn't valid,
      * <code>number</code> will be rewritten in the console notifying the user
      * that isn't correct.
      * </p>
-     * 
+     *
      * <p>
      * After applying the changes, updates the controls available for managing
      * the current data.
      * </p>
-     * 
+     *
      * @param value
      *            value for the current tool state
-     * 
+     *
      * @see CADTool#transition(double)
      * @see #transition(double[], InputEvent, int)
      * @see #transition(String)
@@ -1189,16 +1189,16 @@ public class CADToolAdapter extends Behavior {
      * One of the three kind of transaction methods of the <i>finite machine</i>
      * of edition.
      * </p>
-     * 
+     *
      * <p>
      * This one deals <code>option</code> as an option of the current tool
      * state. Ultimately, if isn't valid, <code>option</code> will be rewritten
      * in the console notifying the user that isn't correct.
      * </p>
-     * 
+     *
      * @param option
      *            option for the current tool state
-     * 
+     *
      * @see CADTool#transition(String)
      * @see #transition(double[], InputEvent, int)
      * @see #transition(double)
@@ -1229,7 +1229,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * [LBD] DOCUMENT ME!
-     * 
+     *
      * @param text
      *            DOCUMENT ME!
      * @param source
@@ -1253,7 +1253,7 @@ public class CADToolAdapter extends Behavior {
     /**
      * Shows or hides a grid on the <code>ViewPort</code> of the associated
      * <code>MapControl</code>.
-     * 
+     *
      * @param value
      *            <code>true</code> to make the grid visible; <code>false</code>
      *            to make it invisible
@@ -1268,11 +1268,11 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Sets the snap tools enabled or disabled.
-     * 
+     *
      * @param activated
      *            <code>true</code> to enable the snap tools; <code>false</code>
      *            to disable them
-     * 
+     *
      * @see #isRefentEnabled()
      */
     public void setRefentEnabled(boolean activated) {
@@ -1281,10 +1281,10 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Determines if snap tools are enabled or disabled.
-     * 
+     *
      * @return <code>true</code> to enable the snap tools; <code>false</code> to
      *         disable them
-     * 
+     *
      * @see #setRefentEnabled(boolean)
      */
     public boolean isRefentEnabled() {
@@ -1320,9 +1320,9 @@ public class CADToolAdapter extends Behavior {
     /**
      * Returns the {@link CADTool CADTool} at the top of the stack without
      * removing it from the CAD tool stack.
-     * 
+     *
      * @return the {@link CADTool CADTool} at the top of the stack
-     * 
+     *
      * @see #pushCadTool(CADTool)
      * @see #popCadTool()
      * @see #setCadTool(CADTool)
@@ -1339,10 +1339,10 @@ public class CADToolAdapter extends Behavior {
      * Pushes a {@link CADTool CADTool} onto the top of the CAD tool stack, and
      * sets it as current.
      * </p>
-     * 
+     *
      * @param cadTool
      *            CAD tool to enable as current
-     * 
+     *
      * @see #getCadTool()
      * @see #popCadTool()
      * @see #setCadTool(CADTool)
@@ -1372,7 +1372,7 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Removes the peek of the CAD tool stack.
-     * 
+     *
      * @see #pushCadTool(CADTool)
      * @see #getCadTool()
      * @see #setCadTool(CADTool)
@@ -1387,7 +1387,7 @@ public class CADToolAdapter extends Behavior {
      * being edited, the question of the following operation that user can do
      * with the current <code>CADTool</code>, only if it hasn't just answered.
      * </p>
-     * 
+     *
      * <p>
      * The format of the question will be according the following pattern:<br>
      * "\n#"<i>{cadtool at CAD tool stack peek}</i>.getQuestion()">"
@@ -1404,8 +1404,9 @@ public class CADToolAdapter extends Behavior {
 	    View vista = (View) PluginServices.getMDIManager()
 		    .getActiveWindow();
 	    String question = cadtool.getQuestion();
-	    if (lastQuestion == null || !(lastQuestion.equals(question))
-		    || questionAsked) {
+	    if (question != null
+		    && (lastQuestion == null
+		    || !(lastQuestion.equals(question)) || questionAsked)) {
 		vista.getConsolePanel().addText("\n" + "#" + question + " > ",
 			JConsole.MESSAGE);
 		// ***PluginServices.getMainFrame().addTextToConsole("\n" +
@@ -1419,10 +1420,10 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Empties the CAD tools stack and pushes <code>cadTool</code> in it.
-     * 
+     *
      * @param cadTool
      *            CAD tool to set at the peek of the stack
-     * 
+     *
      * @see #pushCadTool(CADTool)
      * @see #popCadTool()
      * @see #getCadTool()
@@ -1548,15 +1549,19 @@ public class CADToolAdapter extends Behavior {
      * </li>
      * </ul>
      * </p>
-     * 
+     *
      * @param actionCommand
      *            identifier of the key action command executed by the user
-     * 
+     *
      * @see SelectionCADTool
      * @see MapControl#setPrevTool()
      */
     public void keyPressed(String actionCommand) {
-	if (CADExtension.getEditionManager().getActiveLayerEdited() == null) {
+	if (CADExtension.getEditionManager().getActiveLayerEdited() == null
+		|| CADExtension.getEditionManager().getActiveLayerEdited()
+			.getLayer() == null
+		|| !CADExtension.getEditionManager().getActiveLayerEdited()
+			.getLayer().isEditing()) {
 	    return;
 	}
 	if (actionCommand.equals("eliminar")) {
@@ -1637,12 +1642,12 @@ public class CADToolAdapter extends Behavior {
      * <p>
      * Applies a lightweight repaint of the active layer being edited.
      * </p>
-     * 
+     *
      * <p>
      * All layers under it won't be drawn, only the upper one and whose are over
      * that layer in the TOC.
      * </p>
-     * 
+     *
      * @see MapControl#rePaintDirtyLayers()
      */
     public void refreshEditedLayer() {
@@ -1658,10 +1663,10 @@ public class CADToolAdapter extends Behavior {
     /**
      * Gets the {@link CADGrid CADGrid} that can be drawn on the
      * <code>ViewPort</code> of the associated <code>MapControl</code>.
-     * 
+     *
      * @return reference to the <i>grid</i> that can be applied on the
      *         <code>ViewPort</code>
-     * 
+     *
      * @see #setGridVisibility(boolean)
      */
     public CADGrid getGrid() {
@@ -1670,10 +1675,10 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Determines if is enabled or not the <i>orto</i> mode.
-     * 
+     *
      * @return <code>true</code> if is enabled the <i>orto</i> mode; otherwise
      *         <code>false</code>
-     * 
+     *
      * @see #setOrtoMode(boolean)
      */
     public boolean isOrtoMode() {
@@ -1682,10 +1687,10 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Enables / disables the <i>orto</i> mode.
-     * 
+     *
      * @param b
      *            the desired value
-     * 
+     *
      * @see #isOrtoMode()
      */
     public void setOrtoMode(boolean b) {
@@ -1695,12 +1700,12 @@ public class CADToolAdapter extends Behavior {
     /**
      * Associates and stores the specified name with the specified
      * {@link CADTool CADTool}.
-     * 
+     *
      * @param name
      *            name of the tool
      * @param c
      *            CAD tool to interactuate editing the layers
-     * 
+     *
      * @see #getCADTools()
      * @see #getCADTool(String)
      */
@@ -1711,9 +1716,9 @@ public class CADToolAdapter extends Behavior {
 
     /**
      * Gets all CAD tools available to edit layers with this tool listener.
-     * 
+     *
      * @return CAD tools available to edit layers with this tool listener
-     * 
+     *
      * @see #addCADTool(String, CADTool)
      * @see #getCADTool(String)
      */
@@ -1725,11 +1730,11 @@ public class CADToolAdapter extends Behavior {
     /**
      * Returns the {@link CADTool CADTool} to which the specified name is
      * mapped.
-     * 
+     *
      * @param text
      *            name of the tool
      * @return the CAD tool whose associated name is to be returned
-     * 
+     *
      * @see #addCADTool(String, CADTool)
      * @see #getCADTools()
      */
@@ -1741,9 +1746,9 @@ public class CADToolAdapter extends Behavior {
     /**
      * Gets the object used to manage the edition of the layers of the
      * associated <code>MapControl</code>.
-     * 
+     *
      * @see EditionManager
-     * 
+     *
      * @return object used to manage the edition of the layers
      */
     public EditionManager getEditionManager() {
@@ -1754,7 +1759,7 @@ public class CADToolAdapter extends Behavior {
      * <p>
      * Initializes the <i>flatness</i> with the defined in preferences.
      * </p>
-     * 
+     *
      * <p>
      * The <i>flatness</i> is the maximum tolerance used to approximate curved
      * lines in a <i>shape</i> by polylines.
@@ -1767,7 +1772,7 @@ public class CADToolAdapter extends Behavior {
      * indicates that the difference between each arc and the straight segment
      * that approximates it must be in the worse case, like the <i>flatness</i>.
      * </p>
-     * 
+     *
      * @see FConverter#FLATNESS
      */
     public void initializeFlatness() {
@@ -1786,7 +1791,7 @@ public class CADToolAdapter extends Behavior {
      * {@link com.iver.cit.gvsig.gui.cad.CADToolAdapter.prefs.Preferences
      * com.iver.cit.gvsig.gui.cad.CADToolAdapter.prefs.Preferences}.
      * </p>
-     * 
+     *
      * <p>
      * The preferences are:
      * <ul>
@@ -1817,9 +1822,9 @@ public class CADToolAdapter extends Behavior {
      * Returns the type of the shape that's the current active and vector layer
      * being edited.
      * </p>
-     * 
+     *
      * @see FLyrVect#getShapeType()
-     * 
+     *
      * @return type of the shape that's the current active and vector layer
      *         being edited
      */

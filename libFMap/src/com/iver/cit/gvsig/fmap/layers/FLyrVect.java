@@ -81,6 +81,7 @@ import com.iver.cit.gvsig.fmap.core.ILabelable;
 import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.core.symbols.IMultiLayerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
+import com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
@@ -638,6 +639,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     public void _print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
     		double scale, PrintRequestAttributeSet properties, boolean highlight) throws ReadDriverException {
     	boolean bDrawShapes = true;
+        boolean cutGeom = true;
     	if (legend instanceof SingleSymbolLegend) {
     		bDrawShapes = legend.getDefaultSymbol().isShapeVisible();
     	}
@@ -761,12 +763,38 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     					CartographicSupport csSym = null;
     					int symbolType = sym.getSymbolType();
 
-    					if (   symbolType == FShape.POINT
-    							|| symbolType == FShape.LINE
-    							|| sym instanceof CartographicSupport) {
+                        if (sym instanceof SimpleLineSymbol) {
+                            if (((SimpleLineSymbol) sym).getLineStyle()
+                                    .getArrowDecorator() != null) {
+                                // Lines with decorators should not be cut
+                                // because the decorators would be drawn in the
+                                // wrong places
+                                cutGeom = false;
+                                if (!((SimpleLineSymbol) sym).getLineStyle()
+                                        .getArrowDecorator()
+                                        .isScaleArrow()) {
+                                    // Hack for increasing non-scaled arrow
+                                    // marker size, which usually looks smaller
+                                    // when printing
+                                    SimpleLineSymbol lineSym = new SimpleLineSymbol();
+                                    lineSym.setXMLEntity(sym.getXMLEntity());
+                                    lineSym.getLineStyle()
+                                            .getArrowDecorator()
+                                            .getMarker()
+                                            .setSize(
+                                                    lineSym.getLineStyle()
+                                                            .getArrowDecorator()
+                                                            .getMarker()
+                                                            .getSize() * 3);
+                                    csSym = lineSym;
+                                }
+                            }
+                        } else if (symbolType == FShape.POINT
+                                || symbolType == FShape.LINE
+                                || sym instanceof CartographicSupport) {
 
-    						csSym = (CartographicSupport) sym;
-    					}
+                            csSym = (CartographicSupport) sym;
+                        }
 
     					//System.err.println("passada "+mapPass+" pinte símboll "+sym.getDescription());
 
@@ -774,47 +802,55 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                         // view extent
                         Rectangle2D extent = viewPort.getExtent();
                         IGeometry geomToPrint = null;
-                        try {
-                        if (geom.fastIntersects(extent.getX(), extent.getY(),
-                                extent.getWidth(), extent.getHeight())) {
-                            // If it does, then we create a rectangle based on
-                            // the view extent and cut the geometries by it
-                            // before drawing them
-                            GeometryFactory geomF = new GeometryFactory();
-                            Geometry intersection = geom
-                                    .toJTSGeometry()
-                                    .intersection(
-                                            new Polygon(
-                                                    geomF.createLinearRing(new Coordinate[] {
-                                                            new Coordinate(
-                                                                    extent.getMinX(),
-                                                                    extent.getMaxY()),
-                                                            new Coordinate(
-                                                                    extent.getMaxX(),
-                                                                    extent.getMaxY()),
-                                                            new Coordinate(
-                                                                    extent.getMaxX(),
-                                                                    extent.getMinY()),
-                                                            new Coordinate(
-                                                                    extent.getMinX(),
-                                                                    extent.getMinY()),
-                                                            new Coordinate(
-                                                                    extent.getMinX(),
-                                                                    extent.getMaxY()) }),
-                                                    null, geomF));
-                            if (!intersection.isEmpty()) {
-                                    geomToPrint = FConverter
-                                            .jts_to_igeometry(intersection);
+                        if (cutGeom) {
+
+                            try {
+                                if (geom.fastIntersects(extent.getX(),
+                                        extent.getY(), extent.getWidth(),
+                                        extent.getHeight())) {
+                                    // If it does, then we create a rectangle
+                                    // based on
+                                    // the view extent and cut the geometries by
+                                    // it
+                                    // before drawing them
+                                    GeometryFactory geomF = new GeometryFactory();
+                                    Geometry intersection = geom
+                                            .toJTSGeometry()
+                                            .intersection(
+                                                    new Polygon(
+                                                            geomF.createLinearRing(new Coordinate[] {
+                                                                    new Coordinate(
+                                                                            extent.getMinX(),
+                                                                            extent.getMaxY()),
+                                                                    new Coordinate(
+                                                                            extent.getMaxX(),
+                                                                            extent.getMaxY()),
+                                                                    new Coordinate(
+                                                                            extent.getMaxX(),
+                                                                            extent.getMinY()),
+                                                                    new Coordinate(
+                                                                            extent.getMinX(),
+                                                                            extent.getMinY()),
+                                                                    new Coordinate(
+                                                                            extent.getMinX(),
+                                                                            extent.getMaxY()) }),
+                                                            null, geomF));
+                                    if (!intersection.isEmpty()) {
+                                        geomToPrint = FConverter
+                                                .jts_to_igeometry(intersection);
+                                    }
+                                }
+                            } catch (TopologyException e) {
+                                logger.warn(
+                                        "Some error happened while trying to cut a polygon with the view extent before printing (layer '"
+                                                + this.getName()
+                                                + "' / feature id "
+                                                + feat.getID()
+                                                + "). The whole polygon will be drawn. ",
+                                        e);
+                                geomToPrint = geom;
                             }
-                        }
-                        } catch (TopologyException e) {
-                            logger.warn(
-                                    "Some error happened while trying to cut a polygon with the view extent before printing (layer '"
-                                            + this.getName()
-                                            + "' / feature id "
-                                            + feat.getID()
-                                            + "). The whole polygon will be drawn. ",
-                                    e);
+                        } else {
                             geomToPrint = geom;
                         }
                         if (geomToPrint != null) {
@@ -1836,13 +1872,13 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     public void drawLabels(BufferedImage image, Graphics2D g, ViewPort viewPort,
     		Cancellable cancel, double scale, double dpi) throws ReadDriverException {
         if (strategy!=null && isWithinScale(scale)) {
-        	strategy.draw(image, g, viewPort, cancel, dpi);
+            strategy.draw(image, g, viewPort, cancel, dpi);
         }
     }
     public void printLabels(Graphics2D g, ViewPort viewPort,
     		Cancellable cancel, double scale, PrintRequestAttributeSet properties) throws ReadDriverException {
         if (strategy!=null) {
-        	strategy.print(g, viewPort, cancel, properties);
+            strategy.print(g, viewPort, cancel, properties);
         }
     }
 

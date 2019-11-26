@@ -150,6 +150,7 @@ import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.DefaultLabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
@@ -886,6 +887,25 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		printMode = true;
 
         draw(null, g, viewPort, cancel, dpi, true);
+        GeneralLabelingStrategy strat = this;
+        if (this.method instanceof DefaultLabelingMethod) {
+            // Hack for increasing labels' halo width, which shows thinner than
+            // expected when printing
+            strat = new GeneralLabelingStrategy();
+            strat.setLayer(layer);
+            strat.setXMLEntity(this.getXMLEntity());
+            DefaultLabelingMethod method = new DefaultLabelingMethod();
+            method.setXMLEntity(this.method.getXMLEntity());
+            strat.setLabelingMethod(method);
+            LabelClass[] labelClasses = method.getLabelClasses();
+            for (int i = 0, iLen = labelClasses.length; i < iLen; i++) {
+                if (labelClasses[i].getTextSymbol().isDrawWithHalo()) {
+                    labelClasses[i].getTextSymbol().setHaloWidth(
+                            labelClasses[i].getTextSymbol().getHaloWidth() * 3);
+                }
+            }
+        }
+        strat.draw(null, g, viewPort, cancel, dpi, true);
 	}
 
 	public String[] getUsedFields() {

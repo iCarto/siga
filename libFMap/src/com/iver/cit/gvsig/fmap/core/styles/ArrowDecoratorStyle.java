@@ -53,6 +53,7 @@ import com.iver.cit.gvsig.fmap.core.symbols.ArrowMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
+import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
 
 /**
@@ -65,6 +66,7 @@ import com.iver.utiles.XMLEntity;
 public class ArrowDecoratorStyle implements IStyle {
 	private boolean flipAll = false;
 	private boolean flipFirst = false;
+    private boolean scaleArrow = true;
 	private int arrowMarkerCount = 2;
 	private boolean followLineAngle = true;
 	private IMarkerSymbol marker = new ArrowMarkerSymbol();
@@ -74,6 +76,14 @@ public class ArrowDecoratorStyle implements IStyle {
 		marker.setSize(10);
 		((ArrowMarkerSymbol) marker).setSharpness(30);
 	}
+
+    public boolean isScaleArrow() {
+        return scaleArrow;
+    }
+
+    public void setScaleArrow(boolean scaleArrow) {
+        this.scaleArrow = scaleArrow;
+    }
 
 	/**
 	 * Obtains the number of arrows that the user wants to draw in the same line.
@@ -159,8 +169,10 @@ public class ArrowDecoratorStyle implements IStyle {
 		if (arrowMarkerCount <= 0) return;
 
 		PathLength pl = new PathLength(shp);
-		double percentSize = (float) marker.getSize();
-		float size = (float) (percentSize *  pl.lengthOfPath() / 100);
+        double baseSize = (float) marker.getSize();
+        float lineLength = pl.lengthOfPath();
+        float size = (float) (this.scaleArrow ? baseSize * lineLength / 100
+                : (baseSize > lineLength * 0.25 ? lineLength * 0.25 : baseSize));
 		marker.setSize(size);
 		float myLineLength = pl.lengthOfPath()-size; // length without the first and last arrow
 		float step = arrowMarkerCount>2 ? myLineLength/(arrowMarkerCount-1) : pl.lengthOfPath();
@@ -192,10 +204,10 @@ public class ArrowDecoratorStyle implements IStyle {
 		// the other arrows but the first and the last
 		float aLength;
 		for (int i = 1; i < arrowMarkerCount-1; i++) {
-			aLength = (float) (step*i);
+			aLength = step*i;
 
-			rotation1 = (float) pl.angleAtLength(aLength);
-			rotation2 = (float) pl.angleAtLength((float)(aLength+size));
+			rotation1 = pl.angleAtLength(aLength);
+			rotation2 = pl.angleAtLength(aLength+size);
 
 			if (flipAll) {
 				startP = new FPoint2D(pl.pointAtLength(aLength));
@@ -218,8 +230,8 @@ public class ArrowDecoratorStyle implements IStyle {
 				marker.setRotation(rotation1);
 				marker.draw(g, affineTransform, startP, null);
 			} else {
-				rotation1 = (float) pl.angleAtLength(aLength+1);
-				rotation2 = (float) pl.angleAtLength((float)(aLength+size+1));
+				rotation1 = pl.angleAtLength(aLength+1);
+				rotation2 = pl.angleAtLength(aLength+size+1);
 				if (flipAll) {
 					startP = new FPoint2D(pl.pointAtLength(aLength+1));
 
@@ -239,8 +251,8 @@ public class ArrowDecoratorStyle implements IStyle {
 
 		// and the last arrow at the begining of the line
 		if (arrowMarkerCount>1) {
-			rotation1 = (float) pl.angleAtLength(size);
-			rotation2 = (float) pl.angleAtLength(0);
+			rotation1 = pl.angleAtLength(size);
+			rotation2 = pl.angleAtLength(0);
 
 			if (flipAll) {
 				startP = new FPoint2D(pl.pointAtLength(0));
@@ -257,7 +269,7 @@ public class ArrowDecoratorStyle implements IStyle {
 			}
 		}
 
-		marker.setSize(percentSize);
+        marker.setSize(baseSize);
 
 	}
 
@@ -290,6 +302,7 @@ public class ArrowDecoratorStyle implements IStyle {
 	public XMLEntity getXMLEntity() {
 		XMLEntity xml = new XMLEntity();
 		xml.putProperty("className", getClassName());
+        xml.putProperty("scaleArrow", scaleArrow);
 		xml.putProperty("flipAll", flipAll);
 		xml.putProperty("flipFirst", flipFirst);
 		xml.putProperty("arrowMarkerCount", arrowMarkerCount);
@@ -299,6 +312,11 @@ public class ArrowDecoratorStyle implements IStyle {
 	}
 
 	public void setXMLEntity(XMLEntity xml) {
+        try {
+            setScaleArrow(xml.getBooleanProperty("scaleArrow"));
+        } catch (NotExistInXMLEntity e) {
+            setScaleArrow(true);
+        }
 		setFlipAll(xml.getBooleanProperty("flipAll"));
 		setFlipFirst(xml.getBooleanProperty("flipFirst"));
 		setArrowMarkerCount(xml.getIntProperty("arrowMarkerCount"));

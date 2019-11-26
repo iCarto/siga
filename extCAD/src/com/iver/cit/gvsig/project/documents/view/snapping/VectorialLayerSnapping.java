@@ -31,7 +31,9 @@ public class VectorialLayerSnapping {
 	EditionManager editionManager = CADExtension.getEditionManager();
 	VectorialLayerEdited vle = (VectorialLayerEdited) editionManager
 		.getLayerEdited(layer);
-	setSnappers(vle, layers);
+	if (vle != null) {
+	    setSnappers(vle, layers);
+	}
     }
 
     public void setSnappers(Collection<FLyrVect> layers) {

@@ -63,7 +63,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.styles.ArrowDecoratorStyle;
 import com.iver.cit.gvsig.fmap.core.symbols.ArrowMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
-import com.iver.cit.gvsig.gui.styling.SymbolSelector;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ISymbolSelector;
 
 /**
@@ -90,6 +89,7 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 	private JIncrementalNumberField incrPositionCount;
 	private JIncrementalNumberField incrSharpness;
 	private JCheckBox chkUseDecorator;
+    private JCheckBox chkScaleArrow;
 	private IMarkerSymbol marker;
 	private JIncrementalNumberField incrSize;
 	private JButton btnOpenSymbolSelector;
@@ -108,8 +108,8 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 		JPanel aux = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		GridBagLayoutPanel pnlTopOptions = new GridBagLayoutPanel();
 		pnlTopOptions.addComponent(chkUseDecorator);
-		pnlTopOptions.addComponent(PluginServices.getText(this, "size"),
-				incrSize = new  JIncrementalNumberField(
+        JPanel aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        aux2.add(incrSize = new JIncrementalNumberField(
 						"0",
 						5,
 						ValidatingTextField.DOUBLE_VALIDATOR,
@@ -118,6 +118,15 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 						Integer.MAX_VALUE,
 						1)
 		);
+
+        JPanel aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        chkScaleArrow = new JCheckBox(PluginServices.getText(this,
+                "arrow_scaling"));
+        aux3.add(chkScaleArrow);
+        aux2.add(aux3);
+
+        pnlTopOptions.addComponent(PluginServices.getText(this, "size"), aux2);
+
 		pnlTopOptions.addComponent(PluginServices.getText(this, "arrow_sharpness"),
 				incrSharpness = new  JIncrementalNumberField(
 						"0",
@@ -128,7 +137,7 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 						Integer.MAX_VALUE,
 						1)
 		);
-		JPanel aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        aux2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		aux2.add(	incrPositionCount = new JIncrementalNumberField(
 				"0",
 				5,
@@ -144,7 +153,7 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 //		aux2.add(aux3);
 
 
-		JPanel aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT,5, 0));
+        aux3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		aux3.add(getBtnOpenSymbolSelector());
 		aux2.add(aux3);
 
@@ -172,6 +181,7 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 		aux2.add(pnlRotation);
 
 		chkUseDecorator.addActionListener(this);
+        chkScaleArrow.addActionListener(this);
 		incrPositionCount.addActionListener(this);
 		incrSharpness.addActionListener(this);
 		incrSize.addActionListener(this);
@@ -202,6 +212,7 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 			ArrowMarkerSymbol arrow = (ArrowMarkerSymbol) marker;
 			incrSharpness.setDouble(arrow.getSharpness());
 		}
+        chkScaleArrow.setSelected(ads.isScaleArrow());
 		incrSize.setDouble(marker.getSize());
 		incrPositionCount.setInteger(ads.getArrowMarkerCount());
 		chkFlipAll.setSelected(ads.isFlipAll());
@@ -230,6 +241,7 @@ public class ArrowDecorator extends DefaultBean implements ActionListener {
 			arrow.setSharpness(incrSharpness.getDouble());
 		}
 		marker.setSize(incrSize.getDouble());
+        ads.setScaleArrow(chkScaleArrow.isSelected());
 		ads.setMarker(marker);
 		ads.setArrowMarkerCount(incrPositionCount.getInteger());
 		ads.setFlipAll(chkFlipAll.isSelected());
