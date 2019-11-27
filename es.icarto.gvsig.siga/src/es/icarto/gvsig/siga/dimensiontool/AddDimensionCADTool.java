@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -143,10 +145,20 @@ public class AddDimensionCADTool extends InsertionCADTool {
                     .getMapContext().getViewPort()
                     .distanceWorld(firstPoint, antPoint);
             values[1] = ValueFactory.createValue(length);
-            values[2] = ValueFactory.createValue(Math.round(length)
-                    + " "
+            String label;
+            if (AddDimension.getNrDecimals() == 0) {
+                label = new Long(Math.round(length)).toString();
+            } else {
+                BigDecimal bd = new BigDecimal(Double.toString(length));
+                bd = bd.setScale(AddDimension.getNrDecimals(),
+                        RoundingMode.HALF_EVEN);
+                label = new Double(bd.doubleValue()).toString().replace('.',
+                        ',');
+            }
+            values[2] = ValueFactory.createValue(label
+                    + (AddDimension.getShowUnits() ? (" "
                     + MapContext.getDistanceAbbr()[MapContext
-                            .getDistancePosition("Metros")]);
+                            .getDistancePosition("Metros")]) : ""));
             DefaultFeature feature = new DefaultFeature(geometry, values, (vea.getRowCount() + 1) + "");
             vea.addRow(feature, "", EditionEvent.GRAPHIC);
 

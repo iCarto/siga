@@ -30,7 +30,7 @@ public class AddDimensionConfigExtension extends Extension {
 
     @Override
     public void execute(String actionCommand) {
-        EditionPreferencePage pref = new AddDimensionPreferencePage();
+        EditionPreferencePage pref = new AddDimensionSnapperPreferencePage();
 
         pref.setMapContext(((View) PluginServices.getMDIManager()
                 .getActiveWindow()).getMapControl().getMapContext());
@@ -65,6 +65,8 @@ public class AddDimensionConfigExtension extends Extension {
                 NotificationManager.addError(e.getMessage(), e);
             }
         }
+
+        dlg.addPreferencePage(new AddDimensionLabelPreferencePage());
 
         // dlg.addPreferencePage(gridPage);
         // dlg.addPreferencePage(flatnessPage);

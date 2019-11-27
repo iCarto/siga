@@ -63,6 +63,8 @@ public class AddDimension {
     private static Boolean EXTENSION_ACTIVE = false;
     private static FLyrVect DIMENSIONS_LAYER;
     private static List<String> SNAP_LAYERS;
+    private static int NR_DECIMALS = 0;
+    private static boolean SHOW_UNITS = true;
 
     public void execute() {
         IWindow window = PluginServices.getMDIManager().getActiveWindow();
@@ -177,6 +179,22 @@ public class AddDimension {
             SNAP_LAYERS = getDefaultSnappingLayers();
         }
         return SNAP_LAYERS;
+    }
+
+    public static int getNrDecimals() {
+        return NR_DECIMALS;
+    }
+
+    public static void setNrDecimals(int nrDecimals) {
+        NR_DECIMALS = nrDecimals;
+    }
+
+    public static boolean getShowUnits() {
+        return SHOW_UNITS;
+    }
+
+    public static void setShowUnits(boolean showUnits) {
+        SHOW_UNITS = showUnits;
     }
 
     public static boolean isExtensionActive() {

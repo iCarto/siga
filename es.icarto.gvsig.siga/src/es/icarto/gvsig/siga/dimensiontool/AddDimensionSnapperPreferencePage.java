@@ -13,7 +13,9 @@ import com.iver.cit.gvsig.gui.cad.tools.SelectionCADTool;
 import com.iver.cit.gvsig.gui.preferences.EditionPreferencePage;
 import com.iver.cit.gvsig.project.documents.view.snapping.ISnapper;
 
-public class AddDimensionPreferencePage extends EditionPreferencePage {
+public class AddDimensionSnapperPreferencePage extends EditionPreferencePage {
+
+    private static final long serialVersionUID = -2009208845839552779L;
 
     @Override
     public void initializeValues() {
