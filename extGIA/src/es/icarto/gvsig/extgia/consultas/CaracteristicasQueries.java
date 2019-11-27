@@ -225,7 +225,7 @@ public class CaracteristicasQueries {
             query = ConsultasFieldNames.lineasDistribucionUFDCSVFieldNames();
             break;
         case Fibra_Optica_Derivaciones:
-            query = ConsultasFieldNames.FibraOpticaDerivacionesCSVFieldNames();
+            query = ConsultasFieldNames.fibraOpticaDerivacionesCSVFieldNames();
             break;
         }
         return "SELECT " + query + getFromClauseCaracteristicas(element) + filters.getWhereClauseByLocationWidgets()
