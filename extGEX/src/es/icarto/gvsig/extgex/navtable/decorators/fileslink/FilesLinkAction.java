@@ -15,6 +15,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.icarto.gvsig.siga.models.InfoEmpresaGEX;
+import es.icarto.gvsig.utils.DesktopApi;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class FilesLinkAction {
@@ -62,7 +63,8 @@ public class FilesLinkAction {
 	    	} else if (empresaValue.equalsIgnoreCase(DBNames.FORM_VALUE_AUTOESTRADAS_COMPANY)) {
 	    		baseDirectory = PreferencesPage.getAGExpropiationsBaseDirectory();
 	    	}
-	    }else if (directoryLayerName.equalsIgnoreCase(DBNames.LAYER_FINCAS)) {
+	    }else if (directoryLayerName.equalsIgnoreCase(DBNames.LAYER_FINCAS) ||
+	    		directoryLayerName.equalsIgnoreCase(DBNames.LAYER_FINCAS_AMPLIACION)) {
 		    InfoEmpresaGEX infoEmpresa = new InfoEmpresaGEX();
 		    int tramoField = recordset.getFieldIndexByName(DBNames.FIELD_TRAMO_FINCAS);
 		    String tramoValue = recordset.getFieldValue(registerIndex, 
@@ -75,13 +77,18 @@ public class FilesLinkAction {
 		    }
 	    }
 
+	    if (baseDirectory.isEmpty()) {
+		DesktopApi.showError("Configure correctamente el directorio en la página de preferencias");
+		return;
+		}
+	    
 	    String folderPath = baseDirectory
 		    + directoryLayerName;
 	    String folderName = folderPath + File.separator + registerValue;
 	    File folder = new File(folderName);
 	    logger.debug("Folder name is: " + folderName);
 	    logger.debug("Folder absolute path is: " + folder.getAbsolutePath());
-
+	    
 	    if (folder.exists()) {
 		/*
 		 * TODO: Improve how to do this. *Theorically*, Java is

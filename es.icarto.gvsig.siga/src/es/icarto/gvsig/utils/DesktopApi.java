@@ -1,5 +1,6 @@
 package es.icarto.gvsig.utils;
 
+import java.awt.Component;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +10,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
+
+import com.iver.andami.PluginServices;
 
 /**
  * Based on: http://stackoverflow.com/a/18004334
@@ -268,4 +273,10 @@ public class DesktopApi {
 	    return EnumOS.unknown;
 	}
     }
+    
+    public static void showError(String msg) {
+    	JOptionPane.showMessageDialog(
+    		(Component) PluginServices.getMainFrame(), msg, "Error",
+    		JOptionPane.ERROR_MESSAGE);
+   }
 }

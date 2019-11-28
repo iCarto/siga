@@ -1,8 +1,12 @@
 package es.icarto.gvsig.extgia.forms;
 
+import java.awt.Component;
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import com.iver.andami.Launcher;
+import com.iver.andami.PluginServices;
 
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
@@ -10,6 +14,7 @@ import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.navtableforms.gui.buttons.fileslink.FilesLinkData;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.utils.DesktopApi;
 
 public class FilesLinkDataImp implements FilesLinkData {
     private final Elements element;
@@ -35,10 +40,11 @@ public class FilesLinkDataImp implements FilesLinkData {
 		baseDirectory = PreferencesPage.getAGInventoryBaseDirectory();
 		}
 	} catch (Exception e) {
-	}
 
-	if (baseDirectory == null || baseDirectory.isEmpty()) {
-	    baseDirectory = Launcher.getAppHomeDir();
+	}
+	
+	if (baseDirectory.isEmpty()) {
+		return null;
 	}
 
 	baseDirectory = baseDirectory + element;
@@ -50,6 +56,10 @@ public class FilesLinkDataImp implements FilesLinkData {
     public String getFolder(AbstractForm form) {
 	String registerValue = form.getFormController().getValue(
 		getRegisterField());
+	
+	if (getBaseDirectory() == null) {
+		return null;
+	}
 	
 	String folderName = getBaseDirectory() + File.separator + registerValue;
 	return folderName;

@@ -75,6 +75,7 @@ public class DBNames {
 
     // more tables
     public static final String LAYER_FINCAS = "Fincas";
+    public static final String LAYER_FINCAS_AMPLIACION = "Fincas_Ampliacion";
     public static final String LAYER_REVERSIONES = "Reversiones";
     public static final String TABLE_EXPROPIACIONES = "expropiaciones";
     public static final String LAYER_MUNICIPIOS = "Municipios";

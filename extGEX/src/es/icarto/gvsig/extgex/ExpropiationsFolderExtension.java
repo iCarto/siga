@@ -27,11 +27,13 @@ public class ExpropiationsFolderExtension extends Extension {
 	if (xml.contains(PreferencesPage.EXPROPIATATIONS_FOLDER_KEY)) {
 	    folderStr = xml
 		    .getStringProperty(PreferencesPage.EXPROPIATATIONS_FOLDER_KEY);
+	}else {
+		folderStr = "";
 	}
 
 	File folder = new File(folderStr);
 	if (!folder.isDirectory()) {
-	    showError("Configure correctamente el directorio en la página de preferencias");
+	    DesktopApi.showError("Configure correctamente el directorio en la página de preferencias");
 	    return;
 	}
 	DesktopApi.open(folder);
@@ -46,11 +48,4 @@ public class ExpropiationsFolderExtension extends Extension {
     public boolean isVisible() {
 	return true;
     }
-
-    private void showError(String msg) {
-	JOptionPane.showMessageDialog(
-		(Component) PluginServices.getMainFrame(), msg, "Error",
-		JOptionPane.ERROR_MESSAGE);
-    }
-
 }

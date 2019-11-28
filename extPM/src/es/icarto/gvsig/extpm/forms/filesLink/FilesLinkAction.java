@@ -15,6 +15,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
+import es.icarto.gvsig.utils.DesktopApi;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 
 public class FilesLinkAction {
@@ -64,6 +65,11 @@ public class FilesLinkAction {
 	    baseDirectory = PreferencesPage.getAGExpropiationsBaseDirectory();
 	    }
 
+	    if (baseDirectory.isEmpty()) {
+	    DesktopApi.showError("Configure correctamente el directorio en la página de preferencias");
+		return;
+	    }
+	    
 	    String folderPath = baseDirectory
 		    + directoryLayerName;
 	    String folderName = folderPath + File.separator + registerValue;

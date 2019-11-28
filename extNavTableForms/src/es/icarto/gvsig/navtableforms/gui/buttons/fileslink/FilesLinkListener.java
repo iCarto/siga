@@ -1,5 +1,6 @@
 package es.icarto.gvsig.navtableforms.gui.buttons.fileslink;
 
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +34,15 @@ public class FilesLinkListener implements ActionListener {
     }
 
     public void showFiles() {
+    if (data.getFolder(dialog) == null) {
+    JOptionPane.showMessageDialog(
+	    (Component) PluginServices.getMainFrame(),
+	    PluginServices.getText(this,"fileslink_base_directory_not_configured"),
+	    "Error",
+	    JOptionPane.ERROR_MESSAGE);
+    return;
+    }
+    
 	String folderName = data.getFolder(dialog);
 	File folder = new File(folderName);
 
