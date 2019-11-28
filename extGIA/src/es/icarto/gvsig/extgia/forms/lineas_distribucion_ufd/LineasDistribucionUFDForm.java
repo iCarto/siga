@@ -55,7 +55,7 @@ public class LineasDistribucionUFDForm extends AbstractFormWithLocationWidgets {
 	@Override
 	protected boolean hasSentido() {
     
-		return true;
+		return false;
     
 	}
 

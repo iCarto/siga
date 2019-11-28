@@ -19,8 +19,7 @@ public class LineasDistribucionUFDCaracteristicasReport extends PDFCaracteristic
 
 	@Override
 	protected String[] getColumnNames() {
-		String[] columnNames = { "ID Lineas Distribución UFD", "Tramo", "Tipo Vía",
-				"Nombre Vía", "PK", "Denominación", "Matrícula", "Línea", "Tipo",
+		String[] columnNames = { "ID Lineas Distribución UFD", "Tramo", "PK", "Denominación", "Matrícula", "Línea", "Tipo",
 				"Tensión (kV)", "Longitud (m)",  "Observaciones" };
 			return columnNames;
 	}
@@ -38,9 +37,7 @@ public class LineasDistribucionUFDCaracteristicasReport extends PDFCaracteristic
 		columnsWidth[6] = 60f;
 		columnsWidth[7] = 60f;
 		columnsWidth[8] = 60f;
-		columnsWidth[9] = 60f;
-		columnsWidth[10] = 60f;
-		columnsWidth[11] = 90f;
+		columnsWidth[9] = 90f;
 
 		return columnsWidth;
 	}

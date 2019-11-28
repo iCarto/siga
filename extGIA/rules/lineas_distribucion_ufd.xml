@@ -48,65 +48,6 @@
 	</FIELD>
     
     <FIELD>
-        <FIELDNAME>tipo_via</FIELDNAME>
-        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
-        <DOMAINREADER>
-            <DRTYPE>db</DRTYPE>
-            <DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-            <DRDBTABLE>tipo_via</DRDBTABLE>
-            <DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-            <DRDBCOLUMNVALUE>id</DRDBCOLUMNVALUE>
-            <DRDBFOREIGNKEY>id_bc</DRDBFOREIGNKEY>
-            <DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
-        <DRADDVOIDVALUE>true</DRADDVOIDVALUE>
-        </DOMAINREADER>
-    </FIELD>
-    
-    <FIELD>
-        <FIELDNAME>nombre_via</FIELDNAME>
-        <DOMAINREADER>
-            <DRTYPE>db</DRTYPE>
-            <DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-            <DRDBTABLE>nombre_via</DRDBTABLE>
-            <DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-            <DRDBCOLUMNVALUE>id</DRDBCOLUMNVALUE>
-            <DRDBFOREIGNKEY>id_bc</DRDBFOREIGNKEY>
-            <DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
-            <DRDBFOREIGNKEY>id_tv</DRDBFOREIGNKEY>
-        </DOMAINREADER>
-        <ENABLEIF>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Área de descanso</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Área de servicio</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Área de mantenimiento</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Enlace</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Estación de peaje</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Intercambiador</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Túnel</VALUE>
-            </CONDITION>
-        </ENABLEIF>
-    </FIELD>
-    
-    <FIELD>
 		<FIELDNAME>pk</FIELDNAME>
 		<VALIDATIONRULE>double_positive</VALIDATIONRULE>
 		<DOMAINREADER>
@@ -119,70 +60,6 @@
 			<DRDBFOREIGNKEY>id_nv</DRDBFOREIGNKEY>
 		</DOMAINREADER>
 	</FIELD>
-
-    
-    <FIELD>
-        <FIELDNAME>ramal</FIELDNAME>
-        <DOMAINREADER>
-            <DRTYPE>db</DRTYPE>
-            <DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-            <DRDBTABLE>ramal</DRDBTABLE>
-            <DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-            <DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
-        </DOMAINREADER>
-    </FIELD>
-    
-    <FIELD>
-        <FIELDNAME>direccion</FIELDNAME>
-        <DOMAINREADER>
-            <DRTYPE>db</DRTYPE>
-            <DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-            <DRDBTABLE>direccion</DRDBTABLE>
-            <DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-            <DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
-            <DRDBFOREIGNKEY>id_tv</DRDBFOREIGNKEY>
-        </DOMAINREADER>
-        <ENABLEIF>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Intercambiador</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Enlace</VALUE>
-            </CONDITION>
-            <CONDITION>
-            <COMPONENT>tipo_via</COMPONENT>
-            <VALUE>Área de Servicio</VALUE>
-            </CONDITION>
-            <CONDITION>
-                <COMPONENT>tipo_via</COMPONENT>
-                <VALUE>Área de mantenimiento</VALUE>
-            </CONDITION>
-        </ENABLEIF>
-    </FIELD>
-    
-    <FIELD>
-		<FIELDNAME>sentido</FIELDNAME>
-		<DOMAINREADER>
-			<DRTYPE>db</DRTYPE>
-			<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-			<DRDBTABLE>sentido</DRDBTABLE>
-			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-			<DRDBCOLUMNVALUE>id</DRDBCOLUMNVALUE>
-		</DOMAINREADER>
-	</FIELD>
-    
-    <FIELD>
-        <FIELDNAME>margen</FIELDNAME>
-        <DOMAINREADER>
-            <DRTYPE>db</DRTYPE>
-            <DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-            <DRDBTABLE>margen</DRDBTABLE>
-            <DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-            <DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
-        </DOMAINREADER>
-    </FIELD>
     
     <FIELD>
         <FIELDNAME>municipio</FIELDNAME>

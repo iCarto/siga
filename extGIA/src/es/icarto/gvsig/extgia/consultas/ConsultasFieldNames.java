@@ -168,7 +168,7 @@ public class ConsultasFieldNames {
         case Barrera_Metalica:
             return "gid, tr.item,  tv.item, nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
         case Lineas_Distribucion_UFD:
-            return "gid, tr.item,  tv.item, nv.item, pk, denominacion, matricula, linea, tipo, tension, longitud, observaciones";
+            return "gid, tr.item, pk, denominacion, matricula, linea, tipo, tension, longitud, observaciones";
         case Fibra_Optica_Derivaciones:
             return "gid, tr.item, pk, expediente, companhia, observaciones";
         }
@@ -569,9 +569,8 @@ public class ConsultasFieldNames {
     }
 
     public static String lineasDistribucionUFDCSVFieldNames() {
-        return "gid as \"ID Línea distribucion UFD\","
-                + localizationCSVFieldNames()
-                + "pk as \"PK (Km)\", denominacion as \"Denominación\", matricula as \"Matrícula\", linea as \"Línea\", tipo as \"Tipo\", tension as \"Tensión\", longitud as \"Longitud (m)\", observaciones as \"Observaciones\"";
+        return "gid as \"ID Línea distribucion UFD\", tr.item as \"Tramo\", pk as \"PK (Km)\", "
+        		+ "denominacion as \"Denominación\", matricula as \"Matrícula\", linea as \"Línea\", tipo as \"Tipo\", tension as \"Tensión\", longitud as \"Longitud (m)\", observaciones as \"Observaciones\"";
     }
 
     public static String fibraOpticaDerivacionesCSVFieldNames() {

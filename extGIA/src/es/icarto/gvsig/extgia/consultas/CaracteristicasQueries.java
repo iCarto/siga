@@ -88,7 +88,6 @@ public class CaracteristicasQueries {
         case Obras_Drenaje:
         case Areas_Peaje:
         case Lecho_Frenado:
-        case Lineas_Distribucion_UFD:
         case Senhalizacion_Variable:
         case Transformadores:
         case Tuneles:
@@ -113,6 +112,7 @@ public class CaracteristicasQueries {
             return getLocalizationTablesWithSentidoAndPF();
 
         case Comunicaciones:
+        case Lineas_Distribucion_UFD:
         case Fibra_Optica_Derivaciones:
             return getJoinedArea() + getJoinedBase() + getJoinedTramo() + getJoinedMunicipio();
         case Enlaces:
