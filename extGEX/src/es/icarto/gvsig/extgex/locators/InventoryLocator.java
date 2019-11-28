@@ -79,8 +79,7 @@ public class InventoryLocator extends BasicAbstractWindow implements ActionListe
 
     private static final String TRONCO_VALUE = "Tronco";
 
-    private static final List<Elements> ELEMENTS_TO_IGNORE = Arrays.asList(Elements.Ramales, Elements.Competencias,
-            Elements.Comunicaciones);
+    private static final List<Elements> ELEMENTS_TO_IGNORE = Arrays.asList(Elements.Ramales, Elements.Competencias);
 
     private static final Map<String, String> TRAMOS_IDS = new HashMap<String, String>();
 
