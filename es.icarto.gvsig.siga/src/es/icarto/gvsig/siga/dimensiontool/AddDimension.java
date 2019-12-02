@@ -261,8 +261,8 @@ public class AddDimension {
         LabelClass lc = new LabelClass();
         lc.setLabelExpressions(new String[] { "[" + LABEL_FIELD + "]" });
         lc.getTextSymbol().setDrawWithHalo(true);
-        lc.getTextSymbol().setHaloWidth(6);
-        lc.getTextSymbol().setFontSize(8);
+        lc.getTextSymbol().setHaloWidth(8);
+        lc.getTextSymbol().setFontSize(10);
 
         LinePlacementConstraints pl = new LinePlacementConstraints();
         pl.setPlacementMode(LinePlacementConstraints.HORIZONTAL);

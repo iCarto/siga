@@ -13,15 +13,15 @@
 		</extension>
 
 		<extension class-name="es.icarto.gvsig.siga.dimensiontool.AddDimensionExtension" active="true">
-			<menu text="SIGA" position="30930" is_separator="true"/>
-			<menu text="SIGA/add_dimension_menu/es.icarto.gvsig.siga.AddDimensionExtension.menu" icon="foo" position="30940"/>
+			<menu text="SIGA" position="30939" is_separator="true"/>
+			<menu text="SIGA/add_dimension_menu/es.icarto.gvsig.siga.AddDimensionExtension.menu" icon="es.icarto.gvsig.siga.dimensiontool.AddDimensionExtension" position="30940"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="foo" position="21" tooltip="es.icarto.gvsig.siga.AddDimensionExtension.tooltip" />
+				<action-tool icon="es.icarto.gvsig.siga.dimensiontool.AddDimensionExtension" position="12" tooltip="es.icarto.gvsig.siga.AddDimensionExtension.tooltip" />
 			</tool-bar>
 		</extension>
 
 		<extension class-name="es.icarto.gvsig.siga.dimensiontool.AddDimensionConfigExtension" active="true">
-			<menu text="SIGA/add_dimension_menu/es.icarto.gvsig.siga.AddDimensionConfigExtension.menu" position="30950"/>
+			<menu text="SIGA/add_dimension_menu/es.icarto.gvsig.siga.AddDimensionConfigExtension.menu" position="30945"/>
 		</extension>
 
 		<extension class-name="es.icarto.gvsig.siga.OpenStreetViewExtension" active="true">
@@ -33,17 +33,17 @@
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.siga.CropLayersExtension" active="true">
-			<menu text="SIGA/es.icarto.gvsig.siga.CropLayersExtension.menu" icon="es.icarto.gvsig.siga.CropLayersExtension" position="30952"/>
+			<menu text="SIGA/es.icarto.gvsig.siga.CropLayersExtension.menu" icon="es.icarto.gvsig.siga.CropLayersExtension" position="30970"/>
 			<tool-bar name="SIGA_Tools" position="75">
-                <action-tool icon="es.icarto.gvsig.siga.CropLayersExtension" tooltip="es.icarto.gvsig.siga.CropLayersExtension.tooltip" position="11" name="es.icarto.gvsig.siga.CropLayersExtension" />
+                <action-tool icon="es.icarto.gvsig.siga.CropLayersExtension" tooltip="es.icarto.gvsig.siga.CropLayersExtension.tooltip" position="13" name="es.icarto.gvsig.siga.CropLayersExtension" />
             </tool-bar>
 		</extension>
 
 		<extension class-name="es.icarto.gvsig.siga.ImportIncidenciasExtension" active="true">
-			<menu text="SIGA" position="30954" is_separator="true"/>
-			<menu text="SIGA/es.icarto.gvsig.siga.ImportIncidenciasExtension.menu" icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="30956"/>
+			<menu text="SIGA" position="30979" is_separator="true"/>
+			<menu text="SIGA/es.icarto.gvsig.siga.ImportIncidenciasExtension.menu" icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="30980"/>
 			<tool-bar name="SIGA_Tools" position="75">
-				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="12" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
+				<action-tool icon="es.icarto.gvsig.siga.ImportIncidenciasExtension" position="14" tooltip="es.icarto.gvsig.siga.ImportIncidenciasExtension.tooltip" />
 			</tool-bar>
 		</extension>
 

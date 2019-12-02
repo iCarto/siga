@@ -1,14 +1,16 @@
 package es.icarto.gvsig.siga.dimensiontool;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.CADExtension;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
-public class AddDimensionExtension extends Extension {
+import es.icarto.gvsig.commons.AbstractExtension;
+
+public class AddDimensionExtension extends AbstractExtension {
 
     @Override
     public void initialize() {
+        super.initialize();
         CADExtension
                 .addCADTool(AddDimensionCADTool.CAD_ID, new AddDimensionCADTool());
     }
