@@ -21,72 +21,80 @@ public class EstructurasForm extends AbstractFormWithLocationWidgets {
 
     JTextField estructuraIDWidget;
     CalculateComponentValue estructuraid;
+    private final CodigoXopa codigoXopa;
 
     public EstructurasForm(FLyrVect layer) {
-	super(layer);
+        super(layer);
 
-	addTableHandler(new GIAAlphanumericTableHandler(
-		getTrabajosDBTableName(), getWidgets(), getElementID(),
-		DBFieldNames.trabajosColNames, DBFieldNames.trabajosColAlias,
-		DBFieldNames.trabajosColWidths, this));
+        addTableHandler(new GIAAlphanumericTableHandler(getTrabajosDBTableName(), getWidgets(), getElementID(),
+                DBFieldNames.trabajosColNames, DBFieldNames.trabajosColAlias, DBFieldNames.trabajosColWidths, this));
+
+        codigoXopa = new CodigoXopa(formBody, tramoCB);
+        codigoXopa.setForm(this);
     }
 
     @Override
     protected void fillSpecificValues() {
-	super.fillSpecificValues();
+        super.fillSpecificValues();
 
-	if (estructuraIDWidget.getText().isEmpty()) {
-	    estructuraid = new EstructurasCalculateIDValue(this,
-		    getWidgetComponents(), getElementID(), getElementID());
-	    estructuraid.setValue(true);
-	}
-
-	repaint();
+        if (estructuraIDWidget.getText().isEmpty()) {
+            estructuraid = new EstructurasCalculateIDValue(this, getWidgetComponents(), getElementID(), getElementID());
+            estructuraid.setValue(true);
+        }
+        codigoXopa.fillSpecificValues();
+        repaint();
     }
 
     @Override
     protected void setListeners() {
-	super.setListeners();
-	Map<String, JComponent> widgets = getWidgets();
+        super.setListeners();
+        Map<String, JComponent> widgets = getWidgets();
 
-	estructuraIDWidget = (JTextField) widgets.get(getElementID());
+        estructuraIDWidget = (JTextField) widgets.get(getElementID());
+        codigoXopa.setListeners();
+    }
+
+    @Override
+    protected void removeListeners() {
+        codigoXopa.removeListeners();
+        super.removeListeners();
     }
 
     @Override
     public Elements getElement() {
-	return Elements.Estructuras;
+        return Elements.Estructuras;
     }
 
     @Override
     public JTable getReconocimientosJTable() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public JTable getTrabajosJTable() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public String getBasicName() {
-	return TABLENAME;
+        return TABLENAME;
     }
 
     @Override
     protected boolean hasSentido() {
-	return true;
+        return true;
     }
 
     @Override
     public String getElementID() {
-	return "id_estructura";
+        return "id_estructura";
     }
 
     @Override
     public String getElementIDValue() {
-	return estructuraIDWidget.getText();
+        return estructuraIDWidget.getText();
     }
 
 }
