@@ -3,33 +3,16 @@ package es.icarto.gvsig.extgia.forms.estructuras;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import com.jeta.forms.components.image.ImageComponent;
 import com.jeta.forms.components.panel.FormPanel;
 
 import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
-import es.icarto.gvsig.extgia.forms.images.AddImageListener;
-import es.icarto.gvsig.extgia.forms.images.DeleteImageListener;
-import es.icarto.gvsig.extgia.forms.images.SaveImageListener;
 
 public class CodigoXopa {
 
     private final FormPanel formPanel;
-
-    private final String deleteImageButtonName = "delete_image_button";
-
-    protected ImageComponent imageComponent;
-    protected JButton addImageButton;
-    protected JButton deleteImageButton;
-    protected JButton saveImageButton;
-
-    protected AddImageListener addImageListener;
-    protected DeleteImageListener deleteImageListener;
-    protected SaveImageListener saveImageListener;
-
     private AbstractFormWithLocationWidgets form;
 
     private final JLabel etiquetaCodigo;
@@ -64,9 +47,9 @@ public class CodigoXopa {
         }
         String selectedTramo = selectedItem.toString();
         if (selectedTramo.startsWith("AG")) {
-            etiquetaCodigo.setText("CÃ³digo XOPA");
+            etiquetaCodigo.setText("Código XOPA");
         } else {
-            etiquetaCodigo.setText("CÃ³digo SGPA");
+            etiquetaCodigo.setText("Código SGPA");
         }
 
     }
