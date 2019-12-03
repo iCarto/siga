@@ -94,6 +94,7 @@ public class DBNames {
     // LoadWMS
     public static final String TABLE_WMS = "_wms";
     public static final String FIELD_LAYER_WMS = "layer_name";
+    public static final String TABLE_WMS_PLANES = "municipios_planes";
 
     // QueriesPanel
     public static final String SCHEMA_DATA = "audasa_expropiaciones";

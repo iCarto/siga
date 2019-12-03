@@ -21,11 +21,17 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 public class LoadWMS {
 
     private final String wmsName;
-
+    private String wmsHost = null;
+    
     public LoadWMS(String wmsName) {
-	this.wmsName = wmsName;
+    this.wmsName = wmsName;
     }
-
+    
+    public LoadWMS(String wmsName, String wmsHost) {
+    this.wmsName =wmsName;
+    this.wmsHost = wmsHost;
+    }
+    
     public void Load() {
 
 	DBSession dbs = DBSession.getCurrentSession();
@@ -40,9 +46,11 @@ public class LoadWMS {
 	    String sLayer = wmsValues[0][2];
 	    String srs = wmsValues[0][3];
 	    String format = wmsValues[0][4];
-	    String host = wmsValues[0][5];
-
-	    URL url = new URL(host);
+	    if (wmsHost == null) {
+	    this.wmsHost = wmsValues[0][5];
+	    }
+	    
+	    URL url = new URL(wmsHost);
 	    FLyrWMS layer = new FLyrWMS();
 
 	    layer.setHost(url);
@@ -62,8 +70,8 @@ public class LoadWMS {
 	    //	    }
 
 	    Hashtable online_resources = new Hashtable();
-	    online_resources.put("GetFeatureInfo", host);
-	    online_resources.put("GetMap", host);
+	    online_resources.put("GetFeatureInfo", this.wmsHost);
+	    online_resources.put("GetMap", this.wmsHost);                         
 	    layer.setOnlineResources(online_resources);
 	    layer.setFixedSize(new Dimension(-1, -1));
 	    layer.setQueryable(false);
