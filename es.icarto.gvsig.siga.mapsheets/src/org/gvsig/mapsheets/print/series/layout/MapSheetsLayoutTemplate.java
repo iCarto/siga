@@ -55,6 +55,7 @@ import com.iver.cit.gvsig.project.documents.layout.fframes.FrameFactory;
 import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
+import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
 
 /**
@@ -87,7 +88,6 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
     private static int NextId = 1;
 
     private double leftCm;
-
     private double topCm;
 
     static {
@@ -586,6 +586,8 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	resp.putProperty("margin_2", atts.m_area[2]);
 	resp.putProperty("margin_3", atts.m_area[3]);
 	resp.putProperty("dpi", atts.DPI);
+        resp.putProperty("left_cm", leftCm);
+        resp.putProperty("top_cm", topCm);
 
 	resp.putProperty("type", atts.getType());
 	resp.putProperty("type_unit", atts.getSelTypeUnit());
@@ -610,6 +612,18 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	atts.m_area[1] = m1;
 	atts.m_area[2] = m2;
 	atts.m_area[3] = m3;
+
+        try {
+            leftCm = xml.getDoubleProperty("left_cm");
+        } catch (NotExistInXMLEntity e) {
+            // Printed maps won't look ok, but ignore it
+        }
+
+        try {
+            topCm = xml.getDoubleProperty("top_cm");
+        } catch (NotExistInXMLEntity e) {
+            // Printed maps won't look ok, but ignore it
+        }
 
 	int au = xml.getIntProperty("type");
 	atts.setType(au);
@@ -652,19 +666,20 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	     */
 	}
 
-	IFFrame[] frames = getLayoutContext().getAllFFrames();
-	for (IFFrame frame: frames) {
+	framesFromTemplate = getLayoutContext().getAllFFrames();
+	for (IFFrame frame: framesFromTemplate) {
 	    if (frame instanceof FFrameScaleBar) {
-		((FFrameScaleBar) frame).initDependence(frames);
+		((FFrameScaleBar) frame).initDependence(framesFromTemplate);
 	    }
 	}
 
+        ProjectView pw = MapSheetsUtils.cloneProjectView(viewFrame.getView());
 
-	FLayer lyr = viewFrame.getView().getMapContext().getLayers().getLayer(gridName);
+        FLayer lyr = pw.getMapContext().getLayers()
+                .getLayer(gridName);
 	if (lyr instanceof MapSheetGrid) {
-	    setViewGrid(viewFrame.getView(), (MapSheetGrid) lyr);
+            setViewGrid(pw, (MapSheetGrid) lyr);
 	}
-	viewFrame.setView(MapSheetsUtils.cloneProjectView(viewFrame.getView()));
 
     }
 
