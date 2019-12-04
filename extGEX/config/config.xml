@@ -167,18 +167,17 @@
 			<menu text="SIGA/WMS/Catastro" action-command="es.icarto.gvsig.extgex.WMSLoadCatastroExtension" position="30850"/>
 		</extension>
 		
+		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPlanesGeneralesExtension" description="LOAD_PlanesGenerales_WMS" active="true">
+			<menu text="SIGA/WMS/Planeamiento SIOTUGA (Por Municipio)" action-command="es.icarto.gvsig.extgex.WMSLoadPlanesGeneralesExtension" position="30860"/>
+		</extension>
+		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPUSectoresExtension" description="LOAD_PUSectores_WMS" active="true">
-			<menu text="SIGA/WMS/Planeamiento Urbanístico (Sectores)" action-command="es.icarto.gvsig.extgex.WMSLoadPUSectoresExtension" position="30860"/>
+			<menu text="SIGA/WMS/Planeamiento Urbanístico (Sectores)" action-command="es.icarto.gvsig.extgex.WMSLoadPUSectoresExtension" position="30870"/>
 		</extension>
 		
 		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPUClasesDeSueloExtension" description="LOAD_PUClasesDeSuelo_WMS" active="true">
-			<menu text="SIGA/WMS/Planeamiento Urbanístico (Clases de Suelo)" action-command="es.icarto.gvsig.extgex.WMSLoadPUClasesDeSueloExtension" position="30870"/>
+			<menu text="SIGA/WMS/Planeamiento Urbanístico (Clases de Suelo)" action-command="es.icarto.gvsig.extgex.WMSLoadPUClasesDeSueloExtension" position="30880"/>
 		</extension>
-		
-		<extension class-name="es.icarto.gvsig.extgex.WMSLoadPlanesGeneralesExtension" description="LOAD_PlanesGenerales_WMS" active="true">
-			<menu text="SIGA/WMS/Planes Generales (Por Municipio)" action-command="es.icarto.gvsig.extgex.WMSLoadPlanesGeneralesExtension" position="30880"/>
-		</extension>
-
 
 	</extensions>
 </plugin-config>
