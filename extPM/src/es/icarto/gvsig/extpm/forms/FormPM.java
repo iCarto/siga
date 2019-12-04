@@ -20,7 +20,6 @@ import com.jeta.forms.components.panel.FormPanel;
 
 import es.icarto.gvsig.commons.gui.WidgetFactory;
 import es.icarto.gvsig.extgex.forms.reversions.OpenWebAction;
-import es.icarto.gvsig.extpm.forms.filesLink.NavTableComponentsFilesLinkButton;
 import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.siga.SIGAConfigExtension;
 import es.icarto.gvsig.siga.forms.reports.NavTableComponentsPrintButton;
@@ -71,10 +70,6 @@ public class FormPM extends BasicAbstractForm {
 
 	JButton openWebBt = new JButton(new OpenWebAction(this, "pm"));
 	actionsToolBar.add(openWebBt);
-
-	NavTableComponentsFilesLinkButton ntFilesLinkButton = new NavTableComponentsFilesLinkButton();
-	JButton filesLinkB = ntFilesLinkButton.getFilesLinkButton(layer, this);
-	actionsToolBar.add(filesLinkB);
 
 	URL reportPath = this.getClass().getClassLoader()
 		.getResource("reports/pm_report.jasper");
