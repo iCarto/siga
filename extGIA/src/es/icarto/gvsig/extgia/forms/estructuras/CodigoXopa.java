@@ -47,9 +47,9 @@ public class CodigoXopa {
         }
         String selectedTramo = selectedItem.toString();
         if (selectedTramo.startsWith("AG")) {
-            etiquetaCodigo.setText("Código XOPA");
+            etiquetaCodigo.setText("Código XOPA:");
         } else {
-            etiquetaCodigo.setText("Código SGPA");
+            etiquetaCodigo.setText("Código SGPA:");
         }
 
     }
