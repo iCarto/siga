@@ -5,6 +5,8 @@ import java.io.File;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.commons.legend.LayerLabeling;
+import es.icarto.gvsig.commons.legend.LayerSimbology;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 
 //Como llamas a la combinación de estilo y etiqueta

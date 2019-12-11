@@ -37,9 +37,9 @@ import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.utiles.XMLEntity;
 
+import es.icarto.gvsig.commons.legend.LayerLabeling;
+import es.icarto.gvsig.commons.legend.LayerSimbology;
 import es.icarto.gvsig.elle.db.DBStructure;
-import es.icarto.gvsig.elle.style.LayerLabeling;
-import es.icarto.gvsig.elle.style.LayerSimbology;
 import es.udc.cartolab.gvsig.elle.gui.EllePreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 

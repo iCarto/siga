@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import es.icarto.gvsig.commons.legend.FieldLabelRE;
+
 public class ReplaceFieldLabelTest {
 
     @Test

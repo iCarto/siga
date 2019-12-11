@@ -24,9 +24,9 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.datasources.SHPFactory;
+import es.icarto.gvsig.commons.legend.LayerLabeling;
+import es.icarto.gvsig.commons.legend.LayerSimbology;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
-import es.icarto.gvsig.elle.style.LayerLabeling;
-import es.icarto.gvsig.elle.style.LayerSimbology;
 
 public class Crop {
 

@@ -26,9 +26,9 @@ import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.commons.legend.LayerLabeling;
+import es.icarto.gvsig.commons.legend.LayerSimbology;
 import es.icarto.gvsig.elle.db.DBStructure;
-import es.icarto.gvsig.elle.style.LayerLabeling;
-import es.icarto.gvsig.elle.style.LayerSimbology;
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardException;
 import es.udc.cartolab.gvsig.elle.gui.wizard.save.LayerProperties;
 import es.udc.cartolab.gvsig.users.utils.DBSession;

@@ -19,14 +19,21 @@
 package com.iver.cit.gvsig.addlayer.fileopen.vectorial;
 
 import java.awt.geom.Rectangle2D;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.cresques.cts.IProjection;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.ValidationException;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -44,6 +51,8 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.utiles.XMLEntity;
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
@@ -52,6 +61,9 @@ import com.iver.utiles.XMLEntity;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class VectorialFileOpen extends AbstractFileOpen{
+    
+    
+    private static final Logger logger = Logger.getLogger(VectorialFileOpen.class);
 
 	/**
 	 * Constructor de FileOpenRaster
@@ -161,6 +173,8 @@ public class VectorialFileOpen extends AbstractFileOpen{
 						lyrVect.setLegend(map.get(lyr));
 					}
 				}
+				
+				setLabel(path, lyr);
 				return lyr.getFullExtent();
 			}
 		} catch (ReadDriverException e) {
@@ -172,4 +186,61 @@ public class VectorialFileOpen extends AbstractFileOpen{
 		}
 		return null;
 	}
+	
+	private void setLabel(String path, FLayer lyr) {
+	    File legendFile = new File(path.substring(0, path.lastIndexOf('.') + 1) + "gvlabel");
+
+        if (legendFile.exists() && lyr instanceof FLyrVect) {
+            FLyrVect lyrVect = (FLyrVect) lyr;
+            String label = readFile(legendFile);
+            setLabel(label, lyrVect);
+        }
+    }
+
+    private void setLabel(String label, FLyrVect layer) {
+	    if ((label != null) && (label.length() > 0)) {
+	        try {
+	        XMLEntity parse = XMLEntity.parse(label);
+	        ILabelingStrategy strategy = LabelingFactory
+	            .createStrategyFromXML(parse, layer);
+	        layer.setLabelingStrategy(strategy);
+	        layer.setIsLabeled(true);
+
+	        } catch (MarshalException e) {
+	        logger.error(e.getStackTrace(), e);
+	        } catch (ValidationException e) {
+	        logger.error(e.getStackTrace(), e);
+	        } catch (ReadDriverException e) {
+	        logger.error(e.getStackTrace(), e);
+	        }
+	    }
+	 }
+    
+    private String readFile(File file) {
+        BufferedReader br = null;
+        String fileAsString = null;
+        try {
+            br = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+
+            String line = br.readLine();
+            while (line != null) {
+              sb.append(line).append("\n");
+              line = br.readLine();
+            }
+
+            fileAsString = sb.toString();
+        } catch (Exception e) {
+            logger.error(e.getStackTrace(), e);
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e1) {
+                    logger.error(e1.getStackTrace(), e1);
+                }
+            }
+        }
+        
+        return fileAsString;
+    }
 }

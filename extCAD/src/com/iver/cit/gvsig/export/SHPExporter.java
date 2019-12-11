@@ -9,6 +9,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
 import org.gvsig.exceptions.BaseException;
 
 import com.hardcode.driverManager.Driver;
@@ -22,6 +23,7 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbaseFile;
+import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
@@ -31,9 +33,14 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 import com.iver.utiles.SimpleFileFilter;
 
+import es.icarto.gvsig.commons.legend.LayerLabeling;
+import es.icarto.gvsig.commons.legend.LayerSimbology;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 
 public class SHPExporter extends AbstractLayerExporter {
+
+    private static final Logger logger = Logger.getLogger(SHPExporter.class);
+
     private static Preferences prefs = Preferences.userRoot().node(
 	    "gvSIG.encoding.dbf");
 
@@ -169,6 +176,21 @@ public class SHPExporter extends AbstractLayerExporter {
 	writer.setFile(newFile);
 	writer.initialize(lyrDef);
 	writeFeatures(mapContext, layer, writer, reader);
+
+	try {
+	    LayerSimbology ls = new LayerSimbology(layer);
+	    String gvlPath = FileNameUtils.replaceExtension(
+		    newFile.getAbsolutePath(), "gvl");
+	    ls.save(new File(gvlPath));
+
+	    LayerLabeling ll = new LayerLabeling(layer);
+	    String gvlabelPath = FileNameUtils.replaceExtension(
+		    newFile.getAbsolutePath(), "gvlabel");
+	    ll.save(new File(gvlabelPath));
+
+	} catch (LegendDriverException e) {
+	    logger.error(e.getStackTrace(), e);
+	}
     }
 
     public void export(MapContext mapContext, FLyrVect layer, String path)
