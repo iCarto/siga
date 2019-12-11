@@ -13,7 +13,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class WMSLoadPlanesGeneralesExtension extends AbstractExtension {
 	
-	private static final String wmsName = "Planes_Generales_WMS";
+	private static final String wmsName = "Planeamiento_SIOTUGA_WMS";
 	private static DBSession dbs = null;
 	private static String idMunicipio;
 	private static String idDocument;
