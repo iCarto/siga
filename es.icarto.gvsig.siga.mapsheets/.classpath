@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="lib/itextpdf-5.5.13.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
