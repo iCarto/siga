@@ -352,11 +352,20 @@ public class Rendering implements PropertyListener, FilterListChangeListener {
 		geoImage = drawer.drawBufferOverImageObject(replicateBand, getRenderBands(), cancelWrapper); // Acción de renderizado
 
         if (compress) {
+
             // Transform image to gif format in order to compress it
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(convertRGBAToIndexed((BufferedImage) geoImage),
-                        "gif", baos);
+                // ImageIO has problems with partial transparencias when writing
+                // gifs, so we must revert to png in that case, though it
+                // results in poor compression
+                if (this.lastTransparency.getOpacity() != GridTransparency.MAX_OPACITY) {
+                    ImageIO.write((BufferedImage) geoImage, "png", baos);
+                } else {
+                    ImageIO.write(
+                            convertRGBAToIndexed((BufferedImage) geoImage),
+                            "gif", baos);
+                }
                 geoImage = ImageIO.read(new ByteArrayInputStream(baos
                         .toByteArray()));
             } catch (Exception e) {
