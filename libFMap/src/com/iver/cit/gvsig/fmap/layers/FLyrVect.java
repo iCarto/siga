@@ -763,37 +763,44 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     					CartographicSupport csSym = null;
     					int symbolType = sym.getSymbolType();
 
-                        if (sym instanceof SimpleLineSymbol) {
-                            if (((SimpleLineSymbol) sym).getLineStyle()
-                                    .getArrowDecorator() != null) {
-                                // Lines with decorators should not be cut
-                                // because the decorators would be drawn in the
-                                // wrong places
-                                cutGeom = false;
-                                if (!((SimpleLineSymbol) sym).getLineStyle()
-                                        .getArrowDecorator()
-                                        .isScaleArrow()) {
-                                    // Hack for increasing non-scaled arrow
-                                    // marker size, which usually looks smaller
-                                    // when printing
-                                    SimpleLineSymbol lineSym = new SimpleLineSymbol();
-                                    lineSym.setXMLEntity(sym.getXMLEntity());
-                                    lineSym.getLineStyle()
-                                            .getArrowDecorator()
-                                            .getMarker()
-                                            .setSize(
-                                                    lineSym.getLineStyle()
-                                                            .getArrowDecorator()
-                                                            .getMarker()
-                                                            .getSize() * 3);
-                                    csSym = lineSym;
-                                }
-                            }
-                        } else if (symbolType == FShape.POINT
+                        if (symbolType == FShape.POINT
                                 || symbolType == FShape.LINE
                                 || sym instanceof CartographicSupport) {
 
                             csSym = (CartographicSupport) sym;
+
+                            if (sym instanceof SimpleLineSymbol) {
+                                SimpleLineSymbol lineSym = new SimpleLineSymbol();
+                                lineSym.setXMLEntity(sym.getXMLEntity());
+                                if (((SimpleLineSymbol) sym).getLineStyle()
+                                        .getArrowDecorator() != null) {
+                                    // Lines with decorators should not be cut
+                                    // because the decorators would be drawn in
+                                    // the wrong places
+                                    cutGeom = false;
+                                    if (!((SimpleLineSymbol) sym)
+                                            .getLineStyle().getArrowDecorator()
+                                            .isScaleArrow()) {
+                                        // Hack for increasing non-scaled arrow
+                                        // marker size, which usually looks
+                                        // smaller when printing
+
+                                        lineSym.getLineStyle()
+                                                .getArrowDecorator()
+                                                .getMarker()
+                                                .setSize(
+                                                        lineSym.getLineStyle()
+                                                                .getArrowDecorator()
+                                                                .getMarker()
+                                                                .getSize() * 3);
+                                    }
+                                } else {
+                                    // Make default lines slightly thinner when
+                                    // printing
+                                    lineSym.setLineWidth(lineSym.getLineWidth() * 0.75);
+                                }
+                                csSym = lineSym;
+                            }
                         }
 
     					//System.err.println("passada "+mapPass+" pinte símboll "+sym.getDescription());
