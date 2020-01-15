@@ -106,33 +106,46 @@ public class DatasetListStatistics extends DatasetStatistics {
 		}
 		constructStats(len);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
 	public DatasetListStatistics(MultiRasterDataset[][] mosaic) {
 		super(null);
 		int n = mosaic.length;
-		int m = mosaic[0].length;
+		int m;
 		if(mosaic == null || mosaic[0][0] == null)
 			return;
-		int nDat = mosaic[0][0].getDatasetCount();
-		this.datasetList = new RasterDataset[n * m * nDat];
+		int nDat = 0;
+
+                for (int row = 0; row < n; row++) {
+                    m = mosaic[row].length;
+                    for (int col = 0; col < m; col++) {
+                        if (mosaic[row][col] != null) {
+                            nDat += mosaic[row][col].getDatasetCount();
+                        }
+                    }
+                }
+
+		this.datasetList = new RasterDataset[nDat];
 		int count = 0;
 		for (int row = 0; row < n; row++) {
+	                m = mosaic[row].length;
 			for (int col = 0; col < m; col++) {
-				for (int i = 0; i < mosaic[row][col].getDatasetCount(); i++) {
-					datasetList[count] = mosaic[row][col].getDataset(i)[0];
-					count ++;
-				}
+	                        if (mosaic[row][col] != null) {
+	                                for (int i = 0; i < mosaic[row][col].getDatasetCount(); i++) {
+	                                        datasetList[count] = mosaic[row][col].getDataset(i)[0];
+        					count ++;
+	                                }
+	                        }
 			}
 		}
-	
+
 		statList = new DatasetStatistics[datasetList.length];
 		for(int i = 0; i < datasetList.length; i ++)
 			statList[i] = this.datasetList[i].getStatistics();
 	}
-	
+
 	/**
 	 * Añade un dataset a la lista de estadisticas
 	 * @param dataset
