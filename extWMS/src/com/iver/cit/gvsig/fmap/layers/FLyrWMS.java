@@ -124,6 +124,7 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.XMLItem;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.XmlBuilder;
 import com.iver.cit.gvsig.wmc.WebMapContextTags;
+import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
@@ -197,7 +198,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	private int                         lastNColumns = 0;
 	private int                         lastNRows = 0;
 	private boolean 					hasImageLegend = false;
-	
+	private boolean neverCompress = false;
+
 	private int cachedAxisOrientation = WMSStatus.CRS_AXIS_OTHER_OR_UNKNOWN;
 
 	/***
@@ -405,6 +407,9 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			// Format
 			xml.putProperty("format", m_Format);
 
+                        // Never compress
+                        xml.putProperty("neverCompress", neverCompress);
+
 			// SRS
 			xml.putProperty("srs", m_SRS);
 			if (status!=null)
@@ -495,6 +500,11 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		layerQuery = xml.getStringProperty("layerQuery");
 		m_Format = xml.getStringProperty("format");
 		m_SRS = xml.getStringProperty("srs");
+		try {
+	                neverCompress = xml.getBooleanProperty("neverCompress");
+		} catch (NotExistInXMLEntity e) {
+		    // Leave the default value
+		}
 	}
 
 	/**
@@ -539,6 +549,13 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 
 		// SRS
 		m_SRS = xml.getStringProperty("srs");
+
+                // Never compress
+                try {
+                    neverCompress = xml.getBooleanProperty("neverCompress");
+                } catch (NotExistInXMLEntity e) {
+                    // Leave the default value
+                }
 
 		String claseStr = StatusLayerRaster.defaultClass;
 		if (xml.contains("raster.class")) {
@@ -1489,7 +1506,8 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					// Parte que dibuja
 					try {
 						ViewPort vp = tiles.getTileViewPort(viewPort, tileNr);
-                        drawTile(g, vp, cancel, tileNr, scale, tileNr, true);
+                        drawTile(g, vp, cancel, tileNr, scale, tileNr,
+                                !neverCompress);
 					} catch (NoninvertibleTransformException e) {
 						e.printStackTrace();
 					} catch (LoadLayerException e) {
@@ -1857,6 +1875,25 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	public void setQueryable(boolean b) {
 		queryable = b;
 	}
+
+    /**
+     * Returns the current state of the never-to-compress flag.
+     *
+     * @return never-to-compress flag
+     */
+    public boolean getNeverCompress() {
+        return neverCompress;
+    }
+
+    /**
+     * Marks the layer as to never be compressed when printing
+     *
+     * @param neverCompress
+     *            whether it should never be compressed.
+     */
+    public void setNeverCompress(boolean neverCompress) {
+        this.neverCompress = neverCompress;
+    }
 
 	/**
 	 * Creates the part of a OGC's MapContext document that would describe this

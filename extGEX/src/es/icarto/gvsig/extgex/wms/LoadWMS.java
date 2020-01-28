@@ -22,17 +22,21 @@ public class LoadWMS {
 
     private final String wmsName;
     private String wmsHost = null;
-    
+
     public LoadWMS(String wmsName) {
     this.wmsName = wmsName;
     }
-    
+
     public LoadWMS(String wmsName, String wmsHost) {
     this.wmsName =wmsName;
     this.wmsHost = wmsHost;
     }
-    
+
     public void Load() {
+        this.Load(false);
+    }
+
+    public void Load(boolean neverCompress) {
 
 	DBSession dbs = DBSession.getCurrentSession();
 	String whereC = DBNames.FIELD_LAYER_WMS + "=" + "'" + wmsName + "'";
@@ -49,7 +53,7 @@ public class LoadWMS {
 	    if (wmsHost == null) {
 	    this.wmsHost = wmsValues[0][5];
 	    }
-	    
+
 	    URL url = new URL(wmsHost);
 	    FLyrWMS layer = new FLyrWMS();
 
@@ -59,6 +63,7 @@ public class LoadWMS {
 	    layer.setLayerQuery(sLayer);
 	    layer.setInfoLayerQuery(sLayer);
 	    layer.setSRS(srs);
+            layer.setNeverCompress(neverCompress);
 	    ((FLayer) layer).setName(name);
 	    layer.setWmsTransparency(true);
 
@@ -71,7 +76,7 @@ public class LoadWMS {
 
 	    Hashtable online_resources = new Hashtable();
 	    online_resources.put("GetFeatureInfo", this.wmsHost);
-	    online_resources.put("GetMap", this.wmsHost);                         
+	    online_resources.put("GetMap", this.wmsHost);
 	    layer.setOnlineResources(online_resources);
 	    layer.setFixedSize(new Dimension(-1, -1));
 	    layer.setQueryable(false);

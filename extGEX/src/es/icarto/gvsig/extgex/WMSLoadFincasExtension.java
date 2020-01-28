@@ -10,7 +10,7 @@ public class WMSLoadFincasExtension extends AbstractExtension {
     @Override
     public void execute(String actionCommand) {
         LoadWMS loadWMS = new LoadWMS("Planos_fincas_WMS");
-        loadWMS.Load();
+        loadWMS.Load(true);
     }
 
     @Override
