@@ -673,12 +673,11 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	    }
 	}
 
-        ProjectView pw = MapSheetsUtils.cloneProjectView(viewFrame.getView());
-
-        FLayer lyr = pw.getMapContext().getLayers()
+        FLayer lyr = viewFrame.getView().getMapContext().getLayers()
                 .getLayer(gridName);
 	if (lyr instanceof MapSheetGrid) {
-            setViewGrid(pw, (MapSheetGrid) lyr);
+            setViewGrid(MapSheetsUtils.cloneProjectView(viewFrame.getView()),
+                    (MapSheetGrid) lyr);
 	}
 
     }
