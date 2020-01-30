@@ -72,6 +72,9 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
     private MapSheetGrid grid = null;
     private ProjectView pView = null;
 
+    private String projectViewToLoad = null;
+    private String gridToLoad = null;
+
     //	private FFrameText titleFrame = null;
     private FFrameOverView localFrame = null;
 
@@ -643,7 +646,7 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	int cnt = ch_fra.getChildrenCount();
 	XMLEntity fra_ite = null;
 	IFFrame ifra = null;
-	String gridName = xml.getStringProperty("gridName");
+        gridToLoad = xml.getStringProperty("gridName");
 	MapSheetFrameView viewFrame = getMainViewFrame();
 	for (int i=0; i<cnt; i++) {
 	    fra_ite = ch_fra.getChild(i);
@@ -673,13 +676,7 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 	    }
 	}
 
-        FLayer lyr = viewFrame.getView().getMapContext().getLayers()
-                .getLayer(gridName);
-	if (lyr instanceof MapSheetGrid) {
-            setViewGrid(MapSheetsUtils.cloneProjectView(viewFrame.getView()),
-                    (MapSheetGrid) lyr);
-	}
-
+        projectViewToLoad = viewFrame.getView().getName();
     }
 
 
@@ -943,6 +940,22 @@ public class MapSheetsLayoutTemplate extends Layout implements IMapSheetsIdentif
 
     public double getTopCm() {
         return this.topCm;
+    }
+
+    public String getProjectViewToLoad() {
+        return projectViewToLoad;
+    }
+
+    public void setProjectViewToLoad(String projectViewToLoad) {
+        this.projectViewToLoad = projectViewToLoad;
+    }
+
+    public String getGridToLoad() {
+        return gridToLoad;
+    }
+
+    public void setGridToLoad(String gridToLoad) {
+        this.gridToLoad = gridToLoad;
     }
 
 }

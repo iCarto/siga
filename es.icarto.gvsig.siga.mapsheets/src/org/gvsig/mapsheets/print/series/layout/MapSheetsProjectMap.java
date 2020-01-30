@@ -1,42 +1,79 @@
 package org.gvsig.mapsheets.print.series.layout;
 
-import org.gvsig.mapsheets.print.series.utils.IMapSheetsIdentified;
+import java.util.ArrayList;
 
+import org.gvsig.mapsheets.print.series.fmap.MapSheetGrid;
+import org.gvsig.mapsheets.print.series.utils.IMapSheetsIdentified;
+import org.gvsig.mapsheets.print.series.utils.MapSheetsUtils;
+
+import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMapFactory;
+import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.utiles.XMLEntity;
 
 /**
  * This class is the gvsig document which holds the layout template as a field.
- * 
+ *
  * @author jldominguez
  *
  */
 public class MapSheetsProjectMap extends ProjectMap implements IMapSheetsIdentified {
-	
-	
+
+
 	public MapSheetsProjectMap() {
 		setId(System.currentTimeMillis());
 	}
-	
+
+    public IWindow createWindow() {
+        MapSheetsLayoutTemplate mslt = (MapSheetsLayoutTemplate) this
+                .getModel();
+        String pvName = mslt.getProjectViewToLoad();
+        String gridName = mslt.getGridToLoad();
+        if (pvName != null && gridName != null) {
+            ProjectView pv = null;
+            ArrayList<ProjectDocument> alldocs = MapSheetsUtils.getProject()
+                    .getDocuments();
+            for (int i = 0, iLen = alldocs.size(); i < iLen; i++) {
+                ProjectDocument pd = alldocs.get(i);
+                if (pd instanceof ProjectView && pd.getName().equals(pvName)) {
+                    pv = (ProjectView) pd;
+                }
+            }
+            if (pv != null) {
+                FLayer lyr = pv.getMapContext().getLayers().getLayer(gridName);
+                pv.getMapContext().getViewPort()
+                        .removeViewPortListener(mslt.getMainViewFrame());
+                if (lyr instanceof MapSheetGrid) {
+                    mslt.setViewGrid(MapSheetsUtils.cloneProjectView(pv),
+                            (MapSheetGrid) lyr);
+                    mslt.setProjectViewToLoad(null);
+                    mslt.setGridToLoad(null);
+                }
+            }
+        }
+        return super.createWindow();
+    }
+
 
 	public void setXMLEntity(XMLEntity xml) throws OpenException {
 		try {
 			// super.setXMLEntity(xml);
 			int numMaps=xml.getIntProperty("numMaps");
 			ProjectDocument.NUMS.put(ProjectMapFactory.registerName,new Integer(numMaps));
-			
+
 			XMLEntity child = xml.getChild(0);
 			MapSheetsLayoutTemplate mslt = new MapSheetsLayoutTemplate();
 			mslt.setXMLEntity(child,getProject());
 			setModel(mslt);
 			setName(xml.getStringProperty("name"));
 
-			
+
 			/*
 			for (int i=0; i<xml.getChildrenCount(); i++)
 			{
