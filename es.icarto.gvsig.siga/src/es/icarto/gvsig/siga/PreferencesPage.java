@@ -47,7 +47,6 @@ public class PreferencesPage extends AbstractPreferencePage {
     public static final String AP_INVENTORY_FOLDER_KEY = "APInventoryFolder";
     public static final String AG_EXPROPIATIONS_FOLDER_KEY = "AGExpropiationsFolder";
     public static final String AP_EXPROPIATIONS_FOLDER_KEY = "APExpropiationsFolder";
-    public static final String EXPROPIATATIONS_FOLDER_KEY = "es.icarto.gvsig.extgex.ExpropiationsFolderExtension.folder";
 
     private final String id;
 
@@ -55,7 +54,6 @@ public class PreferencesPage extends AbstractPreferencePage {
     private FolderChooser apInventoryFolder;
     private FolderChooser agExpropiationsFolder;
     private FolderChooser apExpropiationsFolder;
-    private FolderChooser expropiationsFolder;
 
     private final PluginServices pluginServices;
 
@@ -83,8 +81,6 @@ public class PreferencesPage extends AbstractPreferencePage {
 	apInventoryFolder = new FolderChooser(panel, PluginServices.getText(this,
 			"AP Inventario"), "");
 	
-	expropiationsFolder = new FolderChooser(panel,
-		"Directorio de expropiaciones", "");
 	add(panel);
     }
 
@@ -120,19 +116,10 @@ public class PreferencesPage extends AbstractPreferencePage {
 	    throw new StoreException(msg);
 	}
 
-	if (!expropiationsFolder.isFolder()) {
-	    String msg = String.format(baseMsg,
-		    expropiationsFolder.getFolderPath());
-	    throw new StoreException(msg);
-	}
-
 	xml.putProperty(AG_INVENTORY_FOLDER_KEY, agInventoryFolder.getFolderPath());
 	xml.putProperty(AP_INVENTORY_FOLDER_KEY, apInventoryFolder.getFolderPath());
 	xml.putProperty(AG_EXPROPIATIONS_FOLDER_KEY, agExpropiationsFolder.getFolderPath());
 	xml.putProperty(AP_EXPROPIATIONS_FOLDER_KEY, apExpropiationsFolder.getFolderPath());
-	
-	xml.putProperty(EXPROPIATATIONS_FOLDER_KEY,
-		expropiationsFolder.getFolderPath());
 
     }
 
@@ -167,8 +154,6 @@ public class PreferencesPage extends AbstractPreferencePage {
 	apInventoryFolder.setSelectedFile(getValue(xml, AP_INVENTORY_FOLDER_KEY));
 	agExpropiationsFolder.setSelectedFile(getValue(xml, AG_EXPROPIATIONS_FOLDER_KEY));
 	apExpropiationsFolder.setSelectedFile(getValue(xml, AP_EXPROPIATIONS_FOLDER_KEY));
-	expropiationsFolder.setSelectedFile(getValue(xml,
-		EXPROPIATATIONS_FOLDER_KEY));
     }
 
     private String getValue(XMLEntity xml, String key) {

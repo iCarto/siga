@@ -48,10 +48,6 @@
 		<extension class-name="es.icarto.gvsig.extgex.QueriesExtension" active="true">
 			<menu text="SIGA/es.icarto.gvsig.extgex.QueriesExtension.menu" position="30100"/>
 		</extension>
-		
-		<extension class-name="es.icarto.gvsig.extgex.ExpropiationsFolderExtension" active="true">
-			<menu text="SIGA/es.icarto.gvsig.extgex.ExpropiationsFolderExtension.menu" position="30101"/>
-		</extension>
 
 		<!-- MAPAS EXTENSIONS -->
 		<extension class-name="org.gvsig.mapsheets.print.series.MapSheetsCreationExtension" description="Generar rejilla y mapa" active="true">

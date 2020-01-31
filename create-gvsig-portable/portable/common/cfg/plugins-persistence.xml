@@ -39,8 +39,6 @@
         <property key="APInventoryFolder" value=""/>
         <property key="AGExpropiationsFolder" value=""/>
         <property key="APExpropiationsFolder" value=""/>
-        <property
-            key="es.icarto.gvsig.extgex.ExpropiationsFolderExtension.folder" value=""/>
         <property key="com.iver.andami.pluginName" value="es.icarto.gvsig.siga"/>
     </xml-tag>
 
