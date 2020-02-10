@@ -136,7 +136,7 @@ public class XLSTrabajosAgregadosReport {
 	ConnectionWrapper con = new ConnectionWrapper(DBSession
 		.getCurrentSession().getJavaConnection());
 	DefaultTableModel table = con.execute(contentQuery);
-	if (table.getRowCount() > 1) {
+	if (table.getRowCount() >= 1) {
 	    writeTitle(title);
 	    writeColumnNames();
 	    writeRows(table);
