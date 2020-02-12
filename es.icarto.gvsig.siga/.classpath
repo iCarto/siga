@@ -39,5 +39,7 @@
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-3.13-20150929.jar"/>
 	<classpathentry kind="src" path="/extCAD"/>
 	<classpathentry kind="lib" path="/extCAD/lib/Smc.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.topology-lib.jar" sourcepath="/libTopology"/>
+	<classpathentry kind="src" path="/extGeoProcessing"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

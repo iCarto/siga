@@ -12,6 +12,14 @@
 		<extension class-name="es.icarto.gvsig.siga.SIGAConfigExtension" active="true">
 		</extension>
 
+		<extension class-name="es.icarto.gvsig.siga.extractvertexestool.ExtractVertexesExtension" active="true">
+			<menu text="SIGA" position="30944" is_separator="true"/>
+			<menu text="SIGA/es.icarto.gvsig.siga.ExtractVertexesExtension.menu" icon="" position="30945"/>
+			<tool-bar name="SIGA_Tools" position="85">
+				<action-tool icon="" position="12" tooltip="es.icarto.gvsig.siga.ExtractVertexesExtension.tooltip" />
+			</tool-bar>
+		</extension>
+
 		<extension class-name="es.icarto.gvsig.siga.dimensiontool.AddDimensionExtension" active="true">
 			<menu text="SIGA" position="30939" is_separator="true"/>
 			<menu text="SIGA/add_dimension_menu/es.icarto.gvsig.siga.AddDimensionExtension.menu" icon="es.icarto.gvsig.siga.dimensiontool.AddDimensionExtension" position="30940"/>
