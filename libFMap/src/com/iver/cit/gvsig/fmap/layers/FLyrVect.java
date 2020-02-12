@@ -1220,18 +1220,6 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     		XMLEntity legendXML = xml.getChild(0);
     		IVectorLegend leg = LegendFactory.createFromXML(legendXML);
 
-    		/*
-    		 * Parche para detectar cuando, por algun problema de persistencia
-    		 * respecto a versiones anteriores, la leyenda que se ha cargado
-    		 * no se corresponde con el tipo de shape de la capa.
-    		 */
-    		int legShapeType = leg.getShapeType();
-    		if (legShapeType != 0 && legShapeType != this.getShapeType()){
-    			leg = LegendFactory.createSingleSymbolLegend(this.getShapeType());
-				logger.warn("Legend shape type and layer shape type does not match.");
-    		}
-    		/* Fin del parche */
-
     		try {
     			getRecordset().getSelectionSupport().setXMLEntity(xml.getChild(1));
     			// JMVIVO: Esto sirve para algo????
