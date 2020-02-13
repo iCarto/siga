@@ -648,7 +648,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 		try {
 			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
 			XMLEntity xml=new XMLEntity(tag);
-			String VERSION=xml.getStringProperty("VERSION");
+			
 			NotificationManager.addInfo(PluginServices.getText(this,"openning_project")+ ": "+xml.getStringProperty("name"));
 
 			if (encodingFollowed) {
@@ -667,21 +667,17 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				}
 			}
 
-			try {
-				// if ((VERSION!=null) && (VERSION.equals("0.5") || VERSION.equals("0.4") || (VERSION.indexOf("GISPLANET") != -1))){
-				if (VERSION != null) {
-					proj = Project.createFromXML(xml);
-				}else{
-					proj = Project.createFromXML03(new XMLEntity(tag));
-				}
-				if (!VERSION.equals(Version.format())){
-					NotificationManager.showMessageInfo(PluginServices.getText(this, "this_project_is_a_previous_version"),null);
-				}
-				return proj;
-			} catch (OpenException e){
-				e.showError();
-				//NotificationManager.addInfo("Al leer el proyecto", e);
-			}
+			String VERSION=xml.getStringProperty("VERSION");
+		    if (!VERSION.equals(Version.format())){
+                NotificationManager.showMessageInfo(PluginServices.getText(this, "this_project_is_a_previous_version"),null);
+            }
+			proj = Project.createFromXML(xml);
+			return proj;
+			
+		} catch (OpenException e) {
+		    PluginServices.getLogger().error(PluginServices.getText(this, "error_openning_project"),e);
+            JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this, "error_openning_project"));
+            //NotificationManager.addError("Al leer el proyecto", e);
 		}  catch (MarshalException e) {
 			PluginServices.getLogger().error(PluginServices.getText(this, "formato_incorrecto"),e);
 			JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this, "formato_incorrecto"));
