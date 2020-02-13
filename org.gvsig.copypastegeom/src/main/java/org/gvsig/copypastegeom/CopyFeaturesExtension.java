@@ -215,6 +215,11 @@ public class CopyFeaturesExtension extends Extension {
 		XMLEntity xml = new XMLEntity();
 		xml.setName("feature");
 		for (int i = 0; i < fieldsDescription.length; i++) {
+			if (fieldsDescription[i].getFieldName().equalsIgnoreCase("gid")) {
+			xml.putProperty(fieldsDescription[i].getFieldName(), null);
+			}else {
+			xml.putProperty(fieldsDescription[i].getFieldName(), feat.getAttribute(i).toString());
+			}
 		}
 		xml.addChild(getGeometryXML(feat.getGeometry()));
 		return xml;

@@ -191,9 +191,13 @@ public class PasteFeaturesExtension extends Extension {
 										fieldsDescription[k].getFieldType()==type){
 									String stringValue = featureXML.getStringProperty(name);
 									try {
-										values[j] = ValueFactory.createValueByType(stringValue, type);
-									} catch (ParseException pe){
+										if (stringValue == null) {
 										values[j] = ValueFactory.createNullValue();
+										}else {
+										values[j] = ValueFactory.createValueByType(stringValue, type);
+										}
+									} catch (ParseException pe){
+										throw pe;
 									}
 								}
 							}
