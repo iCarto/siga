@@ -473,66 +473,7 @@ public class ProjectTable extends ProjectDocument {
 		xml.putProperty("columns", true);
 		return xml;
 	}
-
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * @param p
-	 *            DOCUMENT ME!
-	 * 
-	 * @throws XMLException
-	 * @throws ReadDriverException
-	 * @throws DriverException
-	 * 
-	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
-	 */
-	public void setXMLEntity03(XMLEntity xml) throws XMLException,
-			ReadDriverException {
-		super.setXMLEntity03(xml);
-		int numTables = xml.getIntProperty("numTables");
-		ProjectDocument.NUMS.put(ProjectTableFactory.registerName, new Integer(
-				numTables));
-
-		if (xml.getStringProperty("type").equals("otherDriverFile")) {
-			LayerFactory.getDataSourceFactory().addFileDataSource(
-					xml.getStringProperty("driverName"),
-					xml.getStringProperty("gdbmsname"),
-					xml.getStringProperty("file"));
-
-			setSelectableDataSource03(xml);
-		} else if (xml.getStringProperty("type").equals("sameDriverFile")) {
-			String layerName = xml.getStringProperty("layerName");
-
-			ProjectView vista = (ProjectView) project.getProjectDocumentByName(
-					xml.getStringProperty("viewName"),
-					ProjectViewFactory.registerName);
-			FLayer layer = vista.getMapContext().getLayers()
-					.getLayer(layerName);
-
-			setTheModel((VectorialEditableAdapter) ((FLyrVect) layer)
-					.getSource());
-			associatedTable = (AlphanumericData) layer;
-
-			LayerFactory.getDataSourceFactory().addDataSource(
-					(ObjectDriver) ((SingleLayer) layer).getSource()
-							.getDriver(), xml.getStringProperty("gdbmsname"));
-		} else if (xml.getStringProperty("type").equals("db")) {
-			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(
-					xml.getStringProperty("gdbmsname"),
-					xml.getStringProperty("host"), xml.getIntProperty("port"),
-					xml.getStringProperty("user"),
-					xml.getStringProperty("password"),
-					xml.getStringProperty("dbName"),
-					xml.getStringProperty("tableName"),
-					xml.getStringProperty("driverInfo"));
-
-			setSelectableDataSource03(xml);
-		}
-
-		setName(xml.getStringProperty("name"));
-	}
+	
 
 	private void fillAsEmpty() {
 		this.esModel = null;
@@ -647,59 +588,7 @@ public class ProjectTable extends ProjectDocument {
 
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @param xml
-	 *            DOCUMENT ME!
-	 * 
-	 * @throws XMLException
-	 *             DOCUMENT ME!
-	 * @throws DriverException
-	 *             DOCUMENT ME!
-	 */
-	private void setSelectableDataSource03(XMLEntity xml) throws XMLException {
-		String layerName = null;
-
-		if (xml.contains("layerName")) {
-			layerName = xml.getStringProperty("layerName");
-		}
-
-		if (layerName == null) {
-			DataSource dataSource;
-
-			try {
-				dataSource = LayerFactory.getDataSourceFactory()
-						.createRandomDataSource(
-								xml.getStringProperty("gdbmsname"),
-								DataSourceFactory.AUTOMATIC_OPENING);
-
-				SelectableDataSource sds = new SelectableDataSource(dataSource);
-
-				sds.setXMLEntity03(xml.getChild(0));
-				EditableAdapter auxea = new EditableAdapter();
-				auxea.setOriginalDataSource(sds);
-				setDataSource(auxea);
-			} catch (NoSuchTableException e) {
-				throw new XMLException(e);
-			} catch (DriverLoadException e) {
-				throw new XMLException(e);
-			} catch (ReadDriverException e) {
-				throw new XMLException(e);
-			}
-
-		} else {
-			ProjectView vista = (ProjectView) project.getProjectDocumentByName(
-					xml.getStringProperty("viewName"),
-					ProjectViewFactory.registerName);
-			FLayer layer = vista.getMapContext().getLayers()
-					.getLayer(layerName);
-
-			setTheModel((VectorialEditableAdapter) ((FLyrVect) layer)
-					.getSource());
-			associatedTable = (AlphanumericData) layer;
-		}
-	}
+	
 
 	/**
 	 * DOCUMENT ME!

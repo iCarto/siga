@@ -99,25 +99,6 @@ public class ProjectView extends ProjectViewBase {
 		return xml;
 	}
 
-	/**
-	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
-	 */
-	public void setXMLEntity03(XMLEntity xml)
-		throws XMLException, ReadDriverException {
-		super.setXMLEntity03(xml);
-		int numViews = xml.getIntProperty("numViews");
-		ProjectDocument.NUMS.put(ProjectViewFactory.registerName,new Integer(numViews));
-
-		m_selectedField = xml.getStringProperty("m_selectedField");
-		m_typeLink = xml.getIntProperty("m_typeLink");
-		m_extLink = xml.getStringProperty("m_extLink");
-		setMapContext(MapContext.createFromXML03(xml.getChild(0)));
-
-		if (xml.getBooleanProperty("mapOverView")) {
-			setMapOverViewContext(MapContext.createFromXML03(xml.getChild(1)));
-		}
-
-	}
 
 	/**
 	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)

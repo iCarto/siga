@@ -660,29 +660,6 @@ public class FFrameLegend extends FFrame implements IFFrameViewDependence {
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
      *      com.iver.cit.gvsig.project.Project)
      */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-        if (xml.getIntProperty("m_Selected") != 0) {
-            this.setSelected(true);
-        } else {
-            this.setSelected(false);
-        }
-
-        this.m_numLayers = xml.getIntProperty("m_numLayers");
-        this.m_max = xml.getIntProperty("m_max");
-        this.m_quality = xml.getIntProperty("m_quality");
-        this.m_viewing = xml.getIntProperty("m_viewing");
-        this.m_f = new Font(xml.getStringProperty("fontName"),
-                xml.getIntProperty("fontStyle"), 9);
-
-        if (xml.contains("index")) {
-            fframeview = (FFrameView) l.getLayoutContext().getFFrame(xml.getIntProperty("index"));
-        }
-    }
-
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
-     *      com.iver.cit.gvsig.project.Project)
-     */
     public void setXMLEntity(XMLEntity xml) {
         if (xml.getIntProperty("m_Selected") != 0) {
             this.setSelected(true);

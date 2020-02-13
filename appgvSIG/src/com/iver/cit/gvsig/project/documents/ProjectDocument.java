@@ -211,36 +211,6 @@ public abstract class ProjectDocument implements Serializable {
 		return xml;
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param xml DOCUMENT ME!
-     * @param p DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     * @throws XMLException
-     */
-    public static ProjectDocument createFromXML03(XMLEntity xml, Project p) throws XMLException{
-        ProjectDocument pe = null;
-
-            Class clase;
-			try {
-				clase = Class.forName(xml.getStringProperty("className"));
-			pe = (ProjectDocument) clase.newInstance();
-			} catch (ClassNotFoundException e) {
-	            NotificationManager.addError("Clase de ProjectElement no reconocida",
-	                    e);
-			} catch (InstantiationException e) {
-	            NotificationManager.addError("Clase de ProjectElement no reconocida",
-	                    e);
-			} catch (IllegalAccessException e) {
-	            NotificationManager.addError("Clase de ProjectElement no reconocida",
-	                    e);
-			}
-
-        return pe;
-    }
-
 	/**
 	 * DOCUMENT ME!
 	 *
@@ -301,25 +271,6 @@ public abstract class ProjectDocument implements Serializable {
 
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @param xml DOCUMENT ME!
-	 * @param p DOCUMENT ME!
-	 *
-	 * @throws XMLException
-	 * @throws ReadDriverException
-	 * @throws DriverIOException
-	 */
-	public void setXMLEntity03(XMLEntity xml)
-		throws XMLException, ReadDriverException{
-
-			this.setComment(xml.getStringProperty("comment"));
-			this.setCreationDate(xml.getStringProperty("creationDate"));
-			this.setName(xml.getStringProperty("name"));
-			this.setOwner(xml.getStringProperty("owner"));
-
-		}
 
 	/**
 	 * DOCUMENT ME!

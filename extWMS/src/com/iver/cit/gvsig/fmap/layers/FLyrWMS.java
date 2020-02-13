@@ -475,37 +475,6 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		return xml;
 	}
 
-	/**
-	 * A partir del XMLEntity reproduce la capa.
-	 *
-	 * @param xml XMLEntity
-	 *
-	 * @throws XMLException
-	 * @throws DriverException
-	 * @throws DriverIOException
-	 */
-	public void setXMLEntity03(XMLEntity xml)
-		throws XMLException {
-		super.setXMLEntity(xml);
-		fullExtent = StringUtilities.string2Rect(xml.getStringProperty(
-					"fullExtent"));
-
-		try {
-			host = new URL(xml.getStringProperty("host"));
-		} catch (MalformedURLException e) {
-			throw new XMLException(e);
-		}
-
-		infoLayerQuery = xml.getStringProperty("infoLayerQuery");
-		layerQuery = xml.getStringProperty("layerQuery");
-		m_Format = xml.getStringProperty("format");
-		m_SRS = xml.getStringProperty("srs");
-		try {
-	                neverCompress = xml.getBooleanProperty("neverCompress");
-		} catch (NotExistInXMLEntity e) {
-		    // Leave the default value
-		}
-	}
 
 	/**
 	 * A partir del XMLEntity reproduce la capa.

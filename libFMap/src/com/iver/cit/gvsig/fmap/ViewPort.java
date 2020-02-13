@@ -1283,69 +1283,6 @@ public class ViewPort {
 		return xml;
 	}
 
-	/**
-	 * <p>Creates a new <code>ViewPort</code> from an XML entity.</p>
-	 *
-	 * @param xml an XML entity
-	 *
-	 * @return the new <code>ViewPort</code>
-	 *
-	 * @see #getXMLEntity()
-	 * @see #createFromXML(XMLEntity)
-	 */
-	public static ViewPort createFromXML03(XMLEntity xml) {
-		ViewPort vp = new ViewPort(null);
-
-		if (xml.contains("adjustedExtentX")) {
-			vp.adjustedExtent = new Rectangle2D.Double(xml.getDoubleProperty(
-						"adjustedExtentX"),
-					xml.getDoubleProperty("adjustedExtentY"),
-					xml.getDoubleProperty("adjustedExtentW"),
-					xml.getDoubleProperty("adjustedExtentH"));
-		}
-
-		if (xml.contains("backColor")) {
-			vp.setBackColor(StringUtilities.string2Color(xml.getStringProperty(
-						"backColor")));
-		}
-
-		if (xml.contains("clipX")) {
-			vp.clip = new Rectangle2D.Double(xml.getDoubleProperty("clipX"),
-					xml.getDoubleProperty("clipY"),
-					xml.getDoubleProperty("clipW"),
-					xml.getDoubleProperty("clipH"));
-		}
-
-		vp.setDist1pixel(xml.getDoubleProperty("dist1pixel"));
-		vp.setDist3pixel(xml.getDoubleProperty("dist3pixel"));
-		vp.setDistanceUnits(xml.getIntProperty("distanceUnits"));
-		vp.extents = ExtentHistory.createFromXML03(xml.getChild(0));
-
-		if (xml.contains("extentX")) {
-			vp.setExtent(new Rectangle2D.Double(xml.getDoubleProperty("extentX"),
-					xml.getDoubleProperty("extentY"),
-					xml.getDoubleProperty("extentW"),
-					xml.getDoubleProperty("extentH")));
-
-			//Calcula la transformación afín
-			vp.calculateAffineTransform();
-
-			// Lanzamos los eventos de extent cambiado
-			// vp.callExtentListeners(vp.adjustedExtent);
-		}
-
-		vp.setMapUnits(xml.getIntProperty("mapUnits"));
-		vp.setOffset(new Point2D.Double(xml.getDoubleProperty("offsetX"),
-				xml.getDoubleProperty("offsetY")));
-
-		if (xml.contains("proj")) {
-			vp.proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
-		}
-
-		//vp.setScale(xml.getDoubleProperty("scale"));
-		vp.refreshExtent();
-		return vp;
-	}
 
 	/**
 	 * <p>Creates a new <code>ViewPort</code> from an XML entity.</p>
@@ -1355,7 +1292,6 @@ public class ViewPort {
 	 * @return the new <code>ViewPort</code>
 	 *
 	 * @see #getXMLEntity()
-	 * @see #createFromXML03(XMLEntity)
 	 */
 	public static ViewPort createFromXML(XMLEntity xml) {
 		ViewPort vp = new ViewPort(null);

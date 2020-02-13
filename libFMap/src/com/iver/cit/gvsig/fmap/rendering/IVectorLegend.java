@@ -130,13 +130,6 @@ public interface IVectorLegend extends ILegend {
 	void setXMLEntity(XMLEntity xml);
 
     /**
-     * Inserts the XMLEntity.
-     *
-     * @param xml XMLEntity.
-     */
-    void setXMLEntity03(XMLEntity xml);
-
-    /**
      * Returns true or false depending on if the rest of values are used.
 	 * 
 	 * @return  True if the rest of values are used.

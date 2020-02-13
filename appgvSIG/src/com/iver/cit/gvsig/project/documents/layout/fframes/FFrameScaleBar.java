@@ -1024,47 +1024,6 @@ public class FFrameScaleBar extends FFrame implements IFFrameViewDependence {
         return xml;
     }
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
-     *      com.iver.cit.gvsig.project.Project)
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-        if (xml.getIntProperty("m_Selected") != 0) {
-            this.setSelected(true);
-        } else {
-            this.setSelected(false);
-        }
-
-        this.m_bIntervalSet = xml.getBooleanProperty("m_bIntervalSet");
-        this.m_dif = xml.getDoubleProperty("m_dif");
-        this.m_hasleft = xml.getIntProperty("m_hasleft");
-        this.m_nameUnit = xml.getStringProperty("m_nameUnit");
-        this.m_numUnit = xml.getDoubleProperty("m_numUnit");
-
-        this.m_height = xml.getDoubleProperty("m_height");
-
-        this.m_style = xml.getIntProperty("m_style");
-        this.m_interval = xml.getLongProperty("m_interval");
-        this.m_numinterval = xml.getIntProperty("m_numinterval");
-        this.m_numleft = xml.getIntProperty("m_numleft");
-        this.m_mapUnits = xml.getIntProperty("m_mapUnits");
-        this.m_f = new Font(xml.getStringProperty("fontName"),
-                xml.getIntProperty("fontStyle"), 9);
-
-        fframeview = (FFrameView) l.getLayoutContext().getFFrame(xml.getIntProperty("index"));
-
-        if (xml.contains("description")) { //Comprobar que es de la versión que cambia el diálogo.
-            this.barcolor = StringUtilities.string2Color(xml.getStringProperty(
-                        "barcolor"));
-            this.textcolor = StringUtilities.string2Color(xml.getStringProperty(
-                        "textcolor"));
-            this.showNameUnits = xml.getBooleanProperty("showNameUnits");
-            this.showDescription = xml.getBooleanProperty("showDescription");
-            this.aboveName = xml.getBooleanProperty("aboveName");
-            this.aboveIntervals = xml.getBooleanProperty("aboveIntervals");
-            this.aboveDescription = xml.getBooleanProperty("aboveDescription");
-        }
-    }
 
     /**
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,

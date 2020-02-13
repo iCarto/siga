@@ -169,21 +169,6 @@ public class SelectionSupport {
 		}
 	}
 
-	/**
-	 * A partir del XMLEntity reproduce la selección.
-	 *
-	 * @param xml DOCUMENT ME!
-	 */
-	public void setXMLEntity03(XMLEntity xml) {
-		int numBitSet = xml.getIntProperty("numBitSet");
-
-		if (numBitSet != 0) {
-			for (int i = 0; i < numBitSet; i++) {
-				selection.set(xml.getIntProperty(String.valueOf(i)));
-			}
-		}
-	}
-
 	public void removeLinkSelectionListener() {
 		for (int i=0;i<listeners.size();i++){
 			if (listeners.get(i) instanceof LinkSelectionListener)

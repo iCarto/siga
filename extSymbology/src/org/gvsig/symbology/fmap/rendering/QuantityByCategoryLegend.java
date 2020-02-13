@@ -323,10 +323,6 @@ public class QuantityByCategoryLegend extends AbstractClassifiedVectorLegend imp
 		}
 	}
 
-	public void setXMLEntity03(XMLEntity xml) {
-		// nothing to do here
-	}
-
 	public boolean isUseDefaultSymbol() {
 		return isUseDefaultSymbol;
 	}

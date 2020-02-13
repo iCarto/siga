@@ -209,16 +209,6 @@ public class FFrameTable extends FFrameGroup implements IFFrameGroupSelectable{
     /**
      * DOCUMENT ME!
      *
-     * @param xml DOCUMENT ME!
-     * @param l DOCUMENT ME!
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @return DOCUMENT ME!
      */
     public String getNameFFrame() {

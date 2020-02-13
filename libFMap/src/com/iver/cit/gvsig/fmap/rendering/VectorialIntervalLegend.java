@@ -126,53 +126,6 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
     }
 
 
-    public void setXMLEntity03(XMLEntity xml) {
-        fieldNames = new String[] {xml.getStringProperty("fieldName")};
-        index = xml.getIntProperty("index");
-
-        if (xml.contains("intervalType")) { /* TODO Esta condición es para
-        									   poder cargar la versión 0.3,
-        									   se puede eliminar cuando ya
-        									   no queramos soportar esta
-        									   versión. */
-            intervalType = xml.getIntProperty("intervalType");
-        }
-
-        int useDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
-
-        if (useDefaultSymbol == 1) {
-            setDefaultSymbol( SymbologyFactory.createSymbolFromXML(xml.getChild(0), null));
-        } else {
-            setDefaultSymbol(null);
-        }
-
-        int numKeys = xml.getIntProperty("numKeys");
-
-        if (numKeys > 0) {
-            String className = xml.getStringProperty("tipoValueKeys");
-            String[] sk = xml.getStringArrayProperty("keys");
-            IInterval auxInterval;
-
-            for (int i = 0; i < numKeys; i++) {
-                auxInterval = FInterval.create(sk[i]);
-                symbols.put(auxInterval,
-                    SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null));
-                keys.add(auxInterval);
-//                System.out.println("auxInterval =" + auxInterval + "Symbol =" +
-//                		 SymbologyFactory.createSymbolFromXML(xml.getChild(i + useDefaultSymbol), null)
-//                           .getDescription());
-            }
-        }
-
-        shapeType = xml.getIntProperty("shapeType");
-
-        startColor = StringUtilities.string2Color(xml.getStringProperty(
-                    "startColor"));
-        endColor = StringUtilities.string2Color(xml.getStringProperty(
-                    "endColor"));
-    }
-
-
     public void setXMLEntity(XMLEntity xml) {
         fieldNames = new String[] {xml.getStringProperty("fieldName")};
         index = xml.getIntProperty("index");

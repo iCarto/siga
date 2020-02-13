@@ -318,11 +318,6 @@ public class FFrameGrid extends FFrame implements IFFrameViewDependence{
 		}
 	}
 
-	public void setXMLEntity03(XMLEntity xml, Layout l) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public String getNameFFrame() {
 		return PluginServices.getText(this, "cuadricula")+ num;
 	}

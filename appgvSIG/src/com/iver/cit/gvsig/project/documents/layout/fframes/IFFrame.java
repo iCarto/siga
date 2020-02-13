@@ -272,14 +272,6 @@ public interface IFFrame extends IPrintable{
     public void setXMLEntity(XMLEntity xml);
 
     /**
-     * A partir del xml y de Project inicia el objeto.
-     *
-     * @param xml XMLEntity
-     * @param l Project
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l);
-
-    /**
      * Devuelve el nombre que representa al tipo de FFrame.
      *
      * @return nombre del elemento.

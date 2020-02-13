@@ -1221,7 +1221,6 @@ public class MapContext implements Projected {
 	 * @throws XMLException if there is any error creating the XML from the map.
 	 *
 	 * @see #createFromXML(XMLEntity)
-	 * @see #createFromXML03(XMLEntity)
 	 * @see ViewPort#getXMLEntity()
 	 * @see FLayers#getXMLEntity()
 	 */
@@ -1236,30 +1235,6 @@ public class MapContext implements Projected {
 
 	/**
 	 * <p>Creates a new <code>MapContext</code> instance from an XML entity, with
-	 *  the data of the {@link ViewPort ViewPort} and
-	 *  {@link FLayers FLayers}.</p>
-	 *
-	 * @param xml an XML entity
-	 *
-	 * @return the new <code>MapContext</code> instance
-	 *
-	 * @throws XMLException if there is any error creating the map from the XML.
-	 *
-	 * @see #getXMLEntity()
-	 * @see #createFromXML(XMLEntity)
-	 * @see ViewPort#createFromXML03(XMLEntity)
-	 * @see FLayers#setXMLEntity03(XMLEntity)
-	 */
-	public static MapContext createFromXML03(XMLEntity xml) throws XMLException {
-		ViewPort vp = ViewPort.createFromXML03(xml.getChild(0));
-		MapContext fmap = new MapContext(vp);
-		fmap.layers.setXMLEntity03(xml.getChild(1));
-
-		return fmap;
-	}
-
-	/**
-	 * <p>Creates a new <code>MapContext</code> instance from an XML entity, with
 	 *  with the data of the {@link ViewPort ViewPort} and
 	 *  {@link FLayers FLayers}.</p>
 	 *
@@ -1270,7 +1245,6 @@ public class MapContext implements Projected {
 	 * @throws XMLException if there is any error creating the map from the XML.
 	 *
 	 * @see #getXMLEntity()
-	 * @see #createFromXML03(XMLEntity)
 	 * @see ViewPort#createFromXML(XMLEntity)
 	 * @see FLayers#setXMLEntity(XMLEntity)
 	 */

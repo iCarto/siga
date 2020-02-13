@@ -148,19 +148,6 @@ public class ProjectMap extends ProjectDocument {
 		}
 	}
 
-	/**
-	 * @see com.iver.cit.gvsig.project.documents.ProjectDocument#setXMLEntity(com.iver.utiles.XMLEntity)
-	 */
-	public void setXMLEntity03(XMLEntity xml)
-		throws XMLException, ReadDriverException{
-
-		super.setXMLEntity03(xml);
-		int numMaps=xml.getIntProperty("numMaps");
-		ProjectDocument.NUMS.put(ProjectMapFactory.registerName,new Integer(numMaps));
-		model = Layout.createLayout03(xml.getChild(0), getProject());
-	}
-
-
 	public IWindow createWindow() {
 		Layout l = getModel();
         setName(l.getName());

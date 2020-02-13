@@ -321,15 +321,6 @@ public class SelectableDataSource implements DataSource,Selectable {
 	}
 
 	/**
-	 * A partir del XMLEntity se rellenan los atributos del DataSource.
-	 *
-	 * @param child
-	 */
-	public void setXMLEntity03(XMLEntity child) {
-		selectionSupport.setXMLEntity(child.getChild(0));
-	}
-
-	/**
 	 * Cuando ocurre un evento de cambio en la selección, éste puede ser uno de
 	 * una gran cantidad de eventos. Con el fin de no propagar todos estos
 	 * eventos, se realiza la propagación de manera manual al final de la

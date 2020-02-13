@@ -418,30 +418,7 @@ public class FFramePicture extends FFrame {
         }
     }
 
-    /**
-     * Incorpora los atributos del XMLEntity en el objeto actual.
-     *
-     * @param xml XMLEntity
-     * @param l Referencia al Layout.
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-        if (xml.getIntProperty("m_Selected") != 0) {
-            this.setSelected(true);
-        } else {
-            this.setSelected(false);
-        }
-
-        this.m_path = PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("m_path"));
-
-        try {
-            load(this.m_path);
-        } catch (Exception ex) {
-            NotificationManager.addError("Excepción :", ex);
-        }
-
-        this.m_quality = xml.getIntProperty("m_quality");
-        this.m_viewing = xml.getIntProperty("m_viewing");
-    }
+ 
 
     /**
      * Incorpora los atributos del XMLEntity en el objeto actual.

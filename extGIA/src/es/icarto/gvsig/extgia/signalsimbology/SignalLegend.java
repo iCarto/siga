@@ -406,9 +406,6 @@ public class SignalLegend extends AbstractClassifiedVectorLegend implements
 	return xml;
     }
 
-    @Override
-    public void setXMLEntity03(XMLEntity xml) {
-    }
 
     @Override
     public void setXMLEntity(XMLEntity xml) {

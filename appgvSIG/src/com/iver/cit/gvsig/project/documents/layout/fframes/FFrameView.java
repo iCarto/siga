@@ -775,59 +775,7 @@ LegendListener, IFFrameUseProject, IFFrameUseFMap {
 	project = p;
     }
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
-     *      com.iver.cit.gvsig.project.Project)
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-	if (xml.getIntProperty("m_Selected") != 0) {
-	    this.setSelected(true);
-	} else {
-	    this.setSelected(false);
-	}
-
-	this.setName(xml.getStringProperty("m_name"));
-	this.setBoundBox(new Rectangle2D.Double(xml.getDoubleProperty("x"),
-		xml.getDoubleProperty("y"), xml.getDoubleProperty("w"),
-		xml.getDoubleProperty("h")));
-
-	this.m_Mode = xml.getIntProperty("m_Mode");
-	this.m_typeScale = xml.getIntProperty("m_typeScale");
-	this.m_extension = xml.getIntProperty("m_extension");
-	this.m_quality = xml.getIntProperty("m_quality");
-	this.m_viewing = xml.getIntProperty("m_viewing");
-	this.m_bLinked = xml.getBooleanProperty("m_bLinked");
-	this.m_mapUnits = xml.getIntProperty("m_mapUnits");
-
-	//ProjectExtension pe = (ProjectExtension) PluginServices.getExtension(ProjectExtension.class);
-	this.m_Scale = xml.getDoubleProperty("m_Scale");
-
-	int indice = xml.getIntProperty("indice");
-
-	if (indice != -1) {
-	    ArrayList views = project.getDocumentsByType(ProjectViewFactory.registerName);
-
-	    ProjectView view = (ProjectView) views.get(indice);
-	    this.m_fmap = view.getMapContext();
-	    this.setView(view);
-
-	    try {
-		if (m_bLinked) {
-		    this.getMapContext().getViewPort().setExtent(new Rectangle2D.Double(
-			    xml.getDoubleProperty("extentX"),
-			    xml.getDoubleProperty("extentY"),
-			    xml.getDoubleProperty("extentW"),
-			    xml.getDoubleProperty("extentH")));
-		} else if (!m_bLinked) {
-		    this.m_fmap = MapContext.createFromXML03(xml.getChild(0));
-		}
-	    } catch (XMLException e) {
-		NotificationManager.addError("Pasando las propiedades del XMLEntity al objeto",
-			e);
-	    }
-	}
-    }
-
+   
     /**
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
      */

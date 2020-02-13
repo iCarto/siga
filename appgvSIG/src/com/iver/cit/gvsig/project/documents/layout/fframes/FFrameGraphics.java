@@ -355,45 +355,7 @@ public class FFrameGraphics extends FFrame implements IFFrameEditableVertex {
         }
     }
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
-     *      com.iver.cit.gvsig.project.Project)
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout p) {
-        m_Selected = xml.getIntProperty("m_Selected");
-        m_type = xml.getIntProperty("m_type");
-        // jaume; m_symbol = FSymbol.createFromXML(xml.getChild(0));
-        m_symbol = SymbologyFactory.createSymbolFromXML(xml.getChild(0), null);
-
-        Rectangle2D r = (Rectangle2D) getBoundBox().clone();
-
-        if (m_type == LINE) {
-            geometry = new PolyLineAdapter();
-        } else if (m_type == RECTANGLE) {
-            geometry = new RectangleAdapter();
-            geometry.addPoint(new Point2D.Double(r.getX(), r.getY()));
-            geometry.addPoint(new Point2D.Double(r.getMaxX(), r.getMaxY()));
-        } else if (m_type == POLYLINE) {
-            geometry = new PolyLineAdapter();
-        } else if (m_type == POLYGON) {
-            geometry = new PolygonAdapter();
-        } else if (m_type == CIRCLE) {
-            geometry = new CircleAdapter();
-            geometry.addPoint(new Point2D.Double(r.getCenterX(), r.getCenterY()));
-
-            if (r.getWidth() < r.getHeight()) {
-                geometry.addPoint(new Point2D.Double(r.getMaxX(), r.getCenterY()));
-            } else {
-                geometry.addPoint(new Point2D.Double(r.getCenterX(), r.getY()));
-            }
-        } else if (m_type == POINT) {
-            geometry = new PointAdapter();
-            geometry.addPoint(new Point2D.Double(r.getCenterX(), r.getCenterY()));
-        }
-
-        geometry.end();
-    }
-
+    
     /**
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#getNameFFrame()
      */

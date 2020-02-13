@@ -124,11 +124,6 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 		return xml;
 	}
 
-	public void setXMLEntity03(XMLEntity xml) {
-		FSymbol auxSym = FSymbol.createFromXML03(xml.getChild(0));
-		setDefaultSymbol(auxSym);
-	}
-
 	public void setXMLEntity(XMLEntity xml) {
         ISymbol auxSym = SymbologyFactory.createSymbolFromXML(xml.getChild(0), null);
 		setDefaultSymbol(auxSym);

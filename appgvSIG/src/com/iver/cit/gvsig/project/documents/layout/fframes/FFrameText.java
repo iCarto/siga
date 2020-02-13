@@ -664,36 +664,6 @@ public class FFrameText extends FFrame {
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
      *      com.iver.cit.gvsig.project.Project)
      */
-	public void setXMLEntity03(XMLEntity xml, Layout l) {
-        if (xml.getIntProperty("m_Selected") != 0) {
-            this.setSelected(true);
-        } else {
-            this.setSelected(false);
-        }
-
-        String[] s = xml.getStringArrayProperty("s");
-
-        for (int i = 0; i < s.length; i++) {
-            this.m_text.add(s[i]);
-        }
-
-        this.m_isFixed = xml.getBooleanProperty("m_isFixed");
-        this.m_pos = xml.getIntProperty("m_pos");
-        setRotation(xml.getDoubleProperty("m_rotation"));
-
-        this.m_f = new Font(xml.getStringProperty("fontName"),
-                xml.getIntProperty("fontStyle"), 9);
-
-        if (xml.contains("textColor")) {
-            this.textColor = StringUtilities.string2Color(xml.getStringProperty(
-                        "textColor"));
-        }
-    }
-
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity,
-     *      com.iver.cit.gvsig.project.Project)
-     */
 	public void setXMLEntity(XMLEntity xml) {
         if (xml.getIntProperty("m_Selected") != 0) {
             this.setSelected(true);

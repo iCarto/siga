@@ -151,15 +151,6 @@ public class FFrameBasic extends FFrame {
      * Incorpora los atributos del XMLEntity en el objeto actual.
      *
      * @param xml XMLEntity
-     * @param l Referencia al Layout.
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-    }
-
-    /**
-     * Incorpora los atributos del XMLEntity en el objeto actual.
-     *
-     * @param xml XMLEntity
      */
     public void setXMLEntity(XMLEntity xml) {
     	ProjectExtension pe=(ProjectExtension)PluginServices.getExtension(ProjectExtension.class);

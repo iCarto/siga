@@ -196,29 +196,6 @@ public class ExtentHistory {
 	}
 
 	/**
-	 * @see #createFromXML(XMLEntity) 
-	 */
-	public static ExtentHistory createFromXML03(XMLEntity xml) {
-		ExtentHistory eh = new ExtentHistory();
-		eh.num = xml.getIntProperty("num");
-		eh.NUMREC = xml.getIntProperty("numrec");
-
-		for (int i = 0; i < eh.NUMREC; i++) {
-			try {
-				eh.extents[i] = new Rectangle2D.Double(xml.getDoubleProperty(
-						"extent" + i + "X"),
-						xml.getDoubleProperty("extent" + i + "Y"),
-						xml.getDoubleProperty("extent" + i + "W"),
-						xml.getDoubleProperty("extent" + i + "H"));
-			} catch (Exception e) {
-				///System.out.println("En las ExtentHistory =" + e); //TODO o se captura de alguna forma o se mete un nuevo parametro en el xml para saber exactamente cuantos rectágulos se han añadido.
-			}
-		}
-
-		return eh;
-	}
-
-	/**
 	 * <p>Binds the information in the XML entity argument to create and return an <code>ExtentHistory</code>
 	 *  object.</p>
 	 *

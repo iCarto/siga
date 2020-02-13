@@ -136,22 +136,6 @@ public class ProjectExtent {
         return xml;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param xml DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    public static ProjectExtent createFromXML03(XMLEntity xml) {
-        ProjectExtent pe = new ProjectExtent();
-        pe.description = xml.getStringProperty("description");
-        pe.extent.setRect(xml.getDoubleProperty("extentX"),
-            xml.getDoubleProperty("extentY"), xml.getDoubleProperty("extentW"),
-            xml.getDoubleProperty("extentH"));
-
-        return pe;
-    }
 
     /**
      * DOCUMENT ME!

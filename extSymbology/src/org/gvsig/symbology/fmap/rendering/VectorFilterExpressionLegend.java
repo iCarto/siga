@@ -406,11 +406,6 @@ public class VectorFilterExpressionLegend extends AbstractClassifiedVectorLegend
 		}
 	}
 
-	public void setXMLEntity03(XMLEntity xml) {
-//		TODO Auto-generated method stub
-
-	}
-
 	public void useDefaultSymbol(boolean b) {
 		useDefaultSymbol = b;
 	}

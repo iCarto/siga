@@ -520,40 +520,6 @@ public class Layout extends JPanel implements SingletonWindow, ViewPortListener,
     }
 
     /**
-	 * It creates an Object of this class from the information of the XMLEntity.
-	 *
-	 * @param xml
-	 *            XMLEntity
-	 * @param p
-	 *            Project.
-	 *
-	 * @return Object of this class.
-	 * @throws OpenException
-	 */
-    public static Layout createLayout03(XMLEntity xml, Project p) {
-        Layout layout = new Layout();
-        layout.layoutContext.setAdjustToGrid(xml.getBooleanProperty("isCuadricula"));
-        layout.setName(xml.getStringProperty("m_name"));
-        layout.getLayoutContext().setAtributes(Attributes.createAtributes03(xml.getChild(0)));
-
-        for (int i = 1; i < xml.getChildrenCount(); i++) {
-            if (xml.getChild(i).getStringProperty("className").equals(
-                    "com.iver.cit.gvsig.gui.layout.fframe.FFrameView")) {
-                layout.layoutContext.addFFrame(FFrame.createFromXML03(xml.getChild(i),p, layout), true, false);
-            }
-        }
-
-        for (int i = 1; i < xml.getChildrenCount(); i++) {
-            if (!xml.getChild(i).getStringProperty("className").equals(
-                    "com.iver.cit.gvsig.gui.layout.fframe.FFrameView")) {
-                layout.layoutContext.addFFrame(FFrame.createFromXML03(xml.getChild(i), p, layout), true, false);
-            }
-        }
-
-        return layout;
-    }
-
-    /**
      * @see com.iver.mdiApp.ui.MDIManager.IWindow#windowActivated()
      */
     public void windowActivated() {

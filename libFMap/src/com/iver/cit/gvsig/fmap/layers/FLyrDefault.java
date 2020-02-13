@@ -472,7 +472,6 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error obtaining the object.
 	 *
 	 * @see #setXMLEntity(XMLEntity)
-	 * @see #setXMLEntity03(XMLEntity)
 	 */
 	public XMLEntity getXMLEntity() throws XMLException {
 		XMLEntity xml = new XMLEntity();
@@ -646,44 +645,6 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 		this.updateDrawVersion();
 	}
 
-	/**
-	 * <p>Inserts some default properties to the this layer.</p>
-	 *
-	 * <p> <b>Properties:</b>
-	 *  <ul>
-	 *   <li> active : if this layer is active or not
-	 *   <li> name : name of this layer
-	 *   <li> minScale : minimum scale of this layer
-	 *   <li> maxScale : maximum scale of this layer
-	 *   <li> visible : if this layer is visible or not
-	 *   <li> proj : the projection of this layer (only if it's defined)
-	 *   <li> transparency : transparency level of this layer (only if it's defined)
-	 *  </ul>
-	 * </p>
-	 *
-	 * @see FLyrDefault#getXMLEntity()
-	 *
-	 * @param xml an <code>XMLEntity</code> with the information
-	 *
-	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error obtaining the object.
-	 *
-	 * @see #getXMLEntity()
-	 * @see #setXMLEntity(XMLEntity)
-	 */
-	public void setXMLEntity03(XMLEntity xml) throws XMLException {
-//		active = xml.getBooleanProperty("active");
-		status.active = xml.getBooleanProperty("active");
-		name = xml.getStringProperty("name");
-		minScale = xml.getDoubleProperty("minScale");
-		maxScale = xml.getDoubleProperty("maxScale");
-//		visible = xml.getBooleanProperty("visible");
-		status.visible = xml.getBooleanProperty("visible");
-		if (xml.contains("proj")) {
-			setProjection(CRSFactory.getCRS(xml.getStringProperty("proj")));
-		}
-		if (xml.contains("transparency"))
-			transparency = xml.getIntProperty("transparency");
-	}
 
 	/*
 	 * (non-Javadoc)

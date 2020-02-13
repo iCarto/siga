@@ -1023,8 +1023,6 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 		return xml;
 	}
 
-	public void setXMLEntity03(XMLEntity xml) throws XMLException {
-	}
 
 	/**
 	 * Recupera de disco los datos de la capa.

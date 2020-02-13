@@ -235,39 +235,6 @@ public class FFrameGroup extends FFrame implements IFFrameUseProject, IFFrameVie
         return xml;
     }
 
-    /**
-     * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity)
-     */
-    public void setXMLEntity03(XMLEntity xml, Layout l) {
-        if (xml.getIntProperty("m_Selected") != 0) {
-            this.setSelected(true);
-        } else {
-            this.setSelected(false);
-        }
-
-        IFFrame fframechild = null;
-
-        for (int i = 0; i < xml.getChildrenCount(); i++) {
-            try {
-                Class clase = Class.forName(xml.getChild(i).getStringProperty("className"));
-                fframechild = (IFFrame) clase.newInstance();
-            } catch (Exception e) {
-                NotificationManager.addError("Clase de Frame sobre el Layout no reconocida",
-                    e);
-            }
-
-            fframechild.setName(xml.getStringProperty("m_name"));
-
-            fframechild.setBoundBox(new Rectangle2D.Double(
-                    xml.getChild(i).getDoubleProperty("x"),
-                    xml.getChild(i).getDoubleProperty("y"),
-                    xml.getChild(i).getDoubleProperty("w"),
-                    xml.getChild(i).getDoubleProperty("h")));
-            fframechild.setTag(xml.getChild(i).getStringProperty("tag"));
-            fframechild.setXMLEntity03(xml.getChild(i), l);
-            this.addFFrame(fframechild);
-        }
-    }
 
     /**
      * @see com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame#setXMLEntity(com.iver.utiles.XMLEntity)

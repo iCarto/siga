@@ -417,47 +417,6 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 		return xml;
 	}
 
-	public void setXMLEntity03(XMLEntity xml) {
-		clear();
-		setClassifyingFieldNames(new String[] { xml
-				.getStringProperty("fieldName") });
-
-		int useDefaultSymbol = xml.getIntProperty("useDefaultSymbol");
-
-		if (useDefaultSymbol == 1) {
-			setDefaultSymbol(FSymbol.createFromXML03(xml.getChild(0)));
-		} else {
-			setDefaultSymbol(null);
-		}
-
-		int numKeys = xml.getIntProperty("numKeys");
-
-		if (numKeys > 0) {
-			String className = xml.getStringProperty("tipoValueKeys");
-			String[] sk = xml.getStringArrayProperty("keys");
-			String[] sv = xml.getStringArrayProperty("values");
-			Value auxValue;
-			Value auxValue2;
-
-			for (int i = 0; i < numKeys; i++) {
-				try {
-					auxValue = ValueFactory.createValue(sk[i], className);
-					auxValue2 = ValueFactory.createValue(sv[i], className);
-
-					ISymbol sym = FSymbol.createFromXML03(xml.getChild(i
-							+ useDefaultSymbol));
-
-					symbols.put(auxValue2, sym);
-					keys.add(auxValue);
-
-				} catch (SemanticException e) {
-					log.error("Exception", e);
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	public void setXMLEntity(XMLEntity xml) {
 		clear();
 		if (xml.contains("fieldName"))

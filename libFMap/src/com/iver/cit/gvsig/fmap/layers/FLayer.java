@@ -90,7 +90,6 @@ public interface FLayer extends Projected {
 	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error obtaining the object.
 	 *
 	 * @see #setXMLEntity(XMLEntity)
-	 * @see #setXMLEntity03(XMLEntity)
 	 */
 	XMLEntity getXMLEntity() throws XMLException;
 
@@ -104,21 +103,8 @@ public interface FLayer extends Projected {
 	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error setting the object.
 	 *
 	 * @see #getXMLEntity()
-	 * @see #setXMLEntity03(XMLEntity)
 	 */
 	void setXMLEntity(XMLEntity xml) throws XMLException;
-
-	/**
-	 * Inserts some properties to this layer.
-	 *
-	 * @param xml an <code>XMLEntity</code> with the information
-	 *
-	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error obtaining the object.
-	 *
-	 * @see #getXMLEntity()
-	 * @see #setXMLEntity(XMLEntity)
-	 */
-	void setXMLEntity03(XMLEntity xml) throws XMLException;
 
 	/**
 	 * <p>Changes the status of this layer to active or inactive.</p>
