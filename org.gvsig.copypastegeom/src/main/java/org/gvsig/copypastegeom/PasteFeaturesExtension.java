@@ -30,6 +30,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SpatialCache;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
+import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
@@ -131,8 +132,18 @@ public class PasteFeaturesExtension extends Extension {
 	 * @see com.iver.andami.plugins.IExtension#isVisible()
 	 */
 	public boolean isVisible() {
-		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
-			return true;
+		com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager()
+				.getActiveWindow();
+		if (f == null) {
+			return false;
+		}
+
+		if (f instanceof View){
+			View vista = (View) f;
+			IProjectView model = vista.getModel();
+			MapContext mapContext = model.getMapContext();
+			return mapContext.getLayers().getLayersCount() > 0;
+		}
 		return false;
 	}
 	/**

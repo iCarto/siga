@@ -49,7 +49,8 @@
 		extGeoreferencing,
 		extTableExport,
 		extTableImport,
-		org.gvsig.installer.app.extension
+		org.gvsig.installer.app.extension,
+		org.gvsig.copypastegeom
 	"/>
 		
 	<!--  es.icarto.gvsig.commons está antes de extCAD porqué ahora depende de él -->
