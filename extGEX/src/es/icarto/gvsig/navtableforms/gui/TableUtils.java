@@ -37,242 +37,228 @@ public class TableUtils {
     /**
      * Compare the values in the row selected in JTable with the values in
      * SelectableDataSource and returns the index of feature.
-     * 
+     *
      * @return feature index in SelectableDataSource or
      *         AbstractNavTable.EMPTY_REGISTER if there is none.
      */
-    public static long getFeatureIndexFromJTable(JTable table,
-	    SelectableDataSource sds) {
-	int rowIndex = table.getSelectedRow();
-	return getFeatureIndexFromJTable(table, sds, rowIndex);
+    public static long getFeatureIndexFromJTable(JTable table, SelectableDataSource sds) {
+        int rowIndex = table.getSelectedRow();
+        return getFeatureIndexFromJTable(table, sds, rowIndex);
     }
 
     /**
      * Compare the values in row at rowIndex in JTable with the values in
      * SelectableDataSource and returns the index of feature.
-     * 
+     *
      * @return feature index in SelectableDataSource or
      *         AbstractNavTable.EMPTY_REGISTER if there is none.
      */
-    public static long getFeatureIndexFromJTable(JTable table,
-	    SelectableDataSource sds, int rowIndex) {
-	if ((sds != null) && (rowIndex != NO_ROW)) {
-	    HashMap<String, String> rowSelected = getRow(table.getModel(),
-		    rowIndex);
-	    return doGetIndexOfRow(sds, rowSelected);
-	}
-	return NO_ROW;
+    public static long getFeatureIndexFromJTable(JTable table, SelectableDataSource sds, int rowIndex) {
+        if ((sds != null) && (rowIndex != NO_ROW)) {
+            HashMap<String, String> rowSelected = getRow(table.getModel(), rowIndex);
+            return doGetIndexOfRow(sds, rowSelected);
+        }
+        return NO_ROW;
     }
 
     /**
      * Compare the values in the row selected in JTable with the values in
      * SelectableDataSource and returns the index of feature. In this case, only
      * 1 cell will be compared: the one specified in columnName.
-     * 
+     *
      * @return feature index in SelectableDataSource or
      *         AbstractNavTable.EMPTY_REGISTER if there is none.
      */
-    public static long getFeatureIndexFromJTable(JTable table,
-	    SelectableDataSource sds, String columnName) {
-	int rowIndex = table.getSelectedRow();
-	return getFeatureIndexFromJTable(table, sds, columnName, rowIndex);
+    public static long getFeatureIndexFromJTable(JTable table, SelectableDataSource sds, String columnName) {
+        int rowIndex = table.getSelectedRow();
+        return getFeatureIndexFromJTable(table, sds, columnName, rowIndex);
     }
 
     /**
      * Compare the values in the row at rowIndex in JTable with the values in
      * SelectableDataSource and returns the index of feature. In this case, only
      * 1 cell will be compared: the one specified in columnName.
-     * 
+     *
      * @return feature index in SelectableDataSource or
      *         AbstractNavTable.EMPTY_REGISTER if there is none.
      */
-    public static long getFeatureIndexFromJTable(JTable table,
-	    SelectableDataSource sds, String columnName, int rowIndex) {
-	int colIndex = getColumnIndex(table, columnName);
-	if ((sds != null) && (rowIndex != NO_ROW) && (colIndex != NO_COLUMN)) {
-	    HashMap<String, String> rowSelected = getCell(table.getModel(),
-		    rowIndex, colIndex);
-	    return doGetIndexOfRow(sds, rowSelected);
-	}
-	return NO_ROW;
+    public static long getFeatureIndexFromJTable(JTable table, SelectableDataSource sds, String columnName,
+            int rowIndex) {
+        int colIndex = getColumnIndex(table, columnName);
+        if ((sds != null) && (rowIndex != NO_ROW) && (colIndex != NO_COLUMN)) {
+            HashMap<String, String> rowSelected = getCell(table.getModel(), rowIndex, colIndex);
+            return doGetIndexOfRow(sds, rowSelected);
+        }
+        return NO_ROW;
     }
 
     /**
      * Return the indexes of the feature present in JTable.
-     * 
+     *
      * @return feature indexes in SelectableDataSource.
      */
-    public static ArrayList<Long> getFeatureIndexesFromJTable(JTable table,
-	    SelectableDataSource sds) {
-	ArrayList<Long> rowList = new ArrayList<Long>();
-	TableModel model = table.getModel();
-	for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
-	    long featIndex = getFeatureIndexFromJTable(table, sds);
-	    if (featIndex != NO_ROW) {
-		rowList.add(featIndex);
-	    }
-	}
-	return rowList;
+    public static ArrayList<Long> getFeatureIndexesFromJTable(JTable table, SelectableDataSource sds) {
+        ArrayList<Long> rowList = new ArrayList<Long>();
+        TableModel model = table.getModel();
+        for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
+            long featIndex = getFeatureIndexFromJTable(table, sds);
+            if (featIndex != NO_ROW) {
+                rowList.add(featIndex);
+            }
+        }
+        return rowList;
     }
 
     /**
      * Return the indexes of the feature present in JTable. Will compare only
      * the cell specified in columnName
-     * 
+     *
      * @return feature indexes in SelectableDataSource.
      */
-    public static ArrayList<Long> getFeatureIndexesFromJTable(JTable table,
-	    SelectableDataSource sds, String columnName) {
-	ArrayList<Long> rowList = new ArrayList<Long>();
-	TableModel model = table.getModel();
-	for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
-	    long featIndex = getFeatureIndexFromJTable(table, sds, columnName);
-	    if (featIndex != NO_ROW) {
-		rowList.add(featIndex);
-	    }
-	}
-	return rowList;
+    public static ArrayList<Long> getFeatureIndexesFromJTable(JTable table, SelectableDataSource sds, String columnName) {
+        ArrayList<Long> rowList = new ArrayList<Long>();
+        TableModel model = table.getModel();
+        for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
+            long featIndex = getFeatureIndexFromJTable(table, sds, columnName);
+            if (featIndex != NO_ROW) {
+                rowList.add(featIndex);
+            }
+        }
+        return rowList;
     }
 
     public static int getColumnIndex(JTable table, String columnName) {
-	TableModel model = table.getModel();
-	for (int i = 0; i < model.getColumnCount(); i++) {
-	    if (model instanceof CustomTableModel) {
-		if (columnName.equalsIgnoreCase(((CustomTableModel) model)
-			.getColumnKey(i))) {
-		    return i;
-		}
-	    } else {
-		if (columnName.equalsIgnoreCase(model.getColumnName(i))) {
-		    return i;
-		}
-	    }
+        TableModel model = table.getModel();
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            if (model instanceof CustomTableModel) {
+                if (columnName.equalsIgnoreCase(((CustomTableModel) model).getColumnKey(i))) {
+                    return i;
+                }
+            } else {
+                if (columnName.equalsIgnoreCase(model.getColumnName(i))) {
+                    return i;
+                }
+            }
 
-	}
-	return NO_COLUMN;
+        }
+        return NO_COLUMN;
     }
 
     public static boolean hasRows(JTable table) {
-	TableModel model = table.getModel();
-	if ((model.getRowCount() > 0) && (!firstRowIsVoid(model))) {
-	    return true;
-	}
-	return false;
+        TableModel model = table.getModel();
+        if ((model.getRowCount() > 0) && (!firstRowIsVoid(model))) {
+            return true;
+        }
+        return false;
     }
 
     public static boolean isProperRowSelected(JTable table) {
-	TableModel model = table.getModel();
-	if (table.getSelectedRows().length == 1) {
-	    if (table.getSelectedRow() < model.getRowCount() - 1) {
-		return true;
-	    } else {
-		return false;
-	    }
-	} else {
-	    return false;
-	}
+        TableModel model = table.getModel();
+        if (table.getSelectedRows().length == 1) {
+            if (table.getSelectedRow() < model.getRowCount() - 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     private static boolean firstRowIsVoid(TableModel model) {
-	boolean isVoid = true;
-	for (int colIndex = 0; colIndex < model.getColumnCount(); colIndex++) {
-	    if (model.getValueAt(0, colIndex) == null) {
-		isVoid = true;
-	    } else {
-		isVoid = false;
-		break;
-	    }
-	}
-	return isVoid;
+        boolean isVoid = true;
+        for (int colIndex = 0; colIndex < model.getColumnCount(); colIndex++) {
+            if (model.getValueAt(0, colIndex) == null) {
+                isVoid = true;
+            } else {
+                isVoid = false;
+                break;
+            }
+        }
+        return isVoid;
     }
 
-    private static HashMap<String, String> getCell(TableModel model,
-	    int rowIndex, int colIndex) {
-	String key, value;
-	HashMap<String, String> rowSelected = new HashMap<String, String>();
-	value = ((Value) model.getValueAt(rowIndex, colIndex))
-		.getStringValue(new ValueFormatNT());
+    private static HashMap<String, String> getCell(TableModel model, int rowIndex, int colIndex) {
+        String key, value;
+        HashMap<String, String> rowSelected = new HashMap<String, String>();
+        value = ((Value) model.getValueAt(rowIndex, colIndex)).getStringValue(new ValueFormatNT());
 
-	if (model instanceof CustomTableModel) {
-	    key = ((CustomTableModel) model).getColumnKey(colIndex);
-	} else {
-	    key = model.getColumnName(colIndex);
-	}
-	rowSelected.put(key, value);
-	return rowSelected;
+        if (model instanceof CustomTableModel) {
+            key = ((CustomTableModel) model).getColumnKey(colIndex);
+        } else {
+            key = model.getColumnName(colIndex);
+        }
+        rowSelected.put(key, value);
+        return rowSelected;
     }
 
-    private static HashMap<String, String> getRow(TableModel model, int rowIndex) {
-	String key, value;
-	HashMap<String, String> rowSelected = new HashMap<String, String>();
-	for (int colIndex = 0; colIndex < model.getColumnCount(); colIndex++) {
-	    Object obj = model.getValueAt(rowIndex, colIndex);
-	    if (obj instanceof Value) {
-		value = ((Value) obj).getStringValue(new ValueFormatNT());
-	    } else {
-		value = obj.toString();
-	    }
+    public static HashMap<String, String> getRow(TableModel model, int rowIndex) {
+        String key, value;
+        HashMap<String, String> rowSelected = new HashMap<String, String>();
+        for (int colIndex = 0; colIndex < model.getColumnCount(); colIndex++) {
+            Object obj = model.getValueAt(rowIndex, colIndex);
+            if (obj instanceof Value) {
+                value = ((Value) obj).getStringValue(new ValueFormatNT());
+            } else {
+                value = obj.toString();
+            }
 
-	    if (model instanceof CustomTableModel) {
-		key = ((CustomTableModel) model).getColumnKey(colIndex);
-	    } else {
-		key = model.getColumnName(colIndex);
-	    }
-	    rowSelected.put(key, value);
-	}
-	return rowSelected;
+            if (model instanceof CustomTableModel) {
+                key = ((CustomTableModel) model).getColumnKey(colIndex);
+            } else {
+                key = model.getColumnName(colIndex);
+            }
+            rowSelected.put(key, value);
+        }
+        return rowSelected;
     }
 
-    private static int doGetIndexOfRow(SelectableDataSource source,
-	    HashMap<String, String> row) {
-	try {
-	    int rowIndex;
-	    for (rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
-		if (allColumnsMatch(source, row, rowIndex)) {
-		    return rowIndex;
-		}
-	    }
-	    return NO_ROW;
-	} catch (ReadDriverException e) {
-	    e.printStackTrace();
-	    return NO_ROW;
-	}
+    private static int doGetIndexOfRow(SelectableDataSource source, HashMap<String, String> row) {
+        try {
+            int rowIndex;
+            for (rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
+                if (allColumnsMatch(source, row, rowIndex)) {
+                    return rowIndex;
+                }
+            }
+            return NO_ROW;
+        } catch (ReadDriverException e) {
+            e.printStackTrace();
+            return NO_ROW;
+        }
     }
 
-    private static boolean allColumnsMatch(SelectableDataSource source,
-	    HashMap<String, String> row, int rowIndex) {
-	try {
-	    boolean checkRow = false;
-	    for (String key : row.keySet()) {
-		int colIndex = source.getFieldIndexByName(key);
-		/*
-		 * Fields from table which are not in the source will be
-		 * discarded. This is useful, for example, in the case the table
-		 * loaded is not the source, but a link-table between 2 other
-		 * tables. In that case, only the fields in the table which are
-		 * in source will be used to compare.
-		 */
-		if (colIndex != NO_COLUMN) {
-		    String fieldValue = source
-			    .getFieldValue(rowIndex, colIndex).getStringValue(
-				    new ValueFormatNT());
-		    if (fieldValue.equals(row.get(key))) {
-			checkRow = true;
-			break;
-		    } else {
-			checkRow = false;
-			break;
-		    }
-		}
-	    }
-	    if (checkRow) {
-		return true;
-	    }
-	    return false;
-	} catch (ReadDriverException e) {
-	    e.printStackTrace();
-	    return false;
-	}
+    private static boolean allColumnsMatch(SelectableDataSource source, HashMap<String, String> row, int rowIndex) {
+        try {
+            boolean checkRow = false;
+            for (String key : row.keySet()) {
+                int colIndex = source.getFieldIndexByName(key);
+                /*
+                 * Fields from table which are not in the source will be
+                 * discarded. This is useful, for example, in the case the table
+                 * loaded is not the source, but a link-table between 2 other
+                 * tables. In that case, only the fields in the table which are
+                 * in source will be used to compare.
+                 */
+                if (colIndex != NO_COLUMN) {
+                    String fieldValue = source.getFieldValue(rowIndex, colIndex).getStringValue(new ValueFormatNT());
+                    if (fieldValue.equals(row.get(key))) {
+                        checkRow = true;
+                        break;
+                    } else {
+                        checkRow = false;
+                        break;
+                    }
+                }
+            }
+            if (checkRow) {
+                return true;
+            }
+            return false;
+        } catch (ReadDriverException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

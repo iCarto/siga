@@ -27,8 +27,6 @@ import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.commons.utils.StrUtils;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.udc.cartolab.gvsig.elle.gui.wizard.save.LayerProperties;
-import es.udc.cartolab.gvsig.elle.utils.ELLEMap;
 
 public class ConstantReload {
 
@@ -37,107 +35,105 @@ public class ConstantReload {
     private final Collection<String> tablesWithConstants;
     private final String provWhere;
 
-    public ConstantReload(View view, String where,
-	    Collection<String> tablesWithConstants, String provWhere) {
-	this.where = where;
-	this.tablesWithConstants = tablesWithConstants;
-	String errorMsg = constantChecks(view);
-	if (!errorMsg.isEmpty()) {
-	    throw new RuntimeException(errorMsg);
-	}
-	this.provWhere = provWhere;
-	closeNotViewWindowsAndDocuments();
+    public ConstantReload(View view, String where, Collection<String> tablesWithConstants, String provWhere) {
+        this.where = where;
+        this.tablesWithConstants = tablesWithConstants;
+        String errorMsg = constantChecks(view);
+        if (!errorMsg.isEmpty()) {
+            throw new RuntimeException(errorMsg);
+        }
+        this.provWhere = provWhere;
+        closeNotViewWindowsAndDocuments();
 
-	reloadLayers(view.getMapOverview());
-	reloadLayers(view.getMapControl());
+        reloadLayers(view.getMapOverview());
+        reloadLayers(view.getMapControl());
     }
 
     private void closeNotViewWindowsAndDocuments() {
-	closeWindows();
-	closeDocuments();
+        closeWindows();
+        closeDocuments();
     }
 
     private void closeWindows() {
-	final MDIManager mdiManager = PluginServices.getMDIManager();
-	for (IWindow window : mdiManager.getAllWindows()) {
-	    if (!(window instanceof BaseView)) {
-		mdiManager.closeWindow(window);
-	    }
-	}
+        final MDIManager mdiManager = PluginServices.getMDIManager();
+        for (IWindow window : mdiManager.getAllWindows()) {
+            if (!(window instanceof BaseView)) {
+                mdiManager.closeWindow(window);
+            }
+        }
     }
 
     private void closeDocuments() {
-	Project project = ((ProjectExtension) PluginServices
-		.getExtension(ProjectExtension.class)).getProject();
+        Project project = ((ProjectExtension) PluginServices.getExtension(ProjectExtension.class)).getProject();
 
-	List<ProjectDocument> documents = project.getDocuments();
+        List<ProjectDocument> documents = project.getDocuments();
 
-	String viewType = ProjectViewFactory.registerName;
+        String viewType = ProjectViewFactory.registerName;
 
-	for (ProjectDocument doc : documents) {
-	    String docType = doc.getProjectDocumentFactory().getRegisterName();
-	    if (!docType.equals(viewType)) {
-		project.delDocument(doc);
-	    }
-	}
+        for (ProjectDocument doc : documents) {
+            String docType = doc.getProjectDocumentFactory().getRegisterName();
+            if (!docType.equals(viewType)) {
+                project.delDocument(doc);
+            }
+        }
     }
 
     private void reloadLayers(MapControl mapControl) {
-	List<FLyrVect> layersToBeReloaded = getLayersToBeReloaded(mapControl);
-	for (FLyrVect l : layersToBeReloaded) {
-	    sanitize(l);
-	    updateLayerConstants(l);
-	    reload(l);
-	}
-	mapControl.drawMap(true);
+        List<FLyrVect> layersToBeReloaded = getLayersToBeReloaded(mapControl);
+        for (FLyrVect l : layersToBeReloaded) {
+            sanitize(l);
+            updateLayerConstants(l);
+            reload(l);
+        }
+        mapControl.drawMap(true);
     }
 
     private List<FLyrVect> getLayersToBeReloaded(MapControl mapControl) {
-	List<FLyrVect> layersToBeReloaded = new ArrayList<FLyrVect>();
+        List<FLyrVect> layersToBeReloaded = new ArrayList<FLyrVect>();
 
-	FLayers layers = mapControl.getMapContext().getLayers();
+        FLayers layers = mapControl.getMapContext().getLayers();
 
-	LayersIterator it = new LayersIterator(layers);
-	while (it.hasNext()) {
-	    FLayer layer = it.nextLayer();
-	    DBLayerDefinition lyrDef = getDBLayerDefinition(layer);
-	    if (lyrDef == null) {
-		continue;
-	    }
-	    String tableName = lyrDef.getTableName();
-	    if (tablesWithConstants.contains(tableName)) {
-		layersToBeReloaded.add((FLyrVect) layer);
-	    }
-	}
-	return layersToBeReloaded;
+        LayersIterator it = new LayersIterator(layers);
+        while (it.hasNext()) {
+            FLayer layer = it.nextLayer();
+            DBLayerDefinition lyrDef = getDBLayerDefinition(layer);
+            if (lyrDef == null) {
+                continue;
+            }
+            String tableName = lyrDef.getTableName();
+            if (tablesWithConstants.contains(tableName)) {
+                layersToBeReloaded.add((FLyrVect) layer);
+            }
+        }
+        return layersToBeReloaded;
     }
 
     // Not sure if this clean actions are needed. Just in case
     private void sanitize(FLyrVect vectLayer) {
-	vectLayer.clearSpatialCache();
-	vectLayer.deleteSpatialIndex();
+        vectLayer.clearSpatialCache();
+        vectLayer.deleteSpatialIndex();
     }
 
     private void updateLayerConstants(FLyrVect l) {
-	DBLayerDefinition lyrDef = getDBLayerDefinition(l);
-	if (lyrDef.getTableName().equalsIgnoreCase("provincias_galicia_loc")
-		|| lyrDef.getTableName().equalsIgnoreCase("autopistas_loc")) {
-	    lyrDef.setWhereClause(provWhere);
-	} else {
-	    lyrDef.setWhereClause(where);
-	}
-	
-	setWhereOnExpropiacionAmpliacionLayers(l, lyrDef);
+        DBLayerDefinition lyrDef = getDBLayerDefinition(l);
+        if (lyrDef.getTableName().equalsIgnoreCase("provincias_galicia_loc")
+                || lyrDef.getTableName().equalsIgnoreCase("autopistas_loc")) {
+            lyrDef.setWhereClause(provWhere);
+        } else {
+            lyrDef.setWhereClause(where);
+        }
+
+        setWhereOnExpropiacionLayers(l, lyrDef);
     }
-    
-    private void setWhereOnExpropiacionAmpliacionLayers(FLyrVect l, DBLayerDefinition lyrDef) {
-        
+
+    private void setWhereOnExpropiacionLayers(FLyrVect l, DBLayerDefinition lyrDef) {
+
         if (l.getName().equalsIgnoreCase("Fincas")) {
             if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
-                lyrDef.setWhereClause("WHERE tramo NOT IN ('13', '14')");
+                lyrDef.setWhereClause("WHERE tramo NOT IN ('13', '14', '15', '16')");
             } else {
-                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND tramo NOT IN ('13', '14')");
-            }    
+                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND tramo NOT IN ('13', '14', '15', '16')");
+            }
         }
 
         if (l.getName().equalsIgnoreCase("Fincas_Ampliacion")) {
@@ -145,15 +141,23 @@ public class ConstantReload {
                 lyrDef.setWhereClause("WHERE tramo IN ('13', '14')");
             } else {
                 lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND tramo IN ('13', '14')");
-            }    
+            }
         }
-        
+
+        if (l.getName().equalsIgnoreCase("Fincas_Ampliacion")) {
+            if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
+                lyrDef.setWhereClause("WHERE tramo IN ('15', '16')");
+            } else {
+                lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND tramo IN ('15', '16')");
+            }
+        }
+
         if (l.getName().equalsIgnoreCase("Linea_Expropiacion")) {
             if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
                 lyrDef.setWhereClause("WHERE NOT ampliacion");
             } else {
                 lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND NOT ampliacion");
-            }    
+            }
         }
 
         if (l.getName().equalsIgnoreCase("Linea_Expropiacion_Ampliacion")) {
@@ -161,18 +165,18 @@ public class ConstantReload {
                 lyrDef.setWhereClause("WHERE ampliacion");
             } else {
                 lyrDef.setWhereClause(lyrDef.getWhereClause() + " AND ampliacion");
-            }    
+            }
         }
     }
 
     private void reload(FLyrVect l) {
-	try {
-	    SaveSelection saveSelection = new SaveSelection(l);
-	    l.reload();
-	    saveSelection.restoreSelection();
-	} catch (ReloadLayerException e) {
-	    logger.error(e.getStackTrace(), e);
-	}
+        try {
+            SaveSelection saveSelection = new SaveSelection(l);
+            l.reload();
+            saveSelection.restoreSelection();
+        } catch (ReloadLayerException e) {
+            logger.error(e.getStackTrace(), e);
+        }
 
     }
 
@@ -181,42 +185,42 @@ public class ConstantReload {
      *         PostGisDriver (and is a FLyrVect). And null if not
      */
     private DBLayerDefinition getDBLayerDefinition(FLayer layer) {
-	if (layer instanceof FLyrVect) {
-	    FLyrVect vectLayer = (FLyrVect) layer;
-	    VectorialDriver driver = vectLayer.getSource().getDriver();
-	    if (driver instanceof PostGisDriver) {
-		PostGisDriver postgis = (PostGisDriver) driver;
-		return postgis.getLyrDef();
-	    }
-	}
-	return null;
+        if (layer instanceof FLyrVect) {
+            FLyrVect vectLayer = (FLyrVect) layer;
+            VectorialDriver driver = vectLayer.getSource().getDriver();
+            if (driver instanceof PostGisDriver) {
+                PostGisDriver postgis = (PostGisDriver) driver;
+                return postgis.getLyrDef();
+            }
+        }
+        return null;
     }
 
     public static String constantChecks(View view) {
-	TOCLayerManager tocManager = new TOCLayerManager(view.getMapControl());
-	List<FLyrVect> joinedLayers = tocManager.getJoinedLayers();
-	List<FLyrVect> editingLayers = tocManager.getEditingLayers();
+        TOCLayerManager tocManager = new TOCLayerManager(view.getMapControl());
+        List<FLyrVect> joinedLayers = tocManager.getJoinedLayers();
+        List<FLyrVect> editingLayers = tocManager.getEditingLayers();
 
-	String errorMsg = "";
+        String errorMsg = "";
 
-	if (!joinedLayers.isEmpty()) {
-	    errorMsg += "Deshaga las uniones o enlaces de las siguientes capas para poder continuar:\n\n";
-	    for (FLyrVect l : joinedLayers) {
-		errorMsg += " - " + l.getName() + "\n";
-	    }
-	    errorMsg += "\n\n";
+        if (!joinedLayers.isEmpty()) {
+            errorMsg += "Deshaga las uniones o enlaces de las siguientes capas para poder continuar:\n\n";
+            for (FLyrVect l : joinedLayers) {
+                errorMsg += " - " + l.getName() + "\n";
+            }
+            errorMsg += "\n\n";
 
-	}
+        }
 
-	if (!editingLayers.isEmpty()) {
-	    errorMsg += "Cierre la edición de las siguientes capas para poder continuar:\n\n";
-	    for (FLyrVect l : editingLayers) {
-		errorMsg += " - " + l.getName() + "\n";
-	    }
+        if (!editingLayers.isEmpty()) {
+            errorMsg += "Cierre la edición de las siguientes capas para poder continuar:\n\n";
+            for (FLyrVect l : editingLayers) {
+                errorMsg += " - " + l.getName() + "\n";
+            }
 
-	}
+        }
 
-	return errorMsg;
+        return errorMsg;
     }
 
 }

@@ -27,23 +27,18 @@ public class FormExpropiationsExtension extends SingleLayerAbstractExtension {
     public boolean isEnabled() {
         return DBSession.isActive() && isViewActive() && isLayerLoaded();
     }
-    
+
     private AbstractForm getForm() {
         TOCLayerManager toc = new TOCLayerManager();
         FLyrVect layer = toc.getLayerByName(getLayerName());
-        
+
         AbstractForm dialog = new FormExpropiations(layer, null);
         return dialog;
     }
 
     @Override
     protected String getLayerName() {
-        return isAmpliacion() ? FormExpropiations.TOCNAME_AMPLIACION : FormExpropiations.TOCNAME;
+        return FormExpropiations.TOCNAME;
     }
-    
-    protected boolean isAmpliacion() {
-        return false;
-    }
-
 
 }

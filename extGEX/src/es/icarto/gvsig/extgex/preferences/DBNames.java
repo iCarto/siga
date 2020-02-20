@@ -1,13 +1,13 @@
 package es.icarto.gvsig.extgex.preferences;
 
 public class DBNames {
-	
-	//companies
-	public static final String AUDASA_COMPANY = "Audasa";
-	public static final String AUTOESTRADAS_COMPANY = "Autoestradas";
-	
-	public static final String FORM_VALUE_AUDASA_COMPANY = "AP - Audasa";
-	public static final String FORM_VALUE_AUTOESTRADAS_COMPANY = "AG - Autoestradas";
+
+    // companies
+    public static final String AUDASA_COMPANY = "Audasa";
+    public static final String AUTOESTRADAS_COMPANY = "Autoestradas";
+
+    public static final String FORM_VALUE_AUDASA_COMPANY = "AP - Audasa";
+    public static final String FORM_VALUE_AUTOESTRADAS_COMPANY = "AG - Autoestradas";
 
     // schemas
     public static final String EXPROPIATIONS_SCHEMA = "audasa_expropiaciones";
@@ -74,8 +74,6 @@ public class DBNames {
     public static final String FIELD_SUPERFICIE_EXPROPIACIONES = "superficie_expropiada";
 
     // more tables
-    public static final String LAYER_FINCAS = "Fincas";
-    public static final String LAYER_FINCAS_AMPLIACION = "Fincas_Ampliacion";
     public static final String LAYER_REVERSIONES = "Reversiones";
     public static final String TABLE_EXPROPIACIONES = "expropiaciones";
     public static final String LAYER_MUNICIPIOS = "Municipios";

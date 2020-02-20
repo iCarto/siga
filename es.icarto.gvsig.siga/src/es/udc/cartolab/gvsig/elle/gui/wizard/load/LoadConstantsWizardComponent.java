@@ -30,8 +30,7 @@ import es.udc.cartolab.gvsig.elle.utils.MapDAO;
 @SuppressWarnings("serial")
 public class LoadConstantsWizardComponent extends WizardComponent {
 
-    private static final Logger logger = Logger
-	    .getLogger(LoadConstantsWizardComponent.class);
+    private static final Logger logger = Logger.getLogger(LoadConstantsWizardComponent.class);
 
     private boolean reload = false;
 
@@ -39,36 +38,35 @@ public class LoadConstantsWizardComponent extends WizardComponent {
 
     public final static String PROPERTY_VIEW = "view";
 
-    public LoadConstantsWizardComponent(Map<String, Object> properties,
-	    boolean reload) {
-	super(properties);
-	this.reload = reload;
-	setUpUI();
+    public LoadConstantsWizardComponent(Map<String, Object> properties, boolean reload) {
+        super(properties);
+        this.reload = reload;
+        setUpUI();
     }
 
     public LoadConstantsWizardComponent(Map<String, Object> properties) {
-	this(properties, false);
+        this(properties, false);
     }
 
     private void setUpUI() {
-	this.setLayout(new BorderLayout());
-	constantsPanel = new ConstantsPanel(reload);
-	this.add(constantsPanel, BorderLayout.CENTER);
+        this.setLayout(new BorderLayout());
+        constantsPanel = new ConstantsPanel(reload);
+        this.add(constantsPanel, BorderLayout.CENTER);
     }
 
     @Override
     public boolean canFinish() {
-	return true;
+        return true;
     }
 
     @Override
     public boolean canNext() {
-	return true;
+        return true;
     }
 
     @Override
     public String getWizardComponentName() {
-	return "constants_wizard_component";
+        return "constants_wizard_component";
     }
 
     @Override
@@ -82,77 +80,72 @@ public class LoadConstantsWizardComponent extends WizardComponent {
     @Override
     public void finish() throws WizardException {
 
-	Object aux = properties.get(PROPERTY_VIEW);
-	if (!(aux instanceof View)) {
-	    throw new WizardException("Couldn't retrieve the view");
-	}
-	View view = (View) aux;
+        Object aux = properties.get(PROPERTY_VIEW);
+        if (!(aux instanceof View)) {
+            throw new WizardException("Couldn't retrieve the view");
+        }
+        View view = (View) aux;
 
-	ELLEMap map = null;
-	String where = constantsPanel.buildWhereAndSetConstants();
-	final Collection<String> tablesAffectedByConstant = constantsPanel
-		.getTablesAffectedByConstant();
-	if (reload) {
-	    List<ELLEMap> loadedMaps = MapDAO.getInstance().getLoadedMaps();
-	    for (ELLEMap m : loadedMaps) {
-		if (m.getView().equals(view)
-			&& m.getName().equals(view.getModel().getName())) {
-		    map = m;
-		}
-	    }
+        ELLEMap map = null;
+        String where = constantsPanel.buildWhereAndSetConstants();
+        final Collection<String> tablesAffectedByConstant = constantsPanel.getTablesAffectedByConstant();
+        if (reload) {
+            List<ELLEMap> loadedMaps = MapDAO.getInstance().getLoadedMaps();
+            for (ELLEMap m : loadedMaps) {
+                if (m.getView().equals(view) && m.getName().equals(view.getModel().getName())) {
+                    map = m;
+                }
+            }
 
-	    // TODO. Que hacer si map es null aquí? Por ahora nos contentamos
-	    // con algo parecido al Null Object Pattern para evitar chequeos de
-	    // null sobre map
+            // TODO. Que hacer si map es null aquí? Por ahora nos contentamos
+            // con algo parecido al Null Object Pattern para evitar chequeos de
+            // null sobre map
 
-	    map = map != null ? map : new ELLEMap(null, null);
-	    map.setWhereOnAllLayers(where);
-	    map.setWhereOnAllOverviewLayers(where);
-	    setWhereOnLoc(map);
-	    new ConstantReload(view, where, tablesAffectedByConstant,
-		    constantsPanel.buildWhereForLoc());
-	} else {
-	    Object tmp = properties
-		    .get(SigaLoadMapWizardComponent.PROPERTY_MAP_NAME);
-	    String mapName = (tmp == null ? "" : tmp.toString());
+            map = map != null ? map : new ELLEMap(null, null);
+            map.setWhereOnAllLayers(where);
+            map.setWhereOnAllOverviewLayers(where);
+            setWhereOnLoc(map);
+            new ConstantReload(view, where, tablesAffectedByConstant, constantsPanel.buildWhereForLoc());
+        } else {
+            Object tmp = properties.get(SigaLoadMapWizardComponent.PROPERTY_MAP_NAME);
+            String mapName = (tmp == null ? "" : tmp.toString());
 
-	    try {
-		map = MapDAO.getInstance().getMap(view, mapName);
-		map.setWhereOnAllLayers(where);
-		map.setWhereOnAllOverviewLayers(where);
-		setWhereOnLoc(map);
-		setWhereOnExpropiacionAmpliacionLayers(map);
+            try {
+                map = MapDAO.getInstance().getMap(view, mapName);
+                map.setWhereOnAllLayers(where);
+                map.setWhereOnAllOverviewLayers(where);
+                setWhereOnLoc(map);
+                setWhereOnExpropiacionLayers(map);
 
-		map.load(view.getProjection(), tablesAffectedByConstant);
+                map.load(view.getProjection(), tablesAffectedByConstant);
 
-		loadLegends(view, mapName);
+                loadLegends(view, mapName);
 
-		if (view.getModel().getName().equals("ELLE View")
-			&& (view.getModel() instanceof ProjectView)) {
-		    ((ProjectView) view.getModel()).setName(mapName);
-		}
+                if (view.getModel().getName().equals("ELLE View") && (view.getModel() instanceof ProjectView)) {
+                    ((ProjectView) view.getModel()).setName(mapName);
+                }
 
-		ZoomTo zoomTo = new ZoomTo(view.getMapControl());
-		zoomTo.zoom(constantsPanel.getZoomGeometry());
-	    } catch (Exception e) {
-		logger.error(e.getStackTrace(), e);
-		throw new WizardException(e);
-	    }
+                ZoomTo zoomTo = new ZoomTo(view.getMapControl());
+                zoomTo.zoom(constantsPanel.getZoomGeometry());
+            } catch (Exception e) {
+                logger.error(e.getStackTrace(), e);
+                throw new WizardException(e);
+            }
 
-	}
+        }
 
-	writeCouncilsLoadedInStatusBar();
+        writeCouncilsLoadedInStatusBar();
 
     }
 
-    private void setWhereOnExpropiacionAmpliacionLayers(ELLEMap map) {
+    private void setWhereOnExpropiacionLayers(ELLEMap map) {
         LayerProperties lp = map.getLayer("Fincas");
         if (lp != null) {
             if (StrUtils.isEmptyString(lp.getWhere())) {
-                lp.setWhere("WHERE tramo NOT IN ('13', '14')");
+                lp.setWhere("WHERE tramo NOT IN ('13', '14', '15', '16')");
             } else {
-                lp.setWhere(lp.getWhere() + " AND tramo NOT IN ('13', '14')");
-            }    
+                lp.setWhere(lp.getWhere() + " AND tramo NOT IN ('13', '14', '15', '16')");
+            }
         }
 
         lp = map.getLayer("Fincas_Ampliacion");
@@ -161,16 +154,25 @@ public class LoadConstantsWizardComponent extends WizardComponent {
                 lp.setWhere("WHERE tramo IN ('13', '14')");
             } else {
                 lp.setWhere(lp.getWhere() + " AND tramo IN ('13', '14')");
-            }    
+            }
         }
-        
+
+        lp = map.getLayer("Fincas_Autoestradas");
+        if (lp != null) {
+            if (StrUtils.isEmptyString(lp.getWhere())) {
+                lp.setWhere("WHERE tramo IN ('15', '16')");
+            } else {
+                lp.setWhere(lp.getWhere() + " AND tramo IN ('15', '16')");
+            }
+        }
+
         lp = map.getLayer("Linea_Expropiacion");
         if (lp != null) {
             if (StrUtils.isEmptyString(lp.getWhere())) {
                 lp.setWhere("WHERE NOT ampliacion");
             } else {
                 lp.setWhere(lp.getWhere() + " AND NOT ampliacion");
-            }    
+            }
         }
 
         lp = map.getLayer("Linea_Expropiacion_Ampliacion");
@@ -179,55 +181,52 @@ public class LoadConstantsWizardComponent extends WizardComponent {
                 lp.setWhere("WHERE ampliacion");
             } else {
                 lp.setWhere(lp.getWhere() + " AND ampliacion");
-            }    
+            }
         }
     }
 
     private void setWhereOnLoc(ELLEMap map) {
-	String where = constantsPanel.buildWhereForLoc();
+        String where = constantsPanel.buildWhereForLoc();
 
-	LayerProperties lp = map.getOverviewLayer("Provincias_galicia_loc");
-	if (lp != null) {
-	    lp.setWhere(where);
-	}
+        LayerProperties lp = map.getOverviewLayer("Provincias_galicia_loc");
+        if (lp != null) {
+            lp.setWhere(where);
+        }
 
-	lp = map.getOverviewLayer("Autopistas_loc");
-	if (lp != null) {
-	    lp.setWhere(where);
-	}
+        lp = map.getOverviewLayer("Autopistas_loc");
+        if (lp != null) {
+            lp.setWhere(where);
+        }
     }
 
     private void loadLegends(View view, String mapName) throws WizardException {
-	FLayers layers = view.getMapControl().getMapContext().getLayers();
-	try {
-	    loadLegends(layers, false, mapName);
-	    layers = view.getMapOverview().getMapContext().getLayers();
-	    loadLegends(layers, true, mapName);
-	} catch (SQLException e) {
-	    throw new WizardException(e);
-	} catch (IOException e) {
-	    throw new WizardException(e);
-	}
+        FLayers layers = view.getMapControl().getMapContext().getLayers();
+        try {
+            loadLegends(layers, false, mapName);
+            layers = view.getMapOverview().getMapContext().getLayers();
+            loadLegends(layers, true, mapName);
+        } catch (SQLException e) {
+            throw new WizardException(e);
+        } catch (IOException e) {
+            throw new WizardException(e);
+        }
     }
 
-    private void loadLegends(FLayers layers, boolean overview, String mapName)
-	    throws SQLException, IOException {
-	for (int i = 0; i < layers.getLayersCount(); i++) {
-	    FLayer layer = layers.getLayer(i);
-	    if (layer instanceof FLyrVect) {
+    private void loadLegends(FLayers layers, boolean overview, String mapName) throws SQLException, IOException {
+        for (int i = 0; i < layers.getLayersCount(); i++) {
+            FLayer layer = layers.getLayer(i);
+            if (layer instanceof FLyrVect) {
 
-		LoadLegend.loadLegend((FLyrVect) layer, mapName, overview,
-			LoadLegend.DB_LEGEND);
-	    } else if (layer instanceof FLayers) {
-		loadLegends((FLayers) layer, overview, mapName);
-	    }
-	}
+                LoadLegend.loadLegend((FLyrVect) layer, mapName, overview, LoadLegend.DB_LEGEND);
+            } else if (layer instanceof FLayers) {
+                loadLegends((FLayers) layer, overview, mapName);
+            }
+        }
     }
 
     private void writeCouncilsLoadedInStatusBar() {
-	final NewStatusBar statusBar = PluginServices.getMainFrame()
-		.getStatusBar();
-	String msg = constantsPanel.getStatusBarMsg();
-	statusBar.setMessage("constants", msg);
+        final NewStatusBar statusBar = PluginServices.getMainFrame().getStatusBar();
+        String msg = constantsPanel.getStatusBarMsg();
+        statusBar.setMessage("constants", msg);
     }
 }

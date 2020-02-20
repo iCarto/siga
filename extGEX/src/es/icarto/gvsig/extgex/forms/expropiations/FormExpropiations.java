@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -45,6 +46,8 @@ import es.icarto.gvsig.navtableforms.gui.CustomTableModel;
 import es.icarto.gvsig.navtableforms.gui.tables.AbstractSubForm;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalidator.listeners.DependentComboboxHandler;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
+import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.siga.models.InfoEmpresaGEX;
 import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -58,6 +61,7 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     public static final String TABLENAME = "exp_finca";
     public static final String TOCNAME = "Fincas";
     public static final String TOCNAME_AMPLIACION = "Fincas_Ampliacion";
+    public static final String TOCNAME_AUTOESTRADAS = "Fincas_Autoestradas";
     public static final String PKFIELD = "id_finca";
 
     private static final String WIDGET_REVERSIONES = "tabla_reversiones_afectan";
@@ -94,6 +98,11 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     private GIAAlphanumericTableHandler procesosTableHandler;
     private TableModelListener procesosTableModelListener;
 
+    private JLabel empresaLb;
+    private JLabel concesionariaLb;
+
+    private final InfoEmpresa infoEmpresa;
+
     public FormExpropiations(FLyrVect layer, IGeometry insertedGeom) {
         super(layer);
 
@@ -103,33 +112,39 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
                 bienesExpropiadosSubForm);
         addTableHandler(bienesExpropiadosTableHandler);
 
-        if (isAmpliacion()) {
-            setTitle("Fincas - Ampliación");
+        setTitle(layer.getName());
+
+        if (ExpropiationsLayerResolver.getBaseName(layer).equals(TABLENAME)) {
+            addCalculation(new ImportePendienteTotalAutocalculado(this));
+            addCalculation(new ImportePagadoTotalAutocalculado(this));
+        } else {
             procesosTableHandler = new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(),
                     ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this,
                     ProcesosSubForm.class);
             addTableHandler(procesosTableHandler);
-            // importe_pagado_total_autocalculado - Cuando es ampliación Trigger + Listener
-        } else {
-            addCalculation(new ImportePendienteTotalAutocalculado(this));
-            addCalculation(new ImportePagadoTotalAutocalculado(this));
+            // importe_pagado_total_autocalculado - Cuando es ampliación/autoestradas Trigger + Listener
         }
         // superficie_expropiada_total_autocalculado - Trigger + Workaround con un listener a la tabla y un refresh
 
         addButtonsToActionsToolBar();
 
         addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);
+
+        infoEmpresa = new InfoEmpresaGEX();
     }
 
-    private boolean isAmpliacion() {
-        return this.layer.getName().equalsIgnoreCase(TOCNAME_AMPLIACION);
+    @Override
+    protected void initWidgets() {
+        super.initWidgets();
+        empresaLb = getFormPanel().getLabel("etiqueta_empresa");
+        concesionariaLb = getFormPanel().getLabel("etiqueta_concesion");
     }
 
     private void addButtonsToActionsToolBar() {
         JPanel actionsToolBar = this.getActionsToolBar();
         NavTableComponentsFactory ntFactory = new NavTableComponentsFactory();
         JButton filesLinkB = ntFactory.getFilesLinkButton(layer, this);
-        String reportName = isAmpliacion() ? "exp_finca_ampliacion" : "exp_finca";
+        String reportName = ExpropiationsLayerResolver.getBaseName(layer);
         JButton printReportB = ntFactory.getPrintButton(layer, this, reportName);
         if ((filesLinkB != null) && (printReportB != null)) {
             actionsToolBar.add(filesLinkB);
@@ -270,7 +285,8 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     @Override
     protected void fillSpecificValues() {
         updateAutomaticFieldSuperficieWhenSubFormDataChanges_pre();
-        if (isAmpliacion()) {
+
+        if (!ExpropiationsLayerResolver.getBaseName(layer).equals(TABLENAME)) {
             updateAutomaticFieldImporteWhenSubFormDataChanges_pre();
         }
         super.fillSpecificValues();
@@ -279,9 +295,11 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
         updateJTables();
 
         updateAutomaticFieldSuperficieWhenSubFormDataChanges_post();
-        if (isAmpliacion()) {
+        if (!ExpropiationsLayerResolver.getBaseName(layer).equals(TABLENAME)) {
             updateAutomaticFieldImporteWhenSubFormDataChanges_post();
         }
+
+        fillEmpresaLB();
 
     }
 
@@ -492,7 +510,7 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
     @Override
     public FormPanel getFormBody() {
-        String name = isAmpliacion() ? getBasicName() + "_ampliacion" : getBasicName();
+        String name = ExpropiationsLayerResolver.getBaseName(this.layer);
         if (formBody == null) {
             InputStream stream = getClass().getClassLoader().getResourceAsStream("/forms/" + name + ".jfrm");
             if (stream == null) {
@@ -506,6 +524,12 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
         }
         return formBody;
 
+    }
+
+    private void fillEmpresaLB() {
+        Object tramoValue = tramo.getSelectedItem();
+        empresaLb.setText(infoEmpresa.getTitle(tramoValue));
+        concesionariaLb.setText(infoEmpresa.getSubtitle(tramoValue));
     }
 
 }

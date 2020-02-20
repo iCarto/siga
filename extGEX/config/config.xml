@@ -31,9 +31,16 @@
 			<menu text="SIGA/Expropiaciones/es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension.menu" icon="es.icarto.gvsig.extgex.FormExpropiationsAmpliacionExtension" position="30001"/>
 		</extension>
 		
+		<extension class-name="es.icarto.gvsig.extgex.FormExpropiationsAutoestradasExtension" active="true">
+			<tool-bar name="extgex.formularios" position="70">
+				<action-tool icon="es.icarto.gvsig.extgex.FormExpropiationsAutoestradasExtension" tooltip="Expediente de expropiaciones - Autoestradas" position="3"/>
+			</tool-bar>
+			<menu text="SIGA/Expropiaciones/es.icarto.gvsig.extgex.FormExpropiationsAutoestradasExtension.menu" icon="es.icarto.gvsig.extgex.FormExpropiationsAutoestradasExtension" position="30003"/>
+		</extension>
+		
 		<extension class-name="es.icarto.gvsig.extgex.FormReversionsExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="extgex.formularios" position="70">
-				<action-tool icon="extgex-reversions" tooltip="Expediente de reversiones" action-command="ReversionsFileExtension" position="3"/>
+				<action-tool icon="extgex-reversions" tooltip="Expediente de reversiones" action-command="ReversionsFileExtension" position="5"/>
 			</tool-bar>
 			<menu text="SIGA/Expropiaciones/Expediente Reversión" action-command="ReversionsFileExtension" icon="extgex-reversions" position="30050"/>
 		</extension>
