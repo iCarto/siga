@@ -1,0 +1,99 @@
+<project name="libTopology" default="dist" basedir=".">
+    <description>
+        Genera el jar con libTopology y sus dependencias
+    </description>
+  <!-- set global properties for this build -->
+	<property name="src" location="src"/>
+	<property name="src-test" location="src-test"/>
+	<property name="lib" location="lib"/>
+	<property name="build" location="bin"/>
+	<property name="build-test" location="bin-test"/>
+	<property name="dist"  location="dist"/>
+	<property name="jarName" value="org.gvsig.topology-lib.jar"/>
+	<!--This could change, so we could copy this jar in lib directory of extTopology
+	project-->
+	<property name="targetDir" location="../libFMap/lib"/>
+	<property name="topology.home" value="${build}/org/gvsig/topology" />
+	<property name="i18n" location="../libInternationalization"/>
+	<property name="i18nLibs" location="${i18n}/lib"/>
+	<property name="andami" value="../_fwAndami"/>
+	<property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+
+  <target name="init">
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...
+	</echo>
+  </target>
+
+
+	 <target name="dist" depends="init, create-jar, move-to-andami"
+	        description="generate the distribution" >
+	  </target>
+
+	<target name="batch-build"
+				description="compile the sources, create the jar file"
+				depends="compile,create-jar,move-to-andami">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	    <copy todir="${topology.home}/i18n/resources/translations">
+	            <fileset dir="config" includes="*" />
+	    </copy>
+	</target>
+
+	<target name="create-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${dist}"/>
+	    <jar jarfile="${dist}/${jarName}" basedir="${build}"/>
+	    <jar jarfile="${dist}/${jarName}" basedir="." includes = "images/*" update="true" />
+	</target>
+
+
+	<target name="move-to-fmap" description="Move jars and required libraries to fmap">
+	    <copy todir="${dist}">
+	    	<fileset dir="./lib" includes="*.jar"/>
+	    </copy>
+	    <move todir="${targetDir}/">
+	    	<fileset dir="${dist}" includes="**/**"/>
+	    </move>
+	</target>
+
+	<target name="move-to-andami" description="Move jars and required libraries to andami plugin directory">
+		    <copy todir="${dist}">
+		    	<fileset dir="./lib" includes="*.jar"/>
+		    </copy>
+
+
+		    <move todir="${extensionsDir}/com.iver.cit.gvsig/lib/">
+		    	<fileset dir="${dist}" includes="**/**"/>
+		    </move>
+		</target>
+
+
+
+
+
+	<target name="clean"
+			description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+	<target name="run-tests" depends="batch-build">
+		<!--
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.cresques.cts.AllTests"/>
+		</antcall>
+		-->
+	</target>
+</project>
+
