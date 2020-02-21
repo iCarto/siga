@@ -25,6 +25,7 @@
 		libRaster,
 		libDriverManager,
 		libGDBMS,
+		libTopology,
 		libFMap,
 		appgvSIG,
 		extSymbology,
