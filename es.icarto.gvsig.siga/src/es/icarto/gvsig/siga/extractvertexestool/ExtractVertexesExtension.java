@@ -1,7 +1,6 @@
 package es.icarto.gvsig.siga.extractvertexestool;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
 import es.icarto.gvsig.commons.AbstractExtension;
@@ -23,12 +22,12 @@ public class ExtractVertexesExtension extends AbstractExtension {
     }
 
     private void updateGeoprocessPanel() {
-        FLayers layers = ((View) PluginServices.getMDIManager().getActiveWindow()).getModel().getMapContext()
-                .getLayers();
+        View view = getView();
+
         if (panel == null) {
-            panel = new ExtractVertexesGeoprocessPanel(layers);
+            panel = new ExtractVertexesGeoprocessPanel(view);
         } else {
-            panel.updateLayers(layers);
+            panel.updateLayers(view);
         }
     }
 
