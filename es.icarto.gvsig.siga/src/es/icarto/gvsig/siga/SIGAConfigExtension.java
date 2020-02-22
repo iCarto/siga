@@ -16,7 +16,8 @@ import com.iver.andami.preferences.IPreferenceExtension;
 import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
-import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.icarto.gvsig.commons.format.Format;
+import es.icarto.gvsig.commons.format.FormatPool;
 import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.elle.ConfigExtension;
@@ -69,7 +70,9 @@ public class SIGAConfigExtension extends Extension implements IPreferenceExtensi
                 return mapsToShow.toArray(new String[0]);
             }
         });
-        DBSession.setFormatter(new SIGAFormatter());
+        Format formatter = new SIGAFormatter();
+        DBSession.setFormatter(formatter);
+        FormatPool.set("default", formatter);
     }
 
     @Override
