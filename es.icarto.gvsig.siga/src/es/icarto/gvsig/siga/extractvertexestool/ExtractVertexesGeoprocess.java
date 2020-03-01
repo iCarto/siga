@@ -51,6 +51,7 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.DefaultLabelingMethod;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.util.SnappingCoordinateMap;
@@ -72,14 +73,12 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
     private static final String FIELD_LABEL_Y = "etiqueta_y";
     private static final String FIELD_LABEL = "etiqueta";
 
-    private static final Point2D.Double LABEL_MARKER_POINT = new Point2D.Double(
-            0.034129692832764506, 0.4810126582278481);
-    private static final Rectangle2D.Double LABEL_TEXT_FIELD_AREA_1 = new Rectangle2D.Double(
-            0.6497890295358645, 0.32911392405063306, 0.1940928270042194,
-            0.10126582278481013);
-    private static final Rectangle2D.Double LABEL_TEXT_FIELD_AREA_2 = new Rectangle2D.Double(
-            0.649789029535865, 0.6329113924050632, 0.18143459915611815,
-            0.0970464135021097);
+    private static final Point2D.Double LABEL_MARKER_POINT = new Point2D.Double(0.034129692832764506,
+            0.4810126582278481);
+    private static final Rectangle2D.Double LABEL_TEXT_FIELD_AREA_1 = new Rectangle2D.Double(0.6497890295358645,
+            0.32911392405063306, 0.1940928270042194, 0.10126582278481013);
+    private static final Rectangle2D.Double LABEL_TEXT_FIELD_AREA_2 = new Rectangle2D.Double(0.649789029535865,
+            0.6329113924050632, 0.18143459915611815, 0.0970464135021097);
 
     private ExtractVertexesGeoprocessPanel userEntries;
 
@@ -124,21 +123,17 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
         do {
             outputFileName = LAYER_FILE_PREFIX + "-" + (nr++);
         } while (layers.getLayer(outputFileName) != null);
-        File outputFile = new File(System.getProperty("java.io.tmpdir") + "/"
-                + outputFileName + ".shp");
+        File outputFile = new File(System.getProperty("java.io.tmpdir") + "/" + outputFileName + ".shp");
 
         SHPLayerDefinition definition = (SHPLayerDefinition) createLayerDefinition();
         definition.setFile(outputFile);
-        ShpSchemaManager schemaManager = new ShpSchemaManager(
-                outputFile.getAbsolutePath());
+        ShpSchemaManager schemaManager = new ShpSchemaManager(outputFile.getAbsolutePath());
         IWriter writer = null;
         try {
             writer = getShpWriter(definition);
         } catch (Exception e1) {
-            String error = PluginServices.getText(this,
-                    "Error_escritura_resultados");
-            String errorDescription = PluginServices.getText(this,
-                    "Error_preparar_escritura_resultados");
+            String error = PluginServices.getText(this, "Error_escritura_resultados");
+            String errorDescription = PluginServices.getText(this, "Error_preparar_escritura_resultados");
             userEntries.error(errorDescription, error);
             return false;
         }
@@ -148,17 +143,11 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
 
         boolean onlySelection = userEntries.isOnlySelectionSelected();
         params.put("layer_selection", new Boolean(onlySelection));
-        double distTolerance = 0d;
-        try {
-            distTolerance = userEntries.getClusterTolerance();
-        } catch (ExtractVertexesException e1) {
-            e1.printStackTrace();
-        }
+        double distTolerance = userEntries.getClusterTolerance();
+
         params.put("cluster_tolerance", new Double(distTolerance));
-        params.put("merge_layer_vertexes",
-                new Boolean(userEntries.isMergeLayerVertexesSelected()));
-        params.put("always_add_last_vertex",
-                new Boolean(userEntries.isAlwaysAddLastVertexSelected()));
+        params.put("merge_layer_vertexes", new Boolean(userEntries.isMergeLayerVertexesSelected()));
+        params.put("always_add_last_vertex", new Boolean(userEntries.isAlwaysAddLastVertexSelected()));
 
         try {
             setParameters(params);
@@ -168,18 +157,15 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
                 return false;
 
             }
-            ExtractVertexesAddResultLayerTask task2 = new ExtractVertexesAddResultLayerTask(
-                    this);
+            ExtractVertexesAddResultLayerTask task2 = new ExtractVertexesAddResultLayerTask(this);
             task2.setLayers(layers);
-            MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(
-                    task1, task2);
+            MonitorableDecoratorMainFirst globalTask = new MonitorableDecoratorMainFirst(task1, task2);
             if (globalTask.preprocess()) {
                 PluginServices.cancelableBackgroundExecution(globalTask);
             }
 
         } catch (ExtractVertexesException e) {
-            userEntries.error(
-                    PluginServices.getText(this, "Error_fallo_geoproceso"),
+            userEntries.error(PluginServices.getText(this, "Error_fallo_geoproceso"),
                     PluginServices.getText(this, "Error_ejecucion"));
             return false;
         }
@@ -195,50 +181,45 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
     }
 
     protected FLayer createLayerFrom(IWriter writer) throws ExtractVertexesException {
-        SHPLayerDefinition tableDef = (SHPLayerDefinition) ((ShpWriter) writer)
-                .getTableDefinition();
+        SHPLayerDefinition tableDef = (SHPLayerDefinition) ((ShpWriter) writer).getTableDefinition();
         FLyrVect solution = null;
         String fileName = ((ShpWriter) writer).getShpPath();
         String layerName = null;
         int fileNameStart = fileName.lastIndexOf(File.separator) + 1;
-        if (fileNameStart == -1)
+        if (fileNameStart == -1) {
             fileNameStart = 0;
+        }
         layerName = fileName.substring(fileNameStart, fileName.length() - 4);
         File file = new File(fileName);
-        IProjection proj = (tableDef.getProjection() != null) ? tableDef
-                .getProjection() : firstLayer.getProjection();
-        try {
-            IndexedShpDriver driver = new IndexedShpDriver();
-            driver.open(file);
-            driver.initialize();
-            solution = (FLyrVect) LayerFactory.createLayer(layerName, driver,
-                    file, proj);
-            LabelClass lc = new LabelClass();
-            lc.setLabelExpressions(new String[] { "[" + FIELD_LABEL_X + "]",
-                    "[" + FIELD_LABEL_Y + "]" });
-            lc.getTextSymbol().setDrawWithHalo(true);
-            lc.getTextSymbol().setHaloWidth(5);
-            lc.getTextSymbol().setFontSize(8);
-            SimpleLabelStyle ls = new SimpleLabelStyle();
-            ls.setMarkerPoint((Point2D) LABEL_MARKER_POINT.clone());
-            ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_1.clone());
-            ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_2.clone());
-            lc.setLabelStyle(ls);
+        IProjection proj = (tableDef.getProjection() != null) ? tableDef.getProjection() : firstLayer.getProjection();
+                try {
+                    IndexedShpDriver driver = new IndexedShpDriver();
+                    driver.open(file);
+                    driver.initialize();
+                    solution = (FLyrVect) LayerFactory.createLayer(layerName, driver, file, proj);
+                    LabelClass lc = new LabelClass();
+                    lc.setLabelExpressions(new String[] { "[" + FIELD_LABEL_X + "]", "[" + FIELD_LABEL_Y + "]" });
+                    lc.getTextSymbol().setDrawWithHalo(true);
+                    lc.getTextSymbol().setHaloWidth(5);
+                    lc.getTextSymbol().setFontSize(8);
+                    SimpleLabelStyle ls = new SimpleLabelStyle();
+                    ls.setMarkerPoint((Point2D) LABEL_MARKER_POINT.clone());
+                    ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_1.clone());
+                    ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_2.clone());
+                    lc.setLabelStyle(ls);
 
-            PointPlacementConstraints pl = new PointPlacementConstraints();
-            pl.setPlacementMode(PointPlacementConstraints.ON_TOP_OF_THE_POINT);
+                    PointPlacementConstraints pl = new PointPlacementConstraints();
+                    pl.setPlacementMode(IPlacementConstraints.ON_TOP_OF_THE_POINT);
 
-            GeneralLabelingStrategy st = (GeneralLabelingStrategy) ExtendedLabelingFactory
-                    .createStrategy(solution, new DefaultLabelingMethod(lc),
-                            pl, null);
-            st.setAllowOverlapping(true);
-            solution.setLabelingStrategy(st);
-            solution.setIsLabeled(true);
-            return solution;
-        } catch (Exception e) {
-            throw new ExtractVertexesException(
-                    "Problemas al cargar la capa resultado", e);
-        }
+                    GeneralLabelingStrategy st = (GeneralLabelingStrategy) ExtendedLabelingFactory.createStrategy(solution,
+                    new DefaultLabelingMethod(lc), pl, null);
+                    st.setAllowOverlapping(true);
+                    solution.setLabelingStrategy(st);
+                    solution.setIsLabeled(true);
+                    return solution;
+                } catch (Exception e) {
+                    throw new ExtractVertexesException("Problemas al cargar la capa resultado", e);
+                }
     }
 
     public FLayer getResult() throws ExtractVertexesException {
@@ -268,8 +249,7 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
         }
     }
 
-    public void setResultLayerProperties(IWriter writer,
-            ISchemaManager schemaManager) {
+    public void setResultLayerProperties(IWriter writer, ISchemaManager schemaManager) {
         this.writer = writer;
         this.schemaManager = schemaManager;
     }
@@ -282,6 +262,7 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
         }
     }
 
+    @Override
     public IMonitorableTask createTask() {
         return new ExtractVertexesGeoprocessTask(this);
     }
@@ -289,16 +270,15 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
     public void checkPreconditions() throws ExtractVertexesException {
         int lyrDimensions;
         try {
-            lyrDimensions = FGeometryUtil.getDimensions(firstLayer
-                    .getShapeType());
+            lyrDimensions = FGeometryUtil.getDimensions(firstLayer.getShapeType());
 
-            if (lyrDimensions < 1)
+            if (lyrDimensions < 1) {
                 throw new ExtractVertexesException(
                         "Geoproceso convertir polígonos o lineas a puntos con capa de puntos");
+            }
 
         } catch (ReadDriverException e) {
-            throw new ExtractVertexesException(
-                    "Error intentando acceder al tipo de geometria de capa vectorial");
+            throw new ExtractVertexesException("Error intentando acceder al tipo de geometria de capa vectorial");
         }
 
     }
@@ -355,28 +335,27 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
 
     public void setParameters(Map params) throws ExtractVertexesException {
         Boolean onlySelection = (Boolean) params.get("layer_selection");
-        if (onlySelection != null)
+        if (onlySelection != null) {
             this.operateOnlyWithSelection = onlySelection.booleanValue();
+        }
 
-        Boolean mergeLayerVertexes = (Boolean) params
-                .get("merge_layer_vertexes");
+        Boolean mergeLayerVertexes = (Boolean) params.get("merge_layer_vertexes");
         if (mergeLayerVertexes != null) {
             this.mergeLayerVertexes = mergeLayerVertexes.booleanValue();
         }
 
-        Boolean alwaysAddLastVertex = (Boolean) params
-                .get("always_add_last_vertex");
+        Boolean alwaysAddLastVertex = (Boolean) params.get("always_add_last_vertex");
         if (alwaysAddLastVertex != null) {
             this.alwaysAddLastVertex = alwaysAddLastVertex.booleanValue();
         }
 
         Double clusterToleranceD = (Double) params.get("cluster_tolerance");
-        if (clusterToleranceD != null)
+        if (clusterToleranceD != null) {
             clusterTolerance = clusterToleranceD.doubleValue();
+        }
     }
 
-    public void process(ExtractVertexesGeoprocessTask progressMonitor)
-            throws ExtractVertexesException {
+    public void process(ExtractVertexesGeoprocessTask progressMonitor) throws ExtractVertexesException {
         if (progressMonitor != null) {
             initialize(progressMonitor);
         }
@@ -391,54 +370,43 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
             IFeatureIterator featureIterator = null;
             if (this.operateOnlyWithSelection) {
                 FBitSet selection = firstLayer.getRecordset().getSelection();
-                featureIterator = new FeatureBitsetIterator(selection,
-                        firstLayer.getSource());
+                featureIterator = new FeatureBitsetIterator(selection, firstLayer.getSource());
             } else {
                 featureIterator = firstLayer.getSource().getFeatureIterator();
             }
 
             int numNewFeatures = 0;
-            SnappingCoordinateMap coordinateMap = new SnappingCoordinateMap(
-                    clusterTolerance);
+            SnappingCoordinateMap coordinateMap = new SnappingCoordinateMap(clusterTolerance);
             NumberFormat nf = NumberFormat.getInstance(new Locale("es", "ES"));
             while (featureIterator.hasNext()) {
                 IFeature feature = featureIterator.next();
                 IGeometry fmapGeo = feature.getGeometry();
 
-                List<Point2D[]> pointsParts = ShapePointExtractor
-                        .extractPoints(fmapGeo);
+                List<Point2D[]> pointsParts = ShapePointExtractor.extractPoints(fmapGeo);
                 for (int i = 0; i < pointsParts.size(); i++) {
                     Point2D[] points = pointsParts.get(i);
                     int numVertexes = 1;
                     for (int j = 0; j < points.length; j++) {
                         Point2D pt = points[j];
                         Coordinate coord = new Coordinate(pt.getX(), pt.getY());
-                        if (coordinateMap.containsKey(coord)
-                                && (!alwaysAddLastVertex || j < (points.length - 1))) {
+                        if (coordinateMap.containsKey(coord) && (!alwaysAddLastVertex || j < (points.length - 1))) {
                             continue;
                         } else {
                             coordinateMap.put(coord, coord);
-                            IGeometry newGeometry = ShapeFactory.createPoint2D(
-                                    coord.x, coord.y);
+                            IGeometry newGeometry = ShapeFactory.createPoint2D(coord.x, coord.y);
                             Value[] attrs = new Value[] {
                                     ValueFactory.createValue(numNewFeatures),
-                                    ValueFactory.createValue(Integer
-                                            .parseInt(feature.getID())),
-                                    ValueFactory.createValue(j + 1),
-                                    ValueFactory.createValue(numVertexes),
-                                    ValueFactory.createValue(coord.x),
-                                    ValueFactory.createValue(coord.y),
-                                    ValueFactory.createValue("X: "
-                                            + nf.format(coord.x)),
-                                    ValueFactory.createValue("Y: "
-                                            + nf.format(coord.y)),
-                                    ValueFactory.createValue(numVertexes++
-                                            + " - X: " + nf.format(coord.x)
-                                            + " | Y: " + nf.format(coord.y)) };
-                            writer.process(new DefaultRowEdited(
-                                    new DefaultFeature(newGeometry, attrs,
-                                            new UID().toString()),
-                                    IRowEdited.STATUS_ADDED, numNewFeatures++));
+                                    ValueFactory.createValue(Integer.parseInt(feature.getID())),
+                                            ValueFactory.createValue(j + 1),
+                                            ValueFactory.createValue(numVertexes),
+                                            ValueFactory.createValue(coord.x),
+                                            ValueFactory.createValue(coord.y),
+                                            ValueFactory.createValue("X: " + nf.format(coord.x)),
+                                                    ValueFactory.createValue("Y: " + nf.format(coord.y)),
+                                                            ValueFactory.createValue(numVertexes++ + " - X: " + nf.format(coord.x) + " | Y: "
+                                            + nf.format(coord.y)) };
+                            writer.process(new DefaultRowEdited(new DefaultFeature(newGeometry, attrs, new UID()
+                                    .toString()), IRowEdited.STATUS_ADDED, numNewFeatures++));
                         }
                     }
                 }
@@ -454,38 +422,27 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
                 progressMonitor.finished();
             }
         } catch (StopVisitorException e) {
-            throw new ExtractVertexesException(
-                    "Error al finalizar el guardado de los resultados del geoproceso",
-                    e);
+            throw new ExtractVertexesException("Error al finalizar el guardado de los resultados del geoproceso", e);
         } catch (BaseException e) {
-            throw new ExtractVertexesException(
-                    "Error al acceder a la informacion del driver dentro del geoproceso",
-                    e);
+            throw new ExtractVertexesException("Error al acceder a la informacion del driver dentro del geoproceso", e);
         } catch (Exception e) {
-            throw new ExtractVertexesException(
-                    "Error al acceder a la informacion del driver dentro del geoproceso",
-                    e);
+            throw new ExtractVertexesException("Error al acceder a la informacion del driver dentro del geoproceso", e);
         }
     }
 
-    public void initialize(ExtractVertexesGeoprocessTask progressMonitor)
-            throws ExtractVertexesException {
+    public void initialize(ExtractVertexesGeoprocessTask progressMonitor) throws ExtractVertexesException {
         try {
             progressMonitor.setInitialStep(0);
             if (this.operateOnlyWithSelection) {
-                progressMonitor.setFinalStep(firstLayer.getRecordset()
-                        .getSelection().cardinality());
+                progressMonitor.setFinalStep(firstLayer.getRecordset().getSelection().cardinality());
             } else {
-                progressMonitor.setFinalStep(firstLayer.getSource()
-                        .getShapeCount());
+                progressMonitor.setFinalStep(firstLayer.getSource().getShapeCount());
             }
             progressMonitor.setDeterminatedProcess(true);
             progressMonitor.setNote(Messages.getText("extract_vertexes_note"));
-            progressMonitor.setStatusMessage(Messages
-                    .getText("extract_vertexes_layer_message"));
+            progressMonitor.setStatusMessage(Messages.getText("extract_vertexes_layer_message"));
         } catch (ReadDriverException e) {
-            throw new ExtractVertexesException(
-                    "error accediendo al numero de features de una layer", e);
+            throw new ExtractVertexesException("error accediendo al numero de features de una layer", e);
         }
     }
 

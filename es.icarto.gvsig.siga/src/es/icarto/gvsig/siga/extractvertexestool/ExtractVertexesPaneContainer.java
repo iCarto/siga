@@ -21,7 +21,8 @@ public class ExtractVertexesPaneContainer extends JPanel implements IWindow {
     private WindowInfo viewInfo = null;
     private ExtractVertexesGeoprocess controller;
 
-    private ActionListener okActionListener = new ActionListener() {
+    private final ActionListener okActionListener = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             if (controller.launchGeoprocess()) {
                 cancel();
@@ -29,7 +30,8 @@ public class ExtractVertexesPaneContainer extends JPanel implements IWindow {
         }
     };
 
-    private ActionListener cancelActionListener = new ActionListener() {
+    private final ActionListener cancelActionListener = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             cancel();
         }
@@ -41,17 +43,18 @@ public class ExtractVertexesPaneContainer extends JPanel implements IWindow {
         initialize();
     }
 
+    @Override
     public WindowInfo getWindowInfo() {
         if (viewInfo == null) {
             viewInfo = new WindowInfo(WindowInfo.MODALDIALOG);
-            viewInfo.setTitle(PluginServices.getText(this,
-                    "extract_vertexes_title"));
+            viewInfo.setTitle(PluginServices.getText(this, "extract_vertexes_title"));
             viewInfo.setWidth(435);
             viewInfo.setHeight(135);
         }
         return viewInfo;
     }
 
+    @Override
     public Object getWindowProfile() {
         return WindowInfo.DIALOG_PROFILE;
     }
@@ -62,7 +65,7 @@ public class ExtractVertexesPaneContainer extends JPanel implements IWindow {
 
     private void initialize() {
         this.setLayout(new BorderLayout());
-        this.setSize(new java.awt.Dimension(570, 460));
+        // this.setSize(new java.awt.Dimension(570, 460));
         this.add(getMainPanel(), java.awt.BorderLayout.NORTH);
         this.add(getButtonPanel(), java.awt.BorderLayout.SOUTH);
 
@@ -92,8 +95,7 @@ public class ExtractVertexesPaneContainer extends JPanel implements IWindow {
             }
             ((Window) container).dispose();
         } else {
-            PluginServices.getMDIManager().closeWindow(
-                    ExtractVertexesPaneContainer.this);
+            PluginServices.getMDIManager().closeWindow(ExtractVertexesPaneContainer.this);
         }
     }
 

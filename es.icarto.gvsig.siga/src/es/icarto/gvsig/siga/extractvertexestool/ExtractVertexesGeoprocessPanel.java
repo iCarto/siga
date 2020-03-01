@@ -1,6 +1,5 @@
 package es.icarto.gvsig.siga.extractvertexestool;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
@@ -14,7 +13,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
@@ -29,10 +27,13 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+import es.icarto.gvsig.commons.format.FormatPool;
 import es.icarto.gvsig.commons.gui.TOCLayerManager;
 import es.icarto.gvsig.commons.gui.TexfieldFactory;
 
 public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
+
+    private static final String prototypeDisplayValue = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
     private static final Logger logger = Logger.getLogger(ExtractVertexesGeoprocessPanel.class);
 
@@ -59,16 +60,13 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
         initLayersWidgets();
         initSelectionWidgets();
         addSpecificDesign();
-
-        setBounds(0, 0, 520, 410);
-
         updateLayersComboBox();
     }
 
     private void initLayersWidgets() {
         JLabel firstLayerLab = new JLabel(PluginServices.getText(this, "extract_vertexes_input") + ":");
         layersComboBox = new JComboBox();
-        layersComboBox.setBounds(142, 63, 260, 21);
+        layersComboBox.setPrototypeDisplayValue(prototypeDisplayValue);
         addComponent(firstLayerLab, layersComboBox, GridBagConstraints.BOTH, insets);
         layersComboBox.addItemListener(new java.awt.event.ItemListener() {
             @Override
@@ -92,6 +90,12 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
             // defaultModel.setSelectedItem(selectedItem);
             layersComboBox.setSelectedItem(selectedItem);
         }
+        // Si se vuelve a seleccionar el elemento ya seleccionado, no salta un ItemEvent, aunque si un ActionEvent
+        // Este código en realidad sólo está para cuando se abra el Panel y no haya una capa activa, para refrescar
+        // el número de features
+        initSelectedItemsJCheckBox();
+        updateAlwaysAddLastVertexCheckbox();
+
     }
 
     private String[] getLayerNames() {
@@ -188,11 +192,8 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
     }
 
     private void addSpecificDesign() {
-
-        JPanel aux = new JPanel(new BorderLayout());
         String text = PluginServices.getText(this, "extract_vertexes_tolerance") + ":";
-        distToleranceTextField = TexfieldFactory.getIntegerTextField(15);
-        aux.add(distToleranceTextField, BorderLayout.WEST);
+        distToleranceTextField = TexfieldFactory.getNumberTextField(-1);
 
         // mergeLayerVertexesCheckBox = new JCheckBox();
         // mergeLayerVertexesCheckBox.setText(PluginServices.getText(this, "extract_vertexes_merge_layer_vertexes"));
@@ -203,7 +204,7 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
         addComponent(alwaysAddLastVertexCheckBox, GridBagConstraints.BOTH, insets);
         alwaysAddLastVertexCheckBox.setSelected(true);
 
-        addComponent(text, aux, GridBagConstraints.HORIZONTAL, insets);
+        addComponent(text, distToleranceTextField, GridBagConstraints.BOTH, insets);
     }
 
     public boolean isMergeLayerVertexesSelected() {
@@ -220,12 +221,8 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
         return selectedOnlyCheckBox != null && selectedOnlyCheckBox.isEnabled() && selectedOnlyCheckBox.isSelected();
     }
 
-    public double getClusterTolerance() throws ExtractVertexesException {
-        try {
-            String strDist = this.distToleranceTextField.getText();
-            return (strDist.trim().length() == 0) ? 0 : Double.parseDouble(strDist);
-        } catch (NumberFormatException ex) {
-            throw new ExtractVertexesException("Distancia de fusionado introducida no numérica");
-        }
+    public double getClusterTolerance() {
+        String strDist = this.distToleranceTextField.getText();
+        return FormatPool.instance().toNumber(strDist).doubleValue();
     }
 }
