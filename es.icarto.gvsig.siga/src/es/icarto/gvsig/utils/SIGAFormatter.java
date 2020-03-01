@@ -16,14 +16,19 @@ import es.udc.cartolab.gvsig.navtable.format.IntegerFormatNT;
 
 public class SIGAFormatter extends Format {
 
-    // Esto debería ser una clase que admitiera seteos, así no tiene sentido
-    private final NumberFormat numberFormat = DoubleFormatNT.getDisplayingFormat();
     private static DecimalFormat doubleFormatOnDisplay;
+    private final static SimpleDateFormat DATE_FORMAT = DateFormatNT.getDateFormat();
+    private final static NumberFormat INT_FORMAT = IntegerFormatNT.getDisplayingFormat();
+
     static {
         doubleFormatOnDisplay = (DecimalFormat) NumberFormat.getNumberInstance(Locale.getDefault());
         // Display a maximum of 3 decimals
         doubleFormatOnDisplay.applyPattern("0.###");
         doubleFormatOnDisplay.setGroupingUsed(false);
+    }
+
+    public SIGAFormatter() {
+        nformat = DoubleFormatNT.getDisplayingFormat();
     }
 
     @Override
@@ -32,7 +37,7 @@ public class SIGAFormatter extends Format {
             return "";
         }
         if ((o instanceof Double) || (o instanceof Float) || (o instanceof BigDecimal)) {
-            return numberFormat.format(o);
+            return nformat.format(o);
         }
         return o.toString();
     }
@@ -71,10 +76,6 @@ public class SIGAFormatter extends Format {
             return "";
         }
     }
-
-    private final static SimpleDateFormat DATE_FORMAT = DateFormatNT.getDateFormat();
-    private final static NumberFormat DOUBLE_FORMAT = DoubleFormatNT.getDisplayingFormat();
-    private static final NumberFormat INT_FORMAT = IntegerFormatNT.getDisplayingFormat();
 
     public static String formatValue(Object o) {
         if (o == null) {
