@@ -408,7 +408,7 @@ public class SymbologyFactory {
 	 */
 	public static IMultiLayerSymbol createEmptyMultiLayerSymbol(int shapeType) {
 		IMultiLayerSymbol mSym;
-		switch (shapeType%FShape.Z) {
+		switch (typeWithoutZM(shapeType)) {
 		case FShape.POINT:
 			mSym = new MultiLayerMarkerSymbol();
 			break;
@@ -497,23 +497,29 @@ public class SymbologyFactory {
 	 * @return ISymbol, the default symbol for the shape type defined by <b>shapeType</b>
 	 */
 	public static ISymbol createDefaultSymbolByShapeType(int shapeType) {
-		if ((shapeType & FShape.POINT)!= 0){
-			return createDefaultMarkerSymbol();
-		} else if ((shapeType & FShape.LINE) != 0){
-			return createDefaultLineSymbol();
-		} else if ((shapeType & FShape.POLYGON) != 0){
-			return createDefaultFillSymbol();
-		} else if ((shapeType & FShape.MULTIPOINT) != 0){
-			return createDefaultMarkerSymbol();
-		} else if ((shapeType & FShape.TEXT) != 0){
-			return createDefaultTextSymbol();
-		} else if ((shapeType & FShape.MULTI) != 0){
-			return new MultiShapeSymbol();
-		} else if (shapeType == FShape.NULL){
-			return null;
-		}
+	    switch (typeWithoutZM(shapeType)) {
+        case FShape.POINT:
+            return createDefaultMarkerSymbol();
+        case FShape.LINE:
+            return createDefaultLineSymbol();
+        case FShape.POLYGON:
+            return createDefaultFillSymbol();
+        case FShape.MULTIPOINT:
+            return createDefaultMarkerSymbol();
+        case FShape.TEXT:
+            return createDefaultTextSymbol();
+        case FShape.MULTI:
+            return new MultiShapeSymbol();
+        case FShape.NULL:
+            return null;
+        }
 		throw new Error("shape type not yet supported");
 	}
+	
+	private static int typeWithoutZM(int shapeType) {
+        // return shapeType % FShape.Z; // esto es suficiente, pero para que quede más claro
+        return shapeType % FShape.Z % FShape.M;
+    }
 
 	/**
 	 * Creates a new instance of the default symbol whose type is defined
