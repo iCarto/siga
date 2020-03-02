@@ -5,9 +5,7 @@ import org.gvsig.copypastegeom.toc.CopyFeaturesTocMenuEntry;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.Version;
-import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -19,14 +17,15 @@ import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SelectionSupport;
-import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 import com.vividsolutions.jts.io.WKTWriter;
 
-public class CopyFeaturesExtension extends Extension {
+import es.icarto.gvsig.commons.AbstractExtension;
+
+public class CopyFeaturesExtension extends AbstractExtension {
 
     private static WKTWriter geometryWriter = new WKTWriter();
     private FLyrVect layer;
@@ -39,14 +38,10 @@ public class CopyFeaturesExtension extends Extension {
         }
     }
 
+    @Override
     public void initialize() {
-        registerIcons();
+        super.initialize();
         registerExtensionPoint();
-    }
-
-    private void registerIcons() {
-        PluginServices.getIconTheme().registerDefault("copy_features",
-                this.getClass().getClassLoader().getResource("images/copy_features.png"));
     }
 
     public void registerExtensionPoint() {
@@ -55,7 +50,7 @@ public class CopyFeaturesExtension extends Extension {
     }
 
     public boolean isEnabled() {
-        View view = (View) PluginServices.getMDIManager().getActiveWindow();
+        View view = getView();
         MapControl mapControl = view.getMapControl();
         FLayer[] layers = mapControl.getMapContext().getLayers().getActives();
         if (layers.length != 1) {
@@ -85,19 +80,9 @@ public class CopyFeaturesExtension extends Extension {
         return false;
     }
 
+    @Override
     public boolean isVisible() {
-        com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
-        if (f == null) {
-            return false;
-        }
-
-        if (f instanceof View) {
-            View vista = (View) f;
-            IProjectView model = vista.getModel();
-            MapContext mapContext = model.getMapContext();
-            return mapContext.getLayers().getLayersCount() > 0;
-        }
-        return false;
+        return getView() != null;
     }
 
     public void copyFeatures() throws ReadDriverException {

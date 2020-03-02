@@ -12,7 +12,6 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.CADExtension;
 import com.iver.cit.gvsig.EditionManager;
 import com.iver.cit.gvsig.EditionUtilities;
@@ -30,7 +29,6 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SpatialCache;
 import com.iver.cit.gvsig.layers.VectorialLayerEdited;
-import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
@@ -38,11 +36,10 @@ import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 import com.vividsolutions.jts.io.WKTReader;
 
-public class PasteFeaturesExtension extends Extension {
+import es.icarto.gvsig.commons.AbstractExtension;
 
-    private View view;
-    private MapControl mapControl;
-    FLyrVect lv;
+public class PasteFeaturesExtension extends AbstractExtension {
+
     private XMLEntity xml = null;
     private static WKTReader geometryReader = new WKTReader();
 
@@ -55,14 +52,10 @@ public class PasteFeaturesExtension extends Extension {
 
     }
 
+    @Override
     public void initialize() {
-        registerIcons();
+        super.initialize();
         registerExtensionPoint();
-    }
-
-    private void registerIcons() {
-        PluginServices.getIconTheme().registerDefault("paste_features",
-                this.getClass().getClassLoader().getResource("images/paste_features.png"));
     }
 
     public void registerExtensionPoint() {
@@ -71,162 +64,160 @@ public class PasteFeaturesExtension extends Extension {
     }
 
     public boolean isEnabled() {
-        if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
-            view = (View) PluginServices.getMDIManager().getActiveWindow();
-            mapControl = view.getMapControl();
-            EditionManager em = CADExtension.getEditionManager();
-            if (em.getActiveLayerEdited() == null) {
-                return false;
-            }
+        if (EditionUtilities.getEditionStatus() != EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
+            return false;
+        }
+
+        EditionManager em = CADExtension.getEditionManager();
+        if (em.getActiveLayerEdited() == null) {
+            return false;
+        }
+
+        this.xml = this.getCheckedXMLFromClipboard();
+        if (this.xml == null) {
+            return false;
+        }
+
+        /*
+         * Comprobamos también que el tipo de shape coincida para saber si podemos
+         * pegar en la capa las features que tenemos en el portapapeles.
+         */
+
+        try {
+            int shapeType = this.xml.getIntProperty("shapeType");
+
             VectorialLayerEdited vle = (VectorialLayerEdited) em.getActiveLayerEdited();
             FLyrVect lv = (FLyrVect) vle.getLayer();
-            if (lv != null) {
-                this.xml = this.getCheckedXMLFromClipboard();
-                /*
-                 * Comprobamos también que el tipo de shape coincida para saber si podemos
-                 * pegar en la capa las features que tenemos en el portapapeles.
-                 */
-                if (this.xml != null) {
-                    try {
-                        int shapeType = this.xml.getIntProperty("shapeType");
-                        if (typeWithoutZM(shapeType) != typeWithoutZM(lv.getShapeType())) {
-                            return false;
-                        }
-                    } catch (NotExistInXMLEntity e) {
-                        return false;
-                    } catch (ReadDriverException e) {
-                        NotificationManager.addError(
-                                PluginServices.getText(this, "error_comprobando_el_tipo_de_shape_de_la_capa"), e);
-                    }
-                }
-                return this.xml != null;
+            if (typeWithoutZM(shapeType) != typeWithoutZM(lv.getShapeType())) {
+                return false;
             }
-
+        } catch (NotExistInXMLEntity e) {
+            return false;
+        } catch (ReadDriverException e) {
+            NotificationManager.addError(
+                    PluginServices.getText(this, "error_comprobando_el_tipo_de_shape_de_la_capa"), e);
+            return false;
         }
-        return false;
+
+        return true;
+
     }
-    
+
     private int typeWithoutZM(int shapeType) {
         // return shapeType % FShape.Z; // esto es suficiente, pero para que quede más claro
         return shapeType % FShape.Z % FShape.M;
     }
 
+    @Override
     public boolean isVisible() {
-        com.iver.andami.ui.mdiManager.IWindow f = PluginServices.getMDIManager().getActiveWindow();
-        if (f == null) {
-            return false;
-        }
-
-        if (f instanceof View) {
-            View vista = (View) f;
-            IProjectView model = vista.getModel();
-            MapContext mapContext = model.getMapContext();
-            return mapContext.getLayers().getLayersCount() > 0;
-        }
-        return false;
+        return getView() != null;
     }
 
     public void pasteFeatures() throws Exception {
-        if (xml != null) {
-            CADExtension.initFocus();
-            CADExtension.getEditionManager().setMapControl(mapControl);
+        if (this.xml == null) {
+            return;
+        }
+        View view = getView();
+        MapControl mapControl = view.getMapControl();
 
-            View vista = (View) PluginServices.getMDIManager().getActiveWindow();
-            mapControl = vista.getMapControl();
-            EditionManager em = CADExtension.getEditionManager();
-            if (em.getActiveLayerEdited() != null) {
-                VectorialLayerEdited vle = (VectorialLayerEdited) em.getActiveLayerEdited();
-                VectorialEditableAdapter vea = vle.getVEA();
-                lv = (FLyrVect) vle.getLayer();
-                MapContext mapContext = lv.getMapContext();
+        CADExtension.initFocus();
+        EditionManager em = CADExtension.getEditionManager();
+        em.setMapControl(mapControl);
 
-                int shapeType = xml.getIntProperty("shapeType");
-                if (typeWithoutZM(shapeType) != typeWithoutZM(lv.getShapeType())) {
-                    return;
-                }
-                
-                int child = xml.firstIndexOfChild("name", "fields");
-                if (child == -1) {
-                    return;
-                }
-                FieldDescription[] fieldsDescription = getFieldsDescription(xml.getChild(child));
+        if (em.getActiveLayerEdited() == null) {
+            return;
+        }
 
-                child = xml.firstIndexOfChild("name", "features");
-                if (child == -1) {
-                    return;
-                }
+        VectorialLayerEdited vle = (VectorialLayerEdited) em.getActiveLayerEdited();
+        VectorialEditableAdapter vea = vle.getVEA();
+        FLyrVect lv = (FLyrVect) vle.getLayer();
+        MapContext mapContext = lv.getMapContext();
 
-                XMLEntity featuresXML = xml.getChild(child);
-                if (featuresXML == null) {
-                    return;
-                }
+        int shapeType = xml.getIntProperty("shapeType");
+        if (typeWithoutZM(shapeType) != typeWithoutZM(lv.getShapeType())) {
+            return;
+        }
 
-                // ReadableVectorial mySource = lv.getSource();
-                SelectableDataSource myRs = lv.getRecordset();
-                mapContext.beginAtomicEvent();
-                myRs.start();
-                try {
-                    int featuresCount = featuresXML.getChildrenCount();
-                    for (int i = 0; i < featuresCount; i++) { // bucle por las features
-                        XMLEntity featureXML = featuresXML.getChild(i);
-                        Value[] values = new Value[myRs.getFieldCount()];
-                        for (int j = 0; j < values.length; j++) { // bucle por los campos de myRs para rellenarlos
-                            String name = myRs.getFieldName(j);
-                            int type = myRs.getFieldType(j);
-                            values[j] = ValueFactory.createNullValue();
-                            for (int k = 0; k < fieldsDescription.length; k++) { // bucle buscando el campo que queremos
-                                // rellenar
-                                if (fieldsDescription[k].getFieldName().compareTo(name) == 0
-                                        && fieldsDescription[k].getFieldType() == type) {
-                                    String stringValue = featureXML.getStringProperty(name);
-                                    try {
-                                        if (stringValue == null) {
-                                            values[j] = ValueFactory.createNullValue();
-                                        } else {
-                                            values[j] = ValueFactory.createValueByType(stringValue, type);
-                                        }
-                                    } catch (ParseException pe) {
-                                        throw pe;
-                                    }
+        int child = xml.firstIndexOfChild("name", "fields");
+        if (child == -1) {
+            return;
+        }
+        FieldDescription[] fieldsDescription = getFieldsDescription(xml.getChild(child));
+
+        child = xml.firstIndexOfChild("name", "features");
+        if (child == -1) {
+            return;
+        }
+
+        XMLEntity featuresXML = xml.getChild(child);
+        if (featuresXML == null) {
+            return;
+        }
+
+        // ReadableVectorial mySource = lv.getSource();
+        SelectableDataSource myRs = lv.getRecordset();
+        mapContext.beginAtomicEvent();
+        myRs.start();
+        try {
+            int featuresCount = featuresXML.getChildrenCount();
+            for (int i = 0; i < featuresCount; i++) { // bucle por las features
+                XMLEntity featureXML = featuresXML.getChild(i);
+                Value[] values = new Value[myRs.getFieldCount()];
+                for (int j = 0; j < values.length; j++) { // bucle por los campos de myRs para rellenarlos
+                    String name = myRs.getFieldName(j);
+                    int type = myRs.getFieldType(j);
+                    values[j] = ValueFactory.createNullValue();
+                    for (int k = 0; k < fieldsDescription.length; k++) { // bucle buscando el campo que queremos
+                        // rellenar
+                        if (fieldsDescription[k].getFieldName().compareTo(name) == 0
+                                && fieldsDescription[k].getFieldType() == type) {
+                            String stringValue = featureXML.getStringProperty(name);
+                            try {
+                                if (stringValue == null) {
+                                    values[j] = ValueFactory.createNullValue();
+                                } else {
+                                    values[j] = ValueFactory.createValueByType(stringValue, type);
                                 }
+                            } catch (ParseException pe) {
+                                throw pe;
                             }
-                        }
-
-                        child = featureXML.firstIndexOfChild("name", "geometry");
-                        if (child == -1) {
-                            continue;
-                        }
-                        XMLEntity geometryXML = featureXML.getChild(child);
-                        if (geometryXML == null) {
-                            return;
-                        }
-                        IGeometry geom = FConverter.jts_to_igeometry(geometryReader.read(geometryXML
-                                .getStringProperty("geometry"))); // .cloneGeometry();
-                        if (geom != null) {
-                            String newFID = vea.getNewFID();
-                            DefaultFeature df = new DefaultFeature(geom, values, newFID);
-                            vea.addRow(df, this.getClass().getName(), EditionEvent.GRAPHIC);
-
-                            SpatialCache spatialCache = lv.getSpatialCache();
-                            Rectangle2D r = geom.getBounds2D();
-                            if (geom.getGeometryType() == FShape.POINT) {
-                                r = new Rectangle2D.Double(r.getX(), r.getY(), 1, 1);
-                            }
-                            spatialCache.insert(r, geom);
-
-                            CADExtension.getCADToolAdapter().getMapControl().rePaintDirtyLayers();
-
                         }
                     }
-                } catch (Exception e) {
-                    throw e;
-                } finally {
-                    myRs.stop();
-                    mapContext.endAtomicEvent();
                 }
 
+                child = featureXML.firstIndexOfChild("name", "geometry");
+                if (child == -1) {
+                    continue;
+                }
+                XMLEntity geometryXML = featureXML.getChild(child);
+                if (geometryXML == null) {
+                    return;
+                }
+                IGeometry geom = FConverter.jts_to_igeometry(geometryReader.read(geometryXML
+                        .getStringProperty("geometry"))); // .cloneGeometry();
+                if (geom != null) {
+                    String newFID = vea.getNewFID();
+                    DefaultFeature df = new DefaultFeature(geom, values, newFID);
+                    vea.addRow(df, this.getClass().getName(), EditionEvent.GRAPHIC);
+
+                    SpatialCache spatialCache = lv.getSpatialCache();
+                    Rectangle2D r = geom.getBounds2D();
+                    if (geom.getGeometryType() == FShape.POINT) {
+                        r = new Rectangle2D.Double(r.getX(), r.getY(), 1, 1);
+                    }
+                    spatialCache.insert(r, geom);
+
+                    CADExtension.getCADToolAdapter().getMapControl().rePaintDirtyLayers();
+
+                }
             }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            myRs.stop();
+            mapContext.endAtomicEvent();
         }
+
     }
 
     private XMLEntity getCheckedXMLFromClipboard() {
