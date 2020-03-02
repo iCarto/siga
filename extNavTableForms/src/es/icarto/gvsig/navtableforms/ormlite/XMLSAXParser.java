@@ -191,7 +191,9 @@ public class XMLSAXParser extends DefaultHandler {
 	    }
 	} else if (qName.equalsIgnoreCase("DRADDVOIDVALUE")) {
 		tmpDomainReader.setAddVoidValue(Boolean.parseBoolean(tmpVal));
-	}
+	} else if (qName.equalsIgnoreCase("DRDBORDERBY")) {
+	    ((DomainReaderDB) tmpDomainReader).setOrderBy(tmpVal);
+    }
 
 	// set tmp domain file reader configuration
 	else if (qName.equalsIgnoreCase("DRFILENAME")) {

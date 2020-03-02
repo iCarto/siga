@@ -30,13 +30,17 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
  * 
  * XML syntax example:
  * 
- * <DOMAINREADER> <DRTYPE>db</DRTYPE> <DRDBTABLE>table</DRDBTABLE>
- * <DRDBCOLUMNALIAS>alias</DRDBCOLUMNALIAS>
- * <DRDBCOLUMNVALUE>value</DRDBCOLUMNVALUE> <DRDBFOREIGNKEY>key</DRDBFOREIGNKEY>
- * <DRADDVOIDVALUE>boolean</DRADDVOIDVALUE> </DOMAINREADER>
+ * <DOMAINREADER>
+ *     <DRTYPE>db</DRTYPE>
+ *     <DRDBTABLE>table</DRDBTABLE>
+ *     <DRDBCOLUMNALIAS>alias</DRDBCOLUMNALIAS>
+ *     <DRDBCOLUMNVALUE>value</DRDBCOLUMNVALUE>
+ *     <DRDBFOREIGNKEY>key</DRDBFOREIGNKEY>
+ *     <DRADDVOIDVALUE>boolean</DRADDVOIDVALUE>
+ *     <DRDBORDERBY>field1, field2</DRDBORDERBY>
+ * </DOMAINREADER>
  * 
- * @author Andrés Maneiro <amaneiro@icarto.es>
- * @author Jorge López <jlopez@cartolab.es>
+ 
  * 
  */
 public class DomainReaderDB implements DomainReader {
@@ -46,6 +50,7 @@ public class DomainReaderDB implements DomainReader {
     private String columnAlias = null;
     private String columnValue = null;
     private boolean addVoidValue = false;
+    private String[] orderBy = null;
     private ArrayList<String> columnForeignKey = new ArrayList<String>();
 
     public DomainReaderDB() {
@@ -73,6 +78,11 @@ public class DomainReaderDB implements DomainReader {
 
     public void setAddVoidValue(boolean addVoidValue) {
 	this.addVoidValue = addVoidValue;
+    }
+    
+    public void setOrderBy(String tmpVal) {
+        String[] tokens = tmpVal.split("[ ]*,[ ]*");
+        this.orderBy = tokens;
     }
 
     private String[] convertArrayToString(ArrayList<String> array) {
@@ -103,10 +113,15 @@ public class DomainReaderDB implements DomainReader {
 	if (table != null && columnValue != null) {
 	    ArrayList<KeyValue> list = new ArrayList<KeyValue>();
 	    DBSession ds = DBSession.getCurrentSession();
+	    
+	    String[] queryOrder = new String[] {columnAlias};
+	    if (orderBy != null) {
+	        queryOrder = orderBy;
+	    }
 
  	    try {
 		String[][] values = ds.getTable(table, schema,
-			getFieldColumns(), "", new String[] {columnAlias}, false);
+			getFieldColumns(), "", queryOrder, false);
 		// ds.getDistinctValues(table, columns[0]);
 		for (int i = 0; i < values.length; i++) {
 		    KeyValue kv = new KeyValue();
