@@ -88,8 +88,7 @@ public class LocatorByFinca extends BasicAbstractWindow implements IPositionRetr
         final List<String> constants = ELLEMap.getConstantValuesSelected();
         try {
             if (constants.isEmpty()) {
-                String[] order = new String[1];
-                order[0] = DBNames.FIELD_IDTRAMO;
+                String[] order = new String[] {DBNames.FIELD_IDTRAMO};
                 String[][] tramos = dbs.getTable(DBNames.TABLE_TRAMOS, DBNames.SCHEMA_DATA, order, false);
                 for (int i = 0; i < tramos.length; i++) {
                     tramo.addItem(tramos[i][1]);
@@ -234,8 +233,7 @@ public class LocatorByFinca extends BasicAbstractWindow implements IPositionRetr
             uc.addItem(new String(""));
         } else {
             try {
-                String[] order = new String[1];
-                order[0] = DBNames.FIELD_IDUC;
+                String[] order = new String[] {DBNames.FIELD_IDTRAMO, DBNames.FIELD_IDUC};
                 String tramoSelectedId = getTramoId();
                 String whereClause = DBNames.FIELD_IDTRAMO + " = " + "'" + tramoSelectedId + "'";
                 String[][] ucs = dbs.getTable(DBNames.TABLE_UC, DBNames.SCHEMA_DATA, whereClause, order, false);
@@ -256,8 +254,7 @@ public class LocatorByFinca extends BasicAbstractWindow implements IPositionRetr
             ayuntamiento.addItem(new String(""));
         } else {
             try {
-                String[] order = new String[1];
-                order[0] = DBNames.FIELD_IDAYUNTAMIENTO;
+                String[] order = new String[] {DBNames.FIELD_IDUC, DBNames.FIELD_IDAYUNTAMIENTO};
                 String ucSelectedId = getUcId();
                 String whereClause = DBNames.FIELD_IDUC + " = " + "'" + ucSelectedId + "'";
                 String[][] ayuntamientos = dbs.getTable(DBNames.TABLE_AYUNTAMIENTOS, DBNames.SCHEMA_DATA, whereClause,
@@ -279,8 +276,7 @@ public class LocatorByFinca extends BasicAbstractWindow implements IPositionRetr
             parroquiaSubtramo.setEnabled(false);
         } else {
             try {
-                String[] order = new String[1];
-                order[0] = DBNames.FIELD_IDPARROQUIA;
+                String[] order = new String[] {DBNames.FIELD_IDUC, DBNames.FIELD_IDAYUNTAMIENTO, DBNames.FIELD_IDPARROQUIA};
                 String ucSelectedId = getUcId();
                 String ayuntamientoSelectedId = getAyuntamientoId();
                 String whereClause = DBNames.FIELD_IDAYUNTAMIENTO + " = " + "'" + ayuntamientoSelectedId + "'"

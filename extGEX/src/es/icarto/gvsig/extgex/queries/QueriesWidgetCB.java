@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -36,6 +35,7 @@ public class QueriesWidgetCB implements QueriesWidget {
     }
 
     private void initQueriesWidget(final FormPanel formPanel) {
+        final JComboBox tramoCB = (JComboBox) formPanel.getComponentByName("tramo");
         widget.addActionListener(new ActionListener() {
 
             @Override
@@ -44,29 +44,31 @@ public class QueriesWidgetCB implements QueriesWidget {
                     return;
                 }
 
+                List<KeyValue> specialTramos = ExpropiationsLayerResolver.getTramosWithHardcodedOrder();
+                Object selectedItem = tramoCB.getSelectedItem();
                 String key = ((KeyValue) widget.getSelectedItem()).getKey();
-                JComboBox tramoCB = (JComboBox) formPanel.getComponentByName("tramo");
-                DefaultComboBoxModel model = (DefaultComboBoxModel) tramoCB.getModel();
                 if (key.startsWith("custom")) {
                     customBt.setEnabled(true);
                     launchBt.setEnabled(false);
 
-                    // Por defecto están en orden alfabético. Cuando la consulta es "Expropiaciones" quiero que salgan
-                    // estos tramos pero al final del combo en un orden predefinido. Si no es Expropiaciones no
-                    // quiero que salgan.
-                    List<KeyValue> specialTramos = ExpropiationsLayerResolver.getTramosWithHardcodedOrder();
                     for (KeyValue kv : specialTramos) {
-                        model.removeElement(kv);
-                        model.addElement(kv);
+                        tramoCB.removeItem(kv);
+                        tramoCB.addItem(kv);
                     }
 
                 } else {
                     customBt.setEnabled(false);
                     launchBt.setEnabled(true);
-                    List<KeyValue> specialTramos = ExpropiationsLayerResolver.getTramosWithHardcodedOrder();
                     for (KeyValue kv : specialTramos) {
-                        model.removeElement(kv);
+                        tramoCB.removeItem(kv);
                     }
+                }
+                tramoCB.setSelectedItem(selectedItem);
+                if ((selectedItem != null) && (tramoCB.getSelectedItem() != null)
+                        && (!tramoCB.getSelectedItem().equals(selectedItem))) {
+                    // tramoCB.setSelectedItem(selectedItem) no ha funcionado porqué estaba seleccionado un tramo que
+                    // hemos eliminado del combo así que seleccionamos el primero
+                    tramoCB.setSelectedIndex(0);
                 }
             }
         });

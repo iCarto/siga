@@ -16,6 +16,7 @@
         	<DRDBTABLE>tramos</DRDBTABLE>
         	<DRDBCOLUMNVALUE>id_tramo</DRDBCOLUMNVALUE>
         	<DRDBCOLUMNALIAS>nombre_tramo</DRDBCOLUMNALIAS>
+        	<DRDBORDERBY>id_tramo</DRDBORDERBY>
         </DOMAINREADER>
       </FIELD>
       <FIELD>
@@ -28,6 +29,7 @@
         	<DRDBCOLUMNVALUE>id_uc</DRDBCOLUMNVALUE>
         	<DRDBCOLUMNALIAS>nombre_uc</DRDBCOLUMNALIAS>
         	<DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
+        	<DRDBORDERBY>id_tramo, id_uc</DRDBORDERBY>
 		</DOMAINREADER>
       </FIELD>
       <FIELD>
@@ -40,6 +42,7 @@
         	<DRDBCOLUMNVALUE>id_ayuntamiento</DRDBCOLUMNVALUE>
         	<DRDBCOLUMNALIAS>nombre_ayuntamiento</DRDBCOLUMNALIAS>
         	<DRDBFOREIGNKEY>id_uc</DRDBFOREIGNKEY>
+        	<DRDBORDERBY>id_uc, id_ayuntamiento</DRDBORDERBY>
        </DOMAINREADER>
       </FIELD>
       <FIELD>
@@ -52,6 +55,7 @@
         	<DRDBCOLUMNALIAS>nombre_parroquia</DRDBCOLUMNALIAS>
         	<DRDBFOREIGNKEY>id_uc</DRDBFOREIGNKEY>
         	<DRDBFOREIGNKEY>id_ayuntamiento</DRDBFOREIGNKEY>
+        	<DRDBORDERBY>id_uc, id_ayuntamiento, id_parroquia</DRDBORDERBY>
         </DOMAINREADER>
       </FIELD>
       
