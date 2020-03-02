@@ -53,9 +53,6 @@
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>
-		<copy todir="${dist}">
-		    <fileset dir="about" includes="*"/>
-		</copy>
 		<copy todir="${dist}/images">
 			<fileset dir="images/" includes="*"/>
 		</copy>
@@ -76,11 +73,7 @@
     <delete dir="${build}"/>
   </target>
 
- 	<target name="run-tests" depends="compile-tests">
-		<antcall target="generic-run-tests">
-			<param name="TestSuite.Name" value="org.gvsig.symbology.AllTests"/>
-		</antcall>
-	</target>
+
 	<target name="buildNumber">
 	        <propertyfile
 	            file="build.number"
@@ -92,10 +85,6 @@
 	            </propertyfile>
 	        <property file="build.number"/>
 		<loadproperties srcFile="build.number"/>
-		            <replace casesensitive="true"
-		                file="${dist}/about.htm"
-		                token="#build.number#"
-		                value="${build.number}"/>
     </target>
 
 </project>

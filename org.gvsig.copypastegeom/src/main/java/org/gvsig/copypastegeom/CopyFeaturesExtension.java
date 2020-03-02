@@ -1,14 +1,11 @@
 package org.gvsig.copypastegeom;
 
-import java.net.URL;
-
 import org.gvsig.copypastegeom.toc.CopyFeaturesTocMenuEntry;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.Version;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
@@ -22,7 +19,6 @@ import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.SelectionSupport;
-import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.XMLEntity;
