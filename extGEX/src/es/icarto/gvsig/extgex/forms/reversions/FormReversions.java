@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -68,7 +69,9 @@ public class FormReversions extends BasicAbstractForm {
             actionsToolBar.add(filesLinkB);
         }
         actionsToolBar.add(new JButton(new OpenWebAction(this, "rv")));
-        actionsToolBar.add(new JButton(new AddFincaAction(layer, this)));
+        JButton addFincaBt = new JButton(new AddFincaAction(layer, this));
+        addFincaBt.getAction().putValue(Action.SHORT_DESCRIPTION, "Añadir Reversión");
+        actionsToolBar.add(addFincaBt);
 
         this.getActionsToolBar().remove(saveB);
         this.getActionsToolBar().remove(removeB);
