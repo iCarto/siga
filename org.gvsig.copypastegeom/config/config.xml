@@ -7,17 +7,17 @@
 	  <extension class-name="org.gvsig.copypastegeom.CopyFeaturesExtension"
 			description="Extensión encargada de copiar las features seleccionadas de una capa en el portapapeles."
 			active="true">
-			<!--<menu text="Capa/copy_features" action-command="_copy_features" icon="copy_features"/>-->
-			<tool-bar name="View" position="3">
-				<selectable-tool icon="copy_features" action-command="_copy_features" tooltip="copy_features" position="33"/>
+			<menu text="Capa/copy_features" action-command="_copy_features" icon="copy_features" position="50105"/>
+			<tool-bar name="copy-paste-features" position="45">
+				<selectable-tool icon="copy_features" action-command="_copy_features" tooltip="copy_features" position="1"/>
 			</tool-bar>
 		</extension>
 		<extension class-name="org.gvsig.copypastegeom.PasteFeaturesExtension"
 			description="Extensión encargada de pegar features del portapapeles a una capa en edición."
 			active="true">
-			<!--<menu text="Capa/paste_features" action-command="_paste_features" icon="paste_features"/>-->
-			<tool-bar name="View" position="4">
-				<selectable-tool icon="paste_features" action-command="_paste_features" tooltip="paste_features" position="34"/>
+			<menu text="Capa/paste_features" action-command="_paste_features" icon="paste_features" position="50106"/>
+			<tool-bar name="copy-paste-features" position="45">
+				<selectable-tool icon="paste_features" action-command="_paste_features" tooltip="paste_features" position="2"/>
 			</tool-bar>
 		</extension>
   </extensions>
