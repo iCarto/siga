@@ -44,7 +44,6 @@ import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.CustomTableModel;
 import es.icarto.gvsig.navtableforms.gui.tables.AbstractSubForm;
-import es.icarto.gvsig.navtableforms.ormlite.domainvalidator.listeners.DependentComboboxHandler;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.siga.models.InfoEmpresa;
 import es.icarto.gvsig.siga.models.InfoEmpresaGEX;
@@ -71,21 +70,19 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     public static final String[] bienesAfectadosColAlias = { "<html>Superficie (m<sup>2</sup>)</html>", "Tipo" };
     public static final int[] bienesAfectadosColWidths = { 100, 100 };
 
-    private JComboBox tramo;
-    private JComboBox uc;
-    private JComboBox ayuntamiento;
-    private JComboBox subtramo;
-    private JTextField finca;
-    private JTextField numFinca;
-    private JTextField seccion;
+    private final JComboBox tramo;
+    private final JComboBox uc;
+    private final JComboBox ayuntamiento;
+    private final JComboBox subtramo;
+    private final JTextField finca;
+    private final JTextField numFinca;
+    private final JTextField seccion;
 
     private JTable reversiones;
     private JTable pm;
 
     private JComboBox afectado_pm;
 
-    private DependentComboboxHandler ayuntamientoDomainHandler;
-    private DependentComboboxHandler subtramoDomainHandler;
     private UpdateNroFincaHandler updateNroFincaHandler;
 
     private FormReversionsLauncher formReversionsLauncher;
@@ -105,6 +102,7 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
     public FormExpropiations(FLyrVect layer, IGeometry insertedGeom) {
         super(layer);
+        ExpropiationsLayerResolver.removeNotAppropiateTramos(this.getOrmlite(), layer);
 
         AbstractSubForm bienesExpropiadosSubForm = new BienesAfectadosSubForm();
         bienesExpropiadosTableHandler = new GIAAlphanumericTableHandler("bienes_afectados", getWidgets(),
@@ -113,12 +111,13 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
         addTableHandler(bienesExpropiadosTableHandler);
 
         setTitle(layer.getName());
+        Map<String, JComponent> widgets = getWidgets();
 
         if (ExpropiationsLayerResolver.getBaseName(layer).equals(TABLENAME)) {
             addCalculation(new ImportePendienteTotalAutocalculado(this));
             addCalculation(new ImportePagadoTotalAutocalculado(this));
         } else {
-            procesosTableHandler = new GIAAlphanumericTableHandler("procesos", getWidgets(), getElementID(),
+            procesosTableHandler = new GIAAlphanumericTableHandler("procesos", widgets, getElementID(),
                     ProcesosSubForm.colNames, ProcesosSubForm.colAlias, ProcesosSubForm.colWidths, this,
                     ProcesosSubForm.class);
             addTableHandler(procesosTableHandler);
@@ -128,9 +127,20 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
         addButtonsToActionsToolBar();
 
+        tramo = (JComboBox) widgets.get(DBNames.FIELD_TRAMO_FINCAS);
+        uc = (JComboBox) widgets.get(DBNames.FIELD_UC_FINCAS);
+        ayuntamiento = (JComboBox) widgets.get(DBNames.FIELD_AYUNTAMIENTO_FINCAS);
+        subtramo = (JComboBox) widgets.get(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS);
+        numFinca = (JTextField) widgets.get(DBNames.FIELD_NUMEROFINCA_FINCAS);
+        seccion = (JTextField) widgets.get(DBNames.FIELD_SECCION_FINCAS);
+        finca = (JTextField) widgets.get(DBNames.FIELD_IDFINCA);
+
         addChained(DBNames.FIELD_UC_FINCAS, DBNames.FIELD_TRAMO_FINCAS);
+        addChained(DBNames.FIELD_AYUNTAMIENTO_FINCAS, DBNames.FIELD_UC_FINCAS);
+        addChained(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS, DBNames.FIELD_UC_FINCAS, DBNames.FIELD_AYUNTAMIENTO_FINCAS);
 
         infoEmpresa = new InfoEmpresaGEX();
+
     }
 
     @Override
@@ -165,33 +175,11 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     @Override
     protected void setListeners() {
         super.setListeners();
-
-        // RETRIEVE WIDGETS
         Map<String, JComponent> widgets = getWidgets();
-
-        tramo = (JComboBox) widgets.get(DBNames.FIELD_TRAMO_FINCAS);
-        uc = (JComboBox) widgets.get(DBNames.FIELD_UC_FINCAS);
-        ayuntamiento = (JComboBox) widgets.get(DBNames.FIELD_AYUNTAMIENTO_FINCAS);
-        subtramo = (JComboBox) widgets.get(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS);
-
-        numFinca = (JTextField) widgets.get(DBNames.FIELD_NUMEROFINCA_FINCAS);
-        seccion = (JTextField) widgets.get(DBNames.FIELD_SECCION_FINCAS);
-
-        finca = (JTextField) widgets.get(DBNames.FIELD_IDFINCA);
-
         reversiones = (JTable) widgets.get(WIDGET_REVERSIONES);
         pm = (JTable) widgets.get(WIDGET_PM);
 
         afectado_pm = (JComboBox) widgets.get(EXPROPIATIONS_AFECTADO_PM);
-
-        ayuntamientoDomainHandler = new DependentComboboxHandler(this, uc, ayuntamiento);
-        uc.addActionListener(ayuntamientoDomainHandler);
-
-        ArrayList<JComponent> parentComponents = new ArrayList<JComponent>();
-        parentComponents.add(uc);
-        parentComponents.add(ayuntamiento);
-        subtramoDomainHandler = new DependentComboboxHandler(this, parentComponents, subtramo);
-        ayuntamiento.addActionListener(subtramoDomainHandler);
 
         updateNroFincaHandler = new UpdateNroFincaHandler();
         subtramo.addActionListener(updateNroFincaHandler);
@@ -207,8 +195,6 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     protected void removeListeners() {
         super.removeListeners();
 
-        uc.removeActionListener(ayuntamientoDomainHandler);
-        ayuntamiento.removeActionListener(subtramoDomainHandler);
         subtramo.removeActionListener(updateNroFincaHandler);
         numFinca.removeKeyListener(updateNroFincaHandler);
         seccion.removeKeyListener(updateNroFincaHandler);
@@ -217,6 +203,7 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     }
 
     private void setIDFinca() {
+
         if ((tramo.getSelectedItem() instanceof KeyValue) && (uc.getSelectedItem() instanceof KeyValue)
                 && (ayuntamiento.getSelectedItem() instanceof KeyValue)
                 && (subtramo.getSelectedItem() instanceof KeyValue)) {
@@ -290,8 +277,7 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
             updateAutomaticFieldImporteWhenSubFormDataChanges_pre();
         }
         super.fillSpecificValues();
-        ayuntamientoDomainHandler.updateComboBoxValues();
-        subtramoDomainHandler.updateComboBoxValues();
+
         updateJTables();
 
         updateAutomaticFieldSuperficieWhenSubFormDataChanges_post();
@@ -307,26 +293,26 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
      * El campo superficie_expropiada_total_autocalculado debe actualizarse cuando cambien los
      * datos del subformulario/tabla (añadir, editar o eliminar) Hay varias formas de intentar
      * implementar esto:
-     * 
+     *
      * * Por ejemplo usar NOTIFY en un trigger de bd y en el formulario padre escuchar el canal con LISTEN
      * https://jdbc.postgresql.org/documentation/81/listennotify.html
      * https://tapoueh.org/blog/2018/07/postgresql-listen/notify/
-     * 
+     *
      * * Trigger para calcular en bd e implementando windowClosed en el subformulario más o menos así
      * el problema es que no funciona al borrar una fila porque el form no llega a abrirse
-     * 
+     *
      * @Override
      * public void windowClosed() {
      * super.windowClosed();
-     * 
+     *
      * No llamamos a parentForm.refresh porque ni el reloadRecordset
      * ni el refresGUI por si mismos hacen que se actualice el LayerController
      * de este modo refreshGUI lee los valores de un LayerController que no
      * está actualizado pero onPositionChange si que lo actualiza
-     * 
-     * 
+     *
+     *
      * }
-     * 
+     *
      * Aquí lo implementamos como un listener sobre la propia tabla. Va en fillSpecificValues porqué
      * el TableHandler puede acabar creando un nuevo modelo de datos en este método y esta rara construcción
      * es para tratar de asegurarnos que no quedan listeners pendientes al cambiar de registros y que siempre
@@ -379,10 +365,8 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
 
     private void updateJTables() {
         oldReversions = new ArrayList<String>();
-
         updateReversionsTable();
         updatePMTable();
-
     }
 
     private void updateReversionsTable() {

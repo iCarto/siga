@@ -581,4 +581,8 @@ public abstract class AbstractForm extends AbstractNavTable implements
         }
     }
     }
+    
+    protected ORMLite getOrmlite() {
+        return ormlite;
+    }
 }
