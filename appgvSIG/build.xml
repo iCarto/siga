@@ -242,27 +242,11 @@
             depends="clean-all,buildNumber,build-all">
     </target>
 
-	<target name="make-binary-distribution-JS1.5_JT1.4"
-            description="
-			Prepare for do a binary distribution of the application.
-			This increments the build number and then makes a global build.
-			Source Java 1.5 and Target Java 1.4"
-            depends="clean-all,buildNumber,build-all-JS1.5_JT1.4-DebugOff">
-    </target>
-
 	<target name="make-binary-distribution-test"
             description="
 			Prepare for a binary distribution of the application
 			without increments the global build number"
             depends="clean-all,build-all-DebugOff">
-    </target>
-
-	<target name="make-binary-distribution-JS1.5_JT1.4-test"
-            description="
-			Prepare for a binary distribution of the application
-			without increments the global build number.
-			Source Java 1.5 and Target Java 1.4"
-            depends="clean-all,build-all-JS1.5_JT1.4-DebugOff">
     </target>
 
     <target name="clean_andami_gvSIGdir"
@@ -292,34 +276,6 @@
 			<param name="debuglevel" value=""/>
 		</antcall>
 	</target>
-
-	<target name="build-all-JS1.5_JT1.4"
-		description="
-			Global build for the whole gvSIG.
-			Compiles all the sources and builds the application so that it's ready to execute.
-			Source Java 1.5 and Target Java 1.4
-	">
-		<antcall target="build-all-projects">
-			<param name="JavaSourceVersion" value="1.5"/>
-			<param name="JavaTargetVersion" value="jsr14"/>
-		</antcall>
-	</target>
-
-	<target name="build-all-JS1.5_JT1.4-DebugOff"
-		description="
-			Global build for the whole gvSIG.
-			Compiles all the sources and builds the application so that it's ready to execute.
-			Source Java 1.5 and Target Java 1.4.
-			Do not generate debug info in complilation.
-	">
-		<antcall target="build-all-projects">
-			<param name="JavaSourceVersion" value="1.5"/>
-			<param name="JavaTargetVersion" value="jsr14"/>
-			<param name="debug" value="off"/>
-			<param name="debuglevel" value=""/>
-		</antcall>
-	</target>
-
 
 	<target name="build-all-projects"
 			description="Builds the application, excluding extensions">
