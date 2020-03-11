@@ -57,11 +57,11 @@ public class WindowStackSupport {
 	private boolean[] key_free;
 	private String[] key;
 	
-	private Vector vistas = new Vector();
+	private Vector<IWindow> vistas = new Vector<IWindow>();
 
 	private WindowInfoSupport vis;
 
-	private Hashtable viewMenu = new Hashtable();
+	private Hashtable<IWindow, Menu> viewMenu = new Hashtable<IWindow, Menu>();
 
 	/**
 	 * @param vis
@@ -108,7 +108,7 @@ public class WindowStackSupport {
 	}
 
 	public void remove(IWindow v){
-		Menu m = (Menu) viewMenu.get(v);
+		Menu m = viewMenu.get(v);
 		if (m == null) return;
 		/* free keyboard shortut taken by this window (if any) */
 		if ( m.getKey() != null ) {
@@ -128,7 +128,7 @@ public class WindowStackSupport {
 	 * FJP: No se usa, y no sé para qué estaba pensado.
 	 */
 	public void ctrltab(){
-		IWindow v = (IWindow) vistas.remove(vistas.size() - 1);
+		IWindow v = vistas.remove(vistas.size() - 1);
 		vistas.add(0, v);
 	}
 
@@ -137,7 +137,7 @@ public class WindowStackSupport {
         int index = vistas.size()-1;
         while (index >= 0)
         {
-            IWindow aux = (IWindow) vistas.get(index);
+            IWindow aux = vistas.get(index);
             if (!aux.getWindowInfo().isPalette())
             {
 //                System.err.println("getActiveView = " + aux.getWindowInfo().getTitle());
@@ -168,7 +168,7 @@ public class WindowStackSupport {
 
         for (int i=0; i < vistas.size(); i++)
         {
-            IWindow aux = (IWindow) vistas.get(i);
+            IWindow aux = vistas.get(i);
             if (aux == v)
             {
                 copia = aux;
@@ -178,12 +178,12 @@ public class WindowStackSupport {
             {
                 if (i < vistas.size()-1)
                 {
-                    IWindow siguiente = (IWindow) vistas.get(i+1);
+                    IWindow siguiente = vistas.get(i+1);
                     vistas.set(i,siguiente);
                 }
                 else // La última
                     vistas.set(i,copia);
             }
-        } // for
+        } 
     }
 }

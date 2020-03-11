@@ -65,7 +65,9 @@ import com.iver.utiles.XMLEntity;
  * @author Fernando González Cortés
  */
 public class WindowInfo {
-	/** Specifies that the window is resizable  */
+	public static final String PERSISTENCE_KEY = "ViewInfoProperties";
+
+    /** Specifies that the window is resizable  */
     public static final int RESIZABLE = 1;
 
     /** Specifies that the window is maximizable */
@@ -164,7 +166,7 @@ public class WindowInfo {
      * para activar el tool que estaba seleccionado en
      * la vista, cuando volvemos a ella.
      */
-    private HashMap selectedTools = null;
+    private HashMap<String, String> selectedTools = null;
     // this should be the same value defined at plugin-config.xsd
     private String defaultGroup = "unico";
 
@@ -576,7 +578,7 @@ public class WindowInfo {
      * @return A HashMap containing pairs (group, actionCommand), which
      * are the selected tools for this window.
      */
-    public HashMap getSelectedTools() {
+    public HashMap<String, String> getSelectedTools() {
         return selectedTools;
     }
 
@@ -598,7 +600,7 @@ public class WindowInfo {
      * (group, actionCommand), which will be set as the selected tools
      * for this window.
      */
-    public void setSelectedTools(HashMap selectedTools) {
+    public void setSelectedTools(HashMap<String, String> selectedTools) {
         if (selectedTools != null)
             this.selectedTools = selectedTools;
     }
@@ -1028,11 +1030,11 @@ public class WindowInfo {
 	 * @throws XMLException
 	 */
 	public XMLEntity getXMLEntity() {
-		if (checkPersistence()==false) {
+		if (checkPersistence()==false) { 
 			return null;
 		}
 		XMLEntity xml = new XMLEntity();
-		xml.setName("ViewInfoProperties");
+		xml.setName(PERSISTENCE_KEY);
 		xml.putProperty("X", this.getX(), false);
 		xml.putProperty("Y", this.getY(), false);
 		xml.putProperty("Width", this.getWidth(), false);

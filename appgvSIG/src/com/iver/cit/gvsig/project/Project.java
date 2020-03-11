@@ -892,7 +892,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				&& child.getStringProperty("className").equals(
 						"com.iver.cit.gvsig.project.Project")
 				&& child.contains("name")
-				&& child.getStringProperty("name").equals("ViewInfoProperties")) {
+				&& child.getStringProperty("name").equals(WindowInfo.PERSISTENCE_KEY)) {
 			child.putProperty("className",
 					"com.iver.cit.gvsig.project.document.gui.ProjectWindow");
 			windowList.add(child);
@@ -916,7 +916,7 @@ public class Project implements Serializable, PropertyChangeListener {
 							"com.iver.cit.gvsig.project.ProjectView")
 					&& child.contains("name")
 					&& child.getStringProperty("name").equals(
-							"ViewInfoProperties")) {
+							WindowInfo.PERSISTENCE_KEY)) {
 				child.putProperty("documentName", view
 						.getStringProperty("name"));
 				child.putProperty("documentType",
@@ -942,7 +942,7 @@ public class Project implements Serializable, PropertyChangeListener {
 								"com.iver.cit.gvsig.project.ProjectMap")
 						&& child.contains("name")
 						&& child.getStringProperty("name").equals(
-								"ViewInfoProperties")) {
+						        WindowInfo.PERSISTENCE_KEY)) {
 					child.putProperty("documentName", map
 							.getStringProperty("name"));
 					child.putProperty("documentType",
@@ -974,7 +974,7 @@ public class Project implements Serializable, PropertyChangeListener {
 				if (child.contains("name") // restore the position of the
 						// document windows
 						&& child.getStringProperty("name").equals(
-								"ViewInfoProperties")
+						        WindowInfo.PERSISTENCE_KEY)
 						&& child.contains("documentType")) {
 					boolean isClosed = true;
 					if (child.contains("isClosed"))
@@ -1017,7 +1017,7 @@ public class Project implements Serializable, PropertyChangeListener {
 										"com.iver.cit.gvsig.project.document.gui.ProjectWindow")
 						&& child.contains("name")
 						&& child.getStringProperty("name").equals(
-								"ViewInfoProperties")) {
+						        WindowInfo.PERSISTENCE_KEY)) {
 					WindowInfo wi = WindowInfo.createFromXMLEntity(child);
 					// don't restore size for ProjectManager window, as it's not resizable
 					wi.setHeight(-1);
@@ -1179,7 +1179,7 @@ public class Project implements Serializable, PropertyChangeListener {
 								"com.iver.cit.gvsig.project.Project")
 						&& child.contains("name")
 						&& child.getStringProperty("name").equals(
-								"ViewInfoProperties")) {
+						        WindowInfo.PERSISTENCE_KEY)) {
 					p.storeInitialWindowProperties061(xml);
 				}
 			}
@@ -1589,7 +1589,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			XMLEntity xml = new XMLEntity();
 			// xml.putProperty("nameClass", this.getClass().getName());
 			try {
-				xml.setName("ViewInfoProperties");
+				xml.setName(WindowInfo.PERSISTENCE_KEY);
 				xml.putProperty("className", this.getClass().getName());
 				xml.putProperty("X", vi.getX());
 				xml.putProperty("Y", vi.getY());
@@ -1878,19 +1878,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	 */
 	public static void setDefaultDistanceArea(int distanceArea) {
 		defaultDistanceArea = distanceArea;
-	}
-	public String exportToXML() throws SaveException {
-		XMLEntity xml = this.newExportXMLRootNode();
-
-		Iterator iter = this.documents.iterator();
-		ProjectDocument document;
-		// FIXME: Falta atrapar los errores
-		while (iter.hasNext()) {
-			document = (ProjectDocument) iter.next();
-			document.exportToXML(xml, this);
-		}
-
-		return xml.toString();
 	}
 
 	public String exportToXML(ProjectDocument[] documents) throws SaveException {

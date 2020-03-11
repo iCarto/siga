@@ -68,24 +68,14 @@ public class WindowInfoSupport {
 	private FrameWindowSupport fws;
 
 	// Correspondencias entre las ventanas y su informacion
-	/**
-	 * key: IWindow, value: WindowInfo
-	 */
-	private Hashtable viewInfo = new Hashtable();
-	/**
-	 * key: WindowInfo, value: IWindow
-	 */
-	private Hashtable infoView = new Hashtable();
+	private Hashtable<IWindow, WindowInfo> viewInfo = new Hashtable<IWindow, WindowInfo>();
+	private Hashtable<WindowInfo, IWindow> infoView = new Hashtable<WindowInfo, IWindow>();
 	private WindowPropertyChangeListener windowInfoListener = new WindowPropertyChangeListener();
 	private SingletonWindowSupport sws;
 	private MainFrame mdiFrame;
 
 	/**
 	 * Creates a new ViewInfoSupport object.
-	 *
-	 * @param frame DOCUMENT ME!
-	 * @param fvs DOCUMENT ME!
-	 * @param svs
 	 */
 	public WindowInfoSupport(MainFrame frame, FrameWindowSupport fvs,
 		SingletonWindowSupport svs) {
@@ -102,28 +92,21 @@ public class WindowInfoSupport {
 	 * @return La vista o null si no hay ninguna vista con ese identificador
 	 */
 	public IWindow getWindowById(int id) {
-		Enumeration en = infoView.keys();
+		Enumeration<WindowInfo> en = infoView.keys();
 
 		while (en.hasMoreElements()) {
-			WindowInfo vi = (WindowInfo) en.nextElement();
+			WindowInfo vi = en.nextElement();
 
 			if (vi.getId() == id) {
-				return (IWindow) infoView.get(vi);
+				return infoView.get(vi);
 			}
 		}
 
 		return null;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @param w DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
-	 */
 	public synchronized WindowInfo getWindowInfo(IWindow w) {
-		WindowInfo wi = (WindowInfo) viewInfo.get(w);
+		WindowInfo wi = viewInfo.get(w);
 
 		if (wi != null) {
 			fws.updateWindowInfo(w, wi);
@@ -145,29 +128,16 @@ public class WindowInfoSupport {
 		return wi;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @param p DOCUMENT ME!
-	 */
 	public void deleteWindowInfo(IWindow p) {
-		WindowInfo vi = (WindowInfo) viewInfo.remove(p);
+		WindowInfo vi = viewInfo.remove(p);
 		infoView.remove(vi);
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @author $author$
-	 * @version $Revision$
-	 */
+
 	public class WindowPropertyChangeListener implements PropertyChangeListener {
-		/**
-		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-		 */
 		public void propertyChange(PropertyChangeEvent evt) {
 			WindowInfo winInfo = (WindowInfo) evt.getSource();
-			IWindow win = (IWindow) infoView.get(winInfo);
+			IWindow win = infoView.get(winInfo);
 
 			if (win instanceof SingletonWindow) {
 				SingletonWindow sw = (SingletonWindow) win;

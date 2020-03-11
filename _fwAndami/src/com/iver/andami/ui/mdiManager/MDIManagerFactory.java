@@ -88,16 +88,10 @@ public class MDIManagerFactory {
                 return mdiManager;
             } catch (InstantiationException e) {
                 logger.error(Messages.getString("Launcher.Error_instanciando_la_extension"), e);
-
-                //                return new NewSkin();
             } catch (IllegalAccessException e) {
                 logger.error(Messages.getString("Launcher.Error_instanciando_la_extension"), e);
-
-                //                return new NewSkin();
             } catch (ClassNotFoundException e) {
                 logger.error(Messages.getString("Launcher.No_se_encontro_la_clase_de_la_extension"), e);
-
-                //                return new NewSkin();
             }
         }
         

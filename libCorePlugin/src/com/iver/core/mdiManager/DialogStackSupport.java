@@ -43,25 +43,16 @@ package com.iver.core.mdiManager;
 import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.JDialog;
-
-import org.apache.log4j.Logger;
-
 import com.iver.andami.ui.mdiFrame.MDIFrame;
 
 
-/**
- *
- */
 public class DialogStackSupport{
-    /** log */
-    private static Logger logger = Logger.getLogger(DialogStackSupport.class.getName());
 
     /** Pila de diálogos modales mostrados */
-    private ArrayList dialogStack = new ArrayList(0);
+    private ArrayList<JDialog> dialogStack = new ArrayList<JDialog>(0);
 
-    private ArrayList dialogCursors = new ArrayList(0);
+    private ArrayList<Cursor> dialogCursors = new ArrayList<Cursor>(0);
 
     public DialogStackSupport(MDIFrame frame){
     }
@@ -74,28 +65,24 @@ public class DialogStackSupport{
     	int dialogStackSize=dialogStack.size();
     	if (dialogStackSize<1)
     		return null;
-    	return (JDialog) dialogStack.remove(dialogStackSize - 1);
+    	return dialogStack.remove(dialogStackSize - 1);
     }
 
-	/**
-	 * @return
-	 */
+
 	public void setWaitCursor() {
         dialogCursors.clear();
-		for (Iterator iter = dialogStack.iterator(); iter.hasNext();) {
-			JDialog dlg = (JDialog) iter.next();
+		for (Iterator<JDialog> iter = dialogStack.iterator(); iter.hasNext();) {
+			JDialog dlg = iter.next();
             dialogCursors.add(dlg.getCursor());
 			dlg.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
  	        dlg.getGlassPane().setVisible(true);
  	   }
 	}
 
-	/**
-	 *
-	 */
+
 	public void restoreCursor() {
-		for (Iterator iter = dialogStack.iterator(); iter.hasNext();) {
-			JDialog dlg = (JDialog) iter.next();
+		for (Iterator<JDialog> iter = dialogStack.iterator(); iter.hasNext();) {
+			JDialog dlg = iter.next();
 
             // TODO: RECUPERAR EL CURSOR
             dlg.setCursor(null);

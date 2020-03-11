@@ -818,7 +818,6 @@ public class Launcher {
 				}
 			}
 		}
-//		return "com.iver.core.mdiManager.NewSkin";
 		return  defaultSkin;
 	}
 
@@ -865,11 +864,7 @@ public class Launcher {
 		}
 
 	}
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @throws MDIManagerLoadException
-	 */
+
 	private static void skinPlugin(String defaultSkin) throws MDIManagerLoadException {
 		XMLEntity entity =null;
 		try {
@@ -913,7 +908,7 @@ public class Launcher {
 			fixSkin(skinExtension, pluginClassLoader);
 		} else {
 			if (skinExtensions.contains("com.iver.core.mdiManager.NewSkin")) {
-				// try first NewSkin (from CorePlugin)
+				// try first IcartoSkin (from CorePlugin)
 				skinPlugin("com.iver.core.mdiManager.NewSkin");
 			}
 			else if (skinExtensions.size()>0){

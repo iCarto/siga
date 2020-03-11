@@ -41,6 +41,7 @@
 package com.iver.core.mdiManager;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.util.Hashtable;
@@ -66,23 +67,19 @@ import com.iver.core.mdiManager.frames.InternalFrame;
  *
  */
 public class FrameWindowSupport {
-    private Hashtable frameView = new Hashtable();
-    private Hashtable viewFrame = new Hashtable();
+    private Hashtable<Container, IWindow> frameView = new Hashtable<Container, IWindow>();
+    private Hashtable<IWindow, Container> viewFrame = new Hashtable<IWindow, Container>();
     private Image icon;
     private WindowInfoSupport vis;
 	private JFrame mainFrame;
 
-    /**
-     * Creates a new FrameViewSupport object.
-     *
-     * @param i DOCUMENT ME!
-     */
+
     public FrameWindowSupport(MDIFrame mainFrame) {
     	this.mainFrame = mainFrame;
         icon = mainFrame.getIconImage();
     }
 
-    public Iterator getWindowIterator(){
+    public Iterator<IWindow> getWindowIterator(){
     	return viewFrame.keySet().iterator();
     }
 
@@ -90,21 +87,12 @@ public class FrameWindowSupport {
     	return viewFrame.containsKey(v);
     }
 
-	/**
-	 * @param wnd
-	 * @return
-	 */
+
 	public boolean contains(JInternalFrame wnd) {
 		return frameView.contains(wnd);
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
+
     public JDialog getJDialog(IWindow p) {
         JDialog dlg = (JDialog) viewFrame.get(p);
 
@@ -128,13 +116,7 @@ public class FrameWindowSupport {
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param p DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
+
     public JInternalFrame getJInternalFrame(IWindow p) {
     	JInternalFrame frame = (JInternalFrame) viewFrame.get(p);
 
@@ -194,7 +176,7 @@ public class FrameWindowSupport {
     }
 
     public IWindow getWindow(Component dlg){
-    	return (IWindow) frameView.get(dlg);
+    	return frameView.get(dlg);
     }
 
     public void closeWindow(IWindow v){
@@ -202,107 +184,45 @@ public class FrameWindowSupport {
     	frameView.remove(c);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     * @param x DOCUMENT ME!
-     */
+
     public void setX(IWindow win, int x) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setX(x);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     * @param y DOCUMENT ME!
-     */
     public void setY(IWindow win, int y) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setY(y);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     * @param height DOCUMENT ME!
-     */
-    public void setHeight(IWindow win, int height) {
+ void setHeight(IWindow win, int height) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setHeight(height);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     * @param width DOCUMENT ME!
-     */
     public void setWidth(IWindow win, int width) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setWidth(width);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     * @param title DOCUMENT ME!
-     */
+
     public void setTitle(IWindow win, String title) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setTitle(title);
     }
-    
-	/**
-	 * Sets the minimum allowed size for the provided window.
-	 * 
-	 * @param sw
-	 * @param minSize
-	 */
+
 	public void setMinimumSize(IWindow win, Dimension minSize) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setMinimumSize(minSize);
 	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param vis The vis to set.
-     */
     public void setVis(WindowInfoSupport vis) {
         this.vis = vis;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    private int getWidth(IWindow v) {
-        WindowInfo vi = vis.getWindowInfo(v);
+ 
 
-        if (vi.getWidth() == -1) {
-            JPanel p = (JPanel) v;
 
-            return p.getSize().width;
-        } else {
-            return vi.getWidth();
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
     private int getWidth(IWindow v, WindowInfo wi) {
         if (wi.getWidth() == -1) {
             JPanel p = (JPanel) v;
@@ -313,32 +233,7 @@ public class FrameWindowSupport {
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    private int getHeight(IWindow v) {
-        WindowInfo vi = vis.getWindowInfo(v);
 
-        if (vi.getHeight() == -1) {
-            JPanel p = (JPanel) v;
-
-            return p.getSize().height;
-        } else {
-            return vi.getHeight();
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param v DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
     private int getHeight(IWindow v, WindowInfo wi) {
         if (wi.getHeight() == -1) {
             JPanel p = (JPanel) v;

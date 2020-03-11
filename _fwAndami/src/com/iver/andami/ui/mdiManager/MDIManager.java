@@ -66,15 +66,15 @@ import com.iver.andami.ui.mdiFrame.MDIFrame;
  * to refer to the real window.
  * </p>
  * <p>
- * This class is implemented by the Andami Skin (currently libCorePlugin),
- * which will decide the final implementation of frames. A different frame
- * implementation could be used by switching the Skin.
+ * This class is implemented by skins, which will decide the final implementation of frames.
+ * A different frame implementation could be used by switching the Skin.
  * </p>
  * 
  * @see IWindow
  * @see WindowInfo
  * @see SingletonWindow
  * @see com.iver.core.mdiManager.NewSkin
+ * @see es.icarto.gvsig.ui.IcartoSkin
  *
  * @author Fernando González Cortés
  */
