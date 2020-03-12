@@ -44,6 +44,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -56,21 +57,21 @@ import javax.swing.JPanel;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.MDIFrame;
+import com.iver.andami.ui.mdiManager.IFrameWindowSupport;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.IWindowInfoSupport;
+import com.iver.andami.ui.mdiManager.IWindowProperties;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.core.mdiManager.frames.ExternalFrame;
 import com.iver.core.mdiManager.frames.IFrame;
 import com.iver.core.mdiManager.frames.InternalFrame;
 
 
-/**
- *
- */
-public class FrameWindowSupport {
+public class FrameWindowSupport implements IFrameWindowSupport, IWindowProperties{
     private Hashtable<Container, IWindow> frameView = new Hashtable<Container, IWindow>();
     private Hashtable<IWindow, Container> viewFrame = new Hashtable<IWindow, Container>();
     private Image icon;
-    private WindowInfoSupport vis;
+    private IWindowInfoSupport vis;
 	private JFrame mainFrame;
 
 
@@ -79,20 +80,28 @@ public class FrameWindowSupport {
         icon = mainFrame.getIconImage();
     }
 
+ 
+    @Override
     public Iterator<IWindow> getWindowIterator(){
     	return viewFrame.keySet().iterator();
     }
 
+
+    @Override
     public boolean contains(IWindow v){
     	return viewFrame.containsKey(v);
     }
 
 
-	public boolean contains(JInternalFrame wnd) {
+
+	@Override
+    public boolean contains(JInternalFrame wnd) {
 		return frameView.contains(wnd);
 	}
 
 
+ 
+    @Override
     public JDialog getJDialog(IWindow p) {
         JDialog dlg = (JDialog) viewFrame.get(p);
 
@@ -117,30 +126,22 @@ public class FrameWindowSupport {
     }
 
 
+  
+    @Override
     public JInternalFrame getJInternalFrame(IWindow p) {
     	JInternalFrame frame = (JInternalFrame) viewFrame.get(p);
 
         if (frame == null) {
-        	//ViewInfo vi = vis.getViewInfo(p);
-            JInternalFrame nuevo = createJInternalFrame(p);
-            viewFrame.put(p, nuevo);
-            frameView.put(nuevo, p);
-
-            return nuevo;
-        } else {
-            return frame;
-        }
+            frame = createJInternalFrame(p);
+            viewFrame.put(p, frame);
+            frameView.put(frame, p);
+        } 
+        
+        return frame;
     }
     
-    /**
-     * Gets the frame associated to the provided IWindow panel.
-     * The frame will usually be a JInternalFrame or a JDialog.
-     *
-     * @param panel The IWindow panel whose frame wants to be retrieved.
-     *
-     * @return The associated frame, it will usually be a JInternalFrame or
-     * a JDialog.
-     */
+  
+    @Override
     public Component getFrame(IWindow panel) {
     	Object object = viewFrame.get(panel);
     	if (object!=null && object instanceof Component) {
@@ -152,8 +153,9 @@ public class FrameWindowSupport {
     	}
     }
 
-    public JInternalFrame createJInternalFrame(IWindow p)
-    {
+  
+    @Override
+    public JInternalFrame createJInternalFrame(IWindow p) {
         WindowInfo wi = vis.getWindowInfo(p);
         JInternalFrame nuevo = new InternalFrame();
         if (icon != null){
@@ -175,48 +177,64 @@ public class FrameWindowSupport {
         return nuevo;
     }
 
+
+    @Override
     public IWindow getWindow(Component dlg){
     	return frameView.get(dlg);
     }
 
+
+    @Override
     public void closeWindow(IWindow v){
     	Object c = viewFrame.remove(v);
     	frameView.remove(c);
     }
 
 
+ 
+    @Override
     public void setX(IWindow win, int x) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setX(x);
     }
 
+ 
+    @Override
     public void setY(IWindow win, int y) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setY(y);
     }
 
- void setHeight(IWindow win, int height) {
+    @Override
+    public void setHeight(IWindow win, int height) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setHeight(height);
     }
 
+
+    @Override
     public void setWidth(IWindow win, int width) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setWidth(width);
     }
 
 
+
+    @Override
     public void setTitle(IWindow win, String title) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setTitle(title);
     }
 
-	public void setMinimumSize(IWindow win, Dimension minSize) {
+
+	@Override
+    public void setMinimumSize(IWindow win, Dimension minSize) {
     	IFrame frame = (IFrame) viewFrame.get(win);
     	frame.setMinimumSize(minSize);
 	}
 
-    public void setVis(WindowInfoSupport vis) {
+
+    public void setVis(IWindowInfoSupport vis) {
         this.vis = vis;
     }
 
@@ -244,6 +262,10 @@ public class FrameWindowSupport {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.iver.core.mdiManager.IFrameWindowSupport#updateWindowInfo(com.iver.andami.ui.mdiManager.IWindow, com.iver.andami.ui.mdiManager.WindowInfo)
+     */
+    @Override
     public void updateWindowInfo(IWindow win, WindowInfo windowInfo) {
     	Object o = viewFrame.get(win);
     	if (windowInfo!=null && o!=null) {
@@ -261,6 +283,16 @@ public class FrameWindowSupport {
 				}
     		}
     	}
+    }
+
+
+    @Override
+    public void setMaximized(IWindow iWindow, boolean maximized) {
+    }
+
+
+    @Override
+    public void setNormalBounds(IWindow iWindow, Rectangle normalBounds) {
     }
 
 }

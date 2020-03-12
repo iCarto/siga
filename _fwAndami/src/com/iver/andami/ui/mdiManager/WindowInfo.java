@@ -100,6 +100,9 @@ public class WindowInfo {
     public static final Integer PROPERTIES_PROFILE = new Integer(4);
     /** Specifies that this window has an Dialog profile */
     public static final Integer DIALOG_PROFILE = new Integer(5);
+    
+    /** Specifies that this window should preferreble be used out of the MainFrame */
+    public static final Integer EXTERNAL_PROFILE = new Integer(6);
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 

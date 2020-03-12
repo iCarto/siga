@@ -83,6 +83,7 @@ import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.andami.ui.mdiFrame.NewStatusBar;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.IWindowFilter;
+import com.iver.andami.ui.mdiManager.IWindowInfoSupport;
 import com.iver.andami.ui.mdiManager.IWindowListener;
 import com.iver.andami.ui.mdiManager.IWindowVisitor;
 import com.iver.andami.ui.mdiManager.MDIManager;
@@ -91,6 +92,9 @@ import com.iver.andami.ui.mdiManager.SingletonDialogAlreadyShownException;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.andami.ui.theme.Theme;
+
+import es.icarto.gvsig.andami.ui.skin.ModalSupport;
+import es.icarto.gvsig.andami.ui.skin.SingletonWindowSupport;
 
 /**
  *
@@ -120,14 +124,14 @@ public class NewSkin extends Extension implements MDIManager{
 
     private GlassPane glassPane = new GlassPane();
 
-    private DialogStackSupport dss;
+    private ModalSupport dss;
 
     /**
      * Associates JInternalFrames with the IWindow they contain
      */
     private FrameWindowSupport fws;
 
-    private WindowInfoSupport wis;
+    private IWindowInfoSupport wis;
 
     private WindowStackSupport wss;
 
@@ -150,7 +154,7 @@ public class NewSkin extends Extension implements MDIManager{
         panel.setDesktopManager(desktopManager);
 
         fws = new FrameWindowSupport(mainFrame);
-        dss = new DialogStackSupport(mainFrame);
+        dss = new ModalSupport(fws);
         sws = new SingletonWindowSupport(wis, fws);
         wis = new WindowInfoSupport(mainFrame, fws, sws);
         fws.setVis(wis);
@@ -194,10 +198,7 @@ public class NewSkin extends Extension implements MDIManager{
         WindowInfo wi = wis.getWindowInfo(p);
 
         // Se comprueban las incompatibilidades que pudieran haber en la vista
-        MDIUtilities.checkWindowInfo(wi);
-        if ((p instanceof SingletonWindow) && (wi.isModal())) {
-            throw new RuntimeException("A modal view cannot be a SingletonView");
-        }
+        MDIUtilities.checkWindowInfo(wi, p);
 
         /*
          * Se obtiene la referencia a la vista anterior por si es una singleton
@@ -276,7 +277,7 @@ public class NewSkin extends Extension implements MDIManager{
 	 *
 	 * @param panel The IWindow to centre
 	 */
-	public synchronized void centreFrame(IWindow panel) {
+	private synchronized void centreFrame(IWindow panel) {
 		Component window = fws.getFrame(panel);
 		if (window==null) return;
 

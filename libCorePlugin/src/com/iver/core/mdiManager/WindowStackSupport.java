@@ -47,6 +47,7 @@ import java.util.Vector;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.config.generate.Menu;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.IWindowInfoSupport;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 /**
@@ -59,14 +60,14 @@ public class WindowStackSupport {
 	
 	private Vector<IWindow> vistas = new Vector<IWindow>();
 
-	private WindowInfoSupport vis;
+	private IWindowInfoSupport vis;
 
 	private Hashtable<IWindow, Menu> viewMenu = new Hashtable<IWindow, Menu>();
 
 	/**
 	 * @param vis
 	 */
-	public WindowStackSupport(WindowInfoSupport vis) {
+	public WindowStackSupport(IWindowInfoSupport vis) {
 		this.vis = vis;
 		
 		/* restart window key shortcut numbering */
@@ -88,7 +89,6 @@ public class WindowStackSupport {
 	}
 
 	public void add(IWindow v, final ActionListener listener) {
-		vistas.add(v);
 		WindowInfo vi = vis.getWindowInfo(v);
 		int id = vi.getId();
 		Menu m = new Menu();
@@ -103,6 +103,7 @@ public class WindowStackSupport {
 				break;
 			}
 		}
+		vistas.add(v);
 		viewMenu.put(v, m);
 		PluginServices.getMainFrame().addMenu(m, listener, PluginServices.getPluginServices(this).getClassLoader() );
 	}
@@ -120,16 +121,8 @@ public class WindowStackSupport {
 			}
 		}
 		PluginServices.getMainFrame().removeMenu(m);
-		viewMenu.remove(v);
 		vistas.remove(v);
-	}
-
-	/**
-	 * FJP: No se usa, y no sé para qué estaba pensado.
-	 */
-	public void ctrltab(){
-		IWindow v = vistas.remove(vistas.size() - 1);
-		vistas.add(0, v);
+		viewMenu.remove(v);
 	}
 
 	public IWindow getActiveWindow(){

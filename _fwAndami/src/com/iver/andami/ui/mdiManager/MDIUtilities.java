@@ -41,14 +41,18 @@
 package com.iver.andami.ui.mdiManager;
 
 /**
- * 
+ *
  */
 public class MDIUtilities {
-public static void checkWindowInfo(WindowInfo vi){
-    if ((vi.isModal()) && (!vi.isVisible())) {
-        throw new RuntimeException("A modal dialog cannot be visible=false");
+
+    public static void checkWindowInfo(WindowInfo wi, IWindow p) {
+        if ((wi.isModal()) && (!wi.isVisible())) {
+            throw new RuntimeException("A modal dialog cannot be visible=false");
+        }
+
+        if ((p instanceof SingletonWindow) && (wi.isModal())) {
+            throw new RuntimeException("A modal view cannot be a SingletonView");
+        }
+
     }
-
-
-}
 }

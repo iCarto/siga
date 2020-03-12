@@ -51,6 +51,8 @@ import com.iver.andami.plugins.PluginClassLoader;
 import com.iver.andami.ui.mdiFrame.MainFrame;
 import com.iver.andami.ui.mdiFrame.NoSuchMenuException;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.IWindowInfoSupport;
+import com.iver.andami.ui.mdiManager.IWindowProperties;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
@@ -59,7 +61,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
  * This class listens to changes in WindowInfo objects, and reflects this
  * changes in the associated window.
  */
-public class WindowInfoSupport {
+public class WindowInfoSupport implements IWindowInfoSupport {
 	private static int serialId = 0;
 	
 	/**
@@ -71,27 +73,24 @@ public class WindowInfoSupport {
 	private Hashtable<IWindow, WindowInfo> viewInfo = new Hashtable<IWindow, WindowInfo>();
 	private Hashtable<WindowInfo, IWindow> infoView = new Hashtable<WindowInfo, IWindow>();
 	private WindowPropertyChangeListener windowInfoListener = new WindowPropertyChangeListener();
-	private SingletonWindowSupport sws;
+	private IWindowProperties sws;
 	private MainFrame mdiFrame;
 
 	/**
 	 * Creates a new ViewInfoSupport object.
 	 */
 	public WindowInfoSupport(MainFrame frame, FrameWindowSupport fvs,
-		SingletonWindowSupport svs) {
+		IWindowProperties svs) {
 		this.fws = fvs;
 		this.sws = svs;
 		this.mdiFrame = frame;
 	}
 
-	/**
-	 * Devuelve la vista cuyo identificador es el parametro
-	 *
-	 * @param id Identificador de la vista que se quiere obtener
-	 *
-	 * @return La vista o null si no hay ninguna vista con ese identificador
-	 */
-	public IWindow getWindowById(int id) {
+	/* (non-Javadoc)
+     * @see com.iver.core.mdiManager.IWindowInfoSupport#getWindowById(int)
+     */
+	@Override
+    public IWindow getWindowById(int id) {
 		Enumeration<WindowInfo> en = infoView.keys();
 
 		while (en.hasMoreElements()) {
@@ -105,13 +104,16 @@ public class WindowInfoSupport {
 		return null;
 	}
 
-	public synchronized WindowInfo getWindowInfo(IWindow w) {
+	/* (non-Javadoc)
+     * @see com.iver.core.mdiManager.IWindowInfoSupport#getWindowInfo(com.iver.andami.ui.mdiManager.IWindow)
+     */
+	@Override
+    public synchronized WindowInfo getWindowInfo(IWindow w) {
 		WindowInfo wi = viewInfo.get(w);
 
 		if (wi != null) {
 			fws.updateWindowInfo(w, wi);
-		}
-		else {
+		} else {
 			wi = w.getWindowInfo();
 
 			//Para el título
@@ -126,11 +128,6 @@ public class WindowInfoSupport {
 		}
 
 		return wi;
-	}
-
-	public void deleteWindowInfo(IWindow p) {
-		WindowInfo vi = viewInfo.remove(p);
-		infoView.remove(vi);
 	}
 
 

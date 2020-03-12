@@ -198,18 +198,6 @@ public interface MDIManager {
     public IWindow[] getOrderedWindows();
 
     /**
-     * Close the SingletonWindow whose class and model are provided as
-     * parameters.
-     * 
-     * @param viewClass Class of the window which is to be closed
-     * @param model Model of the window which is to be closed
-     *
-     * @return true if there is an open window whose class and model
-     *         match the provided parameteres, false otherwise.
-     */
-    public boolean closeSingletonWindow(Class viewClass, Object model);
-
-    /**
      * Close the SingletonWindow whose model is provided as parameter.
      *
      * @param model Model of the window which is to be closed
