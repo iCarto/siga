@@ -1,5 +1,6 @@
 package es.icarto.gvsig.siga.extractvertexestool;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -32,6 +33,7 @@ import com.iver.cit.gvsig.fmap.core.DefaultFeature;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
+import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.ILayerDefinition;
@@ -50,6 +52,7 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.DefaultLabelingMethod;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.IPlacementConstraints;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
@@ -59,6 +62,8 @@ import com.iver.utiles.swing.threads.IBackgroundExecution;
 import com.iver.utiles.swing.threads.IMonitorableTask;
 import com.iver.utiles.swing.threads.MonitorableDecoratorMainFirst;
 import com.vividsolutions.jts.geom.Coordinate;
+
+import es.icarto.gvsig.commons.datasources.FieldDescriptionFactory;
 
 public class ExtractVertexesGeoprocess implements IBackgroundExecution {
 
@@ -182,44 +187,55 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
 
     protected FLayer createLayerFrom(IWriter writer) throws ExtractVertexesException {
         SHPLayerDefinition tableDef = (SHPLayerDefinition) ((ShpWriter) writer).getTableDefinition();
-        FLyrVect solution = null;
         String fileName = ((ShpWriter) writer).getShpPath();
-        String layerName = null;
         int fileNameStart = fileName.lastIndexOf(File.separator) + 1;
         if (fileNameStart == -1) {
             fileNameStart = 0;
         }
-        layerName = fileName.substring(fileNameStart, fileName.length() - 4);
+        String layerName = fileName.substring(fileNameStart, fileName.length() - 4);
         File file = new File(fileName);
         IProjection proj = (tableDef.getProjection() != null) ? tableDef.getProjection() : firstLayer.getProjection();
-                try {
-                    IndexedShpDriver driver = new IndexedShpDriver();
-                    driver.open(file);
-                    driver.initialize();
-                    solution = (FLyrVect) LayerFactory.createLayer(layerName, driver, file, proj);
-                    LabelClass lc = new LabelClass();
-                    lc.setLabelExpressions(new String[] { "[" + FIELD_LABEL_X + "]", "[" + FIELD_LABEL_Y + "]" });
-                    lc.getTextSymbol().setDrawWithHalo(true);
-                    lc.getTextSymbol().setHaloWidth(5);
-                    lc.getTextSymbol().setFontSize(8);
-                    SimpleLabelStyle ls = new SimpleLabelStyle();
-                    ls.setMarkerPoint((Point2D) LABEL_MARKER_POINT.clone());
-                    ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_1.clone());
-                    ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_2.clone());
-                    lc.setLabelStyle(ls);
+        try {
+            IndexedShpDriver driver = new IndexedShpDriver();
+            driver.open(file);
+            driver.initialize();
+            FLyrVect solution = (FLyrVect) LayerFactory.createLayer(layerName, driver, file, proj);
+            setLabel(solution);
+            setStyle(solution);
+            return solution;
+        } catch (Exception e) {
+            throw new ExtractVertexesException("Problemas al cargar la capa resultado", e);
+        }
+    }
 
-                    PointPlacementConstraints pl = new PointPlacementConstraints();
-                    pl.setPlacementMode(IPlacementConstraints.ON_TOP_OF_THE_POINT);
+    private void setLabel(FLyrVect layer) {
+        LabelClass lc = new LabelClass();
+        lc.setLabelExpressions(new String[] { "[" + FIELD_LABEL_X + "]", "[" + FIELD_LABEL_Y + "]" });
+        lc.getTextSymbol().setDrawWithHalo(true);
+        lc.getTextSymbol().setHaloWidth(5);
+        lc.getTextSymbol().setFontSize(8);
+        lc.getTextSymbol().setTextColor(new Color(50, 50, 50));
+        SimpleLabelStyle ls = new SimpleLabelStyle();
+        ls.setMarkerPoint((Point2D) LABEL_MARKER_POINT.clone());
+        ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_1.clone());
+        ls.addTextFieldArea((Rectangle2D) LABEL_TEXT_FIELD_AREA_2.clone());
+        lc.setLabelStyle(ls);
 
-                    GeneralLabelingStrategy st = (GeneralLabelingStrategy) ExtendedLabelingFactory.createStrategy(solution,
-                    new DefaultLabelingMethod(lc), pl, null);
-                    st.setAllowOverlapping(true);
-                    solution.setLabelingStrategy(st);
-                    solution.setIsLabeled(true);
-                    return solution;
-                } catch (Exception e) {
-                    throw new ExtractVertexesException("Problemas al cargar la capa resultado", e);
-                }
+        PointPlacementConstraints pl = new PointPlacementConstraints();
+        pl.setPlacementMode(IPlacementConstraints.ON_TOP_OF_THE_POINT);
+
+        GeneralLabelingStrategy st = (GeneralLabelingStrategy) ExtendedLabelingFactory.createStrategy(layer,
+                new DefaultLabelingMethod(lc), pl, null);
+        st.setAllowOverlapping(true);
+        layer.setLabelingStrategy(st);
+        layer.setIsLabeled(true);
+    }
+
+    private void setStyle(FLyrVect layer) {
+        ILegend legend = layer.getLegend();
+        IMarkerSymbol symbol = (IMarkerSymbol) legend.getDefaultSymbol();
+        symbol.setColor(new Color(100, 100, 100));
+        symbol.setSize(5);
     }
 
     public FLayer getResult() throws ExtractVertexesException {
@@ -287,50 +303,29 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
         if (resultLayerDefinition == null) {
             ILayerDefinition resultLayerDefinition = new SHPLayerDefinition();
             resultLayerDefinition.setShapeType(XTypes.POINT);
-            FieldDescription[] fields = new FieldDescription[9];
-            fields[0] = new FieldDescription();
-            fields[0].setFieldLength(10);
-            fields[0].setFieldName(FIELD_FID);
-            fields[0].setFieldType(XTypes.BIGINT);
-            fields[1] = new FieldDescription();
-            fields[1].setFieldLength(10);
-            fields[1].setFieldName(FIELD_ORIGINAL_FID);
-            fields[1].setFieldType(XTypes.BIGINT);
-            fields[2] = new FieldDescription();
-            fields[2].setFieldLength(10);
-            fields[2].setFieldName(FIELD_VERTEX_NR);
-            fields[2].setFieldType(XTypes.BIGINT);
-            fields[3] = new FieldDescription();
-            fields[3].setFieldLength(10);
-            fields[3].setFieldName(FIELD_RESULTS_VERTEX_NR);
-            fields[3].setFieldType(XTypes.BIGINT);
-            fields[4] = new FieldDescription();
-            fields[4].setFieldLength(20);
-            fields[4].setFieldDecimalCount(5);
-            fields[4].setFieldName(FIELD_X);
-            fields[4].setFieldType(XTypes.DOUBLE);
-            fields[5] = new FieldDescription();
-            fields[5].setFieldLength(20);
-            fields[5].setFieldDecimalCount(5);
-            fields[5].setFieldName(FIELD_Y);
-            fields[5].setFieldType(XTypes.DOUBLE);
-            fields[6] = new FieldDescription();
-            fields[6].setFieldLength(25);
-            fields[6].setFieldName(FIELD_LABEL_X);
-            fields[6].setFieldType(XTypes.VARCHAR);
-            fields[7] = new FieldDescription();
-            fields[7].setFieldLength(25);
-            fields[7].setFieldName(FIELD_LABEL_Y);
-            fields[7].setFieldType(XTypes.VARCHAR);
-            fields[8] = new FieldDescription();
-            fields[8].setFieldLength(200);
-            fields[8].setFieldName(FIELD_LABEL);
-            fields[8].setFieldType(XTypes.VARCHAR);
-
+            FieldDescription[] fields = getFields();
             resultLayerDefinition.setFieldsDesc(fields);
             return resultLayerDefinition;
         }
         return resultLayerDefinition;
+    }
+
+    private FieldDescription[] getFields() {
+        FieldDescriptionFactory factory = new FieldDescriptionFactory();
+        factory.setDefaultNumericLength(10);
+        factory.addBigInteger(FIELD_FID);
+        factory.addBigInteger(FIELD_ORIGINAL_FID);
+        factory.addBigInteger(FIELD_VERTEX_NR);
+        factory.addBigInteger(FIELD_RESULTS_VERTEX_NR);
+        factory.setDefaultNumericLength(20);
+        factory.setDefaultDecimalCount(5);
+        factory.addDouble(FIELD_X);
+        factory.addDouble(FIELD_Y);
+        factory.setDefaultStringLength(25);
+        factory.addString(FIELD_LABEL_X);
+        factory.addString(FIELD_LABEL_Y);
+        factory.addString(FIELD_LABEL).setFieldLength(200);
+        return factory.getFields();
     }
 
     public void setParameters(Map params) throws ExtractVertexesException {
@@ -397,13 +392,13 @@ public class ExtractVertexesGeoprocess implements IBackgroundExecution {
                             Value[] attrs = new Value[] {
                                     ValueFactory.createValue(numNewFeatures),
                                     ValueFactory.createValue(Integer.parseInt(feature.getID())),
-                                            ValueFactory.createValue(j + 1),
-                                            ValueFactory.createValue(numVertexes),
-                                            ValueFactory.createValue(coord.x),
-                                            ValueFactory.createValue(coord.y),
-                                            ValueFactory.createValue("X: " + nf.format(coord.x)),
-                                                    ValueFactory.createValue("Y: " + nf.format(coord.y)),
-                                                            ValueFactory.createValue(numVertexes++ + " - X: " + nf.format(coord.x) + " | Y: "
+                                    ValueFactory.createValue(j + 1),
+                                    ValueFactory.createValue(numVertexes),
+                                    ValueFactory.createValue(coord.x),
+                                    ValueFactory.createValue(coord.y),
+                                    ValueFactory.createValue("X: " + nf.format(coord.x)),
+                                    ValueFactory.createValue("Y: " + nf.format(coord.y)),
+                                    ValueFactory.createValue(numVertexes++ + " - X: " + nf.format(coord.x) + " | Y: "
                                             + nf.format(coord.y)) };
                             writer.process(new DefaultRowEdited(new DefaultFeature(newGeometry, attrs, new UID()
                                     .toString()), IRowEdited.STATUS_ADDED, numNewFeatures++));

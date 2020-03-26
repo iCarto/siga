@@ -48,7 +48,7 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
     private JLabel numSelectedLabel;
     private JTextField distToleranceTextField;
 
-    private TOCLayerManager tocLayerManager;
+    private final TOCLayerManager tocLayerManager;
 
     public ExtractVertexesGeoprocessPanel(View view) {
         super();
@@ -162,11 +162,6 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
         alwaysAddLastVertexCheckBox.setEnabled(enabled);
     }
 
-    public void updateLayers(View view) {
-        tocLayerManager = new TOCLayerManager(view.getMapControl());
-        this.updateLayersComboBox();
-    }
-
     public FLayers getFLayers() {
         return tocLayerManager.getFLayers();
     }
@@ -223,6 +218,6 @@ public class ExtractVertexesGeoprocessPanel extends GridBagLayoutPanel {
 
     public double getClusterTolerance() {
         String strDist = this.distToleranceTextField.getText();
-        return FormatPool.instance().toNumber(strDist).doubleValue();
+        return FormatPool.instance().toNumber(strDist, 0).doubleValue();
     }
 }
