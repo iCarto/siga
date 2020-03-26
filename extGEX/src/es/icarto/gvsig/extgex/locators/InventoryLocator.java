@@ -847,7 +847,7 @@ public class InventoryLocator extends BasicAbstractWindow implements ActionListe
 
     @Override
     public Object getWindowModel() {
-        return "PkLocator";
+        return this.getClass().getName();
     }
 
     @Override

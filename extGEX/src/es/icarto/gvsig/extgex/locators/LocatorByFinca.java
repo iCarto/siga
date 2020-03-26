@@ -80,7 +80,7 @@ public class LocatorByFinca extends BasicAbstractWindow implements IPositionRetr
 
     public LocatorByFinca() {
         super();
-        setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
+        setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
         this.setWindowTitle("Localizar Finca");
         dbs = DBSession.getCurrentSession();
         initWidgets();
@@ -462,6 +462,11 @@ public class LocatorByFinca extends BasicAbstractWindow implements IPositionRetr
     @Override
     protected Component getDefaultFocusComponent() {
         return null;
+    }
+    
+    @Override
+    public Object getWindowProfile() {
+        return WindowInfo.EXTERNAL_PROFILE;
     }
 
 }

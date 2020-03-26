@@ -651,6 +651,11 @@ public abstract class AbstractNavTable extends JPanel implements IWindow,
 	}
 	return windowInfo;
     }
+    
+    @Override
+    public Object getWindowProfile() {
+        return WindowInfo.EXTERNAL_PROFILE;
+    }
 
     /**
      * Repaints the window.

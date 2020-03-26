@@ -408,7 +408,7 @@ public class LocatorByPK extends BasicAbstractWindow implements ActionListener,
 
     @Override
     public Object getWindowModel() {
-        return "PkLocator";
+        return this.getClass().getName();
     }
 
     @Override

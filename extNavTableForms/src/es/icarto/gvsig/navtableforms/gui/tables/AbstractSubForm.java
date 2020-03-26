@@ -406,7 +406,7 @@ IValidatableForm, IWindow, IWindowListener, II18nForm {
 
     @Override
     public Object getWindowProfile() {
-        return WindowInfo.DIALOG_PROFILE;
+        return WindowInfo.EXTERNAL_PROFILE;
     }
 
     @Override

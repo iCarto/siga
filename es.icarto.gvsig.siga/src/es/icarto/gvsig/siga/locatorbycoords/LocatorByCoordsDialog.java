@@ -44,7 +44,7 @@ DocumentListener {
 	this.model = locatorByCoordsModel;
 	setupUI();
 	setWindowTitle("Localizar Coordenadas");
-	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
+	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
 	setWindowClosed(new IWindowClosed() {
 	    @Override
 	    public void windowClosed(IWindow window) {
@@ -193,5 +193,11 @@ DocumentListener {
     protected Component getDefaultFocusComponent() {
 	return zoomBt;
     }
+    
+    @Override
+    public Object getWindowProfile() {
+        return WindowInfo.EXTERNAL_PROFILE;
+    }
+
 
 }

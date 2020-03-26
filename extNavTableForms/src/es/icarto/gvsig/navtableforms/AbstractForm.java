@@ -467,11 +467,6 @@ public abstract class AbstractForm extends AbstractNavTable implements
 	}
     }
 
-    @Override
-    public Object getWindowProfile() {
-	return null;
-    }
-
     protected void setTitle(String title) {
 	this.title = title;
     }

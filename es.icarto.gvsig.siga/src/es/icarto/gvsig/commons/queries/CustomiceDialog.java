@@ -39,7 +39,6 @@ public class CustomiceDialog<E> extends AbstractIWindow implements
     public CustomiceDialog() {
 	super(new MigLayout("wrap 1, insets 10", "[center]", ""));
 	setWindowTitle("Personalizar consulta");
-	setWindowInfoProperties(WindowInfo.MODALDIALOG);
 	okPanel = WidgetFactory.okCancelPanel(this, this, this);
 
 	dualListBox = new DualListBox<E>();

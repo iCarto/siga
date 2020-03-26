@@ -580,11 +580,6 @@ public class NavTable extends AbstractNavTable {
     }
 
     @Override
-    public Object getWindowProfile() {
-	return WindowInfo.PROPERTIES_PROFILE;
-    }
-
-    @Override
     public void reloadRecordset() throws ReadDriverException {
 	super.reloadRecordset();
 	initWidgets();

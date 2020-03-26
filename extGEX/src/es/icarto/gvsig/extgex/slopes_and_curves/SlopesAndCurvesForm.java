@@ -474,7 +474,7 @@ public class SlopesAndCurvesForm extends BasicAbstractWindow implements Singleto
 
     @Override
     public Object getWindowModel() {
-        return "SlopesAndCurvesForm";
+        return this.getClass().getName();
     }
 
     private void fillData() {

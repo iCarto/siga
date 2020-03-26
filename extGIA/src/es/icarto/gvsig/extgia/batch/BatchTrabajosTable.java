@@ -156,7 +156,7 @@ public class BatchTrabajosTable extends JPanel implements IWindow {
 	if (viewInfo == null) {
 	    viewInfo = new WindowInfo(WindowInfo.ICONIFIABLE
 		    | WindowInfo.MAXIMIZABLE | WindowInfo.RESIZABLE
-		    | WindowInfo.PALETTE);
+		    | WindowInfo.PALETTE | WindowInfo.MODELESSDIALOG);
 	    viewInfo.setTitle(PluginServices.getText(this, "Añadir Trabajos"));
 	    viewInfo.setWidth((int) table.getPreferredSize().getWidth() + 10);
 	    viewInfo.setHeight(480);
@@ -166,7 +166,7 @@ public class BatchTrabajosTable extends JPanel implements IWindow {
 
     @Override
     public Object getWindowProfile() {
-	return WindowInfo.EDITOR_PROFILE;
+	return WindowInfo.EXTERNAL_PROFILE;
     }
 
     private void closeWindow() {

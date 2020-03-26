@@ -32,7 +32,7 @@ IPositionRetriever, ActionListener {
 
     public LocatorByMunicipio() {
 	super();
-	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
+	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
 	this.setWindowTitle("Localizar Municipio o Parroquia");
 	initWidgets();
     }
@@ -146,6 +146,11 @@ IPositionRetriever, ActionListener {
     @Override
     protected Component getDefaultFocusComponent() {
 	return null;
+    }
+    
+    @Override
+    public Object getWindowProfile() {
+        return WindowInfo.EXTERNAL_PROFILE;
     }
 
 }
