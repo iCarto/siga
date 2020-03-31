@@ -72,7 +72,6 @@ import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.Permissions;
 import java.security.Policy;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -141,7 +140,6 @@ import com.iver.andami.plugins.config.generate.ToolBar;
 import com.iver.andami.plugins.status.IExtensionStatus;
 import com.iver.andami.plugins.status.IUnsavedData;
 import com.iver.andami.ui.AndamiEventQueue;
-import com.iver.andami.ui.MDIManagerLoadException;
 import com.iver.andami.ui.fonts.FontUtils;
 import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.andami.ui.mdiFrame.NewStatusBar;
@@ -155,7 +153,6 @@ import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xml.XMLEncodingUtils;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 
-
 /**
  * <p>
  * Andami's launching class. This is the class used to create the Andami's plugin environment.<br>
@@ -164,7 +161,8 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
  * <p>
  * <b>Syntax:</b>
  * <br>
- * java [-Xmx512M (for 512MB of RAM)] [-classpath={a colon-separated(unix) or semicolon-separated(windows) list of files containg base library of classes}]
+ * java [-Xmx512M (for 512MB of RAM)] [-classpath={a colon-separated(unix) or semicolon-separated(windows) list of files
+ * containg base library of classes}]
  * [-Djava.library.path=PATH_TO_NATIVE_LIBRARIES]
  * PATH_TO_APPLICATION_HOME_DIRECTORY PATH_TO_APPLICATION_PLUGINS_DIRECTORY
  * [{list of additional custom application arguments separated by spaces}]
@@ -175,83 +173,81 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
  * @version $Revision$
  */
 public class Launcher {
-	private static Logger logger = Logger.getLogger(Launcher.class.getName());
-	private static Preferences prefs = Preferences.userRoot().node( "gvsig.connection" );
-	private static AndamiConfig andamiConfig;
-	private static MultiSplashWindow splashWindow;
-	private static String appName;
-	private static Locale locale;
-	private static HashMap pluginsConfig = new HashMap();
-	private static HashMap pluginsServices = new HashMap();
-	private static MDIFrame frame;
-	private static HashMap classesExtensions = new HashMap();
-	private static String andamiConfigPath;
-	private static String pluginsPersistencePath;
-	private static final String nonWinDefaultLookAndFeel =  "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+    public static final String DEFAULT_SKIN = "es.icarto.gvsig.andami.ui.skin.IcartoSkin";
+    private static Logger logger = Logger.getLogger(Launcher.class.getName());
+    private static Preferences prefs = Preferences.userRoot().node("gvsig.connection");
+    private static AndamiConfig andamiConfig;
+    private static MultiSplashWindow splashWindow;
+    private static String appName;
+    private static Locale locale;
+    private static HashMap<String, PluginConfig> pluginsConfig = new HashMap<String, PluginConfig>();
+    private static HashMap<String, PluginServices> pluginsServices = new HashMap<String, PluginServices>();
+    private static MDIFrame frame;
+    private static HashMap<Class, ExtensionDecorator> classesExtensions = new HashMap<Class, ExtensionDecorator>();
+    private static String andamiConfigPath;
+    private static String pluginsPersistencePath;
+    private static final String nonWinDefaultLookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
 
-    private static ArrayList pluginsOrdered = new ArrayList();
-    private static ArrayList extensions=new ArrayList();
+    private static ArrayList<String> pluginsOrdered = new ArrayList<String>();
+    private static ArrayList<IExtension> extensions = new ArrayList<IExtension>();
     private static String appHomeDir = null;
     // it seems castor uses this encoding
     private static final String CASTORENCODING = "UTF8";
 
-	private static final class ProxyAuth extends Authenticator {
-		private PasswordAuthentication auth;
+    private static final class ProxyAuth extends Authenticator {
+        private final PasswordAuthentication auth;
 
-		private ProxyAuth(String user, String pass) {
-			auth = new PasswordAuthentication(user, pass.toCharArray());
-		}
+        private ProxyAuth(String user, String pass) {
+            auth = new PasswordAuthentication(user, pass.toCharArray());
+        }
 
-		protected PasswordAuthentication getPasswordAuthentication() {
-			return auth;
-		}
-	}
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return auth;
+        }
+    }
 
-	
-	public static void main(String[] args) throws Exception {
-		boolean install = false;
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equalsIgnoreCase("--install")) {
-				install = true;
-			}
-		}
-    	
-    	new DefaultLibrariesInitializer().fullInitialize();
+    public static void main(String[] args) throws Exception {
+        boolean install = false;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("--install")) {
+                install = true;
+            }
+        }
 
-		try {
-			if (install) {
-				doInstall(args);
-			} else {
-				doMain(args);
-			}
-		} catch (Exception e) {
-			logger.error("excepción al arrancar", e);
-			System.exit(-1);
-		}
-	}
-	
-	
-	/**
+        new DefaultLibrariesInitializer().fullInitialize();
+
+        try {
+            if (install) {
+                doInstall(args);
+            } else {
+                doMain(args);
+            }
+        } catch (Exception e) {
+            logger.error("excepción al arrancar", e);
+            System.exit(-1);
+        }
+    }
+
+    /**
      * Launch the gvSIG package installer.
-     * 
+     *
      * @throws Exception
      *             if there is any error
      */
     private static void doInstall(String[] args) throws Exception {
-    	
+
         String installURL = null;
         if (args.length >= 4) {
             String installURLParam = args[3];
             if (installURLParam.startsWith("--installURL=")) {
-                installURL =
-                    installURLParam.substring("--installURL=".length());
+                installURL = installURLParam.substring("--installURL=".length());
             }
         }
 
         if (args.length < 3) {
-            System.err.println(Messages.get("usage")
-                + ": Launcher appName plugins-directory "
-                + "--install [--installURL=[URL]] [language=locale]");
+            System.err.println(Messages.get("usage") + ": Launcher appName plugins-directory "
+                    + "--install [--installURL=[URL]] [language=locale]");
         }
 
         initializeApp(args);
@@ -263,40 +259,36 @@ public class Launcher {
         // Configure default index download URL
         if (installURL != null) {
             try {
-                SwingInstallerLocator.getSwingInstallerManager()
-                    .setDefaultDownloadURL(new URL(installURL));
+                SwingInstallerLocator.getSwingInstallerManager().setDefaultDownloadURL(new URL(installURL));
             } catch (MalformedURLException e) {
-                logger.error(
-                    "Error creating the default packages download URL pointing to"
-                        + installURL, e);
+                logger.error("Error creating the default packages download URL pointing to" + installURL, e);
             }
         }
 
-		// Launch installer
-		File appFolder = new File(System.getProperty("user.dir"));
+        // Launch installer
+        File appFolder = new File(System.getProperty("user.dir"));
 
-		AbstractInstallPackageWizard installPackageWizard = SwingInstallerLocator
-				.getSwingInstallerManager().createInstallPackageWizard(
-						appFolder,
-						new File(appFolder, "install"));
-		
-		installPackageWizard
-				.setWizardActionListener(new InstallerWizardActionListener() {
+        AbstractInstallPackageWizard installPackageWizard = SwingInstallerLocator.getSwingInstallerManager()
+                .createInstallPackageWizard(appFolder, new File(appFolder, "install"));
 
-					public void finish(InstallerWizardPanel installerWizard) {
-						System.exit(0);
-					}
+        installPackageWizard.setWizardActionListener(new InstallerWizardActionListener() {
 
-					public void cancel(InstallerWizardPanel installerWizard) {
-						System.exit(0);
-					}
-				});
-   
+            @Override
+            public void finish(InstallerWizardPanel installerWizard) {
+                System.exit(0);
+            }
+
+            @Override
+            public void cancel(InstallerWizardPanel installerWizard) {
+                System.exit(0);
+            }
+        });
+
         // the wizard will show the Typical or Advanced mode option.
         installPackageWizard.setAskTypicalOrCustom(true);
         // default packages will be selected.
         installPackageWizard.setSelectDefaultPackages(true);
-        
+
         // 1. Create the frame.
         JFrame frame = new JFrame(Messages.get("gvsig_package_installer"));
 
@@ -322,313 +314,294 @@ public class Launcher {
     }
 
     private static void doMain(String[] args) throws Exception {
-    	try{
+        try {
 
-    		if (args.length < 1) {
-    			System.err.println("Uso: Launcher appName plugins-directory [language=locale]");
-    		}
+            if (args.length < 1) {
+                System.err.println("Uso: Launcher appName plugins-directory [language=locale]");
+            }
 
-    		initializeApp(args);
+            initializeApp(args);
 
-    		// Solucionamos el problema de permisos que se producï¿½a con Java Web Start con este cï¿½digo.
-    		// System.setSecurityManager(null);
-    		Policy.setPolicy(new Policy() {
-    			public PermissionCollection getPermissions(CodeSource codesource) {
-    				Permissions perms = new Permissions();
-    				perms.add(new AllPermission());
-    				return (perms);
-    			}
-    			public void
-    			refresh() {}
-    		});
+            // Solucionamos el problema de permisos que se producï¿½a con Java Web Start con este cï¿½digo.
+            // System.setSecurityManager(null);
+            Policy.setPolicy(new Policy() {
+                @Override
+                public PermissionCollection getPermissions(CodeSource codesource) {
+                    Permissions perms = new Permissions();
+                    perms.add(new AllPermission());
+                    return (perms);
+                }
 
-    		initIconThemes();
-//    		Registramos los iconos base
-    		registerIcons();
-    		validate();
+                @Override
+                public void refresh() {
+                }
+            });
 
-    		// Obtener la personalización de la aplicación.
-    		Theme theme=getTheme();
+            initIconThemes();
+            // Registramos los iconos base
+            registerIcons();
+            validate();
 
-    		// Mostrar la ventana de inicio
-    		Frame f=new Frame();
-    		splashWindow=new MultiSplashWindow(f,theme, 190);
+            // Obtener la personalización de la aplicación.
+            Theme theme = getTheme();
 
-    		// 1. Ponemos los datos del proxy
-    		splashWindow.process(10,
-    				PluginServices.getText(Launcher.class, "SplashWindow.configuring_proxy"));
-    		configureProxy();
+            // Mostrar la ventana de inicio
+            Frame f = new Frame();
+            splashWindow = new MultiSplashWindow(f, theme, 190);
 
-    		// 2. TODO Buscar actualizaciones de los plugins
-    		splashWindow.process(20,
-    				PluginServices.getText(Launcher.class, "SplashWindow.looking_for_updates"));
-    		downloadExtensions(andamiConfig.getPluginsDirectory());
+            // 1. Ponemos los datos del proxy
+            splashWindow.process(10, PluginServices.getText(Launcher.class, "SplashWindow.configuring_proxy"));
+            configureProxy();
 
-    		// 3. Se leen los config.xml de los plugins -----++++
-    		splashWindow.process(30,
-    				PluginServices.getText(Launcher.class, "SplashWindow.reading_plugins_config.xml"));
-    		loadPlugins(andamiConfig.getPluginsDirectory());
+            // 2. TODO Buscar actualizaciones de los plugins
+            splashWindow.process(20, PluginServices.getText(Launcher.class, "SplashWindow.looking_for_updates"));
+            downloadExtensions(andamiConfig.getPluginsDirectory());
 
-    		// 4. Se configura el classloader del plugin
-    		splashWindow.process(40,
-    				PluginServices.getText(Launcher.class, "SplashWindow.setting_up_class_loaders"));
-    		pluginsClassLoaders();
+            // 3. Se leen los config.xml de los plugins -----++++
+            splashWindow
+                    .process(30, PluginServices.getText(Launcher.class, "SplashWindow.reading_plugins_config.xml"));
+            loadPlugins(andamiConfig.getPluginsDirectory());
 
-    		// 5. Se carga un Skin si alguno de los plugins trae información para ello
-    		splashWindow.process(50,
-    				PluginServices.getText(Launcher.class, "SplashWindow.looking_for_a_skin"));
-//    		skinPlugin(	"com.iver.core.mdiManager.NewSkin");
-    		skinPlugin(null);
+            // 4. Se configura el classloader del plugin
+            splashWindow.process(40, PluginServices.getText(Launcher.class, "SplashWindow.setting_up_class_loaders"));
+            pluginsClassLoaders();
 
-    		// 6. Se configura la cola de eventos
-    		splashWindow.process(60,
-    				PluginServices.getText(Launcher.class, "setting_up_event_queue"));
-    		EventQueue waitQueue = new AndamiEventQueue();
-    		Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQueue);
+            // 5. Se carga un Skin si alguno de los plugins trae información para ello
+            splashWindow.process(50, PluginServices.getText(Launcher.class, "SplashWindow.looking_for_a_skin"));
+            XMLEntity persistenceFromXML = persistenceFromXML();
+            MDIManagerFactory.skinPlugin(persistenceFromXML, null);
 
-    		// 7. Se configura la mensajería del plugin
-    		splashWindow.process(70,
-    				PluginServices.getText(Launcher.class, "SplashWindow.starting_plugin_internationalization_system"));
-    		pluginsMessages();
+            // 6. Se configura la cola de eventos
+            splashWindow.process(60, PluginServices.getText(Launcher.class, "setting_up_event_queue"));
+            EventQueue waitQueue = new AndamiEventQueue();
+            Toolkit.getDefaultToolkit().getSystemEventQueue().push(waitQueue);
 
-    		// 8. Se modifica el andami-config con los plugins nuevos
-    		splashWindow.process(80,
-    				PluginServices.getText(Launcher.class, "SplashWindow.looking_for_a_skin"));
-    		updateAndamiConfig();
+            // 7. Se configura la mensajería del plugin
+            splashWindow
+                    .process(70, PluginServices.getText(Launcher.class,
+                            "SplashWindow.starting_plugin_internationalization_system"));
+            pluginsMessages();
 
+            // 8. Se modifica el andami-config con los plugins nuevos
+            splashWindow.process(80, PluginServices.getText(Launcher.class, "SplashWindow.looking_for_a_skin"));
+            updateAndamiConfig();
 
-    		frame = new MDIFrame();
-    		// 9. Se configura el nombre e icono de la aplicación
-    		splashWindow.process(90,
-    				PluginServices.getText(Launcher.class, "SplashWindow.setting_up_applications_name_and_icons"));
-    		frameIcon(theme);
+            frame = new MDIFrame();
+            // 9. Se configura el nombre e icono de la aplicación
+            splashWindow.process(90,
+                    PluginServices.getText(Launcher.class, "SplashWindow.setting_up_applications_name_and_icons"));
+            frameIcon(theme);
 
-    		// 10. Se prepara el MainFrame para albergar las extensiones
-    		splashWindow.process(100,
-    				PluginServices.getText(Launcher.class, "SplashWindow.preparing_workbench"));
-    		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+            // 10. Se prepara el MainFrame para albergar las extensiones
+            splashWindow.process(100, PluginServices.getText(Launcher.class, "SplashWindow.preparing_workbench"));
+            JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				frame.init();
-    			}
-    		});
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    frame.init();
+                }
+            });
 
+            // 11. Leer el fichero de persistencia
+            // info de los plugins
+            // bookmarks de los plugins
+            splashWindow.process(110, PluginServices.getText(Launcher.class, "SplashWindow.loading_plugin_settings"));
+            loadPluginsPersistence();
 
+            // // Boorar tras versión 2003xx
+            // PluginServices ps = PluginServices.getPluginServices("com.iver.core");
+            // XMLEntity xml = ps.getPersistentXML();
+            // xml.putProperty("Skin-Selected", DEFAULT_SKIN);
+            // // Boorar tras versión 2003xx
 
-    		// 11. Leer el fichero de persistencia
-    		//  info de los plugins
-    		//  bookmarks de los plugins
-    		splashWindow.process(110,
-    				PluginServices.getText(Launcher.class, "SplashWindow.loading_plugin_settings"));
-    		loadPluginsPersistence();
+            // Se instalan los controles del skin
+            // 12. Se inicializan todas las extensiones de todos los plugins
+            splashWindow.process(120, PluginServices.getText(Launcher.class, "SplashWindow.initializing_extensions"));
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    initializeExtensions();
+                }
+            });
 
+            // 13. Se inicializan la extensión exclusiva
+            splashWindow.process(130,
+                    PluginServices.getText(Launcher.class, "SplashWindow.setting_up_master_extension"));
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    initializeExclusiveUIExtension();
+                }
+            });
+            frame.setClassesExtensions(classesExtensions);
 
+            // 14. Se instalan los controles de las extensiones de los plugins
+            splashWindow.process(140,
+                    PluginServices.getText(Launcher.class, "SplashWindow.installing_extensions_controls"));
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    installPluginsControls();
 
-    		// Se instalan los controles del skin
-    		// 12. Se inicializan todas las extensiones de todos los plugins
-    		splashWindow.process(120,
-					PluginServices.getText(Launcher.class, "SplashWindow.initializing_extensions"));
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				initializeExtensions();
-    			}
-    		});
+                }
+            });
 
-    		// 13. Se inicializan la extensión exclusiva
-			splashWindow.process(130,
-					PluginServices.getText(Launcher.class, "SplashWindow.setting_up_master_extension"));
-			SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				initializeExclusiveUIExtension();
-    			}
-    		});
-    		frame.setClassesExtensions(classesExtensions);
+            // 15. Se instalan los menus de las extensiones de los plugins
+            splashWindow.process(150,
+                    PluginServices.getText(Launcher.class, "SplashWindow.installing_extensions_menus"));
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    installPluginsMenus();
 
+                }
+            });
 
+            // 16. Se instalan las etiquetas de las extensiones de los plugins
+            splashWindow.process(160,
+                    PluginServices.getText(Launcher.class, "SplashWindow.installing_extensions_labels"));
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    installPluginsLabels();
 
+                }
+            });
 
+            // 17. Se instalan los bookmarks de los plugins
 
-    		// 14. Se instalan los controles de las extensiones de los plugins
-    		splashWindow.process(140,
-    				PluginServices.getText(Launcher.class, "SplashWindow.installing_extensions_controls"));
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				installPluginsControls();
+            // 18. Se muestra el frame principal
+            splashWindow.process(180, PluginServices.getText(Launcher.class, "creating_main_window"));
+            frame.setVisible(true);
 
-    			}
-    		});
+            // 19. Se ejecuta el postInitialize
+            splashWindow.process(190,
+                    PluginServices.getText(Launcher.class, "SplashWindow.post_initializing_extensions"));
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    postInitializeExtensions();
 
-    		// 15. Se instalan los menus de las extensiones de los plugins
-    		splashWindow.process(150,
-    				PluginServices.getText(Launcher.class, "SplashWindow.installing_extensions_menus"));
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				installPluginsMenus();
+                }
+            });
 
-    			}
-    		});
+            // Definimos un KeyEventDispatcher global para que las extensiones
+            // puedan registrar sus "teclas rápidas".
+            GlobalKeyEventDispatcher keyDispatcher = GlobalKeyEventDispatcher.getInstance();
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(keyDispatcher);
 
-    		// 16. Se instalan las etiquetas de las extensiones de los plugins
-    		splashWindow.process(160,
-    				PluginServices.getText(Launcher.class, "SplashWindow.installing_extensions_labels"));
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				installPluginsLabels();
-
-    			}
-    		});
-
-
-    		// 17. Se instalan los bookmarks de los plugins
-
-    		// 18. Se muestra el frame principal
-    		splashWindow.process(180,
-    				PluginServices.getText(Launcher.class, "creating_main_window"));
-    		frame.setVisible(true);
-
-    		// 19. Se ejecuta el postInitialize
-			splashWindow.process(190,
-					PluginServices.getText(Launcher.class, "SplashWindow.post_initializing_extensions"));
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				postInitializeExtensions();
-
-    			}
-    		});
-
-
-    		// Definimos un KeyEventDispatcher global para que las extensiones
-    		// puedan registrar sus "teclas rápidas".
-    		GlobalKeyEventDispatcher keyDispatcher = GlobalKeyEventDispatcher.getInstance();
-    		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(keyDispatcher);
-
-    		SwingUtilities.invokeAndWait(new Runnable() {
-    			public void run() {
-    				frame.enableControls();
-    			}
-    		});
-    		splashWindow.close();
-    	}catch(Exception e){
-    		logger.error("excepción al arrancar", e);
-    		System.exit(-1);
-    	}
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    frame.enableControls();
+                }
+            });
+            splashWindow.close();
+        } catch (Exception e) {
+            logger.error("excepción al arrancar", e);
+            System.exit(-1);
+        }
 
     }
 
+    private static void initializeApp(String[] args) throws IOException, ConfigurationException {
+        if (!validJVM()) {
+            System.exit(-1);
+        }
 
-	private static void initializeApp(String[] args) throws IOException,
-			ConfigurationException {
-		if (!validJVM()){
-			System.exit(-1);
-		}
-		
-		//  Clean temporal files
-		Utilities.cleanUpTempFiles();
+        // Clean temporal files
+        Utilities.cleanUpTempFiles();
 
-		appName = args[0];
+        appName = args[0];
 
-		appHomeDir = System.getProperty(args[0]+".home");
-		if (appHomeDir == null)
-			appHomeDir = System.getProperty("user.home");
+        appHomeDir = System.getProperty(args[0] + ".home");
+        if (appHomeDir == null) {
+            appHomeDir = System.getProperty("user.home");
+        }
 
-		appHomeDir += File.separator + args[0] + File.separator;
+        appHomeDir += File.separator + args[0] + File.separator;
 
-		// If gvSIG.confDir exists, then it will override any other setting for
-		// the configuration file path.
-		// This is a Java property, which means it has to be passed to the
-		// VM like this: java -DgvSIG.confDir=<path>
-		String gvsig_conf_dir = System.getProperty("gvSIG.confDir");    	
-		if ( gvsig_conf_dir != null ) {
-			gvsig_conf_dir = gvsig_conf_dir.trim();
-			if ( gvsig_conf_dir.length() > 0 ) {
-				if ( gvsig_conf_dir.endsWith(File.separator) ) {
-					appHomeDir = gvsig_conf_dir;
-				} else {
-					appHomeDir = gvsig_conf_dir + File.separator;
-				}
-			}
-		}
-		
-		FileUtils.setAppHomeDir(appHomeDir);
-		
-		File parent = new File( appHomeDir );
-		parent.mkdirs();    		
+        // If gvSIG.confDir exists, then it will override any other setting for
+        // the configuration file path.
+        // This is a Java property, which means it has to be passed to the
+        // VM like this: java -DgvSIG.confDir=<path>
+        String gvsig_conf_dir = System.getProperty("gvSIG.confDir");
+        if (gvsig_conf_dir != null) {
+            gvsig_conf_dir = gvsig_conf_dir.trim();
+            if (gvsig_conf_dir.length() > 0) {
+                if (gvsig_conf_dir.endsWith(File.separator)) {
+                    appHomeDir = gvsig_conf_dir;
+                } else {
+                    appHomeDir = gvsig_conf_dir + File.separator;
+                }
+            }
+        }
 
-		
-		andamiConfigPath = appHomeDir + "andami-config.xml";
-		pluginsPersistencePath = appHomeDir + "plugins-persistence.xml";
+        FileUtils.setAppHomeDir(appHomeDir);
 
-		
-		// Configurar el log4j
-		Launcher.class.getClassLoader()
-		.getResource(".");
-		PropertyConfigurator.configure("log4j.properties");
+        File parent = new File(appHomeDir);
+        parent.mkdirs();
 
-		PatternLayout l = new PatternLayout("%p %t %C - %m%n");
-		
-		RollingFileAppender fa = new RollingFileAppender(l,
-				appHomeDir + args[0] + ".log", false);
+        andamiConfigPath = appHomeDir + "andami-config.xml";
+        pluginsPersistencePath = appHomeDir + "plugins-persistence.xml";
 
-		fa.setMaxFileSize("512KB");
-		fa.setMaxBackupIndex(3);
-		Logger.getRootLogger().addAppender(fa);
+        // Configurar el log4j
+        Launcher.class.getClassLoader().getResource(".");
+        PropertyConfigurator.configure("log4j.properties");
 
-		// Leer el fichero de configuraciï¿½n de andami (andami-config.xsd)
-		// locale
-		// Buscar actualizaciï¿½nes al comenzar
-		//  Andami
-		//  Plugins
-		// Directorio de las extensiones
-		andamiConfigFromXML(andamiConfigPath);
-		andamiConfig.setPluginsDirectory(args[1]);
+        PatternLayout l = new PatternLayout("%p %t %C - %m%n");
 
-		// Hacemos visibles los argumentos como una propiedad estï¿½tica
-		// de plugin services para quien lo quiera usar (por ejemplo, para
-		// cargar un proyecto por lï¿½nea de comandos)
-		PluginServices.setArguments(args);
+        RollingFileAppender fa = new RollingFileAppender(l, appHomeDir + args[0] + ".log", false);
 
-		configureLocales(args);
-		
-		logger.info("Launching gvSIG: " + new Date());
+        fa.setMaxFileSize("512KB");
+        fa.setMaxBackupIndex(3);
+        Logger.getRootLogger().addAppender(fa);
 
-		//Se pone el lookAndFeel
-		try {
-			String lookAndFeel = getAndamiConfig().getLookAndFeel();
-			if (lookAndFeel == null)
-				lookAndFeel = getDefaultLookAndFeel();
-			UIManager.setLookAndFeel(lookAndFeel);
-		} catch (Exception e) {
-			logger.warn(Messages.getString("Launcher.look_and_feel"), e);
-		}
-		FontUtils.initFonts();
-	}
+        // Leer el fichero de configuraciï¿½n de andami (andami-config.xsd)
+        // locale
+        // Buscar actualizaciï¿½nes al comenzar
+        // Andami
+        // Plugins
+        // Directorio de las extensiones
+        andamiConfigFromXML(andamiConfigPath);
+        andamiConfig.setPluginsDirectory(args[1]);
 
-    private static void registerIcons(){
-    	PluginServices.getIconTheme().registerDefault(
-    			"login-gvsig",
-    			LoginUI.class.getClassLoader().getResource("images/login_gvsig.png")
-    		);
-    	PluginServices.getIconTheme().registerDefault(
-    			"splash-gvsig",
-    			MultiSplashWindow.class.getClassLoader().getResource("images/splash.png")
-    		);
-    	PluginServices.getIconTheme().registerDefault(
-    			"info-icon",
-    			NewStatusBar.class.getClassLoader().getResource("images/info.gif")
-    		);
-    	PluginServices.getIconTheme().registerDefault(
-    			"error-icon",
-    			NewStatusBar.class.getClassLoader().getResource("images/error.gif")
-    		);
-    	PluginServices.getIconTheme().registerDefault(
-    			"warning-icon",
-    			NewStatusBar.class.getClassLoader().getResource("images/warning.gif")
-    		);
-    	PluginServices.getIconTheme().registerDefault(
-    			"no-icon",
-    			NewStatusBar.class.getClassLoader().getResource("images/no_icon.png")
-    		);
+        // Hacemos visibles los argumentos como una propiedad estï¿½tica
+        // de plugin services para quien lo quiera usar (por ejemplo, para
+        // cargar un proyecto por lï¿½nea de comandos)
+        PluginServices.setArguments(args);
+
+        configureLocales(args);
+
+        logger.info("Launching gvSIG: " + new Date());
+
+        // Se pone el lookAndFeel
+        try {
+            String lookAndFeel = getAndamiConfig().getLookAndFeel();
+            if (lookAndFeel == null) {
+                lookAndFeel = getDefaultLookAndFeel();
+            }
+            UIManager.setLookAndFeel(lookAndFeel);
+        } catch (Exception e) {
+            logger.warn(Messages.getString("Launcher.look_and_feel"), e);
+        }
+        FontUtils.initFonts();
+    }
+
+    private static void registerIcons() {
+        PluginServices.getIconTheme().registerDefault("login-gvsig",
+                LoginUI.class.getClassLoader().getResource("images/login_gvsig.png"));
+        PluginServices.getIconTheme().registerDefault("splash-gvsig",
+                MultiSplashWindow.class.getClassLoader().getResource("images/splash.png"));
+        PluginServices.getIconTheme().registerDefault("info-icon",
+                NewStatusBar.class.getClassLoader().getResource("images/info.gif"));
+        PluginServices.getIconTheme().registerDefault("error-icon",
+                NewStatusBar.class.getClassLoader().getResource("images/error.gif"));
+        PluginServices.getIconTheme().registerDefault("warning-icon",
+                NewStatusBar.class.getClassLoader().getResource("images/warning.gif"));
+        PluginServices.getIconTheme().registerDefault("no-icon",
+                NewStatusBar.class.getClassLoader().getResource("images/no_icon.png"));
     }
 
     /**
@@ -638,1177 +611,1048 @@ public class Launcher {
      * @return Theme
      */
     private static Theme getTheme() {
-    	Theme theme=new Theme();
-    	String name=PluginServices.getArgumentByName("andamiTheme");
-		//File file=new File("theme/andami-theme.xml");
-    	File file;
-    	if (name==null){
-    		file=new File("theme/andami-theme.xml");
-    	}else{
-    		file=new File(name);
-    	}
+        Theme theme = new Theme();
+        String name = PluginServices.getArgumentByName("andamiTheme");
+        // File file=new File("theme/andami-theme.xml");
+        File file;
+        if (name == null) {
+            file = new File("theme/andami-theme.xml");
+        } else {
+            file = new File(name);
+        }
 
-    	if (file.exists()) {
-			theme.readTheme(file);
-		}
-		return theme;
-	}
-	/**
-     *Establece los datos que teníamos guardados respecto de la configuración
-     *del proxy.
+        if (file.exists()) {
+            theme.readTheme(file);
+        }
+        return theme;
+    }
+
+    /**
+     * Establece los datos que teníamos guardados respecto de la configuración
+     * del proxy.
      */
-	private static void configureProxy() {
-		String host = prefs.get("firewall.http.host", "");
-		String port = prefs.get("firewall.http.port", "");
+    private static void configureProxy() {
+        String host = prefs.get("firewall.http.host", "");
+        String port = prefs.get("firewall.http.port", "");
 
-		System.getProperties().put("http.proxyHost", host);
-		System.getProperties().put("http.proxyPort", port);
+        System.getProperties().put("http.proxyHost", host);
+        System.getProperties().put("http.proxyPort", port);
 
-		// Ponemos el usuario y clave del proxy, si existe
-		String proxyUser = prefs.get("firewall.http.user",null);
-		String proxyPassword = prefs.get("firewall.http.password", null);
-		if (proxyUser != null )
-		{
-			System.getProperties().put("http.proxyUserName", proxyUser);
-			System.getProperties().put("http.proxyPassword", proxyPassword);
+        // Ponemos el usuario y clave del proxy, si existe
+        String proxyUser = prefs.get("firewall.http.user", null);
+        String proxyPassword = prefs.get("firewall.http.password", null);
+        if (proxyUser != null) {
+            System.getProperties().put("http.proxyUserName", proxyUser);
+            System.getProperties().put("http.proxyPassword", proxyPassword);
 
-			Authenticator.setDefault(new ProxyAuth(proxyUser,
-			                                proxyPassword));
-		} else {
-			Authenticator.setDefault(new ProxyAuth("", ""));
-		}
-	}
+            Authenticator.setDefault(new ProxyAuth(proxyUser, proxyPassword));
+        } else {
+            Authenticator.setDefault(new ProxyAuth("", ""));
+        }
+    }
 
-	/**
-	 * Recupera la geometría (tamaño, posicón y estado) de la ventana principal de Andami.
-	 * TODO Pendiente de ver como se asigna un pluginServices para el launcher.
-	 * @author LWS
-	 */
-	private static void restoreMDIStatus(XMLEntity xml) {
-		if (xml == null) xml = new XMLEntity();
-		//  restore frame size
-		Dimension sz = new Dimension(700,580);
-		if (xml.contains("MDIFrameSize")) {
-			int [] wh = xml.getIntArrayProperty("MDIFrameSize");
-			sz = new Dimension(wh[0], wh[1]);
-		}
-		frame.setSize(sz);
-		//  restore frame location
-		Point pos = new Point(10,10);
-		if (xml.contains("MDIFramePos")) {
-			int [] xy = xml.getIntArrayProperty("MDIFramePos");
-			pos = new Point(xy[0], xy[1]);
-		}
-		frame.setLocation(pos);
+    /**
+     * Recupera la geometría (tamaño, posicón y estado) de la ventana principal de Andami.
+     * TODO Pendiente de ver como se asigna un pluginServices para el launcher.
+     *
+     * @author LWS
+     */
+    private static void restoreMDIStatus(XMLEntity xml) {
+        if (xml == null) {
+            xml = new XMLEntity();
+        }
+        // restore frame size
+        Dimension sz = new Dimension(700, 580);
+        if (xml.contains("MDIFrameSize")) {
+            int[] wh = xml.getIntArrayProperty("MDIFrameSize");
+            sz = new Dimension(wh[0], wh[1]);
+        }
+        frame.setSize(sz);
+        // restore frame location
+        Point pos = new Point(10, 10);
+        if (xml.contains("MDIFramePos")) {
+            int[] xy = xml.getIntArrayProperty("MDIFramePos");
+            pos = new Point(xy[0], xy[1]);
+        }
+        frame.setLocation(pos);
 
-		//  restore frame status (Maximized, minimized, etc);
-		int state = java.awt.Frame.MAXIMIZED_BOTH;
-		if (xml.contains("MDIFrameState")) {
-			state = xml.getIntProperty("MDIFrameState");
-		}
-		frame.setExtendedState(state);
-	}
+        // restore frame status (Maximized, minimized, etc);
+        int state = java.awt.Frame.MAXIMIZED_BOTH;
+        if (xml.contains("MDIFrameState")) {
+            state = xml.getIntProperty("MDIFrameState");
+        }
+        frame.setExtendedState(state);
+    }
 
-	private static XMLEntity saveMDIStatus() {
-		XMLEntity xml = new XMLEntity();
-		// save frame size
-		int [] wh = new int[2];
-		wh[0] = frame.getWidth();
-		wh[1] = frame.getHeight();
-		xml.putProperty("MDIFrameSize", wh);
-		// save frame location
-		int [] xy = new int[2];
-		xy[0] = frame.getX();
-		xy[1] = frame.getY();
-		xml.putProperty("MDIFramePos", xy);
-		// save frame status
-		xml.putProperty("MDIFrameState", frame.getExtendedState());
-		return xml;
-	}
+    private static XMLEntity saveMDIStatus() {
+        XMLEntity xml = new XMLEntity();
+        // save frame size
+        int[] wh = new int[2];
+        wh[0] = frame.getWidth();
+        wh[1] = frame.getHeight();
+        xml.putProperty("MDIFrameSize", wh);
+        // save frame location
+        int[] xy = new int[2];
+        xy[0] = frame.getX();
+        xy[1] = frame.getY();
+        xml.putProperty("MDIFramePos", xy);
+        // save frame status
+        xml.putProperty("MDIFrameState", frame.getExtendedState());
+        return xml;
+    }
 
     private static boolean validJVM() {
         char thirdCharacter = System.getProperty("java.version").charAt(2);
-        if (thirdCharacter < '4'){
+        if (thirdCharacter < '4') {
             return false;
-	    }else{
-	        return true;
-	    }
+        } else {
+            return true;
+        }
     }
 
-	private static void loadPluginsPersistence() throws ConfigurationException {
-		XMLEntity entity = persistenceFromXML();
+    private static void loadPluginsPersistence() throws ConfigurationException {
+        XMLEntity entity = persistenceFromXML();
 
-		for (int i = 0; i < entity.getChildrenCount(); i++) {
-			XMLEntity plugin = entity.getChild(i);
-			String pName = plugin.getStringProperty(
-					"com.iver.andami.pluginName");
-			if (pluginsServices.get(pName)!= null){
-				((PluginServices) pluginsServices.get(pName)).setPersistentXML(plugin);
-			} else {
-				if (pName.startsWith("Andami.Launcher"))
-					restoreMDIStatus(plugin);
-			}
-		}
-	}
+        for (int i = 0; i < entity.getChildrenCount(); i++) {
+            XMLEntity plugin = entity.getChild(i);
+            String pName = plugin.getStringProperty("com.iver.andami.pluginName");
+            if (pluginsServices.get(pName) != null) {
+                pluginsServices.get(pName).setPersistentXML(plugin);
+            } else {
+                if (pName.startsWith("Andami.Launcher")) {
+                    restoreMDIStatus(plugin);
+                }
+            }
+        }
+    }
 
-	/**
-	 * Salva la persistencia de los plugins.
-	 * @author LWS
-	 */
-	private static void savePluginPersistence() {
-		Iterator i = pluginsConfig.keySet().iterator();
+    /**
+     * Salva la persistencia de los plugins.
+     *
+     * @author LWS
+     */
+    private static void savePluginPersistence() {
+        Iterator<String> i = pluginsConfig.keySet().iterator();
 
-		XMLEntity entity = new XMLEntity();
+        XMLEntity entity = new XMLEntity();
 
-		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
-			XMLEntity ent = ps.getPersistentXML();
+        while (i.hasNext()) {
+            String pName = i.next();
+            PluginServices ps = pluginsServices.get(pName);
+            XMLEntity ent = ps.getPersistentXML();
 
-			if (ent != null) {
-				ent.putProperty("com.iver.andami.pluginName", pName);
-				entity.addChild(ent);
-			}
-		}
-		XMLEntity ent = saveMDIStatus();
-		if (ent != null) {
-			ent.putProperty("com.iver.andami.pluginName", "Andami.Launcher");
-			entity.addChild(ent);
-		}
-		try {
-			persistenceToXML(entity);
-		} catch (ConfigurationException e1) {
-			logger.error(Messages.getString(
-					"Launcher.Se_produjo_un_error_guardando_la_configuracion_de_los_plugins"),
-				e1);
-		}
-	}
+            if (ent != null) {
+                ent.putProperty("com.iver.andami.pluginName", pName);
+                entity.addChild(ent);
+            }
+        }
+        XMLEntity ent = saveMDIStatus();
+        if (ent != null) {
+            ent.putProperty("com.iver.andami.pluginName", "Andami.Launcher");
+            entity.addChild(ent);
+        }
+        try {
+            persistenceToXML(entity);
+        } catch (ConfigurationException e1) {
+            logger.error(Messages.getString("Launcher.Se_produjo_un_error_guardando_la_configuracion_de_los_plugins"),
+                    e1);
+        }
+    }
 
-	private static void installPluginsLabels() {
-		Iterator i = pluginsConfig.keySet().iterator();
+    private static void installPluginsLabels() {
+        Iterator<String> i = pluginsConfig.keySet().iterator();
 
-		while (i.hasNext()) {
-			String name = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(name);
-			PluginServices ps = (PluginServices) pluginsServices.get(name);
+        while (i.hasNext()) {
+            String name = i.next();
+            PluginConfig pc = pluginsConfig.get(name);
+            PluginServices ps = pluginsServices.get(name);
 
-			LabelSet[] ls = pc.getLabelSet();
+            LabelSet[] ls = pc.getLabelSet();
 
-			for (int j = 0; j < ls.length; j++) {
-				PluginClassLoader loader = ps.getClassLoader();
+            for (int j = 0; j < ls.length; j++) {
+                PluginClassLoader loader = ps.getClassLoader();
 
-				try {
-					Class clase = loader.loadClass(ls[j].getClassName());
-					frame.setStatusBarLabels(clase, ls[j].getLabel());
-				} catch (ClassNotFoundException e) {
-					logger.error(Messages.getString("Launcher.labelset_class"),
-						e);
-				}
-			}
-		}
-	}
+                try {
+                    Class clase = loader.loadClass(ls[j].getClassName());
+                    frame.setStatusBarLabels(clase, ls[j].getLabel());
+                } catch (ClassNotFoundException e) {
+                    logger.error(Messages.getString("Launcher.labelset_class"), e);
+                }
+            }
+        }
+    }
 
-	private static String configureSkin(XMLEntity xml,String defaultSkin) {
-		if (defaultSkin == null){
-			for (int i = 0; i < xml.getChildrenCount(); i++) {
-				if (xml.getChild(i).contains("Skin-Selected")) {
-					String className = xml.getChild(i).getStringProperty(
-					"Skin-Selected");
-					return className;
-				}
-			}
-		}
-		return  defaultSkin;
-	}
+    private static void frameIcon(Theme theme) {
+        Iterator<String> i = pluginsConfig.keySet().iterator();
 
-	private static void fixSkin(SkinExtension skinExtension,PluginClassLoader pluginClassLoader) throws MDIManagerLoadException{
-		// now insert the skin selected.
-		MDIManagerFactory.setSkinExtension(skinExtension, pluginClassLoader);
-		// MDIManagerFactory.setSkinExtension(se,
-		// ps.getClassLoader());
+        while (i.hasNext()) {
+            String pName = i.next();
+            PluginConfig pc = pluginsConfig.get(pName);
+            PluginServices ps = pluginsServices.get(pName);
+            if (pc.getIcon() != null) {
+                if (theme.getIcon() != null) {
+                    frame.setIconImage(theme.getIcon().getImage());
+                } else {
 
-		Class skinClass;
+                    ImageIcon icon = PluginServices.getIconTheme().get(pc.getIcon().getSrc());
+                    frame.setIconImage(icon.getImage());
 
-		try {
-			skinClass = pluginClassLoader.loadClass(
-					skinExtension.getClassName());
+                }
+                if (theme.getName() != null) {
+                    frame.setTitlePrefix(theme.getName());
+                } else {
+                    frame.setTitlePrefix(pc.getIcon().getText());
+                }
+                if (theme.getBackgroundImage() != null) {
 
-			com.iver.andami.plugins.IExtension skinInstance = (com.iver.andami.plugins.IExtension) skinClass
-			.newInstance();
-			// classesExtensions.put(skinClass, skinInstance);
-			// jaume
-			ExtensionDecorator newExtensionDecorator = new ExtensionDecorator(
-					skinInstance, ExtensionDecorator.INACTIVE);
-			classesExtensions.put(skinClass, newExtensionDecorator);
-		} catch (ClassNotFoundException e) {
-			logger
-			.error(
-					Messages
-					.getString("Launcher.No_se_encontro_la_clase_mdi_manager"),
-					e);
-			throw new MDIManagerLoadException(e);
-		} catch (InstantiationException e) {
-			logger
-			.error(
-					Messages
-					.getString("Launcher.No_se_pudo_instanciar_la_clase_mdi_manager"),
-					e);
-			throw new MDIManagerLoadException(e);
-		} catch (IllegalAccessException e) {
-			logger
-			.error(
-					Messages
-					.getString("Launcher.No_se_pudo_acceder_a_la_clase_mdi_manager"),
-					e);
-			throw new MDIManagerLoadException(e);
-		}
+                    PluginServices.getMDIManager().setBackgroundImage(theme.getBackgroundImage(),
+                            theme.getTypeDesktop());
+                }
+            }
+        }
+    }
 
-	}
+    private static void initializeExtensions() {
+        Iterator<String> i = pluginsOrdered.iterator();
 
-	private static void skinPlugin(String defaultSkin) throws MDIManagerLoadException {
-		XMLEntity entity =null;
-		try {
-			entity = persistenceFromXML();
-		} catch (ConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		Iterator i = pluginsConfig.keySet().iterator();
-
-		SkinExtension skinExtension = null;
-		PluginClassLoader pluginClassLoader = null;
-		ArrayList skinExtensions = new ArrayList();
-		while (i.hasNext()) {
-			String name = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(name);
-			PluginServices ps = (PluginServices) pluginsServices.get(name);
-
-			if (pc.getExtensions().getSkinExtension() != null) {
-//				if (MDIManagerFactory.getSkinExtension() != null) {
-//					logger.warn(Messages.getString(
-//							"Launcher.Dos_skin_extension"));
-//				}
-
-				SkinExtension[] se = pc.getExtensions().getSkinExtension();
-				for (int numExten=0; numExten<se.length; numExten++) {
-					skinExtensions.add(se[numExten]);
-				}
-				for (int j=0;j<se.length;j++){
-					String configuredSkin = Launcher.configureSkin(entity,defaultSkin);
-					if (configuredSkin!=null && configuredSkin.equals(se[j].getClassName())) {
-						skinExtension = se[j];
-						pluginClassLoader = ps.getClassLoader();
-					}
-				}
-			}
-		}
-
-		if ((skinExtension != null) && (pluginClassLoader != null)) {
-			// configured skin was found
-			fixSkin(skinExtension, pluginClassLoader);
-		} else {
-			if (skinExtensions.contains("com.iver.core.mdiManager.NewSkin")) {
-				// try first IcartoSkin (from CorePlugin)
-				skinPlugin("com.iver.core.mdiManager.NewSkin");
-			}
-			else if (skinExtensions.size()>0){
-				// try to load the first skin found
-				SkinExtension se =  (SkinExtension)skinExtensions.get(0);
-				skinPlugin((String)se.getClassName());
-			}
-			else {
-				throw new MDIManagerLoadException("No Skin-Extension installed");
-			}
-		}
-
-	}
-
-	private static void frameIcon(Theme theme) {
-		Iterator i = pluginsConfig.keySet().iterator();
-
-		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
-			if (pc.getIcon() != null) {
-				if (theme.getIcon() != null) {
-					frame.setIconImage(theme.getIcon().getImage());
-				} else {
-
-					ImageIcon icon = PluginServices.getIconTheme().get(pc.getIcon().getSrc());
-					frame.setIconImage(icon.getImage());
-
-				}
-				if (theme.getName() != null) {
-					frame.setTitlePrefix(theme.getName());
-				} else {
-					frame.setTitlePrefix(pc.getIcon().getText());
-				}
-				if (theme.getBackgroundImage() != null) {
-
-					PluginServices.getMDIManager().setBackgroundImage(theme.getBackgroundImage(),theme.getTypeDesktop());
-				}
-			}
-		}
-	}
-
-	private static void initializeExtensions() {
-		Iterator i = pluginsOrdered.iterator();
-
-		while (i.hasNext()) {
-			String pName = (String) i.next();
+        while (i.hasNext()) {
+            String pName = i.next();
             logger.debug("Initializing extensions from " + pName);
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
+            PluginConfig pc = pluginsConfig.get(pName);
+            PluginServices ps = pluginsServices.get(pName);
 
-			Extension[] exts = pc.getExtensions().getExtension();
+            Extension[] exts = pc.getExtensions().getExtension();
 
-			TreeMap orderedExtensions = new TreeMap(new ExtensionComparator());
+            TreeMap orderedExtensions = new TreeMap(new ExtensionComparator());
 
-			for (int j = 0; j < exts.length; j++) {
-				if (!exts[j].getActive()) {
-					continue;
-				}
+            for (int j = 0; j < exts.length; j++) {
+                if (!exts[j].getActive()) {
+                    continue;
+                }
 
-				if (orderedExtensions.containsKey(exts[j])) {
-					logger.warn(Messages.getString(
-							"Launcher.Two_extensions_with_the_same_priority") +
-						exts[j].getClassName());
-				}
+                if (orderedExtensions.containsKey(exts[j])) {
+                    logger.warn(Messages.getString("Launcher.Two_extensions_with_the_same_priority")
+                            + exts[j].getClassName());
+                }
 
-				orderedExtensions.put(exts[j], null);
-			}
+                orderedExtensions.put(exts[j], null);
+            }
 
-			Iterator e = orderedExtensions.keySet().iterator();
+            Iterator<Extension> e = orderedExtensions.keySet().iterator();
 
-			while (e.hasNext()) {
-				Extension extension = (Extension) e.next();
-				com.iver.andami.plugins.IExtension extensionInstance;
+            while (e.hasNext()) {
+                Extension extension = e.next();
+                com.iver.andami.plugins.IExtension extensionInstance;
 
-				try {
-					Class extensionClass = ps.getClassLoader().loadClass(extension.getClassName());
-					extensionInstance = (com.iver.andami.plugins.IExtension) extensionClass.newInstance();
+                try {
+                    Class extensionClass = ps.getClassLoader().loadClass(extension.getClassName());
+                    extensionInstance = (com.iver.andami.plugins.IExtension) extensionClass.newInstance();
 
-					// CON DECORATOR
-					// ANTES: classesExtensions.put(extensionClass, extensionInstance);
-					// AHORA: CREAMOS UNA ExtensionDecorator y asignamos esta instancia para
-					// poder ampliar con nuevas propiedades (AlwaysVisible, por ejemplo)
-					// Para crear la nueva clase ExtensionDecorator, le pasamos como parï¿½metro
-					// la extensiï¿½n original que acabamos de crear
-					// 0-> Inactivo, controla la extension
-					// 1-> Siempre visible
-					// 2-> Invisible
-					ExtensionDecorator newExtensionDecorator = new ExtensionDecorator(extensionInstance, ExtensionDecorator.INACTIVE);
-					classesExtensions.put(extensionClass, newExtensionDecorator);
-					logger.info("Initializing " + extension.getClassName()+"...");
+                    // CON DECORATOR
+                    // ANTES: classesExtensions.put(extensionClass, extensionInstance);
+                    // AHORA: CREAMOS UNA ExtensionDecorator y asignamos esta instancia para
+                    // poder ampliar con nuevas propiedades (AlwaysVisible, por ejemplo)
+                    // Para crear la nueva clase ExtensionDecorator, le pasamos como parï¿½metro
+                    // la extensiï¿½n original que acabamos de crear
+                    // 0-> Inactivo, controla la extension
+                    // 1-> Siempre visible
+                    // 2-> Invisible
+                    ExtensionDecorator newExtensionDecorator = new ExtensionDecorator(extensionInstance,
+                            ExtensionDecorator.INACTIVE);
+                    classesExtensions.put(extensionClass, newExtensionDecorator);
+                    logger.info("Initializing " + extension.getClassName() + "...");
                     // logger.debug("Initializing " + extension.getClassName());
                     extensionInstance.initialize();
                     extensions.add(extensionInstance);
                     // logger.debug(extension.getClassName() + " initialized.");
 
-				} catch (InstantiationException e1) {
-					logger.error(Messages.getString(
-							"Launcher.Error_instanciando_la_extension") +
-						extension.getClassName(), e1);
-				} catch (IllegalAccessException e1) {
-					logger.error(Messages.getString(
-							"Launcher.Error_instanciando_la_extension") +
-						extension.getClassName(), e1);
-				} catch (ClassNotFoundException e1) {
-					logger.error(Messages.getString(
-							"Launcher.No_se_encontro_la_clase_de_la_extension") +
-						extension.getClassName(), e1);
-				} catch (NoClassDefFoundError e1) {
-					logger.error(Messages.getString(
-							"Launcher.Error_localizando_la_clase_de_la_extension") +
-						extension.getClassName(), e1);
-				}
-			}
-		}
-	}
-
-	private static void postInitializeExtensions() {
-		for (int i=0;i<extensions.size();i++) {
-			com.iver.andami.plugins.IExtension extensionInstance=(com.iver.andami.plugins.IExtension)extensions.get(i);
-			extensionInstance.postInitialize();
-		}
-	}
-
-	private static void installPluginsMenus() {
-		TreeMap orderedMenus = new TreeMap(new MenuComparator());
-
-		Iterator i = pluginsConfig.keySet().iterator();
-
-		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-
-			Extension[] exts = pc.getExtensions().getExtension();
-
-			for (int j = 0; j < exts.length; j++) {
-				if (!exts[j].getActive()) {
-					continue;
-				}
-
-				Menu[] menus = exts[j].getMenu();
-
-				for (int k = 0; k < menus.length; k++) {
-					SortableMenu sm = new SortableMenu(ps.getClassLoader(),
-							exts[j], menus[k]);
-
-					if (orderedMenus.containsKey(sm)) {
-						logger.error(Messages.getString(
-								"Launcher.Two_menus_with_the_same_position") + " - " +
-							menus[k].getText()+ " - " + exts[j].getClassName());
-					}
-
-					orderedMenus.put(sm, null);
-				}
-			}
-
-			// Se instalan las extensiones de MDI
-			SkinExtension[] skinExts = pc.getExtensions().getSkinExtension();
-			for (int j = 0; j < skinExts.length; j++) {
-
-
-			if (skinExts[j] != null) {
-				Menu[] menu = skinExts[j].getMenu();
-
-				for (int k = 0; k < menu.length; k++) {
-					SortableMenu sm = new SortableMenu(ps.getClassLoader(),
-							skinExts[j], menu[k]);
-
-					if (orderedMenus.containsKey(sm)) {
-						logger.error(Messages.getString(
-								"Launcher.Two_menus_with_the_same_position") +
-							skinExts[j].getClassName());
-					}
-
-					orderedMenus.put(sm, null);
-				}
-			}
-			}
-		}
-
-		//Se itera por los menus ordenados
-		Iterator e = orderedMenus.keySet().iterator();
-
-		// Se ordenan los menues
-		while (e.hasNext()) {
-			try {
-				SortableMenu sm = (SortableMenu) e.next();
-
-				frame.addMenu(sm.loader, sm.extension, sm.menu);
-			} catch (ClassNotFoundException ex) {
-				logger.error(Messages.getString(
-						"Launcher.No_se_encontro_la_clase_de_la_extension"), ex);
-			}
-		}
-	}
-
-	/**
-	 * Installs the menus, toolbars, actiontools, selectable toolbars and combos.
-	 * The order in which they are shown is determined here.
-	 */
-	private static void installPluginsControls() {
-		Iterator i = pluginsConfig.keySet().iterator();
-
-		HashMap extensionPluginServices = new HashMap();
-		HashMap extensionPluginConfig = new HashMap();
-		TreeMap orderedExtensions = new TreeMap(new ExtensionComparator());
-
-		// First of all, sort the extensions.
-		// We need to iterate on the plugins, and iterate on each plugin's extensions
-		// (each plugin may contain one or more extensions)
-		while (i.hasNext()) { // iterate on the plugins
-			String pName = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
-
-			Extension[] exts = pc.getExtensions().getExtension();
-
-			for (int j = 0; j < exts.length; j++) { // iterate on the extensions
-				if (exts[j].getActive()) {
-					if (orderedExtensions.containsKey(exts[j])) {
-						logger.error(Messages.getString(
-						"Launcher.Two_extensions_with_the_same_priority") +
-						exts[j].getClassName());
-					}
-
-					orderedExtensions.put(exts[j], null);
-					extensionPluginServices.put(exts[j], ps);
-					extensionPluginConfig.put(exts[j], pc);
-				}
-			}
-		}
-
-		TreeMap orderedTools = new TreeMap(new ToolComparator());
-		Iterator e = orderedExtensions.keySet().iterator();
-
-		// sort the toolbars and tools from 'normal' extensions (actiontools, selectabletools)
-		// and load the  combo-scales and combo-buttons for the status bar
-		while (e.hasNext()) {
-			Extension ext = (Extension) e.next();
-
-			ToolBar[] toolbars = ext.getToolBar();
-
-			// get tools from toolbars
-			for (int k = 0; k < toolbars.length; k++) {
-				ActionTool[] tools = toolbars[k].getActionTool();
-
-				for (int t = 0; t < tools.length; t++) {
-					SortableTool sm = new SortableTool(((PluginServices)extensionPluginServices.get(ext)).getClassLoader(), ext,
-							toolbars[k], tools[t]);
-					orderedTools.put(sm, null);
-				}
-
-				SelectableTool[] sTools = toolbars[k].getSelectableTool();
-
-				for (int t = 0; t < sTools.length; t++) {
-					SortableTool sm=new SortableTool(((PluginServices)extensionPluginServices.get(ext)).getClassLoader(), ext,
-							toolbars[k], sTools[t]);
-					orderedTools.put(sm, null);
-				}
-			}
-
-			// get controls for statusBar
-			PluginServices ps = (PluginServices) extensionPluginServices.get(ext);
-			PluginClassLoader loader = ps.getClassLoader();
-
-			//ArrayList componentList = new ArrayList();
-			ComboScale[] comboScaleArray = ext.getComboScale();
-			for (int k=0; k < comboScaleArray.length; k++) {
-				org.gvsig.gui.beans.controls.comboscale.ComboScale combo = new org.gvsig.gui.beans.controls.comboscale.ComboScale();
-				String label = comboScaleArray[k].getLabel();
-				if (label!=null)
-					combo.setLabel(label);
-				String name = comboScaleArray[k].getName();
-				if (name!=null)
-					combo.setName(name);
-				String[] elementsString = ((String)comboScaleArray[k].getElements()).split(";");
-				long[] elements = new long[elementsString.length];
-				for (int currentElem=0; currentElem<elementsString.length; currentElem++) {
-					try {
-						elements[currentElem] = Long.parseLong(elementsString[currentElem]);
-					}
-					catch (NumberFormatException nfex1) {
-						logger.error(ext.getClassName()+" -- "+Messages.getString( "error_parsing_comboscale_elements"));
-						elements[currentElem] = 0;
-					}
-				}
-				combo.setItems(elements);
-				try {
-					long value = Long.parseLong((String)comboScaleArray[k].getValue());
-					combo.setScale(value);
-				}
-				catch (NumberFormatException nfex2) {
-					logger.error(ext.getClassName()+" -- "+Messages.getString( "error_parsing_comboscale_value"));
-				}
-				try {
-					frame.addStatusBarControl(loader.loadClass(ext.getClassName()),combo);
-				} catch (ClassNotFoundException e1) {
-					logger.error(Messages.getString("Launcher.error_getting_class_loader_for_status_bar_control"), e1);
-				}
-			}
-
-			ComboButton[] comboButtonArray = ext.getComboButton();
-			for (int k=0; k < comboButtonArray.length; k++) {
-				ComboButtonElement[] elementList = comboButtonArray[k].getComboButtonElement();
-				org.gvsig.gui.beans.controls.combobutton.ComboButton combo = new org.gvsig.gui.beans.controls.combobutton.ComboButton();
-				String name = comboButtonArray[k].getName();
-				if (name!=null)
-					combo.setName(name);
-				for (int currentElement=0; currentElement<elementList.length; currentElement++) {
-					ComboButtonElement element = elementList[currentElement];
-					ImageIcon icon;
-					URL iconLocation = loader.getResource(element.getIcon());
-					if (iconLocation==null)
-						logger.error(Messages.getString("Icon_not_found_")+element.getIcon());
-					else {
-						icon = new ImageIcon(iconLocation);
-						JButton button = new JButton(icon);
-						combo.addButton(button);
-						button.setActionCommand(element.getActionCommand());
-					}
-				}
-				try {
-					frame.addStatusBarControl(loader.loadClass(ext.getClassName()), combo);
-				} catch (ClassNotFoundException e1) {
-					logger.error(Messages.getString("Launcher.error_getting_class_loader_for_status_bar_control"), e1);
-				}
-			}
-		}
-
-		// Add the tools from MDI extensions to the ordered tool-list, so that we get a sorted list containing all the tools
-		i = pluginsConfig.keySet().iterator();
-		while (i.hasNext()) {
-			String pName = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(pName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pName);
-
-			SkinExtension[] skinExts = pc.getExtensions().getSkinExtension();
-			for (int j = 0; j < skinExts.length; j++) {
-
-
-			if (skinExts[j] != null) {
-				ToolBar[] toolbars = skinExts[j].getToolBar();
-
-				for (int k = 0; k < toolbars.length; k++) {
-					ActionTool[] tools = toolbars[k].getActionTool();
-
-					for (int t = 0; t < tools.length; t++) {
-						SortableTool stb=new SortableTool(ps.getClassLoader(), skinExts[j],
-								toolbars[k], tools[t]);
-						orderedTools.put(stb,null);
-					}
-
-					SelectableTool[] sTools = toolbars[k].getSelectableTool();
-
-					for (int t = 0; t < sTools.length; t++) {
-						SortableTool stb=new SortableTool(ps.getClassLoader(), skinExts[j],
-								toolbars[k], sTools[t]);
-						orderedTools.put(stb,null);
-					}
-				}
-			}
-			}
-			// Install popup menus
-			PopupMenus pus = pc.getPopupMenus();
-
-			if (pus != null) {
-				PopupMenu[] menus = pus.getPopupMenu();
-
-				for (int j = 0; j < menus.length; j++) {
-					frame.addPopupMenu(ps.getClassLoader(), menus[j]);
-				}
-			}
-		}
-
-		// loop on the ordered extension list, to add them to the interface in an ordered way
-		Iterator t = orderedTools.keySet().iterator();
-		while (t.hasNext()) {
-			try {
-				SortableTool stb = (SortableTool) t.next();
-				if (stb.actiontool!=null)
-					frame.addTool(stb.loader, stb.extension,stb.toolbar, stb.actiontool);
-				else
-					frame.addTool(stb.loader, stb.extension,stb.toolbar, stb.selectabletool);
-			} catch (ClassNotFoundException ex) {
-				logger.error(Messages.getString(
-				"Launcher.No_se_encontro_la_clase_de_la_extension"), ex);
-			}
-		}
-	}
-
-	/**
-	 * Adds new plugins to the the andami-config file.
-	 */
-	private static void updateAndamiConfig() {
-		HashSet olds = new HashSet();
-
-		Plugin[] plugins = andamiConfig.getPlugin();
-
-		for (int i = 0; i < plugins.length; i++) {
-			olds.add(plugins[i].getName());
-		}
-
-		Iterator i = pluginsServices.values().iterator();
-
-		while (i.hasNext()) {
-			PluginServices ps = (PluginServices) i.next();
-
-			if (!olds.contains(ps.getPluginName())) {
-				Plugin p = new Plugin();
-				p.setName(ps.getPluginName());
-				p.setUpdate(false);
-
-				andamiConfig.addPlugin(p);
-			}
-		}
-	}
-
-	private static void pluginsClassLoaders() {
-		HashSet instalados = new HashSet();
-
-		// Se itera hasta que están todos instalados
-		while (instalados.size() != pluginsConfig.size()) {
-			boolean circle = true;
-
-			//Hacemos una pasada por todos los plugins
-			Iterator i = pluginsConfig.keySet().iterator();
-
-			while (i.hasNext()) {
-				String pluginName = (String) i.next();
-				PluginConfig config = (PluginConfig) pluginsConfig.get(pluginName);
-
-				if (instalados.contains(pluginName)) {
-					continue;
-				}
-
-				//Se obtienen las dependencias y sus class loaders
-				boolean ready = true;
-				Depends[] dependencies = config.getDepends();
-				PluginClassLoader[] loaders = new PluginClassLoader[dependencies.length];
-
-				for (int j = 0; j < dependencies.length; j++) {
-					if (pluginsConfig.get(dependencies[j].getPluginName()) == null) {
-						logger.error(Messages.getString(
-								"Launcher.Dependencia_no_resuelta_en_plugin") +
-							pluginName + ": " +
-							dependencies[j].getPluginName());
-
-						continue;
-					}
-
-					if (!instalados.contains(dependencies[j].getPluginName())) {
-						ready = false;
-					} else {
-						loaders[j] = ((PluginServices) pluginsServices.get(dependencies[j].getPluginName())).getClassLoader();
-					}
-				}
-
-				//Si no están sus dependencias satisfechas se aborta la instalación
-				if (!ready) {
-					continue;
-				}
-
-				//Se genera el class loader
-				String jardir = config.getLibraries().getLibraryDir();
-				File jarDir = new File(andamiConfig.getPluginsDirectory() +
-						File.separator + pluginName + File.separator + jardir);
-				File[] jarFiles = jarDir.listFiles(new FileFilter() {
-							public boolean accept(File pathname) {
-								return (pathname.getName().toUpperCase()
-												.endsWith(".JAR")) ||
-								(pathname.getName().toUpperCase().endsWith(".ZIP"));
-							}
-						});
-
-				URL[] urls = new URL[jarFiles.length];
-
-				for (int j = 0; j < jarFiles.length; j++) {
-					try {
-						urls[j] = new URL("file:" + jarFiles[j]);
-					} catch (MalformedURLException e) {
-						logger.error(Messages.getString(
-								"Launcher.No_se_puede_acceder_a") +
-							jarFiles[j]);
-					}
-				}
-
-				PluginClassLoader loader;
-
-				try {
-					loader = new PluginClassLoader(urls,
-							andamiConfig.getPluginsDirectory() +
-							File.separator + pluginName,
-							Launcher.class.getClassLoader(), loaders);
-
-					PluginServices ps = new PluginServices(loader);
-
-					pluginsServices.put(ps.getPluginName(), ps);
-
-					instalados.add(pluginName);
-                    // FJP: Los metemos ordenados para luego no cargar uno que necesita de otro antes de tiempo. Esto lo usaremos al
+                } catch (InstantiationException e1) {
+                    logger.error(
+                            Messages.getString("Launcher.Error_instanciando_la_extension") + extension.getClassName(),
+                            e1);
+                } catch (IllegalAccessException e1) {
+                    logger.error(
+                            Messages.getString("Launcher.Error_instanciando_la_extension") + extension.getClassName(),
+                            e1);
+                } catch (ClassNotFoundException e1) {
+                    logger.error(
+                            Messages.getString("Launcher.No_se_encontro_la_clase_de_la_extension")
+                                    + extension.getClassName(), e1);
+                } catch (NoClassDefFoundError e1) {
+                    logger.error(
+                            Messages.getString("Launcher.Error_localizando_la_clase_de_la_extension")
+                                    + extension.getClassName(), e1);
+                }
+            }
+        }
+    }
+
+    private static void postInitializeExtensions() {
+        for (int i = 0; i < extensions.size(); i++) {
+            com.iver.andami.plugins.IExtension extensionInstance = extensions.get(i);
+            extensionInstance.postInitialize();
+        }
+    }
+
+    private static void installPluginsMenus() {
+        TreeMap orderedMenus = new TreeMap(new MenuComparator());
+
+        Iterator<String> i = pluginsConfig.keySet().iterator();
+
+        while (i.hasNext()) {
+            String pName = i.next();
+            PluginServices ps = pluginsServices.get(pName);
+            PluginConfig pc = pluginsConfig.get(pName);
+
+            Extension[] exts = pc.getExtensions().getExtension();
+
+            for (int j = 0; j < exts.length; j++) {
+                if (!exts[j].getActive()) {
+                    continue;
+                }
+
+                Menu[] menus = exts[j].getMenu();
+
+                for (int k = 0; k < menus.length; k++) {
+                    SortableMenu sm = new SortableMenu(ps.getClassLoader(), exts[j], menus[k]);
+
+                    if (orderedMenus.containsKey(sm)) {
+                        logger.error(Messages.getString("Launcher.Two_menus_with_the_same_position") + " - "
+                                + menus[k].getText() + " - " + exts[j].getClassName());
+                    }
+
+                    orderedMenus.put(sm, null);
+                }
+            }
+
+            // Se instalan las extensiones de MDI
+            SkinExtension[] skinExts = pc.getExtensions().getSkinExtension();
+            for (int j = 0; j < skinExts.length; j++) {
+
+                if (skinExts[j] != null) {
+                    Menu[] menu = skinExts[j].getMenu();
+
+                    for (int k = 0; k < menu.length; k++) {
+                        SortableMenu sm = new SortableMenu(ps.getClassLoader(), skinExts[j], menu[k]);
+
+                        if (orderedMenus.containsKey(sm)) {
+                            logger.error(Messages.getString("Launcher.Two_menus_with_the_same_position")
+                                    + skinExts[j].getClassName());
+                        }
+
+                        orderedMenus.put(sm, null);
+                    }
+                }
+            }
+        }
+
+        // Se itera por los menus ordenados
+        Iterator<SortableMenu> e = orderedMenus.keySet().iterator();
+
+        // Se ordenan los menues
+        while (e.hasNext()) {
+            try {
+                SortableMenu sm = e.next();
+
+                frame.addMenu(sm.loader, sm.extension, sm.menu);
+            } catch (ClassNotFoundException ex) {
+                logger.error(Messages.getString("Launcher.No_se_encontro_la_clase_de_la_extension"), ex);
+            }
+        }
+    }
+
+    /**
+     * Installs the menus, toolbars, actiontools, selectable toolbars and combos.
+     * The order in which they are shown is determined here.
+     */
+    private static void installPluginsControls() {
+        Iterator<String> i = pluginsConfig.keySet().iterator();
+
+        HashMap<Extension, PluginServices> extensionPluginServices = new HashMap<Extension, PluginServices>();
+        HashMap<Extension, PluginConfig> extensionPluginConfig = new HashMap<Extension, PluginConfig>();
+        TreeMap orderedExtensions = new TreeMap(new ExtensionComparator());
+
+        // First of all, sort the extensions.
+        // We need to iterate on the plugins, and iterate on each plugin's extensions
+        // (each plugin may contain one or more extensions)
+        while (i.hasNext()) { // iterate on the plugins
+            String pName = i.next();
+            PluginConfig pc = pluginsConfig.get(pName);
+            PluginServices ps = pluginsServices.get(pName);
+
+            Extension[] exts = pc.getExtensions().getExtension();
+
+            for (int j = 0; j < exts.length; j++) { // iterate on the extensions
+                if (exts[j].getActive()) {
+                    if (orderedExtensions.containsKey(exts[j])) {
+                        logger.error(Messages.getString("Launcher.Two_extensions_with_the_same_priority")
+                                + exts[j].getClassName());
+                    }
+
+                    orderedExtensions.put(exts[j], null);
+                    extensionPluginServices.put(exts[j], ps);
+                    extensionPluginConfig.put(exts[j], pc);
+                }
+            }
+        }
+
+        TreeMap orderedTools = new TreeMap(new ToolComparator());
+        Iterator<Extension> e = orderedExtensions.keySet().iterator();
+
+        // sort the toolbars and tools from 'normal' extensions (actiontools, selectabletools)
+        // and load the combo-scales and combo-buttons for the status bar
+        while (e.hasNext()) {
+            Extension ext = e.next();
+
+            ToolBar[] toolbars = ext.getToolBar();
+
+            // get tools from toolbars
+            for (int k = 0; k < toolbars.length; k++) {
+                ActionTool[] tools = toolbars[k].getActionTool();
+
+                for (int t = 0; t < tools.length; t++) {
+                    SortableTool sm = new SortableTool(extensionPluginServices.get(ext).getClassLoader(), ext,
+                            toolbars[k], tools[t]);
+                    orderedTools.put(sm, null);
+                }
+
+                SelectableTool[] sTools = toolbars[k].getSelectableTool();
+
+                for (int t = 0; t < sTools.length; t++) {
+                    SortableTool sm = new SortableTool(extensionPluginServices.get(ext).getClassLoader(), ext,
+                            toolbars[k], sTools[t]);
+                    orderedTools.put(sm, null);
+                }
+            }
+
+            // get controls for statusBar
+            PluginServices ps = extensionPluginServices.get(ext);
+            PluginClassLoader loader = ps.getClassLoader();
+
+            // ArrayList componentList = new ArrayList();
+            ComboScale[] comboScaleArray = ext.getComboScale();
+            for (int k = 0; k < comboScaleArray.length; k++) {
+                org.gvsig.gui.beans.controls.comboscale.ComboScale combo = new org.gvsig.gui.beans.controls.comboscale.ComboScale();
+                String label = comboScaleArray[k].getLabel();
+                if (label != null) {
+                    combo.setLabel(label);
+                }
+                String name = comboScaleArray[k].getName();
+                if (name != null) {
+                    combo.setName(name);
+                }
+                String[] elementsString = ((String) comboScaleArray[k].getElements()).split(";");
+                long[] elements = new long[elementsString.length];
+                for (int currentElem = 0; currentElem < elementsString.length; currentElem++) {
+                    try {
+                        elements[currentElem] = Long.parseLong(elementsString[currentElem]);
+                    } catch (NumberFormatException nfex1) {
+                        logger.error(ext.getClassName() + " -- "
+                                + Messages.getString("error_parsing_comboscale_elements"));
+                        elements[currentElem] = 0;
+                    }
+                }
+                combo.setItems(elements);
+                try {
+                    long value = Long.parseLong((String) comboScaleArray[k].getValue());
+                    combo.setScale(value);
+                } catch (NumberFormatException nfex2) {
+                    logger.error(ext.getClassName() + " -- " + Messages.getString("error_parsing_comboscale_value"));
+                }
+                try {
+                    frame.addStatusBarControl(loader.loadClass(ext.getClassName()), combo);
+                } catch (ClassNotFoundException e1) {
+                    logger.error(Messages.getString("Launcher.error_getting_class_loader_for_status_bar_control"), e1);
+                }
+            }
+
+            ComboButton[] comboButtonArray = ext.getComboButton();
+            for (int k = 0; k < comboButtonArray.length; k++) {
+                ComboButtonElement[] elementList = comboButtonArray[k].getComboButtonElement();
+                org.gvsig.gui.beans.controls.combobutton.ComboButton combo = new org.gvsig.gui.beans.controls.combobutton.ComboButton();
+                String name = comboButtonArray[k].getName();
+                if (name != null) {
+                    combo.setName(name);
+                }
+                for (int currentElement = 0; currentElement < elementList.length; currentElement++) {
+                    ComboButtonElement element = elementList[currentElement];
+                    ImageIcon icon;
+                    URL iconLocation = loader.getResource(element.getIcon());
+                    if (iconLocation == null) {
+                        logger.error(Messages.getString("Icon_not_found_") + element.getIcon());
+                    } else {
+                        icon = new ImageIcon(iconLocation);
+                        JButton button = new JButton(icon);
+                        combo.addButton(button);
+                        button.setActionCommand(element.getActionCommand());
+                    }
+                }
+                try {
+                    frame.addStatusBarControl(loader.loadClass(ext.getClassName()), combo);
+                } catch (ClassNotFoundException e1) {
+                    logger.error(Messages.getString("Launcher.error_getting_class_loader_for_status_bar_control"), e1);
+                }
+            }
+        }
+
+        // Add the tools from MDI extensions to the ordered tool-list, so that we get a sorted list containing all the
+        // tools
+        i = pluginsConfig.keySet().iterator();
+        while (i.hasNext()) {
+            String pName = i.next();
+            PluginConfig pc = pluginsConfig.get(pName);
+            PluginServices ps = pluginsServices.get(pName);
+
+            SkinExtension[] skinExts = pc.getExtensions().getSkinExtension();
+            for (int j = 0; j < skinExts.length; j++) {
+
+                if (skinExts[j] != null) {
+                    ToolBar[] toolbars = skinExts[j].getToolBar();
+
+                    for (int k = 0; k < toolbars.length; k++) {
+                        ActionTool[] tools = toolbars[k].getActionTool();
+
+                        for (int t = 0; t < tools.length; t++) {
+                            SortableTool stb = new SortableTool(ps.getClassLoader(), skinExts[j], toolbars[k],
+                                    tools[t]);
+                            orderedTools.put(stb, null);
+                        }
+
+                        SelectableTool[] sTools = toolbars[k].getSelectableTool();
+
+                        for (int t = 0; t < sTools.length; t++) {
+                            SortableTool stb = new SortableTool(ps.getClassLoader(), skinExts[j], toolbars[k],
+                                    sTools[t]);
+                            orderedTools.put(stb, null);
+                        }
+                    }
+                }
+            }
+            // Install popup menus
+            PopupMenus pus = pc.getPopupMenus();
+
+            if (pus != null) {
+                PopupMenu[] menus = pus.getPopupMenu();
+
+                for (int j = 0; j < menus.length; j++) {
+                    frame.addPopupMenu(ps.getClassLoader(), menus[j]);
+                }
+            }
+        }
+
+        // loop on the ordered extension list, to add them to the interface in an ordered way
+        Iterator<SortableTool> t = orderedTools.keySet().iterator();
+        while (t.hasNext()) {
+            try {
+                SortableTool stb = t.next();
+                if (stb.actiontool != null) {
+                    frame.addTool(stb.loader, stb.extension, stb.toolbar, stb.actiontool);
+                } else {
+                    frame.addTool(stb.loader, stb.extension, stb.toolbar, stb.selectabletool);
+                }
+            } catch (ClassNotFoundException ex) {
+                logger.error(Messages.getString("Launcher.No_se_encontro_la_clase_de_la_extension"), ex);
+            }
+        }
+    }
+
+    /**
+     * Adds new plugins to the the andami-config file.
+     */
+    private static void updateAndamiConfig() {
+        HashSet<String> olds = new HashSet<String>();
+
+        Plugin[] plugins = andamiConfig.getPlugin();
+
+        for (int i = 0; i < plugins.length; i++) {
+            olds.add(plugins[i].getName());
+        }
+
+        Iterator<PluginServices> i = pluginsServices.values().iterator();
+
+        while (i.hasNext()) {
+            PluginServices ps = i.next();
+
+            if (!olds.contains(ps.getPluginName())) {
+                Plugin p = new Plugin();
+                p.setName(ps.getPluginName());
+                p.setUpdate(false);
+
+                andamiConfig.addPlugin(p);
+            }
+        }
+    }
+
+    private static void pluginsClassLoaders() {
+        HashSet<String> instalados = new HashSet<String>();
+
+        // Se itera hasta que están todos instalados
+        while (instalados.size() != pluginsConfig.size()) {
+            boolean circle = true;
+
+            // Hacemos una pasada por todos los plugins
+            Iterator<String> i = pluginsConfig.keySet().iterator();
+
+            while (i.hasNext()) {
+                String pluginName = i.next();
+                PluginConfig config = pluginsConfig.get(pluginName);
+
+                if (instalados.contains(pluginName)) {
+                    continue;
+                }
+
+                // Se obtienen las dependencias y sus class loaders
+                boolean ready = true;
+                Depends[] dependencies = config.getDepends();
+                PluginClassLoader[] loaders = new PluginClassLoader[dependencies.length];
+
+                for (int j = 0; j < dependencies.length; j++) {
+                    if (pluginsConfig.get(dependencies[j].getPluginName()) == null) {
+                        logger.error(Messages.getString("Launcher.Dependencia_no_resuelta_en_plugin") + pluginName
+                                + ": " + dependencies[j].getPluginName());
+
+                        continue;
+                    }
+
+                    if (!instalados.contains(dependencies[j].getPluginName())) {
+                        ready = false;
+                    } else {
+                        loaders[j] = pluginsServices.get(dependencies[j].getPluginName()).getClassLoader();
+                    }
+                }
+
+                // Si no están sus dependencias satisfechas se aborta la instalación
+                if (!ready) {
+                    continue;
+                }
+
+                // Se genera el class loader
+                String jardir = config.getLibraries().getLibraryDir();
+                File jarDir = new File(andamiConfig.getPluginsDirectory() + File.separator + pluginName
+                        + File.separator + jardir);
+                File[] jarFiles = jarDir.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File pathname) {
+                        return (pathname.getName().toUpperCase().endsWith(".JAR"))
+                                || (pathname.getName().toUpperCase().endsWith(".ZIP"));
+                    }
+                });
+
+                URL[] urls = new URL[jarFiles.length];
+
+                for (int j = 0; j < jarFiles.length; j++) {
+                    try {
+                        urls[j] = new URL("file:" + jarFiles[j]);
+                    } catch (MalformedURLException e) {
+                        logger.error(Messages.getString("Launcher.No_se_puede_acceder_a") + jarFiles[j]);
+                    }
+                }
+
+                PluginClassLoader loader;
+
+                try {
+                    loader = new PluginClassLoader(urls, andamiConfig.getPluginsDirectory() + File.separator
+                            + pluginName, Launcher.class.getClassLoader(), loaders);
+
+                    PluginServices ps = new PluginServices(loader);
+
+                    pluginsServices.put(ps.getPluginName(), ps);
+
+                    instalados.add(pluginName);
+                    // FJP: Los metemos ordenados para luego no cargar uno que necesita de otro antes de tiempo. Esto lo
+                    // usaremos al
                     // inicializar los plugins
                     pluginsOrdered.add(pluginName);
 
-					circle = false;
-				} catch (IOException e) {
-					logger.error(Messages.getString(
-							"Launcher.Error_con_las_librerias_del_plugin"), e);
-					pluginsConfig.remove(pluginName);
-					i = pluginsConfig.keySet().iterator();
-				}
-			}
+                    circle = false;
+                } catch (IOException e) {
+                    logger.error(Messages.getString("Launcher.Error_con_las_librerias_del_plugin"), e);
+                    pluginsConfig.remove(pluginName);
+                    i = pluginsConfig.keySet().iterator();
+                }
+            }
 
-			if (circle) {
-				logger.error(Messages.getString(
-						"Launcher.Hay_dependencias_circulares"));
+            if (circle) {
+                logger.error(Messages.getString("Launcher.Hay_dependencias_circulares"));
 
-				break;
-			}
-		}
+                break;
+            }
+        }
 
-		//Se eliminan los plugins que no fueron instalados
-		Iterator i = pluginsConfig.keySet().iterator();
+        // Se eliminan los plugins que no fueron instalados
+        Iterator<String> i = pluginsConfig.keySet().iterator();
 
-		while (i.hasNext()) {
-			String pluginName = (String) i.next();
-			PluginConfig config = (PluginConfig) pluginsConfig.get(pluginName);
-			PluginServices ps = (PluginServices) pluginsServices.get(pluginName);
+        while (i.hasNext()) {
+            String pluginName = i.next();
+            PluginConfig config = pluginsConfig.get(pluginName);
+            PluginServices ps = pluginsServices.get(pluginName);
 
-			if (ps == null) {
-				pluginsConfig.remove(pluginName);
-				i = pluginsConfig.keySet().iterator();
-			}
-		}
-	}
+            if (ps == null) {
+                pluginsConfig.remove(pluginName);
+                i = pluginsConfig.keySet().iterator();
+            }
+        }
+    }
 
-	private static void pluginsMessages() {
-		Iterator iterator = pluginsOrdered.iterator();
-		PluginConfig config;
-		PluginServices ps;
+    private static void pluginsMessages() {
+        Iterator<String> iterator = pluginsOrdered.iterator();
+        PluginConfig config;
+        PluginServices ps;
 
-		while (iterator.hasNext()) {
-			String pluginName = (String) iterator.next();
-			config = (PluginConfig) pluginsConfig.get(pluginName);
-			ps = (PluginServices) pluginsServices.get(pluginName);
+        while (iterator.hasNext()) {
+            String pluginName = iterator.next();
+            config = pluginsConfig.get(pluginName);
+            ps = pluginsServices.get(pluginName);
 
-			if (config.getResourceBundle() != null && !config.getResourceBundle().getName().equals("")) {
-				// add the locale files associated with the plugin
-				org.gvsig.i18n.Messages.addResourceFamily(config.getResourceBundle().getName(), ps.getClassLoader(), pluginName);
-			}
-		}
-	}
+            if (config.getResourceBundle() != null && !config.getResourceBundle().getName().equals("")) {
+                // add the locale files associated with the plugin
+                org.gvsig.i18n.Messages.addResourceFamily(config.getResourceBundle().getName(), ps.getClassLoader(),
+                        pluginName);
+            }
+        }
+    }
 
-	static PluginServices getPluginServices(String name) {
-		return (PluginServices) pluginsServices.get(name);
-	}
+    public static PluginServices getPluginServices(String name) {
+        return pluginsServices.get(name);
+    }
 
-	static String getPluginsDir() {
-		return andamiConfig.getPluginsDirectory();
-	}
+    static String getPluginsDir() {
+        return andamiConfig.getPluginsDirectory();
+    }
 
-	static void setPluginsDir(String s) {
-		andamiConfig.setPluginsDirectory(s);
-	}
+    static void setPluginsDir(String s) {
+        andamiConfig.setPluginsDirectory(s);
+    }
 
-	static MDIFrame getMDIFrame() {
-		return frame;
-	}
+    static MDIFrame getMDIFrame() {
+        return frame;
+    }
 
-	private static void loadPlugins(String pluginsDirectory) {
-		File pDir = new File(pluginsDirectory);
+    private static void loadPlugins(String pluginsDirectory) {
+        File pDir = new File(pluginsDirectory);
 
-		if (!pDir.exists()) {
-			logger.error("\n\tPlugins directory not found: "+pDir.getAbsolutePath()+"\n\tDid you specify the correct directory in the Launch Configuration parameters?\n\tExiting now...");
-			System.exit(-1);
-			return;
-		}
+        if (!pDir.exists()) {
+            logger.error("\n\tPlugins directory not found: "
+                    + pDir.getAbsolutePath()
+                    + "\n\tDid you specify the correct directory in the Launch Configuration parameters?\n\tExiting now...");
+            System.exit(-1);
+            return;
+        }
 
-		File[] pluginDirs = pDir.listFiles();
-		if (pluginDirs.length==0) {
-			logger.error("\n\tPlugins directory is empty: "+pDir.getAbsolutePath()+"Did you specify the correct directory in the Launch Configuration parameters?\n\tExiting now...");
-			System.exit(-1);
-			return;
-		}
+        File[] pluginDirs = pDir.listFiles();
+        if (pluginDirs.length == 0) {
+            logger.error("\n\tPlugins directory is empty: "
+                    + pDir.getAbsolutePath()
+                    + "Did you specify the correct directory in the Launch Configuration parameters?\n\tExiting now...");
+            System.exit(-1);
+            return;
+        }
 
-		for (int i = 0; i < pluginDirs.length; i++) {
-			if (pluginDirs[i].isDirectory()) {
-				File configXml = new File(pluginDirs[i].getAbsolutePath() +
-						File.separator + "config.xml");
+        for (int i = 0; i < pluginDirs.length; i++) {
+            if (pluginDirs[i].isDirectory()) {
+                File configXml = new File(pluginDirs[i].getAbsolutePath() + File.separator + "config.xml");
 
-				try {
-					FileInputStream is = new FileInputStream(configXml);
-					Reader xml = com.iver.utiles.xml.XMLEncodingUtils.getReader(is);
-					if (xml==null) {
-						// the encoding was not correctly detected, use system default
-						xml = new FileReader(configXml);
-					}
-					else {
-						// use a buffered reader to improve performance
-						xml = new BufferedReader(xml);
-					}
-					PluginConfig pConfig = (PluginConfig) PluginConfig.unmarshal(xml);
-					pluginsConfig.put(pluginDirs[i].getName(), pConfig);
-				} catch (FileNotFoundException e) {
-					logger.info(Messages.getString(
-							"Launcher.Ignorando_el_directorio") +
-						pluginDirs[i].getAbsolutePath() +
-						Messages.getString("Launcher.config_no_encontrado"));
-				} catch (MarshalException e) {
-					logger.info(Messages.getString(
-							"Launcher.Ignorando_el_directorio") +
-						pluginDirs[i].getAbsolutePath() +
-						Messages.getString("Launcher.config_mal_formado"), e);
-				} catch (ValidationException e) {
-					logger.info(Messages.getString(
-							"Launcher.Ignorando_el_directorio") +
-						pluginDirs[i].getAbsolutePath() +
-						Messages.getString("Launcher.config_mal_formado"), e);
-				}
-			}
-		}
+                try {
+                    FileInputStream is = new FileInputStream(configXml);
+                    Reader xml = com.iver.utiles.xml.XMLEncodingUtils.getReader(is);
+                    if (xml == null) {
+                        // the encoding was not correctly detected, use system default
+                        xml = new FileReader(configXml);
+                    } else {
+                        // use a buffered reader to improve performance
+                        xml = new BufferedReader(xml);
+                    }
+                    PluginConfig pConfig = (PluginConfig) PluginConfig.unmarshal(xml);
+                    pluginsConfig.put(pluginDirs[i].getName(), pConfig);
+                } catch (FileNotFoundException e) {
+                    logger.info(Messages.getString("Launcher.Ignorando_el_directorio")
+                            + pluginDirs[i].getAbsolutePath() + Messages.getString("Launcher.config_no_encontrado"));
+                } catch (MarshalException e) {
+                    logger.info(
+                            Messages.getString("Launcher.Ignorando_el_directorio") + pluginDirs[i].getAbsolutePath()
+                                    + Messages.getString("Launcher.config_mal_formado"), e);
+                } catch (ValidationException e) {
+                    logger.info(
+                            Messages.getString("Launcher.Ignorando_el_directorio") + pluginDirs[i].getAbsolutePath()
+                                    + Messages.getString("Launcher.config_mal_formado"), e);
+                }
+            }
+        }
 
-		if (pluginsConfig.size()==0) {
-			logger.error("\n\tNo valid plugin was found. The plugins directory currently is: "+pDir.getAbsolutePath()+"\n\tDid you specify the correct directory in the Launch Configuration parameters?\n\tExiting now...");
-			System.exit(-1);
-			return;
-		}
-	}
+        if (pluginsConfig.size() == 0) {
+            logger.error("\n\tNo valid plugin was found. The plugins directory currently is: "
+                    + pDir.getAbsolutePath()
+                    + "\n\tDid you specify the correct directory in the Launch Configuration parameters?\n\tExiting now...");
+            System.exit(-1);
+            return;
+        }
+    }
 
-	private static Locale getLocale(String language, String country,
-		String variant) {
-		if (variant != null) {
-			return new Locale(language, country, variant);
-		} else if (country != null) {
-			return new Locale(language, country);
-		} else if (language != null) {
-			return new Locale(language);
-		} else {
-			return new Locale("es");
-		}
-	}
+    private static Locale getLocale(String language, String country, String variant) {
+        if (variant != null) {
+            return new Locale(language, country, variant);
+        } else if (country != null) {
+            return new Locale(language, country);
+        } else if (language != null) {
+            return new Locale(language);
+        } else {
+            return new Locale("es");
+        }
+    }
 
-	private static void andamiConfigToXML(String file)
-		throws IOException, MarshalException, ValidationException {
-		// write on a temporary file in order to not destroy current file if there is some problem while marshaling
-		File tmpFile = new File(file+"-"+DateTime.getCurrentDate().getTime());
-		File xml = new File(file);
-		File parent = xml.getParentFile();
-		parent.mkdirs();
+    private static void andamiConfigToXML(String file) throws IOException, MarshalException, ValidationException {
+        // write on a temporary file in order to not destroy current file if there is some problem while marshaling
+        File tmpFile = new File(file + "-" + DateTime.getCurrentDate().getTime());
+        File xml = new File(file);
+        File parent = xml.getParentFile();
+        parent.mkdirs();
 
-		BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile));
-		OutputStreamWriter writer = new OutputStreamWriter(os, CASTORENCODING);
-		andamiConfig.marshal(writer);
-		writer.close();
+        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile));
+        OutputStreamWriter writer = new OutputStreamWriter(os, CASTORENCODING);
+        andamiConfig.marshal(writer);
+        writer.close();
 
-		// if marshaling process finished correctly, move the file to the correct one
-		xml.delete();
-		if (!tmpFile.renameTo(xml)) {
-			// if rename was not succesful, try copying it
-			FileChannel sourceChannel = new  FileInputStream(tmpFile).getChannel();
-			FileChannel destinationChannel = new FileOutputStream(xml).getChannel();
-			sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
-			sourceChannel.close();
-			destinationChannel.close();
-		}
-	}
+        // if marshaling process finished correctly, move the file to the correct one
+        xml.delete();
+        if (!tmpFile.renameTo(xml)) {
+            // if rename was not succesful, try copying it
+            FileChannel sourceChannel = new FileInputStream(tmpFile).getChannel();
+            FileChannel destinationChannel = new FileOutputStream(xml).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
+            sourceChannel.close();
+            destinationChannel.close();
+        }
+    }
 
-	private static void andamiConfigFromXML(String file)
-		throws ConfigurationException {
-		File xml = new File(file);
+    private static void andamiConfigFromXML(String file) throws ConfigurationException {
+        File xml = new File(file);
 
-		InputStreamReader reader = null;
-		try {
-			//Se lee la configuración
-			reader = XMLEncodingUtils.getReader(xml);
-			andamiConfig = (AndamiConfig) AndamiConfig.unmarshal(reader);
-		} catch (FileNotFoundException e) {
-			//Si no existe se ponen los valores por defecto
-			andamiConfig = getDefaultAndamiConfig();
-		} catch (MarshalException e) {
-			// try to close the stream, maybe it remains open
-			if (reader!=null) {
-				try { reader.close(); } catch (IOException e1) {}
-			}
-			// if there was a problem reading the file, backup it and create a new one with default values
-			String backupFile = file+"-"+DateTime.getCurrentDate().getTime();
-			NotificationManager.addError(Messages.getString("Error_reading_andami_config_New_file_created_A_backup_was_made_on_")+backupFile, new ConfigurationException(e));
-			xml.renameTo(new File(backupFile));
-			andamiConfig = getDefaultAndamiConfig();
-		} catch (ValidationException e) {
-			throw new ConfigurationException(e);
-		}
-	}
+        InputStreamReader reader = null;
+        try {
+            // Se lee la configuración
+            reader = XMLEncodingUtils.getReader(xml);
+            andamiConfig = (AndamiConfig) AndamiConfig.unmarshal(reader);
+        } catch (FileNotFoundException e) {
+            // Si no existe se ponen los valores por defecto
+            andamiConfig = getDefaultAndamiConfig();
+        } catch (MarshalException e) {
+            // try to close the stream, maybe it remains open
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+            // if there was a problem reading the file, backup it and create a new one with default values
+            String backupFile = file + "-" + DateTime.getCurrentDate().getTime();
+            NotificationManager.addError(
+                    Messages.getString("Error_reading_andami_config_New_file_created_A_backup_was_made_on_")
+                            + backupFile, new ConfigurationException(e));
+            xml.renameTo(new File(backupFile));
+            andamiConfig = getDefaultAndamiConfig();
+        } catch (ValidationException e) {
+            throw new ConfigurationException(e);
+        }
+    }
 
-	private static AndamiConfig getDefaultAndamiConfig() {
-		AndamiConfig andamiConfig = new AndamiConfig();
+    private static AndamiConfig getDefaultAndamiConfig() {
+        AndamiConfig andamiConfig = new AndamiConfig();
 
-		Andami andami = new Andami();
-		andami.setUpdate(true);
-		andamiConfig.setAndami(andami);
-		andamiConfig.setLocaleCountry(Locale.getDefault().getCountry());
-		andamiConfig.setLocaleLanguage(Locale.getDefault().getLanguage());
-		andamiConfig.setLocaleVariant(Locale.getDefault().getVariant());
+        Andami andami = new Andami();
+        andami.setUpdate(true);
+        andamiConfig.setAndami(andami);
+        andamiConfig.setLocaleCountry(Locale.getDefault().getCountry());
+        andamiConfig.setLocaleLanguage(Locale.getDefault().getLanguage());
+        andamiConfig.setLocaleVariant(Locale.getDefault().getVariant());
 
-		if (System.getProperty("javawebstart.version") != null) // Es java web start)
-		 {
-			andamiConfig.setPluginsDirectory(new File(appHomeDir
-					+ "extensiones").getAbsolutePath());
-		} else {
-			andamiConfig.setPluginsDirectory(new File(appName +
-					File.separator + "extensiones").getAbsolutePath());
-		}
+        if (System.getProperty("javawebstart.version") != null) // Es java web start)
+        {
+            andamiConfig.setPluginsDirectory(new File(appHomeDir + "extensiones").getAbsolutePath());
+        } else {
+            andamiConfig.setPluginsDirectory(new File(appName + File.separator + "extensiones").getAbsolutePath());
+        }
 
-		andamiConfig.setPlugin(new Plugin[0]);
-		return andamiConfig;
-	}
+        andamiConfig.setPlugin(new Plugin[0]);
+        return andamiConfig;
+    }
 
-	private static XMLEntity persistenceFromXML() throws ConfigurationException {
-		File xml = new File(pluginsPersistencePath);
+    private static XMLEntity persistenceFromXML() throws ConfigurationException {
+        File xml = new File(pluginsPersistencePath);
 
-		if (xml.exists()) {
-			InputStreamReader reader = null;
+        if (xml.exists()) {
+            InputStreamReader reader = null;
 
-			try {
-				reader = XMLEncodingUtils.getReader(xml);
-				XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-				return new XMLEntity(tag);
-			} catch (FileNotFoundException e) {
-				throw new ConfigurationException(e);
-			} catch (MarshalException e) {
+            try {
+                reader = XMLEncodingUtils.getReader(xml);
+                XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
+                return new XMLEntity(tag);
+            } catch (FileNotFoundException e) {
+                throw new ConfigurationException(e);
+            } catch (MarshalException e) {
 
-				// try to reopen with default encoding (for backward compatibility)
-				try {
-					reader = new FileReader(xml);
-					XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-					return new XMLEntity(tag);
+                // try to reopen with default encoding (for backward compatibility)
+                try {
+                    reader = new FileReader(xml);
+                    XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
+                    return new XMLEntity(tag);
 
-				} catch (MarshalException ex) {
-					// try to close the stream, maybe it remains open
-					if (reader!=null) {
-						try { reader.close(); } catch (IOException e1) {}
-					}
-					// backup the old file
-					String backupFile = pluginsPersistencePath+"-"+DateTime.getCurrentDate().getTime();
-					NotificationManager.addError(Messages.getString("Error_reading_plugin_persinstence_New_file_created_A_backup_was_made_on_")+backupFile, new ConfigurationException(e));
-					xml.renameTo(new File(backupFile));
-					// create a new, empty configuration
-					return new XMLEntity();
-				}
-				catch (FileNotFoundException ex) {
-					return new XMLEntity();
-				} catch (ValidationException ex) {
-					throw new ConfigurationException(e);
-				}
-			} catch (ValidationException e) {
-				throw new ConfigurationException(e);
-			}
-		} else {
-			return new XMLEntity();
-		}
-	}
+                } catch (MarshalException ex) {
+                    // try to close the stream, maybe it remains open
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e1) {
+                        }
+                    }
+                    // backup the old file
+                    String backupFile = pluginsPersistencePath + "-" + DateTime.getCurrentDate().getTime();
+                    NotificationManager
+                            .addError(
+                                    Messages.getString("Error_reading_plugin_persinstence_New_file_created_A_backup_was_made_on_")
+                                            + backupFile, new ConfigurationException(e));
+                    xml.renameTo(new File(backupFile));
+                    // create a new, empty configuration
+                    return new XMLEntity();
+                } catch (FileNotFoundException ex) {
+                    return new XMLEntity();
+                } catch (ValidationException ex) {
+                    throw new ConfigurationException(e);
+                }
+            } catch (ValidationException e) {
+                throw new ConfigurationException(e);
+            }
+        } else {
+            return new XMLEntity();
+        }
+    }
 
-	private static void persistenceToXML(XMLEntity entity)
-		throws ConfigurationException {
-		// write on a temporary file in order to not destroy current file if there is some problem while marshaling
-		File tmpFile = new File(pluginsPersistencePath+"-"+DateTime.getCurrentDate().getTime());
+    private static void persistenceToXML(XMLEntity entity) throws ConfigurationException {
+        // write on a temporary file in order to not destroy current file if there is some problem while marshaling
+        File tmpFile = new File(pluginsPersistencePath + "-" + DateTime.getCurrentDate().getTime());
 
-		File xml = new File(pluginsPersistencePath);
-		OutputStreamWriter writer = null;
+        File xml = new File(pluginsPersistencePath);
+        OutputStreamWriter writer = null;
 
-		try {
-			writer = new OutputStreamWriter(new FileOutputStream(tmpFile), CASTORENCODING);
-			entity.getXmlTag().marshal(writer);
-			writer.close();
+        try {
+            writer = new OutputStreamWriter(new FileOutputStream(tmpFile), CASTORENCODING);
+            entity.getXmlTag().marshal(writer);
+            writer.close();
 
-			// if marshaling process finished correctly, move the file to the correct one
-			xml.delete();
-			if (!tmpFile.renameTo(xml)) {
-				// if rename was not succesful, try copying it
-				FileChannel sourceChannel = new  FileInputStream(tmpFile).getChannel();
-				FileChannel destinationChannel = new FileOutputStream(xml).getChannel();
-				sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
-				sourceChannel.close();
-				destinationChannel.close();
+            // if marshaling process finished correctly, move the file to the correct one
+            xml.delete();
+            if (!tmpFile.renameTo(xml)) {
+                // if rename was not succesful, try copying it
+                FileChannel sourceChannel = new FileInputStream(tmpFile).getChannel();
+                FileChannel destinationChannel = new FileOutputStream(xml).getChannel();
+                sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
+                sourceChannel.close();
+                destinationChannel.close();
 
-			}
-		} catch (FileNotFoundException e) {
-			throw new ConfigurationException(e);
-		} catch (MarshalException e) {
-			// try to close the stream, maybe it remains open
-			if (writer!=null) {
-				try { writer.close(); } catch (IOException e1) {}
-			}
-		} catch (ValidationException e) {
-			throw new ConfigurationException(e);
-		} catch (IOException e) {
-			throw new ConfigurationException(e);
-		}
-	}
+            }
+        } catch (FileNotFoundException e) {
+            throw new ConfigurationException(e);
+        } catch (MarshalException e) {
+            // try to close the stream, maybe it remains open
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e1) {
+                }
+            }
+        } catch (ValidationException e) {
+            throw new ConfigurationException(e);
+        } catch (IOException e) {
+            throw new ConfigurationException(e);
+        }
+    }
 
-	static MDIFrame getFrame() {
-		return frame;
-	}
+    static MDIFrame getFrame() {
+        return frame;
+    }
 
-	/**
-	 * Gracefully closes the application. It shows dialogs to save data,
-	 * finish processes, etc, then it terminates the extensions, removes
-	 * temporal files and finally exits.
-	 */
-	public synchronized static void closeApplication() {
-		TerminationProcess terminationProcess = (new Launcher()).new TerminationProcess();
-		terminationProcess.run();
-	}
+    /**
+     * Gracefully closes the application. It shows dialogs to save data,
+     * finish processes, etc, then it terminates the extensions, removes
+     * temporal files and finally exits.
+     */
+    public synchronized static void closeApplication() {
+        TerminationProcess terminationProcess = (new Launcher()).new TerminationProcess();
+        terminationProcess.run();
+    }
 
-	static HashMap getClassesExtensions() {
-		return classesExtensions;
-	}
+    public static HashMap<Class, ExtensionDecorator> getClassesExtensions() {
+        return classesExtensions;
+    }
 
-	private static void downloadExtensions(String extDir) {
-		java.util.Date fechaActual = null;
+    private static void downloadExtensions(String extDir) {
+        java.util.Date fechaActual = null;
 
-		try {
-			if (System.getProperty("javawebstart.version") != null) {
-				//Obtenemos la URL del servidor
-				BasicService bs = (BasicService) ServiceManager.lookup(
-						"javax.jnlp.BasicService");
-				URL baseURL = bs.getCodeBase();
+        try {
+            if (System.getProperty("javawebstart.version") != null) {
+                // Obtenemos la URL del servidor
+                BasicService bs = (BasicService) ServiceManager.lookup("javax.jnlp.BasicService");
+                URL baseURL = bs.getCodeBase();
 
-				//Se descargan las extensiones
-				splashWindow.process(5,
-					"Descargando las extensiones desde " + baseURL + " a " +
-					extDir);
+                // Se descargan las extensiones
+                splashWindow.process(5, "Descargando las extensiones desde " + baseURL + " a " + extDir);
 
-				URL url = new URL(baseURL + "extensiones.zip");
-				URLConnection connection = url.openConnection();
+                URL url = new URL(baseURL + "extensiones.zip");
+                URLConnection connection = url.openConnection();
 
-				System.out.println(url.toExternalForm() + ":");
-				System.out.println("  Content Type: " +
-					connection.getContentType());
-				System.out.println("  Content Length: " +
-					connection.getContentLength());
-				System.out.println("  Last Modified: " +
-					new Date(connection.getLastModified()));
-				System.out.println("  Expiration: " +
-					connection.getExpiration());
-				System.out.println("  Content Encoding: " +
-					connection.getContentEncoding());
+                System.out.println(url.toExternalForm() + ":");
+                System.out.println("  Content Type: " + connection.getContentType());
+                System.out.println("  Content Length: " + connection.getContentLength());
+                System.out.println("  Last Modified: " + new Date(connection.getLastModified()));
+                System.out.println("  Expiration: " + connection.getExpiration());
+                System.out.println("  Content Encoding: " + connection.getContentEncoding());
 
-				// Guardamos la fecha del fichero de extensiones que nos hemos bajado, y
-				// comprobamos el último que se ha bajado. Si no son
-				// iguales, nos bajamos el nuevo. Si son iguales, no
-				// nos bajamos nada.
-				Long miliSecondsInWeb = new Long(connection.getLastModified());
+                // Guardamos la fecha del fichero de extensiones que nos hemos bajado, y
+                // comprobamos el último que se ha bajado. Si no son
+                // iguales, nos bajamos el nuevo. Si son iguales, no
+                // nos bajamos nada.
+                Long miliSecondsInWeb = new Long(connection.getLastModified());
 
-				File destDir = new File(extDir);
+                File destDir = new File(extDir);
 
-				if (!destDir.exists()) {
-					// Creamos gvSIG
-					destDir.getParentFile().mkdir();
+                if (!destDir.exists()) {
+                    // Creamos gvSIG
+                    destDir.getParentFile().mkdir();
 
-					if (!destDir.mkdir()) {
-						System.err.println("Imposible crear el directorio " +
-							destDir.getAbsolutePath());
-					}
-				}
+                    if (!destDir.mkdir()) {
+                        System.err.println("Imposible crear el directorio " + destDir.getAbsolutePath());
+                    }
+                }
 
-				File timeFile = new File(destDir.getParent() + File.separator +
-						"timeStamp.properties");
+                File timeFile = new File(destDir.getParent() + File.separator + "timeStamp.properties");
 
-				if (!timeFile.exists()) {
-					timeFile.createNewFile();
-				}
+                if (!timeFile.exists()) {
+                    timeFile.createNewFile();
+                }
 
-				FileInputStream inAux = new FileInputStream(timeFile);
-				Properties prop = new Properties();
-				prop.load(inAux);
-				inAux.close();
+                FileInputStream inAux = new FileInputStream(timeFile);
+                Properties prop = new Properties();
+                prop.load(inAux);
+                inAux.close();
 
-				if (prop.getProperty("timestamp") != null) {
-					Long lastMiliSeconds = (Long) new Long(prop.getProperty(
-								"timestamp"));
+                if (prop.getProperty("timestamp") != null) {
+                    Long lastMiliSeconds = new Long(prop.getProperty("timestamp"));
 
-					if (lastMiliSeconds.longValue() == miliSecondsInWeb.longValue()) {
-						System.out.println("No hay nueva actualizaciï¿½n");
+                    if (lastMiliSeconds.longValue() == miliSecondsInWeb.longValue()) {
+                        System.out.println("No hay nueva actualizaciï¿½n");
                         logger.debug("No hay nueva actualizaciï¿½n -> Return");
                         logger.debug("timeStampWeb= " + miliSecondsInWeb);
                         logger.debug("timeStampLocal= " + lastMiliSeconds);
 
-						return;
-					}
+                        return;
+                    }
 
-					System.out.println("timeStampWeb= " + miliSecondsInWeb);
-					System.out.println("timeStampLocal= " + lastMiliSeconds);
-				} else {
-					System.out.println("El timeStamp no estï¿½ escrito en " +
-						timeFile.getAbsolutePath());
-				}
+                    System.out.println("timeStampWeb= " + miliSecondsInWeb);
+                    System.out.println("timeStampLocal= " + lastMiliSeconds);
+                } else {
+                    System.out.println("El timeStamp no estï¿½ escrito en " + timeFile.getAbsolutePath());
+                }
 
-				InputStream stream = url.openStream();
+                InputStream stream = url.openStream();
                 File temp = File.createTempFile("gvsig", ".zip");
 
                 logger.debug(temp.getAbsolutePath());
@@ -1818,10 +1662,11 @@ public class Launcher {
 
                 byte[] lt_read = new byte[1];
 
-                while (stream.read(lt_read) > 0)
-                  file.write(lt_read);
+                while (stream.read(lt_read) > 0) {
+                    file.write(lt_read);
+                }
 
-				stream.close();
+                stream.close();
                 stream = null;
                 file.close();
                 file = null;
@@ -1829,715 +1674,722 @@ public class Launcher {
                 System.gc();
 
                 logger.debug("Ha creado el fichero ZIP");
-				//Se extrae el zip
+                // Se extrae el zip
                 splashWindow.process(5, "Extensiones descargadas.");
 
-				System.out.println("Extrayendo a " + destDir.getAbsolutePath());
+                System.out.println("Extrayendo a " + destDir.getAbsolutePath());
 
-				Date fechaDir = new Date(destDir.lastModified());
-				System.out.println("Fecha del directorio " + extDir + " = " +
-					fechaDir.toString());
-				Utilities.extractTo(temp, new File(extDir), splashWindow);
+                Date fechaDir = new Date(destDir.lastModified());
+                System.out.println("Fecha del directorio " + extDir + " = " + fechaDir.toString());
+                Utilities.extractTo(temp, new File(extDir), splashWindow);
 
-				// Si todo ha ido bien, guardamos el timestamp.
-				///  App.instance.getPc().addProperties("timestamp", miliSecondsInWeb);
-				// XMLEntity xml=ps.getPersistentXML();
-				fechaActual = new java.util.Date();
+                // Si todo ha ido bien, guardamos el timestamp.
+                // / App.instance.getPc().addProperties("timestamp", miliSecondsInWeb);
+                // XMLEntity xml=ps.getPersistentXML();
+                fechaActual = new java.util.Date();
 
-				FileOutputStream outAux = new FileOutputStream(timeFile);
-				prop.setProperty("timestamp", miliSecondsInWeb.toString());
-				prop.store(outAux, "last download");
-				outAux.close();
-				System.out.println("Fecha actual guardada: " +
-					fechaActual.toGMTString());
+                FileOutputStream outAux = new FileOutputStream(timeFile);
+                prop.setProperty("timestamp", miliSecondsInWeb.toString());
+                prop.store(outAux, "last download");
+                outAux.close();
+                System.out.println("Fecha actual guardada: " + fechaActual.toGMTString());
 
-				/* xml.putProperty("timestamp",fechaActual.toGMTString());
-				   ps.setPresistentXML(xml); */
-			}
-		} catch (IOException e) {
-			NotificationManager.addError("", e);
-		} catch (UnavailableServiceException e) {
-			NotificationManager.addError("", e);
-		} catch (SecurityException e) {
-			System.err.println("No se puede escribir el timeStamp " +
-				fechaActual.toGMTString());
-			NotificationManager.addError("", e);
-		}
-	}
+                /*
+                 * xml.putProperty("timestamp",fechaActual.toGMTString());
+                 * ps.setPresistentXML(xml);
+                 */
+            }
+        } catch (IOException e) {
+            NotificationManager.addError("", e);
+        } catch (UnavailableServiceException e) {
+            NotificationManager.addError("", e);
+        } catch (SecurityException e) {
+            System.err.println("No se puede escribir el timeStamp " + fechaActual.toGMTString());
+            NotificationManager.addError("", e);
+        }
+    }
 
-	private static Extensions[] getExtensions() {
-		ArrayList array = new ArrayList();
-		Iterator iter = pluginsConfig.values().iterator();
+    private static Extensions[] getExtensions() {
+        ArrayList<Extensions> array = new ArrayList<Extensions>();
+        Iterator<PluginConfig> iter = pluginsConfig.values().iterator();
 
-		while (iter.hasNext()) {
-			array.add(((PluginConfig) iter.next()).getExtensions());
-		}
+        while (iter.hasNext()) {
+            array.add(iter.next().getExtensions());
+        }
 
-		return (Extensions[]) array.toArray(new Extensions[0]);
-	}
+        return array.toArray(new Extensions[0]);
+    }
 
-	public static Iterator getExtensionIterator() {
-		return extensions.iterator();
-	}
+    public static Iterator<IExtension> getExtensionIterator() {
+        return extensions.iterator();
+    }
 
-	public static HashMap getPluginConfig() {
-		return pluginsConfig;
-	}
+    public static HashMap<String, PluginConfig> getPluginConfig() {
+        return pluginsConfig;
+    }
 
-	public static Extension getExtension(String s) {
-		Extensions[] exts = getExtensions();
+    public static Extension getExtension(String s) {
+        Extensions[] exts = getExtensions();
 
-		for (int i = 0; i < exts.length; i++) {
-			for (int j = 0; j < exts[i].getExtensionCount(); j++) {
-				if (exts[i].getExtension(j).getClassName().equals(s)) {
-					return exts[i].getExtension(j);
-				}
-			}
-		}
+        for (int i = 0; i < exts.length; i++) {
+            for (int j = 0; j < exts[i].getExtensionCount(); j++) {
+                if (exts[i].getExtension(j).getClassName().equals(s)) {
+                    return exts[i].getExtension(j);
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static AndamiConfig getAndamiConfig() {
-		return andamiConfig;
-	}
+    public static AndamiConfig getAndamiConfig() {
+        return andamiConfig;
+    }
 
-	private static class ExtensionComparator implements Comparator {
-		public int compare(Object o1, Object o2) {
-			Extension e1 = (Extension) o1;
-			Extension e2 = (Extension) o2;
+    private static class ExtensionComparator implements Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            Extension e1 = (Extension) o1;
+            Extension e2 = (Extension) o2;
 
-			if (!e1.hasPriority() && !e2.hasPriority()) {
-				return -1;
-			}
+            if (!e1.hasPriority() && !e2.hasPriority()) {
+                return -1;
+            }
 
-			if (e1.hasPriority() && !e2.hasPriority()) {
-				return Integer.MIN_VALUE;
-			}
+            if (e1.hasPriority() && !e2.hasPriority()) {
+                return Integer.MIN_VALUE;
+            }
 
-			if (e2.hasPriority() && !e1.hasPriority()) {
-				return Integer.MAX_VALUE;
-			}
+            if (e2.hasPriority() && !e1.hasPriority()) {
+                return Integer.MAX_VALUE;
+            }
 
-			if (e1.getPriority() != e2.getPriority()){
-				return e2.getPriority() - e1.getPriority();
-			}else{
-				return (e2.toString().compareTo(e1.toString()));
-			}
-		}
-	}
+            if (e1.getPriority() != e2.getPriority()) {
+                return e2.getPriority() - e1.getPriority();
+            } else {
+                return (e2.toString().compareTo(e1.toString()));
+            }
+        }
+    }
 
-	private static class MenuComparator implements Comparator {
-		private static ExtensionComparator extComp = new ExtensionComparator();
+    private static class MenuComparator implements Comparator {
+        private static ExtensionComparator extComp = new ExtensionComparator();
 
-		public int compare(Object o1, Object o2) {
-			SortableMenu e1 = (SortableMenu) o1;
-			SortableMenu e2 = (SortableMenu) o2;
+        @Override
+        public int compare(Object o1, Object o2) {
+            SortableMenu e1 = (SortableMenu) o1;
+            SortableMenu e2 = (SortableMenu) o2;
 
-			if (!e1.menu.hasPosition() && !e2.menu.hasPosition()) {
-				if (e1.extension instanceof SkinExtensionType) {
-					return 1;
-				} else if (e2.extension instanceof SkinExtensionType) {
-					return -1;
-				} else {
-					return extComp.compare(e1.extension, e2.extension);
-				}
-			}
+            if (!e1.menu.hasPosition() && !e2.menu.hasPosition()) {
+                if (e1.extension instanceof SkinExtensionType) {
+                    return 1;
+                } else if (e2.extension instanceof SkinExtensionType) {
+                    return -1;
+                } else {
+                    return extComp.compare(e1.extension, e2.extension);
+                }
+            }
 
-			if (e1.menu.hasPosition() && !e2.menu.hasPosition()) {
-				return Integer.MIN_VALUE;
-			}
+            if (e1.menu.hasPosition() && !e2.menu.hasPosition()) {
+                return Integer.MIN_VALUE;
+            }
 
-			if (e2.menu.hasPosition() && !e1.menu.hasPosition()) {
-				return Integer.MAX_VALUE;
-			}
-			if (e1.menu.getPosition() != e2.menu.getPosition()){
-				//we don't return 0 unless both objects are the same, otherwise the objects get overwritten in the treemap
-				return e1.menu.getPosition() - e2.menu.getPosition();
-			}else{
-				return (e1.toString().compareTo(e2.toString()));
-			}
-		}
-	}
+            if (e2.menu.hasPosition() && !e1.menu.hasPosition()) {
+                return Integer.MAX_VALUE;
+            }
+            if (e1.menu.getPosition() != e2.menu.getPosition()) {
+                // we don't return 0 unless both objects are the same, otherwise the objects get overwritten in the
+                // treemap
+                return e1.menu.getPosition() - e2.menu.getPosition();
+            } else {
+                return (e1.toString().compareTo(e2.toString()));
+            }
+        }
+    }
 
-	private static class SortableMenu {
-		public PluginClassLoader loader;
-		public Menu menu;
-		public SkinExtensionType extension;
+    private static class SortableMenu {
+        public PluginClassLoader loader;
+        public Menu menu;
+        public SkinExtensionType extension;
 
-		public SortableMenu(PluginClassLoader loader,
-			SkinExtensionType skinExt, Menu menu2) {
-			extension = skinExt;
-			menu = menu2;
-			this.loader = loader;
-		}
-	}
+        public SortableMenu(PluginClassLoader loader, SkinExtensionType skinExt, Menu menu2) {
+            extension = skinExt;
+            menu = menu2;
+            this.loader = loader;
+        }
+    }
 
-	private static class SortableTool {
-		public PluginClassLoader loader;
-		public ToolBar toolbar;
-		public ActionTool actiontool;
-		public SelectableTool selectabletool;
-		public SkinExtensionType extension;
+    private static class SortableTool {
+        public PluginClassLoader loader;
+        public ToolBar toolbar;
+        public ActionTool actiontool;
+        public SelectableTool selectabletool;
+        public SkinExtensionType extension;
 
-		public SortableTool(PluginClassLoader loader,
-			SkinExtensionType skinExt, ToolBar toolbar2,ActionTool actiontool2) {
-			extension = skinExt;
-			toolbar = toolbar2;
-			actiontool=actiontool2;
-			this.loader = loader;
-		}
-		public SortableTool(PluginClassLoader loader,
-				SkinExtensionType skinExt, ToolBar toolbar2,SelectableTool selectabletool2) {
-			extension = skinExt;
-			toolbar = toolbar2;
-			selectabletool=selectabletool2;
-			this.loader = loader;
-		}
-	}
+        public SortableTool(PluginClassLoader loader, SkinExtensionType skinExt, ToolBar toolbar2,
+                ActionTool actiontool2) {
+            extension = skinExt;
+            toolbar = toolbar2;
+            actiontool = actiontool2;
+            this.loader = loader;
+        }
 
-	private static class ToolBarComparator implements Comparator {
-		private static ExtensionComparator extComp = new ExtensionComparator();
+        public SortableTool(PluginClassLoader loader, SkinExtensionType skinExt, ToolBar toolbar2,
+                SelectableTool selectabletool2) {
+            extension = skinExt;
+            toolbar = toolbar2;
+            selectabletool = selectabletool2;
+            this.loader = loader;
+        }
+    }
 
-		public int compare(Object o1, Object o2) {
-			SortableTool e1 = (SortableTool) o1;
-			SortableTool e2 = (SortableTool) o2;
+    private static class ToolBarComparator implements Comparator {
+        private static ExtensionComparator extComp = new ExtensionComparator();
 
-			// if the toolbars have the same name, they are considered to be
-			// the same toolbar, so we don't need to do further comparing
-			if (e1.toolbar.getName().equals(e2.toolbar.getName()))
-				return 0;
+        @Override
+        public int compare(Object o1, Object o2) {
+            SortableTool e1 = (SortableTool) o1;
+            SortableTool e2 = (SortableTool) o2;
 
-			if (!e1.toolbar.hasPosition() && !e2.toolbar.hasPosition()) {
-				if (e1.extension instanceof SkinExtensionType) {
-					return 1;
-				} else if (e2.extension instanceof SkinExtensionType) {
-					return -1;
-				} else {
-					return extComp.compare(e1.extension, e2.extension);
-				}
-			}
+            // if the toolbars have the same name, they are considered to be
+            // the same toolbar, so we don't need to do further comparing
+            if (e1.toolbar.getName().equals(e2.toolbar.getName())) {
+                return 0;
+            }
 
-			if (e1.toolbar.hasPosition() && !e2.toolbar.hasPosition()) {
-				return Integer.MIN_VALUE;
-			}
+            if (!e1.toolbar.hasPosition() && !e2.toolbar.hasPosition()) {
+                if (e1.extension instanceof SkinExtensionType) {
+                    return 1;
+                } else if (e2.extension instanceof SkinExtensionType) {
+                    return -1;
+                } else {
+                    return extComp.compare(e1.extension, e2.extension);
+                }
+            }
 
-			if (e2.toolbar.hasPosition() && !e1.toolbar.hasPosition()) {
-				return Integer.MAX_VALUE;
-			}
-			if (e1.toolbar.getPosition() != e2.toolbar.getPosition())
-				return e1.toolbar.getPosition() - e2.toolbar.getPosition();
+            if (e1.toolbar.hasPosition() && !e2.toolbar.hasPosition()) {
+                return Integer.MIN_VALUE;
+            }
 
-			if (e1.toolbar.getActionTool().equals(e2.toolbar.getActionTool()) && e1.toolbar.getSelectableTool().equals(e2.toolbar.getSelectableTool())){
-				return 0;
-			}
-			return (e1.toolbar.toString().compareTo(e2.toolbar.toString()));
-		}
-	}
+            if (e2.toolbar.hasPosition() && !e1.toolbar.hasPosition()) {
+                return Integer.MAX_VALUE;
+            }
+            if (e1.toolbar.getPosition() != e2.toolbar.getPosition()) {
+                return e1.toolbar.getPosition() - e2.toolbar.getPosition();
+            }
 
-	/**
-	 * <p>This class is used to compare tools (selectabletool and actiontool),
-	 * using the "position"
-	 * attribute.</p>
-	 * <p>The ordering criteria are:</p>
-	 * <ul><li>If the tools are placed in different toolbars, they use the toolbars'
-	 * order.
-	 * (using the ToolBarComparator).</li>
-	 * <li></li>
-	 * <li>If any of the tools has not 'position' attribute, the tool which
-	 * <strong>has</strong> the attribute will be placed first.</li>
-	 * <li>If both tools have the same position (or they don't have a
-	 * 'position' attribute), the priority of the extensions where the tool is defined.</li></ul>
-	 *
-	 * @author cesar
-	 * @version $Revision$
-	 */
-	private static class ToolComparator implements Comparator {
-		private static ToolBarComparator toolBarComp = new ToolBarComparator();
+            if (e1.toolbar.getActionTool().equals(e2.toolbar.getActionTool())
+                    && e1.toolbar.getSelectableTool().equals(e2.toolbar.getSelectableTool())) {
+                return 0;
+            }
+            return (e1.toolbar.toString().compareTo(e2.toolbar.toString()));
+        }
+    }
 
-		public int compare(Object o1, Object o2) {
-			// compare the toolbars which contain the tools
-			int result = toolBarComp.compare(o1, o2);
-			if (result != 0) { // if the toolbars are different, use their order
-				return result;
-			}
-			// otherwise, compare the tools
-			SortableTool e1 = (SortableTool) o1;
-			SortableTool e2 = (SortableTool) o2;
-			int e1Position=-1, e2Position=-1;
+    /**
+     * <p>This class is used to compare tools (selectabletool and actiontool),
+     * using the "position"
+     * attribute.</p>
+     * <p>The ordering criteria are:</p>
+     * <ul><li>If the tools are placed in different toolbars, they use the toolbars'
+     * order.
+     * (using the ToolBarComparator).</li>
+     * <li></li>
+     * <li>If any of the tools has not 'position' attribute, the tool which
+     * <strong>has</strong> the attribute will be placed first.</li>
+     * <li>If both tools have the same position (or they don't have a
+     * 'position' attribute), the priority of the extensions where the tool is defined.</li></ul>
+     *
+     * @author cesar
+     * @version $Revision$
+     */
+    private static class ToolComparator implements Comparator {
+        private static ToolBarComparator toolBarComp = new ToolBarComparator();
 
-			if (e1.actiontool!=null) {
-				if (e1.actiontool.hasPosition())
-					e1Position = e1.actiontool.getPosition();
-			}
-			else if (e1.selectabletool!=null) {
-				if (e1.selectabletool.hasPosition())
-					e1Position = e1.selectabletool.getPosition();
-			}
+        @Override
+        public int compare(Object o1, Object o2) {
+            // compare the toolbars which contain the tools
+            int result = toolBarComp.compare(o1, o2);
+            if (result != 0) { // if the toolbars are different, use their order
+                return result;
+            }
+            // otherwise, compare the tools
+            SortableTool e1 = (SortableTool) o1;
+            SortableTool e2 = (SortableTool) o2;
+            int e1Position = -1, e2Position = -1;
 
-			if (e2.actiontool!=null) {
-				if (e2.actiontool.hasPosition())
-					e2Position = e2.actiontool.getPosition();
-			}
-			else if (e2.selectabletool!=null){
-				if (e2.selectabletool.hasPosition())
-					e2Position = e2.selectabletool.getPosition();
-			}
+            if (e1.actiontool != null) {
+                if (e1.actiontool.hasPosition()) {
+                    e1Position = e1.actiontool.getPosition();
+                }
+            } else if (e1.selectabletool != null) {
+                if (e1.selectabletool.hasPosition()) {
+                    e1Position = e1.selectabletool.getPosition();
+                }
+            }
 
-			if (e1Position==-1 && e2Position!=-1) {
-				return 1;
-			}
-			if (e1Position!=-1 && e2Position==-1) {
-				return -1;
-			}
-			if (e1Position!=-1 && e2Position!=-1) {
-				result = e1Position - e2Position;
-				// we don't return 0 unless both objects are the same, otherwise the objects get overwritten in the treemap
-				if (result!=0) return result;
-			}
-			return e1.toString().compareTo(e2.toString());
-		}
-	}
+            if (e2.actiontool != null) {
+                if (e2.actiontool.hasPosition()) {
+                    e2Position = e2.actiontool.getPosition();
+                }
+            } else if (e2.selectabletool != null) {
+                if (e2.selectabletool.hasPosition()) {
+                    e2Position = e2.selectabletool.getPosition();
+                }
+            }
 
+            if (e1Position == -1 && e2Position != -1) {
+                return 1;
+            }
+            if (e1Position != -1 && e2Position == -1) {
+                return -1;
+            }
+            if (e1Position != -1 && e2Position != -1) {
+                result = e1Position - e2Position;
+                // we don't return 0 unless both objects are the same, otherwise the objects get overwritten in the
+                // treemap
+                if (result != 0) {
+                    return result;
+                }
+            }
+            return e1.toString().compareTo(e2.toString());
+        }
+    }
 
-	/**
-	 * validates the user before starting gvsig
-	 *
-	 */
-	private static void validate(){
+    /**
+     * validates the user before starting gvsig
+     *
+     */
+    private static void validate() {
 
-		IAuthentication session =  null;
-		try {
-			session = (IAuthentication)Class.forName("com.iver.andami.authentication.Session").newInstance();
+        IAuthentication session = null;
+        try {
+            session = (IAuthentication) Class.forName("com.iver.andami.authentication.Session").newInstance();
 
-		} catch (ClassNotFoundException e) {
-			return;
-		} catch (InstantiationException e) {
-			return;
-		} catch (IllegalAccessException e) {
-			return;
-		}
+        } catch (ClassNotFoundException e) {
+            return;
+        } catch (InstantiationException e) {
+            return;
+        } catch (IllegalAccessException e) {
+            return;
+        }
 
-		session.setPluginDirectory( andamiConfig.getPluginsDirectory() );
-		if (session.validationRequired()){
-			if(session.Login()){
-				System.out.println("You are logged in");
-			}
-			else{
-				JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
-						 "You are not logged in");
-				//System.exit(0);
-			}
-			PluginServices.setAuthentication(session);
-		}
-	}
+        session.setPluginDirectory(andamiConfig.getPluginsDirectory());
+        if (session.validationRequired()) {
+            if (session.Login()) {
+                System.out.println("You are logged in");
+            } else {
+                JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), "You are not logged in");
+                // System.exit(0);
+            }
+            PluginServices.setAuthentication(session);
+        }
+    }
 
-	public static String getDefaultLookAndFeel() {
-		if (OsUtils.isLinux()) 
-			return nonWinDefaultLookAndFeel;
-		if (OsUtils.isMac())
-			return "ch.randelshofer.quaqua.QuaquaLookAndFeel";
-		return UIManager.getSystemLookAndFeelClassName();
-	}
+    public static String getDefaultLookAndFeel() {
+        if (OsUtils.isLinux()) {
+            return nonWinDefaultLookAndFeel;
+        }
+        if (OsUtils.isMac()) {
+            return "ch.randelshofer.quaqua.QuaquaLookAndFeel";
+        }
+        return UIManager.getSystemLookAndFeelClassName();
+    }
 
-	/**
-	 * Gets the ISO 839 two-characters-long language code matching the
-	 * provided language code (which may be an ISO 839-2/T
-	 * three-characters-long code or an ISO 839-1 two-characters-long
-	 * code).
-	 *
-	 * If the provided parameter is already two characters long, it
-	 * returns the parameter without any modification.
-	 *
-	 * @param langCode A language code representing either
-	 *  an ISO 839-2/T language code or an ISO 839-1 code.
-	 * @return A two-characters-long code specifying
-	 *  an ISO 839 language code.
-	 */
-	private static String normalizeLanguageCode(String langCode) {
-		final String fileName = "iso_639.tab";
-		if (langCode.length()==2)
-			return langCode;
-		else if (langCode.length()==3) {
-			if (langCode.equals("va") || langCode.equals("val")) { // special case for Valencian
-				return "ca";
-			}
-			URL isoCodes = Launcher.class.getClassLoader().getResource(fileName);
-			if (isoCodes!=null) {
-				try {
-					BufferedReader reader =
-						new BufferedReader(new InputStreamReader(isoCodes.openStream(), "ISO-8859-1"));
-						String line;
+    /**
+     * Gets the ISO 839 two-characters-long language code matching the
+     * provided language code (which may be an ISO 839-2/T
+     * three-characters-long code or an ISO 839-1 two-characters-long
+     * code).
+     *
+     * If the provided parameter is already two characters long, it
+     * returns the parameter without any modification.
+     *
+     * @param langCode
+     *            A language code representing either
+     *            an ISO 839-2/T language code or an ISO 839-1 code.
+     * @return A two-characters-long code specifying
+     *         an ISO 839 language code.
+     */
+    private static String normalizeLanguageCode(String langCode) {
+        final String fileName = "iso_639.tab";
+        if (langCode.length() == 2) {
+            return langCode;
+        } else if (langCode.length() == 3) {
+            if (langCode.equals("va") || langCode.equals("val")) { // special case for Valencian
+                return "ca";
+            }
+            URL isoCodes = Launcher.class.getClassLoader().getResource(fileName);
+            if (isoCodes != null) {
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(isoCodes.openStream(),
+                            "ISO-8859-1"));
+                    String line;
 
-						while ((line = reader.readLine()) != null) {
-							String[] language = line.split("\t");
-							if (language[0].equals(langCode)) // first column is the three characters code
-								return language[2]; // third column i the two characters code
-						}
-				}
-				catch (IOException ex) {
-					logger.error(Messages.getString("Error_reading_isocodes_file"), ex);
-					return "es";
-				}
-			}
-			else {
-				logger.error(Messages.getString("Error_reading_isocodes_file"));
-				return "es";
-			}
-		}
-		return "es";
-	}
+                    while ((line = reader.readLine()) != null) {
+                        String[] language = line.split("\t");
+                        if (language[0].equals(langCode)) {
+                            return language[2]; // third column i the two characters code
+                        }
+                    }
+                } catch (IOException ex) {
+                    logger.error(Messages.getString("Error_reading_isocodes_file"), ex);
+                    return "es";
+                }
+            } else {
+                logger.error(Messages.getString("Error_reading_isocodes_file"));
+                return "es";
+            }
+        }
+        return "es";
+    }
 
-	/**
-	 * Configures the locales (languages and local resources) to be used
-	 * by the application.
-	 *
-	 * First it tries to get the locale from the command line parameters,
-	 * then the andami-config file is checked.
-	 *
-	 * The locale name is normalized to get a two characters language code
-	 * as defined by ISO-639-1 (although ISO-639-2/T three characters codes
-	 * are also accepted from the command line or the configuration file).
-	 *
-	 * Finally, the gvsig-i18n library and the default locales for Java and
-	 * Swing are configured.
-	 *
-	 */
-	private static void configureLocales(String[] args) {
-		//		 Configurar el locale
+    /**
+     * Configures the locales (languages and local resources) to be used
+     * by the application.
+     *
+     * First it tries to get the locale from the command line parameters,
+     * then the andami-config file is checked.
+     *
+     * The locale name is normalized to get a two characters language code
+     * as defined by ISO-639-1 (although ISO-639-2/T three characters codes
+     * are also accepted from the command line or the configuration file).
+     *
+     * Finally, the gvsig-i18n library and the default locales for Java and
+     * Swing are configured.
+     *
+     */
+    private static void configureLocales(String[] args) {
+        // Configurar el locale
         String localeStr = null;
         /*
-        for (int i=2; i < args.length; i++)
-        {
-        	int index = args[i].indexOf("language=");
-        	if (index != -1)
-        		localeStr = args[i].substring(index+9);
-        }
+         * for (int i=2; i < args.length; i++)
+         * {
+         * int index = args[i].indexOf("language=");
+         * if (index != -1)
+         * localeStr = args[i].substring(index+9);
+         * }
          */
         localeStr = PluginServices.getArgumentByName("language");
-		if (localeStr == null)
-		{
+        if (localeStr == null) {
             localeStr = andamiConfig.getLocaleLanguage();
-		}
-		localeStr = normalizeLanguageCode(localeStr);
-		locale = getLocale(localeStr,
-                andamiConfig.getLocaleCountry(),
-                andamiConfig.getLocaleVariant());
-		Locale.setDefault(locale);
-		JComponent.setDefaultLocale(locale);
-        org.gvsig.i18n.Messages.addLocale(locale);
-		// add english and spanish as fallback languages
-        if (localeStr.equals("es")||localeStr.equals("ca")||localeStr.equals("gl")||localeStr.equals("eu")||localeStr.equals("va")) {
-        	// prefer Spanish for languages spoken in Spain
-        	org.gvsig.i18n.Messages.addLocale(new Locale("es"));
-        	org.gvsig.i18n.Messages.addLocale(new Locale("en"));
         }
-        else {
-        	// prefer English for the rest
-        	org.gvsig.i18n.Messages.addLocale(new Locale("en"));
-    		org.gvsig.i18n.Messages.addLocale(new Locale("es"));
+        localeStr = normalizeLanguageCode(localeStr);
+        locale = getLocale(localeStr, andamiConfig.getLocaleCountry(), andamiConfig.getLocaleVariant());
+        Locale.setDefault(locale);
+        JComponent.setDefaultLocale(locale);
+        org.gvsig.i18n.Messages.addLocale(locale);
+        // add english and spanish as fallback languages
+        if (localeStr.equals("es") || localeStr.equals("ca") || localeStr.equals("gl") || localeStr.equals("eu")
+                || localeStr.equals("va")) {
+            // prefer Spanish for languages spoken in Spain
+            org.gvsig.i18n.Messages.addLocale(new Locale("es"));
+            org.gvsig.i18n.Messages.addLocale(new Locale("en"));
+        } else {
+            // prefer English for the rest
+            org.gvsig.i18n.Messages.addLocale(new Locale("en"));
+            org.gvsig.i18n.Messages.addLocale(new Locale("es"));
         }
         org.gvsig.i18n.Messages.addResourceFamily("com.iver.andami.text", "com.iver.andami.text");
 
-	}
+    }
 
-	/**
-	 * Gets Home Directory location of the application.
-	 * May be set from outside the aplication by means of
-	 * -DgvSIG.home=C:/data/gvSIG, where gvSIG its the name
-	 * of the application
-	 * @return
-	 */
-	public static String getAppHomeDir() {
-		return appHomeDir;
-	}
+    /**
+     * Gets Home Directory location of the application.
+     * May be set from outside the aplication by means of
+     * -DgvSIG.home=C:/data/gvSIG, where gvSIG its the name
+     * of the application
+     *
+     * @return
+     */
+    public static String getAppHomeDir() {
+        return appHomeDir;
+    }
 
-	/**
-	 * Sets Home Directory location of the application.
-	 * May be set from outside the aplication by means of
-	 * -DgvSIG.home=C:/data/gvSIG, where gvSIG its the name
-	 * of the application
-	 * @param appHomeDir
-	 */
-	public static void setAppHomeDir(String appHomeDir) {
-		Launcher.appHomeDir = appHomeDir;
-	}
+    /**
+     * Sets Home Directory location of the application.
+     * May be set from outside the aplication by means of
+     * -DgvSIG.home=C:/data/gvSIG, where gvSIG its the name
+     * of the application
+     *
+     * @param appHomeDir
+     */
+    public static void setAppHomeDir(String appHomeDir) {
+        Launcher.appHomeDir = appHomeDir;
+    }
 
-	/**
-	 * Initialize the extesion that have to take the control
-	 *  of the state of action controls of the UI of all extensions.
-	 * <br>
-	 * <br>
-	 * For use this option you have to add an argument
-	 * to the command line like this:
-	 * <br>
-	 * <br>
-	 * -exclusiveUI={pathToExtensionClass}
-	 * <br>
-	 *  @see com.iver.andami.plugins.IExtension#isEnabled(IExtension extension)
-	 *  @see com.iver.andami.plugins.IExtension#isVisible(IExtension extension)
-	 */
-	private static void initializeExclusiveUIExtension(){
-		String name = PluginServices.getArgumentByName("exclusiveUI");
-		if (name == null)
-			return;
+    /**
+     * Initialize the extesion that have to take the control
+     * of the state of action controls of the UI of all extensions.
+     * <br>
+     * <br>
+     * For use this option you have to add an argument
+     * to the command line like this:
+     * <br>
+     * <br>
+     * -exclusiveUI={pathToExtensionClass}
+     * <br>
+     *
+     * @see com.iver.andami.plugins.IExtension#isEnabled(IExtension extension)
+     * @see com.iver.andami.plugins.IExtension#isVisible(IExtension extension)
+     */
+    private static void initializeExclusiveUIExtension() {
+        String name = PluginServices.getArgumentByName("exclusiveUI");
+        if (name == null) {
+            return;
+        }
 
+        Iterator<Class> iter = classesExtensions.keySet().iterator();
+        int charIndex;
+        Class key;
+        while (iter.hasNext()) {
+            key = iter.next();
+            charIndex = key.getName().indexOf(name);
+            // System.out.println("key='"+key.getName()+"' name='"+name+"' charIndex="+charIndex);
+            if (charIndex == 0) {
+                IExtension ext = classesExtensions.get(key);
+                if (ext instanceof ExtensionDecorator) {
+                    ext = ((ExtensionDecorator) ext).getExtension();
+                }
+                if (ext instanceof ExclusiveUIExtension) {
+                    PluginServices.setExclusiveUIExtension((ExclusiveUIExtension) ext);
+                }
+                break;
+            }
+        }
 
-		Iterator iter  = classesExtensions.keySet().iterator();
-		int charIndex;
-		Class key;
-		while (iter.hasNext()) {
-			key = (Class)iter.next();
-			charIndex = key.getName().indexOf(name);
-			//System.out.println("key='"+key.getName()+"' name='"+name+"' charIndex="+charIndex);
-			if (charIndex == 0) {
-				IExtension ext =(IExtension)classesExtensions.get(key);
-				if (ext instanceof ExtensionDecorator)
-					ext = ((ExtensionDecorator)ext).getExtension();
-				if (ext instanceof ExclusiveUIExtension)
-					PluginServices.setExclusiveUIExtension((ExclusiveUIExtension)ext);
-				break;
-			}
-		}
+        logger.error(Messages.getString("No_se_encontro_la_extension_especificada_en_el_parametro_exclusiveUI") + " '"
+                + name + "'");
+    }
 
-		logger.error(Messages.getString("No_se_encontro_la_extension_especificada_en_el_parametro_exclusiveUI") + " '" + name +"'");
-	}
+    // public static void initIconThemes() {
+    // // load the iconTheme
+    // IconThemeManager iconManager = new IconThemeManager();
+    // PluginServices.setIconThemeManager(iconManager);
+    // IconThemeInfo selectedTheme = iconManager.readConfig();
+    // if (selectedTheme!=null) {
+    // iconManager.setDefault(selectedTheme);
+    // logger.info("Setting the icon theme: "+selectedTheme.toVerboseString());
+    // }
+    // else {
+    // // set the default dir and try to load the default theme
+    // try {
+    // iconManager.setThemesDir(new File("iconThemes"));
+    // IconThemeInfo[] list = iconManager.list();
+    //
+    // for (int i=0; i<list.length; i++) {
+    // if (list[i].getResourceName().equals("iconThemes/icons")) {
+    // iconManager.setDefault(list[i]);
+    // logger.info("Setting the default icon theme: "+list[i].toVerboseString());
+    // return;
+    // }
+    // }
+    // } catch (FileNotFoundException e) {
+    // logger.info("IconTheme basedir does not exist");
+    // }
+    // // create an empty theme
+    // IconThemeInfo info = new IconThemeInfo();
+    // info.setName("No theme loaded");
+    // info.setResource(null); // null resource means that no real theme is loaded
+    // info.setDescription("No theme loaded");
+    // info.setVersion("0");
+    // iconManager.setDefault(new IconTheme(info));
+    // logger.info("Setting an empty icon theme");
+    //
+    // }
+    // }
 
+    public static void initIconThemes() {
+        IconThemeManager iconManager = IconThemeManager.getIconThemeManager();
+        IIconTheme icontheme = iconManager.getIconThemeFromConfig();
+        if (icontheme != null) {
+            iconManager.setCurrent(icontheme);
+        }
+    }
 
-//	public static void initIconThemes() {
-//		// load the iconTheme
-//		IconThemeManager iconManager = new IconThemeManager();
-//		PluginServices.setIconThemeManager(iconManager);
-//		IconThemeInfo selectedTheme = iconManager.readConfig();
-//		if (selectedTheme!=null) {
-//			iconManager.setDefault(selectedTheme);
-//			logger.info("Setting the icon theme: "+selectedTheme.toVerboseString());
-//		}
-//		else {
-//			// set the default dir and try to load the default theme
-//			try {
-//				iconManager.setThemesDir(new File("iconThemes"));
-//				IconThemeInfo[] list = iconManager.list();
-//
-//				for (int i=0; i<list.length; i++) {
-//					if (list[i].getResourceName().equals("iconThemes/icons")) {
-//						iconManager.setDefault(list[i]);
-//						logger.info("Setting the default icon theme: "+list[i].toVerboseString());
-//						return;
-//					}
-//				}
-//			} catch (FileNotFoundException e) {
-//				logger.info("IconTheme basedir does not exist");
-//			}
-//			// create an empty theme
-//			IconThemeInfo info = new IconThemeInfo();
-//			info.setName("No theme loaded");
-//			info.setResource(null); // null resource means that no real theme is loaded
-//			info.setDescription("No theme loaded");
-//			info.setVersion("0");
-//			iconManager.setDefault(new IconTheme(info));
-//			logger.info("Setting an empty icon theme");
-//
-//		}
-//	}
+    /**
+     * Manages Andami termination process
+     *
+     * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
+     */
+    public class TerminationProcess {
+        private boolean proceed = false;
+        private UnsavedDataPanel panel = null;
 
-	public static void initIconThemes(){
-		IconThemeManager iconManager = IconThemeManager.getIconThemeManager();
-		IIconTheme icontheme= iconManager.getIconThemeFromConfig();
-		if (icontheme!=null){
-			iconManager.setCurrent(icontheme);
-		}
-	}
+        public void run() {
+            int exit = manageUnsavedData();
+            if (exit == JOptionPane.NO_OPTION || exit == JOptionPane.CLOSED_OPTION) {
+                // the user doesn't want to exit
+                return;
+            }
 
-	/**
-	 * Manages Andami termination process
-	 *
-	 * @author Cesar Martinez Izquierdo <cesar.martinez@iver.es>
-	 */
-	public class TerminationProcess {
-		private boolean proceed = false;
-		private UnsavedDataPanel panel = null;
+            closeAndami();
+        }
 
-		public void run() {
-			int exit = manageUnsavedData();
-			if (exit==JOptionPane.NO_OPTION || exit == JOptionPane.CLOSED_OPTION) {
-				// the user doesn't want to exit
-				return;
-			}
+        /**
+         * Finishes the application without asking user if want or not to save unsaved data.
+         */
+        public void closeAndami() {
+            saveAndamiConfig();
 
-			closeAndami();
-		}
+            // Persistencia de los plugins
+            savePluginPersistence();
 
-		/**
-		 * Finishes the application without asking user if want or not to save unsaved data.
-		 */
-		public void closeAndami() {
-			saveAndamiConfig();
+            // Finalize all the extensions
+            finalizeExtensions();
 
-			//Persistencia de los plugins
-			savePluginPersistence();
+            // Clean any temp data created
+            Utilities.cleanUpTempFiles();
 
-			//Finalize all the extensions
-			finalizeExtensions();
+            // Para la depuración de memory leaks
+            System.gc();
 
-			// Clean any temp data created
-			Utilities.cleanUpTempFiles();
+            System.exit(0);
+        }
 
-			//Para la depuración de memory leaks
-			System.gc();
+        public void saveAndamiConfig() {
+            // Configuración de Andami
+            try {
+                andamiConfigToXML(andamiConfigPath);
+            } catch (MarshalException e) {
+                logger.error(Messages.getString("Launcher.No_se_pudo_guardar_la_configuracion_de_andami"), e);
+            } catch (ValidationException e) {
+                logger.error(Messages.getString("Launcher.No_se_pudo_guardar_la_configuracion_de_andami"), e);
+            } catch (IOException e) {
+                logger.error(Messages.getString("Launcher.No_se_pudo_guardar_la_configuracion_de_andami"), e);
+            }
+        }
 
-			System.exit(0);
-		}
+        /**
+         * Exectutes the terminate method for all the extensions, in the reverse
+         * order they were initialized
+         *
+         */
+        private void finalizeExtensions() {
+            for (int i = extensions.size() - 1; i >= 0; i--) {
+                com.iver.andami.plugins.IExtension extensionInstance = extensions.get(i);
+                extensionInstance.terminate();
+            }
+        }
 
-		public void saveAndamiConfig() {
-			//Configuración de Andami
-			try {
-				andamiConfigToXML(andamiConfigPath);
-			} catch (MarshalException e) {
-				logger.error(Messages.getString(
-				"Launcher.No_se_pudo_guardar_la_configuracion_de_andami"), e);
-			} catch (ValidationException e) {
-				logger.error(Messages.getString(
-				"Launcher.No_se_pudo_guardar_la_configuracion_de_andami"), e);
-			} catch (IOException e) {
-				logger.error(Messages.getString(
-				"Launcher.No_se_pudo_guardar_la_configuracion_de_andami"), e);
-			}
-		}
+        private ArrayList<IUnsavedData> getUnsavedData() {
+            ArrayList<IUnsavedData> unsavedDataList = new ArrayList<IUnsavedData>();
+            IExtension exclusiveExtension = PluginServices.getExclusiveUIExtension();
 
-		/**
-		 * Exectutes the terminate method for all the extensions, in the reverse
-		 * order they were initialized
-		 *
-		 */
-		private void finalizeExtensions() {
-			for (int i=extensions.size()-1; i>=0; i--) {
-				com.iver.andami.plugins.IExtension extensionInstance=(com.iver.andami.plugins.IExtension)extensions.get(i);
-				extensionInstance.terminate();
-			}
-		}
+            for (int i = extensions.size() - 1; i >= 0; i--) {
+                com.iver.andami.plugins.IExtension extensionInstance = extensions.get(i);
+                IExtensionStatus status = null;
+                if (exclusiveExtension != null) {
+                    status = exclusiveExtension.getStatus(extensionInstance);
+                } else {
+                    status = extensionInstance.getStatus();
+                }
+                if (status != null) {
+                    if (status.hasUnsavedData()) {
+                        IUnsavedData[] array = status.getUnsavedData();
+                        for (int element = 0; element < array.length; element++) {
+                            unsavedDataList.add(array[element]);
+                        }
+                    }
+                }
+            }
+            return unsavedDataList;
+        }
 
+        public UnsavedDataPanel getUnsavedDataPanel() {
+            if (panel == null) {
+                panel = new UnsavedDataPanel(new IUnsavedData[0]);
+            }
+            return panel;
+        }
 
-		private ArrayList getUnsavedData() {
-			ArrayList unsavedDataList = new ArrayList();
-			IExtension exclusiveExtension=PluginServices.getExclusiveUIExtension();
+        /**
+         * Checks if the extensions have some unsaved data, and shows a dialog
+         * to allow saving it. This dialog also allows to don't exit Andami.
+         *
+         * @return true if the user confirmed he wishes to exit, false otherwise
+         */
+        public int manageUnsavedData() {
+            ArrayList<IUnsavedData> unsavedDataList = getUnsavedData();
 
-			for (int i=extensions.size()-1; i>=0; i--) {
-				com.iver.andami.plugins.IExtension extensionInstance=(com.iver.andami.plugins.IExtension)extensions.get(i);
-				IExtensionStatus status = null;
-				if (exclusiveExtension!=null) {
-					status = exclusiveExtension.getStatus(extensionInstance);
-				}else {
-					status = extensionInstance.getStatus();
-				}
-				if (status!=null) {
-					if (status.hasUnsavedData()) {
-						IUnsavedData[] array = status.getUnsavedData();
-						for (int element = 0; element<array.length; element++) {
-							unsavedDataList.add(array[element]);
-						}
-					}
-				}
-			}
-			return unsavedDataList;
-		}
+            // there was no unsaved data
+            if (unsavedDataList.size() == 0) {
+                int option = JOptionPane.showConfirmDialog(frame, Messages.getString("MDIFrame.quiere_salir"),
+                        Messages.getString("MDIFrame.salir"), JOptionPane.YES_NO_OPTION);
+                return option;
+            }
 
-		public UnsavedDataPanel getUnsavedDataPanel() {
-			if (panel==null) {
-				panel = new UnsavedDataPanel(new IUnsavedData[0]);
-			}
-			return panel;
-		}
-		/**
-		 * Checks if the extensions have some unsaved data, and shows a dialog
-		 * to allow saving it. This dialog also allows to don't exit Andami.
-		 *
-		 * @return true if the user confirmed he wishes to exit, false otherwise
-		 */
-		public int manageUnsavedData(){
-			ArrayList unsavedDataList = getUnsavedData();
+            // it does not work if we directly cast the array
+            IUnsavedData[] unsavedDataArray;
+            unsavedDataArray = new IUnsavedData[unsavedDataList.size()];
+            System.arraycopy(unsavedDataList.toArray(), 0, unsavedDataArray, 0, unsavedDataList.size());
 
-			// there was no unsaved data
-			if (unsavedDataList.size()==0) {
-				int option = JOptionPane.showConfirmDialog(frame,
-						Messages.getString("MDIFrame.quiere_salir"),
-						Messages.getString("MDIFrame.salir"),
-						JOptionPane.YES_NO_OPTION);
-				return option;
-			}
+            UnsavedDataPanel panel = getUnsavedDataPanel();
+            panel.setUnsavedDataArray(unsavedDataArray);
 
-			// it does not work if we directly cast the array
-			IUnsavedData[] unsavedDataArray;
-			unsavedDataArray = new IUnsavedData[unsavedDataList.size()];
-			System.arraycopy(unsavedDataList.toArray(), 0, unsavedDataArray, 0, unsavedDataList.size());
+            panel.addActionListener(panel.new UnsavedDataPanelListener() {
+                @Override
+                public void cancel(UnsavedDataPanel panel) {
+                    proceed(false);
+                    PluginServices.getMDIManager().closeWindow(panel);
 
-			UnsavedDataPanel panel = getUnsavedDataPanel();
-			panel.setUnsavedDataArray(unsavedDataArray);
+                }
 
+                @Override
+                public void discard(UnsavedDataPanel panel) {
+                    proceed(true);
+                    PluginServices.getMDIManager().closeWindow(panel);
 
-			panel.addActionListener(panel.new UnsavedDataPanelListener() {
-				public void cancel(UnsavedDataPanel panel){
-					proceed(false);
-					PluginServices.getMDIManager().closeWindow(panel);
+                }
 
-				}
+                @Override
+                public void accept(UnsavedDataPanel panel) {
+                    IUnsavedData[] unsavedDataArray = panel.getSelectedsUnsavedData();
+                    boolean saved;
+                    for (int i = 0; i < unsavedDataArray.length; i++) {
+                        try {
+                            saved = unsavedDataArray[i].saveData();
+                        } catch (Exception ex) {
+                            PluginServices.getLogger().error("Error saving" + unsavedDataArray[i].getResourceName(),
+                                    ex);
+                            saved = false;
+                        }
+                        if (!saved) {
+                            JOptionPane.showMessageDialog(
+                                    panel,
+                                    PluginServices.getText(this, "The_following_resource_could_not_be_saved_") + "\n"
+                                            + unsavedDataArray[i].getResourceName() + " -- "
+                                            + unsavedDataArray[i].getDescription(),
+                                    PluginServices.getText(this, "Resource_was_not_saved"), JOptionPane.ERROR_MESSAGE);
 
-				public void discard(UnsavedDataPanel panel){
-					proceed(true);
-					PluginServices.getMDIManager().closeWindow(panel);
+                            ArrayList<IUnsavedData> unsavedDataList = getUnsavedData();
+                            // it does not work if we directly cast the array
+                            unsavedDataArray = new IUnsavedData[unsavedDataList.size()];
+                            System.arraycopy(unsavedDataList.toArray(), 0, unsavedDataArray, 0, unsavedDataList.size());
+                            panel.setUnsavedDataArray(unsavedDataArray);
+                            return;
+                        }
+                    }
+                    proceed(true);
+                    PluginServices.getMDIManager().closeWindow(panel);
+                }
+            });
 
-				}
+            PluginServices.getMDIManager().addWindow(panel);
+            if (proceed) {
+                return JOptionPane.YES_OPTION;
+            } else {
+                return JOptionPane.NO_OPTION;
+            }
+        }
 
-				public void accept(UnsavedDataPanel panel){
-					IUnsavedData[] unsavedDataArray = panel.getSelectedsUnsavedData();
-					boolean saved;
-					for (int i=0; i<unsavedDataArray.length; i++) {
-						try {
-							saved = unsavedDataArray[i].saveData();
-						}
-						catch (Exception ex) {
-							PluginServices.getLogger().error("Error saving"+unsavedDataArray[i].getResourceName() ,ex);
-							saved = false;
-						}
-						if (!saved) {
-							JOptionPane.showMessageDialog(
-									panel,
-									PluginServices.getText(this, "The_following_resource_could_not_be_saved_")+
-									"\n"+unsavedDataArray[i].getResourceName() + " -- "
-									+ unsavedDataArray[i].getDescription(),
-									PluginServices.getText(this, "Resource_was_not_saved"),
-									JOptionPane.ERROR_MESSAGE);
+        private void proceed(boolean proceed) {
+            this.proceed = proceed;
+        }
 
-							ArrayList unsavedDataList = getUnsavedData();
-							// it does not work if we directly cast the array
-							unsavedDataArray = new IUnsavedData[unsavedDataList.size()];
-							System.arraycopy(unsavedDataList.toArray(), 0, unsavedDataArray, 0, unsavedDataList.size());
-							panel.setUnsavedDataArray(unsavedDataArray);
-							return;
-						}
-					}
-					proceed(true);
-					PluginServices.getMDIManager().closeWindow(panel);
-				}
-			});
+    }
 
-			PluginServices.getMDIManager().addWindow(panel);
-			if (proceed) {
-				return JOptionPane.YES_OPTION;
-			}
-			else {
-				return JOptionPane.NO_OPTION;
-			}
-		}
-
-		private void proceed(boolean proceed) {
-			this.proceed = proceed;
-		}
-
-
-	}
-
-	public static TerminationProcess getTerminationProcess() {
-		return (new Launcher()).new TerminationProcess();
-	}
+    public static TerminationProcess getTerminationProcess() {
+        return (new Launcher()).new TerminationProcess();
+    }
 }

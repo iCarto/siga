@@ -174,7 +174,7 @@ public class ExtensionPage extends AbstractPreferencePage {
 					reader = new BufferedReader(reader);
 				}
 				pconfig=(PluginConfig)PluginConfig.unmarshal(reader);
-				Launcher.getPluginConfig().put(obj,pconfig);
+				Launcher.getPluginConfig().put(obj.toString(),pconfig);
 			} catch (Exception e) {
 				System.out.println("Exception unmarshalPlugin " + e);
 			}

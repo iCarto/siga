@@ -1,12 +1,10 @@
 package com.iver.core.preferences.general;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -19,132 +17,122 @@ import com.iver.andami.plugins.config.generate.PluginConfig;
 import com.iver.andami.plugins.config.generate.SkinExtension;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
-import com.iver.andami.ui.mdiManager.MDIManagerFactory;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.JComboBox;
 
+@SuppressWarnings("serial")
 public class SkinPreferences extends AbstractPreferencePage {
 
-	private String id;
-	private ImageIcon icon;
-	private Vector<String> listSkinsPlugins;
-	private JComboBox comboBox;
-	private String skinName = "com.iver.core.mdiManager.NewSkin";
-	private static Preferences prefs = Preferences.userRoot().node(
-			"gvsig.configuration.3D");
+    private final String id;
+    private final ImageIcon icon;
+    private Vector<String> listSkinsPlugins;
+    private JComboBox comboBox;
+    private String skinName = Launcher.DEFAULT_SKIN;
 
-	public SkinPreferences() {
-		super();
-		// TODO Auto-generated constructor stub
-		id = this.getClass().getName();
-		setParentID(GeneralPage.id);
-		icon = PluginServices.getIconTheme().get("gnome-settings-theme");
-	}
+    public SkinPreferences() {
+        super();
+        id = this.getClass().getName();
+        setParentID(GeneralPage.id);
+        icon = PluginServices.getIconTheme().get("gnome-settings-theme");
+    }
 
-	public void setChangesApplied() {
-		// System.out.println("ESTOY LLAMANDO A setChangesApplied()");
+    @Override
+    public void setChangesApplied() {
+    }
 
-	}
+    @Override
+    public void storeValues() throws StoreException {
+        PluginServices ps = PluginServices.getPluginServices("com.iver.core");
+        XMLEntity xml = ps.getPersistentXML();
+        xml.putProperty("Skin-Selected", skinName);
+    }
 
-	public void storeValues() throws StoreException {
-		// System.out.println("ESTOY LLAMANDO A storeValues()");
-		PluginServices ps = PluginServices.getPluginServices("com.iver.core");
-		XMLEntity xml = ps.getPersistentXML();
-		xml.putProperty("Skin-Selected", skinName);
-	}
+    @Override
+    public String getID() {
+        return id;
+    }
 
-	public String getID() {
-		return id;
-	}
+    @Override
+    public ImageIcon getIcon() {
+        return icon;
+    }
 
-	public ImageIcon getIcon() {
-		return icon;
-	}
+    @Override
+    public JPanel getPanel() {
 
-	public JPanel getPanel() {
+        if (comboBox == null) {
+            comboBox = getComboBox();
+            addComponent(new JLabel(PluginServices.getText(this, "skin_label")));
+            addComponent(comboBox);
+        }
 
-		if (comboBox == null) {
-			comboBox = getComboBox();
+        return this;
+    }
 
-			addComponent(new JLabel(PluginServices.getText(this, "skin_label")));
+    private JComboBox getComboBox() {
+        comboBox = new JComboBox(listSkinsPlugins);
 
-			addComponent(comboBox);
-		}
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                String newSkinName = (String) cb.getSelectedItem();
+                if (newSkinName != null) {
+                    if (!newSkinName.equals(skinName)) {
+                        skinName = newSkinName;
+                        JOptionPane.showMessageDialog(null, PluginServices.getText(this, "skin_message"));
+                    }
+                }
+            }
 
-		return this;
-	}
+        });
 
-	private JComboBox getComboBox() {
-		comboBox = new JComboBox(listSkinsPlugins);
+        comboBox.setSelectedItem(skinName);
+        return comboBox;
+    }
 
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox) e.getSource();
-				String newSkinName = (String) cb.getSelectedItem();
-				if (newSkinName != null)
-					if (!newSkinName.equals(skinName)) {
-						skinName = newSkinName;
-						JOptionPane.showMessageDialog(null, PluginServices
-								.getText(this, "skin_message"));
-					}
-			}
+    @Override
+    public String getTitle() {
+        return PluginServices.getText(this, "skin");
+    }
 
-		});
+    @Override
+    public void initializeDefaults() {
+    }
 
-		comboBox.setSelectedItem(skinName);
-		return comboBox;
-	}
+    @Override
+    public void initializeValues() {
 
-	public String getTitle() {
-		// TODO Auto-generated method stub
-		return PluginServices.getText(this, "skin");
-	}
+        listSkinsPlugins = new Vector<String>();
 
-	public void initializeDefaults() {
-		// TODO Auto-generated method stub
-		// System.out.println("inicialize Defaults");
+        HashMap pluginsConfig = Launcher.getPluginConfig();
+        Iterator i = pluginsConfig.keySet().iterator();
 
-	}
+        while (i.hasNext()) {
+            String name = (String) i.next();
+            PluginConfig pc = (PluginConfig) pluginsConfig.get(name);
 
-	public void initializeValues() {
-		// TODO Auto-generated method stub
-		// System.out.println("inicialize values");
+            if (pc.getExtensions().getSkinExtension() != null) {
+                SkinExtension[] se = pc.getExtensions().getSkinExtension();
+                for (int j = 0; j < se.length; j++) {
 
-		listSkinsPlugins = new Vector<String>();
+                    listSkinsPlugins.add(se[j].getClassName());
+                    System.out.println("plugin de skin + name");
+                }
+            }
+        }
 
-		HashMap pluginsConfig = Launcher.getPluginConfig();
-		Iterator i = pluginsConfig.keySet().iterator();
+        PluginServices ps = PluginServices.getPluginServices("com.iver.core");
+        XMLEntity xml = ps.getPersistentXML();
+        if (xml.contains("Skin-Selected")) {
+            skinName = xml.getStringProperty("Skin-Selected");
+        }
 
-		while (i.hasNext()) {
-			String name = (String) i.next();
-			PluginConfig pc = (PluginConfig) pluginsConfig.get(name);
+    }
 
-			if (pc.getExtensions().getSkinExtension() != null) {
-				SkinExtension[] se = pc.getExtensions().getSkinExtension();
-				for (int j=0;j<se.length;j++){
-
-					listSkinsPlugins.add(se[j].getClassName());
-					System.out.println("plugin de skin + name");
-				}
-			}
-		}
-
-
-		PluginServices ps = PluginServices.getPluginServices("com.iver.core");
-		XMLEntity xml = ps.getPersistentXML();
-		if (xml.contains("Skin-Selected")) {
-			skinName = xml.getStringProperty("Skin-Selected");
-
-		}
-
-
-
-	}
-
-	public boolean isValueChanged() {
-		// TODO Auto-generated method stub
-		// System.out.println("is value changed");
-		return true;
-	}
+    @Override
+    public boolean isValueChanged() {
+        return true;
+    }
 
 }

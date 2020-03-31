@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
+
+    <xml-tag>
+        <property key="Skin-Selected" value="es.icarto.gvsig.andami.ui.skin.IcartoSkin"/>
+        <property key="com.iver.andami.pluginName" value="com.iver.core"/>
+    </xml-tag>
  
 	<xml-tag>
         <property key="options.view.open_view_window_maximized" value="true"/>
