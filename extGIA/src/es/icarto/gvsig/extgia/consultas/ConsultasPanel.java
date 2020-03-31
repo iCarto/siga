@@ -25,11 +25,13 @@ import javax.swing.JRadioButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
+import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.toedter.calendar.JDateChooser;
 
 import es.icarto.gvsig.commons.queries.Component;
 import es.icarto.gvsig.commons.queries.CustomiceDialog;
 import es.icarto.gvsig.commons.queries.Utils;
+import es.icarto.gvsig.commons.queries.ValidatableForm;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
@@ -60,6 +62,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
     public ConsultasPanel() {
 
 	super();
+	setWindowTitle("Consultas Inventario");
 	Calendar calendar = Calendar.getInstance();
 	fechaInicio = (JDateChooser) formPanel
 		.getComponentByName("fecha_inicio");
@@ -319,4 +322,5 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
     protected String getBasicName() {
 	return "consultas_inventario";
     }
+    
 }

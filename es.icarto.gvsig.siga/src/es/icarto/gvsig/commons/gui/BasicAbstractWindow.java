@@ -17,20 +17,9 @@ public abstract class BasicAbstractWindow extends AbstractIWindow {
 
     public BasicAbstractWindow() {
 	super();
-//	ormlite = new ORMLite(getClass().getClassLoader()
-//		.getResource("rules/" + getBasicName() + ".xml").getPath());
 	formPanel = getFormPanel();
 	this.add(formPanel);
 	addImageHandler("image", PreferencesPage.SIGA_LOGO);
-//	widgets = AbeilleParser.getWidgetsFromContainer(formPanel);
-//	dependencyHandler = new DependencyHandler(ormlite, widgets, this);
-//	mockController = new MockController(widgets);
-//	fillHandler = new FillHandler(widgets, mockController,
-//		ormlite.getAppDomain());
-//	chainedHandler = new ChainedHandler();
-//	initWidgets();
-//	fillValues();
-//	setListeners();
     }
 
     public FormPanel getFormPanel() {
@@ -52,6 +41,16 @@ public abstract class BasicAbstractWindow extends AbstractIWindow {
 
     protected abstract String getBasicName();
 
+    /**
+     * Instead of create an implementation of ImageHandler that only sets a path
+     * (FixedImageHandler) this utiliy method sets the image without doing
+     * anything more
+     * 
+     * @param imgComponent
+     *            . Name of the abeille widget
+     * @param absPath
+     *            . Absolute path to the image or relative path from andami.jar
+     */
     protected void addImageHandler(String imgComponent, String absPath) {
 	ImageComponent image = (ImageComponent) formPanel.getComponentByName(imgComponent);
         if (image != null) {

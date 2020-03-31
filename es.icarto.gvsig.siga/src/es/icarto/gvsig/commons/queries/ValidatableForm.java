@@ -1,4 +1,4 @@
-package es.icarto.gvsig.extgia.consultas;
+package es.icarto.gvsig.commons.queries;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -20,6 +20,7 @@ import com.jeta.forms.gui.common.FormException;
 import com.toedter.calendar.JDateChooser;
 
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
+import es.icarto.gvsig.commons.gui.BasicAbstractWindow;
 import es.icarto.gvsig.navtableforms.DependencyHandler;
 import es.icarto.gvsig.navtableforms.FillHandler;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
@@ -31,7 +32,7 @@ import es.udc.cartolab.gvsig.navtable.dataacces.IController;
 import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 
 @SuppressWarnings("serial")
-public abstract class ValidatableForm extends AbstractIWindow implements
+public abstract class ValidatableForm extends BasicAbstractWindow implements
 	IValidatableForm {
 
     private final ORMLite ormlite;
@@ -44,6 +45,7 @@ public abstract class ValidatableForm extends AbstractIWindow implements
     private boolean fillingValues;
 
     public ValidatableForm() {
+        // don't call super if you don't understand what you are doing
 	ormlite = new ORMLite(getClass().getClassLoader()
 		.getResource("rules/" + getBasicName() + ".xml").getPath());
 	formPanel = getFormPanel();
@@ -86,25 +88,9 @@ public abstract class ValidatableForm extends AbstractIWindow implements
 	fillingValues = false;
     }
 
-    protected abstract String getBasicName();
+    
 
-    @Override
-    public FormPanel getFormPanel() {
-	if (formPanel == null) {
-	    InputStream stream = getClass().getClassLoader()
-		    .getResourceAsStream("/forms/" + getBasicName() + ".jfrm");
-	    if (stream == null) {
-	        stream = getClass().getClassLoader().getResourceAsStream(
-	            "/forms/" + getBasicName() + ".xml");
-	        }
-	    try {
-		formPanel = new FormPanel(stream);
-	    } catch (FormException e) {
-		e.printStackTrace();
-	    }
-	}
-	return formPanel;
-    }
+
 
     @Override
     public boolean isFillingValues() {
@@ -175,22 +161,8 @@ public abstract class ValidatableForm extends AbstractIWindow implements
 	chainedHandler.add(this, widgets.get(chained), parentList);
     }
 
-    /**
-     * Instead of create an implementation of ImageHandler that only sets a path
-     * (FixedImageHandler) this utiliy method sets the image without doing
-     * anything more
-     * 
-     * @param imgComponent
-     *            . Name of the abeille widget
-     * @param absPath
-     *            . Absolute path to the image or relative path from andami.jar
-     */
-    protected void addImageHandler(String imgComponent, String absPath) {
-	ImageComponent image = (ImageComponent) formPanel
-		.getComponentByName(imgComponent);
-	ImageIcon icon = new ImageIcon(absPath);
-	image.setIcon(icon);
-    }
+
+
 
     @Override
     protected JButton getDefaultButton() {

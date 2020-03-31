@@ -25,10 +25,10 @@ import es.icarto.gvsig.commons.queries.CustomiceDialog;
 import es.icarto.gvsig.commons.queries.FinalActions;
 import es.icarto.gvsig.commons.queries.QueriesWidget;
 import es.icarto.gvsig.commons.queries.Utils;
+import es.icarto.gvsig.commons.queries.ValidatableForm;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgex.forms.expropiations.FormExpropiations;
 import es.icarto.gvsig.extgex.preferences.DBNames;
-import es.icarto.gvsig.extgia.consultas.ValidatableForm;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -49,14 +49,14 @@ public class QueriesPanel extends ValidatableForm implements ActionListener {
 
     public QueriesPanel() {
         super();
-        setWindowTitle("Consultas");
-        setWindowInfoProperties(WindowInfo.MODELESSDIALOG);
-        addImageHandler("image", PreferencesPage.SIGA_LOGO);
+        setWindowTitle("Consultas Expropiaciones");
+        
     }
 
     @Override
     protected void initWidgets() {
         super.initWidgets();
+        addImageHandler("image", PreferencesPage.SIGA_LOGO);
         addChained("uc", DBNames.FIELD_TRAMO_FINCAS);
         addChained(DBNames.FIELD_AYUNTAMIENTO_FINCAS, "uc");
         addChained(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS, "uc", DBNames.FIELD_AYUNTAMIENTO_FINCAS);

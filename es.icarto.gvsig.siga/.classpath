@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="/extCAD/lib/Smc.jar"/>
 	<classpathentry kind="src" path="/extGeoProcessing"/>
 	<classpathentry kind="src" path="/libTopology"/>
+	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
