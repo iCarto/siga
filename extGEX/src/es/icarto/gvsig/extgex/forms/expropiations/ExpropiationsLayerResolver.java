@@ -102,10 +102,12 @@ public class ExpropiationsLayerResolver {
         ArrayList<KeyValue> domainValuesForTramo = ormLite.getAppDomain()
                 .getDomainValuesForComponent(DBNames.FIELD_TRAMO_FINCAS).getValues();
         List<KeyValue> tramos = getTramosWithHardcodedOrder();
+        boolean addVoidValue = false;
         if (layer.getName().equals(FormExpropiations.TOCNAME)) {
             domainValuesForTramo.removeAll(tramos);
         } else {
             domainValuesForTramo.clear();
+            addVoidValue = true;
             for (KeyValue t : tramos) {
                 String ttt = getLayerNameBasedOnTramo(t.getKey());
                 if (ttt.equals(layer.getName())) {
@@ -113,8 +115,7 @@ public class ExpropiationsLayerResolver {
                 }
             }
         }
-        DomainValues foo = new DomainValues(domainValuesForTramo);
-
+        DomainValues foo = new DomainValues(domainValuesForTramo, addVoidValue);
         ormLite.getAppDomain().addDomainValues(DBNames.FIELD_TRAMO_FINCAS, foo);
     }
 }

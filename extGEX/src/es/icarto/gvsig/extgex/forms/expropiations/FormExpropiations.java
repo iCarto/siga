@@ -30,12 +30,14 @@ import org.apache.log4j.Logger;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
+import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.jeta.forms.components.panel.FormPanel;
 import com.jeta.forms.gui.common.FormException;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.commons.utils.StrUtils;
 import es.icarto.gvsig.extgex.navtable.NavTableComponentsFactory;
 import es.icarto.gvsig.extgex.preferences.DBNames;
 import es.icarto.gvsig.extgex.utils.retrievers.LocalizadorFormatter;
@@ -516,4 +518,19 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
         concesionariaLb.setText(infoEmpresa.getSubtitle(tramoValue));
     }
 
+    @Override
+    public boolean saveRecord() throws StopWriterVisitorException {
+
+        /*
+         * Workaround. Para forzar al usuario a escoger un tramo (si no no se rellena el LayerController se meten
+         * valores void a todos los combos. Para parroquia, por algún bug probablemente en
+         * FillHandler.setDomainValueSelected no se rellena bien el valor cuando está a nulo
+         */
+        String subtramoV = getFormController().getValue(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS);
+        if (StrUtils.isEmptyString(subtramoV)) {
+            getFormController().setValue(DBNames.FIELD_PARROQUIASUBTRAMO_FINCAS,
+                    LocalizadorFormatter.SUBTRAMO_DEFAULT_VALUE);
+        }
+        return super.saveRecord();
+    }
 }
