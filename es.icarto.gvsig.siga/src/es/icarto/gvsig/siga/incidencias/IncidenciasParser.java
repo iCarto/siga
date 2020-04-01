@@ -58,8 +58,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class IncidenciasParser {
 
-    private static final Logger logger = Logger
-	    .getLogger(IncidenciasParser.class);
+    private static final Logger logger = Logger.getLogger(IncidenciasParser.class);
 
     private final Sheet sheet;
 
@@ -84,432 +83,405 @@ public class IncidenciasParser {
     private final List<IFeature> featureList = new ArrayList<IFeature>();
     private final List<double[]> coordList = new ArrayList<double[]>();
 
-    public IncidenciasParser(View view, File file) throws IOException,
-	    InvalidFormatException {
-	this.view = view;
-	collator = Collator.getInstance();
-	collator.setStrength(Collator.PRIMARY);
+    public IncidenciasParser(View view, File file) throws IOException, InvalidFormatException {
+        this.view = view;
+        collator = Collator.getInstance();
+        collator.setStrength(Collator.PRIMARY);
 
-	cw = new ConnectionWrapper(DBSession.getCurrentSession()
-		.getJavaConnection());
+        cw = new ConnectionWrapper(DBSession.getCurrentSession().getJavaConnection());
 
-	/**
-	 * Enum is singleton. So header idx is set from previous executions
-	 */
-	for (Header h : Header.values()) {
-	    h.setIdx(-1);
-	}
+        /**
+         * Enum is singleton. So header idx is set from previous executions
+         */
+        for (Header h : Header.values()) {
+            h.setIdx(-1);
+        }
 
-	this.file = file;
+        this.file = file;
 
-	if ((file == null) || (!file.isFile())) {
-	    throw new IOException("El fichero no existe");
-	}
+        if ((file == null) || (!file.isFile())) {
+            throw new IOException("El fichero no existe");
+        }
 
-	Workbook wb = WorkbookFactory.create(file);
+        Workbook wb = WorkbookFactory.create(file);
 
-	int sheetIdx = wb.getActiveSheetIndex();
-	if (sheetIdx != 0) {
-	    addWarning("La última hoja empleada no es la primera del libro. Compruebe que esto es correcto");
-	}
-	sheet = wb.getSheetAt(sheetIdx);
+        int sheetIdx = wb.getActiveSheetIndex();
+        if (sheetIdx != 0) {
+            addWarning("La última hoja empleada no es la primera del libro. Compruebe que esto es correcto");
+        }
+        sheet = wb.getSheetAt(sheetIdx);
     }
 
     private void addWarning(String string) {
-	warnings.add(string);
+        warnings.add(string);
     }
 
     public void parse() {
-	initHeader();
-	initFeatures();
+        initHeader();
+        initFeatures();
     }
 
     private void initHeader() {
-	for (Cell cell : sheet.getRow(0)) {
-	    if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-		final String value = cell.getStringCellValue();
+        for (Cell cell : sheet.getRow(0)) {
+            if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                final String value = cell.getStringCellValue();
 
-		final int columnIdx = cell.getColumnIndex();
-		if (collator.compare(value, "TRAMO") == 0) {
-		    tramoIdx = columnIdx;
-		} else if ((collator.compare(value, "CARACTERÍSTICAS VÍA") == 0)
-			|| (collator.compare(value, "TIPO VÍA") == 0)) {
-		    tipoViaIdx = columnIdx;
-		} else if ((collator.compare(value, "LUGAR") == 0)
-			|| (collator.compare(value, "NOMBRE") == 0)) {
-		    nombreIdx = columnIdx;
-		} else if (collator.compare(value, "P.K.") == 0) {
-		    pkIdx = columnIdx;
-		} else if (collator.compare(value, "RAMAL") == 0) {
-		    ramalIdx = columnIdx;
-		} else if (collator.compare(value, "SENTIDO") == 0) {
-		    sentidoIdx = columnIdx;
-		}
+                final int columnIdx = cell.getColumnIndex();
+                if (collator.compare(value, "TRAMO") == 0) {
+                    tramoIdx = columnIdx;
+                } else if ((collator.compare(value, "CARACTERÍSTICAS VÍA") == 0)
+                        || (collator.compare(value, "TIPO VÍA") == 0)) {
+                    tipoViaIdx = columnIdx;
+                } else if ((collator.compare(value, "LUGAR") == 0) || (collator.compare(value, "NOMBRE") == 0)) {
+                    nombreIdx = columnIdx;
+                } else if (collator.compare(value, "P.K.") == 0) {
+                    pkIdx = columnIdx;
+                } else if (collator.compare(value, "RAMAL") == 0) {
+                    ramalIdx = columnIdx;
+                } else if (collator.compare(value, "SENTIDO") == 0) {
+                    sentidoIdx = columnIdx;
+                }
 
-		header.add(value);
-		setEnumHeaderIdx(value, columnIdx);
+                header.add(value);
+                setEnumHeaderIdx(value, columnIdx);
 
-		if (collator.compare(value, "Seguimiento") == 0) {
-		    break;
-		}
+                if (collator.compare(value, "Seguimiento") == 0) {
+                    break;
+                }
 
-	    } else {
-		addWarning("La primera fila tiene una cabecera incorrecta o menos valores que otras filas");
-	    }
-	}
+            } else {
+                addWarning("La primera fila tiene una cabecera incorrecta o menos valores que otras filas");
+            }
+        }
 
-	if (header.indexOf("Motivo") == -1) {
-	    header.add("Motivo");
-	    pushMotivo = true;
-	    setEnumHeaderIdx("Motivo", header.size() - 1);
-	}
+        if (header.indexOf("Motivo") == -1) {
+            header.add("Motivo");
+            pushMotivo = true;
+            setEnumHeaderIdx("Motivo", header.size() - 1);
+        }
 
-	if (tramoIdx == -1) {
-	    throw new RuntimeException(
-		    "Cabecera incorrecta. Es necesario que la columna 'TRAMO' esté presente en la cabecera");
-	}
-	if (tipoViaIdx == -1) {
-	    throw new RuntimeException(
-		    "Cabecera incorrecta. Es necesario que la columna 'TIPO VÍA' o 'CARACTERÍSTICAS VÍA' esté presente en la cabecera");
-	}
-	if (nombreIdx == -1) {
-	    throw new RuntimeException(
-		    "Cabecera incorrecta. Es necesario que la columna 'LUGAR' o 'NOMBRE' esté presente en la cabecera");
-	}
-	if (pkIdx == -1) {
-	    throw new RuntimeException(
-		    "Cabecera incorrecta. Es necesario que la columna 'P.K.' esté presente en la cabecera");
-	}
-	if (ramalIdx == -1) {
-	    throw new RuntimeException(
-		    "Cabecera incorrecta. Es necesario que la columna 'RAMAL' esté presente en la cabecera");
-	}
-	if (sentidoIdx == -1) {
-	    throw new RuntimeException(
-		    "Cabecera incorrecta. Es necesario que la columna 'SENTIDO' esté presente en la cabecera");
-	}
+        if (tramoIdx == -1) {
+            throw new RuntimeException(
+                    "Cabecera incorrecta. Es necesario que la columna 'TRAMO' esté presente en la cabecera");
+        }
+        if (tipoViaIdx == -1) {
+            throw new RuntimeException(
+                    "Cabecera incorrecta. Es necesario que la columna 'TIPO VÍA' o 'CARACTERÍSTICAS VÍA' esté presente en la cabecera");
+        }
+        if (nombreIdx == -1) {
+            throw new RuntimeException(
+                    "Cabecera incorrecta. Es necesario que la columna 'LUGAR' o 'NOMBRE' esté presente en la cabecera");
+        }
+        if (pkIdx == -1) {
+            throw new RuntimeException(
+                    "Cabecera incorrecta. Es necesario que la columna 'P.K.' esté presente en la cabecera");
+        }
+        if (ramalIdx == -1) {
+            throw new RuntimeException(
+                    "Cabecera incorrecta. Es necesario que la columna 'RAMAL' esté presente en la cabecera");
+        }
+        if (sentidoIdx == -1) {
+            throw new RuntimeException(
+                    "Cabecera incorrecta. Es necesario que la columna 'SENTIDO' esté presente en la cabecera");
+        }
     }
 
     private void setEnumHeaderIdx(String value, int columnIdx) {
-	Header h = Header.fromString(value);
-	if (h != null) {
-	    h.setIdx(columnIdx);
-	}
+        Header h = Header.fromString(value);
+        if (h != null) {
+            h.setIdx(columnIdx);
+        }
     }
 
     private void initFeatures() {
-	Iterator<Row> rowIterator = sheet.rowIterator();
-	rowIterator.next(); // skip header
+        Iterator<Row> rowIterator = sheet.rowIterator();
+        rowIterator.next(); // skip header
 
-	while (rowIterator.hasNext()) {
-	    Row row = rowIterator.next();
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
 
-	    if (notValidRow(row)) {
-		continue;
-	    }
+            if (notValidRow(row)) {
+                continue;
+            }
 
-	    Value[] values = new Value[header.size()];
-	    for (int i = 0; i < header.size(); i++) {
-		String str = null;
-		if ((pushMotivo) && (i == header.size() - 1)) {
-		    str = "ACCIDENTES";
-		} else {
-		    str = XLSFormatUtils.getValueAsString(row.getCell(i));
+            Value[] values = new Value[header.size()];
+            for (int i = 0; i < header.size(); i++) {
+                String str = null;
+                if ((pushMotivo) && (i == header.size() - 1)) {
+                    str = "ACCIDENTES";
+                } else {
+                    str = XLSFormatUtils.getValueAsString(row.getCell(i));
 
-		    if (Header.PK.getIdx() == i) {
-			str = SIGAFormatter.formatPkForDisplay(str);
-		    }
-		}
-		values[i] = ValueFactory.createValue(str);
-	    }
+                    if (Header.PK.getIdx() == i) {
+                        str = SIGAFormatter.formatPkForDisplay(str);
+                    }
+                }
+                values[i] = ValueFactory.createValue(str);
+            }
 
-	    TableModel results = calculateGeom(row);
-	    if (results != null) {
-		double x = (Double) results.getValueAt(0, 0);
-		double y = (Double) results.getValueAt(0, 1);
-		IGeometry geom = ShapeFactory.createPoint2D(x, y);
-		featureList.add(new DefaultFeature(geom, values));
+            TableModel results = calculateGeom(row);
+            if (results != null) {
+                double x = (Double) results.getValueAt(0, 0);
+                double y = (Double) results.getValueAt(0, 1);
+                IGeometry geom = ShapeFactory.createPoint2D(x, y);
+                featureList.add(new DefaultFeature(geom, values));
 
-		double lat = (Double) results.getValueAt(0, 2);
-		double lon = (Double) results.getValueAt(0, 3);
+                double lat = (Double) results.getValueAt(0, 2);
+                double lon = (Double) results.getValueAt(0, 3);
 
-		coordList.add(new double[] { lon, lat });
-	    }
-	}
+                coordList.add(new double[] { lon, lat });
+            }
+        }
     }
 
     private boolean notValidRow(Row row) {
-	String v = XLSFormatUtils.getValueAsString(row.getCell(0));
-	if (v.isEmpty() || v.equals(header.get(0))) {
-	    return true;
-	}
-	return false;
+        String v = XLSFormatUtils.getValueAsString(row.getCell(0));
+        if (v.isEmpty() || v.equals(header.get(0))) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * call parse first
      */
     public FLyrVect toFLyrVect(String path, boolean addToView) {
-	String shpPath = FileNameUtils.replaceExtension(file.getAbsolutePath(),
-		"shp");
-	File outfile = new File(shpPath);
+        String shpPath = FileNameUtils.replaceExtension(file.getAbsolutePath(), "shp");
+        File outfile = new File(shpPath);
 
-	FieldDescriptionFactory fdf = new FieldDescriptionFactory();
-	for (String h : header) {
-	    fdf.setDefaultStringLength(100);
-	    String normalizedColumn = Normalizer
-		    .normalize(h, Normalizer.Form.NFD)
-		    .replaceAll("[^\\p{ASCII}]", "").replace(" ", "_")
-		    .replace(".", "").toUpperCase();
-	    if (normalizedColumn.equals("SEGUIMIENT")) {
-		fdf.setDefaultStringLength(250);
-	    }
-	    fdf.addString(normalizedColumn);
-	}
-	FieldDescription[] fieldsDesc = fdf.getFields();
-	int geometryType = FShape.POINT;
+        FieldDescriptionFactory fdf = new FieldDescriptionFactory();
+        for (String h : header) {
+            fdf.setDefaultStringLength(100);
+            String normalizedColumn = Normalizer.normalize(h, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+                    .replace(" ", "_").replace(".", "").toUpperCase();
+            if (normalizedColumn.equals("SEGUIMIENT")) {
+                fdf.setDefaultStringLength(250);
+            }
+            fdf.addString(normalizedColumn);
+        }
+        FieldDescription[] fieldsDesc = fdf.getFields();
+        int geometryType = FShape.POINT;
 
-	IFeature[] features = featureList.toArray(new IFeature[0]);
+        IFeature[] features = featureList.toArray(new IFeature[0]);
 
-	FLyrVect layer = null;
-	try {
-	    SHPFactory.createSHP(outfile, fieldsDesc, geometryType, features);
-	    layer = SHPFactory.getFLyrVectFromSHP(outfile, view.getProjection()
-		    .getAbrev());
+        FLyrVect layer = null;
+        try {
+            SHPFactory.createSHP(outfile, fieldsDesc, geometryType, features);
+            layer = SHPFactory.getFLyrVectFromSHP(outfile, view.getProjection().getAbrev());
 
-	    // applySymbology(layer);
-	    LoadLegend.setLegend(layer, path, true);
-	    applyLabel(layer);
+            // applySymbology(layer);
+            LoadLegend.setLegend(layer, path, true);
+            applyLabel(layer);
 
-	    if (addToView) {
-		FLayers layers = view.getMapControl().getMapContext()
-			.getLayers();
-		layers.addLayer(layer);
-	    }
+            if (addToView) {
+                FLayers layers = view.getMapControl().getMapContext().getLayers();
+                layers.addLayer(layer);
+            }
 
-	} catch (StartWriterVisitorException e) {
-	    logger.error(e.getStackTrace(), e);
-	} catch (ProcessWriterVisitorException e) {
-	    logger.error(e.getStackTrace(), e);
-	} catch (StopWriterVisitorException e) {
-	    logger.error(e.getStackTrace(), e);
-	} catch (DriverLoadException e) {
-	    logger.error(e.getStackTrace(), e);
-	} catch (InitializeWriterException e) {
-	    logger.error(e.getStackTrace(), e);
-	}
+        } catch (StartWriterVisitorException e) {
+            logger.error(e.getStackTrace(), e);
+        } catch (ProcessWriterVisitorException e) {
+            logger.error(e.getStackTrace(), e);
+        } catch (StopWriterVisitorException e) {
+            logger.error(e.getStackTrace(), e);
+        } catch (DriverLoadException e) {
+            logger.error(e.getStackTrace(), e);
+        } catch (InitializeWriterException e) {
+            logger.error(e.getStackTrace(), e);
+        }
 
-	return layer;
+        return layer;
     }
 
     private void applyLabel(FLyrVect layer) {
-	AttrInTableLabelingStrategy st = new AttrInTableLabelingStrategy();
-	st.setFixedColor(new Color(100, 0, 0));
-	st.setFixedSize(6);
-	st.setTextField("MOTIVO");
-	st.setFont(new Font("Arial", Font.BOLD, 7));
-	st.setUsesFixedSize(true);
-	st.setUsesFixedColor(true);
-	st.setLayer(layer);
+        AttrInTableLabelingStrategy st = new AttrInTableLabelingStrategy();
+        st.setFixedColor(new Color(100, 0, 0));
+        st.setFixedSize(6);
+        st.setTextField("MOTIVO");
+        st.setFont(new Font("Arial", Font.BOLD, 7));
+        st.setUsesFixedSize(true);
+        st.setUsesFixedColor(true);
+        st.setLayer(layer);
 
-	layer.setLabelingStrategy(st);
-	layer.setIsLabeled(true);
+        layer.setLabelingStrategy(st);
+        layer.setIsLabeled(true);
     }
 
     private String kmlAddDescription(Value[] atts, Header h) {
-	final int idx = h.getIdx();
-	if (idx != -1) {
-	    final String template = "<tr><td><strong>%s<strong></td><td>%s</td></tr>";
-	    return String.format(template, h.toString(), atts[idx].toString());
-	}
-	return "";
+        final int idx = h.getIdx();
+        if (idx != -1) {
+            final String template = "<tr><td><strong>%s<strong></td><td>%s</td></tr>";
+            return String.format(template, h.toString(), atts[idx].toString());
+        }
+        return "";
     }
 
     public boolean toKml() {
 
-	// Kml unmarshal = Kml
-	// .unmarshal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\"><Document>	<name>/tmp/listado de prueba</name>	<open>1</open>	<StyleMap id=\"m_ylw-pushpin\">		<Pair>			<key>normal</key>			<styleUrl>#s_ylw-pushpin</styleUrl>		</Pair>		<Pair>			<key>highlight</key>			<styleUrl>#s_ylw-pushpin_hl</styleUrl>		</Pair>	</StyleMap>	<Style id=\"s_ylw-pushpin\">		<IconStyle>			<scale>0.7</scale>			<Icon>				<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>			</Icon>			<hotSpot x=\"20\" y=\"2\" xunits=\"pixels\" yunits=\"pixels\"/>		</IconStyle>		<LabelStyle>			<scale>0.5</scale>		</LabelStyle>		<BalloonStyle>		</BalloonStyle>		<ListStyle>		</ListStyle>	</Style>	<Style id=\"s_ylw-pushpin_hl\">		<IconStyle>			<scale>0.827273</scale>			<Icon>				<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>			</Icon>			<hotSpot x=\"20\" y=\"2\" xunits=\"pixels\" yunits=\"pixels\"/>		</IconStyle>		<LabelStyle>			<scale>0.5</scale>		</LabelStyle>		<BalloonStyle>		</BalloonStyle>		<ListStyle>		</ListStyle>	</Style>	<Placemark>		<name>ACCIDENTES</name>		<open>1</open>		<description>prueba</description>		<styleUrl>#m_ylw-pushpin</styleUrl>		<Point>			<coordinates>-8.666041999999999,42.275911,0</coordinates>		</Point>	</Placemark></Document></kml>");
-	String templatePath = getClass().getClassLoader()
-		.getResource("incidencias.kml").getPath();
-	Kml unmarshal = Kml.unmarshal(new File(templatePath));
-	List<StyleSelector> styleSelector = unmarshal.getFeature()
-		.getStyleSelector();
+        // Kml unmarshal = Kml
+        // .unmarshal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\"><Document>	<name>/tmp/listado de prueba</name>	<open>1</open>	<StyleMap id=\"m_ylw-pushpin\">		<Pair>			<key>normal</key>			<styleUrl>#s_ylw-pushpin</styleUrl>		</Pair>		<Pair>			<key>highlight</key>			<styleUrl>#s_ylw-pushpin_hl</styleUrl>		</Pair>	</StyleMap>	<Style id=\"s_ylw-pushpin\">		<IconStyle>			<scale>0.7</scale>			<Icon>				<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>			</Icon>			<hotSpot x=\"20\" y=\"2\" xunits=\"pixels\" yunits=\"pixels\"/>		</IconStyle>		<LabelStyle>			<scale>0.5</scale>		</LabelStyle>		<BalloonStyle>		</BalloonStyle>		<ListStyle>		</ListStyle>	</Style>	<Style id=\"s_ylw-pushpin_hl\">		<IconStyle>			<scale>0.827273</scale>			<Icon>				<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>			</Icon>			<hotSpot x=\"20\" y=\"2\" xunits=\"pixels\" yunits=\"pixels\"/>		</IconStyle>		<LabelStyle>			<scale>0.5</scale>		</LabelStyle>		<BalloonStyle>		</BalloonStyle>		<ListStyle>		</ListStyle>	</Style>	<Placemark>		<name>ACCIDENTES</name>		<open>1</open>		<description>prueba</description>		<styleUrl>#m_ylw-pushpin</styleUrl>		<Point>			<coordinates>-8.666041999999999,42.275911,0</coordinates>		</Point>	</Placemark></Document></kml>");
+        String templatePath = getClass().getClassLoader().getResource("incidencias.kml").getPath();
+        Kml unmarshal = Kml.unmarshal(new File(templatePath));
+        List<StyleSelector> styleSelector = unmarshal.getFeature().getStyleSelector();
 
-	String kmlNamePath = FileNameUtils.removeExtension(file
-		.getAbsolutePath());
-	final Kml kml = new Kml();
-	Document document = kml.createAndSetDocument().withName(kmlNamePath);
-	document.setStyleSelector(styleSelector);
+        String kmlNamePath = FileNameUtils.removeExtension(file.getAbsolutePath());
+        final Kml kml = new Kml();
+        Document document = kml.createAndSetDocument().withName(kmlNamePath);
+        document.setStyleSelector(styleSelector);
 
-	for (int i = 0; i < coordList.size(); i++) {
-	    Value[] atts = featureList.get(i).getAttributes();
+        for (int i = 0; i < coordList.size(); i++) {
+            Value[] atts = featureList.get(i).getAttributes();
 
-	    double[] coord = coordList.get(i);
+            double[] coord = coordList.get(i);
 
-	    String description = kmlDescription(atts);
-	    String name = kmlName(atts);
+            String description = kmlDescription(atts);
+            String name = kmlName(atts);
 
-	    document.createAndAddPlacemark().withName(name)
-		    .withDescription(description)
-		    .withStyleUrl("#m_ylw-pushpin").withOpen(Boolean.TRUE)
-		    .createAndSetPoint().addToCoordinates(coord[0], coord[1]);
-	}
+            document.createAndAddPlacemark().withName(name).withDescription(description)
+                    .withStyleUrl("#m_ylw-pushpin").withOpen(Boolean.TRUE).createAndSetPoint()
+                    .addToCoordinates(coord[0], coord[1]);
+        }
 
-	KMZPackager kmzPackager = new KMZPackager();
-	OutputStream os;
-	try {
-	    os = new FileOutputStream(kmlNamePath + ".kmz");
-	    DataSource kmlDataSource = new KMZPackager.KMLDataSource(kml,
-		    "doc.kml");
-	    List<FileDataSource> resourceList = new ArrayList<KMZPackager.FileDataSource>();
-	    String signal2Path = getClass().getClassLoader()
-		    .getResource("images/signal2.png").getPath();
-	    resourceList.add(new KMZPackager.FileDataSource(new File(
-		    signal2Path), "files/signal2.png"));
-	    kmzPackager.packageAsKMZ(os, kmlDataSource, resourceList);
-	} catch (FileNotFoundException e1) {
-	    logger.error(e1.getStackTrace(), e1);
-	    return false;
-	}
-	//
-	// try {
-	// kml.marshal(new File(kmlNamePath + ".kml"));
-	//
-	// } catch (FileNotFoundException e) {
-	// logger.error(e.getStackTrace(), e);
-	//
-	// }
-	return true;
+        KMZPackager kmzPackager = new KMZPackager();
+        OutputStream os;
+        try {
+            os = new FileOutputStream(kmlNamePath + ".kmz");
+            DataSource kmlDataSource = new KMZPackager.KMLDataSource(kml, "doc.kml");
+            List<FileDataSource> resourceList = new ArrayList<KMZPackager.FileDataSource>();
+            String signal2Path = getClass().getClassLoader().getResource("images/signal2.png").getPath();
+            resourceList.add(new KMZPackager.FileDataSource(new File(signal2Path), "files/signal2.png"));
+            kmzPackager.packageAsKMZ(os, kmlDataSource, resourceList);
+        } catch (FileNotFoundException e1) {
+            logger.error(e1.getStackTrace(), e1);
+            return false;
+        }
+        //
+        // try {
+        // kml.marshal(new File(kmlNamePath + ".kml"));
+        //
+        // } catch (FileNotFoundException e) {
+        // logger.error(e.getStackTrace(), e);
+        //
+        // }
+        return true;
 
     }
 
     private String kmlName(Value[] atts) {
-	return atts[Header.MOTIVO.getIdx()].toString() + ": "
-		+ atts[0].toString();
+        return atts[Header.MOTIVO.getIdx()].toString() + ": " + atts[0].toString();
     }
 
     private String kmlDescription(Value[] atts) {
-	// String description = "<![CDATA[<table>";
+        // String description = "<![CDATA[<table>";
 
-	String description = "<table>";
-	description += kmlAddDescription(atts, Header.FECHA);
-	description += kmlAddDescription(atts, Header.HORA);
-	description += kmlAddDescription(atts, Header.PK);
-	description += kmlAddDescription(atts, Header.SENTIDO);
-	description += kmlAddDescription(atts, Header.DURACION);
-	description += kmlAddDescription(atts, Header.ASISTENCIAS_MOVILIZADAS);
-	description += kmlAddDescription(atts, Header.CLIMA);
-	description += kmlAddDescription(atts, Header.CAUSAS);
-	description += kmlAddDescription(atts, Header.N_VEHICULOS);
-	description += kmlAddDescription(atts, Header.HERIDOS);
-	description += kmlAddDescription(atts, Header.MUERTOS);
-	description += kmlAddDescription(atts, Header.ASIST_SANITARIA);
-	description += kmlAddDescription(atts, Header.INFORME_ARENA);
-	description += "</table>";
-	// description += "</table>]]>";
-	return description;
+        String description = "<table>";
+        description += kmlAddDescription(atts, Header.FECHA);
+        description += kmlAddDescription(atts, Header.HORA);
+        description += kmlAddDescription(atts, Header.PK);
+        description += kmlAddDescription(atts, Header.SENTIDO);
+        description += kmlAddDescription(atts, Header.DURACION);
+        description += kmlAddDescription(atts, Header.ASISTENCIAS_MOVILIZADAS);
+        description += kmlAddDescription(atts, Header.CLIMA);
+        description += kmlAddDescription(atts, Header.CAUSAS);
+        description += kmlAddDescription(atts, Header.N_VEHICULOS);
+        description += kmlAddDescription(atts, Header.TOTAL_VEHICULOS);
+        description += kmlAddDescription(atts, Header.HERIDOS);
+        description += kmlAddDescription(atts, Header.HERIDOS_LEVES);
+        description += kmlAddDescription(atts, Header.HERIDOS_GRAVES);
+        description += kmlAddDescription(atts, Header.MUERTOS);
+        description += kmlAddDescription(atts, Header.ASIST_SANITARIA);
+        description += kmlAddDescription(atts, Header.INFORME_ARENA);
+        description += kmlAddDescription(atts, Header.INFORME_GCT);
+
+        description += "</table>";
+        // description += "</table>]]>";
+        return description;
     }
 
     private TableModel calculateGeom(Row row) {
-	String tramo = XLSFormatUtils.getValueAsString(row.getCell(tramoIdx));
-	String tipoVia = XLSFormatUtils.getValueAsString(row.getCell(tipoViaIdx));
-	String nombre = XLSFormatUtils.getValueAsString(row.getCell(nombreIdx));
+        String tramo = XLSFormatUtils.getValueAsString(row.getCell(tramoIdx));
+        String tipoVia = XLSFormatUtils.getValueAsString(row.getCell(tipoViaIdx));
+        String nombre = XLSFormatUtils.getValueAsString(row.getCell(nombreIdx));
 
-	String pkStr = XLSFormatUtils.getValueAsString(row.getCell(pkIdx));
-	String pkformatted = SIGAFormatter.formatPkForDouble(pkStr);
+        String pkStr = XLSFormatUtils.getValueAsString(row.getCell(pkIdx));
+        String pkformatted = SIGAFormatter.formatPkForDouble(pkStr);
 
-	String ramal = XLSFormatUtils.getValueAsString(row.getCell(ramalIdx));
-	String sentido = XLSFormatUtils.getValueAsString(row.getCell(sentidoIdx));
-	sentido = sentido.isEmpty() ? "Ambos" : sentido;
+        String ramal = XLSFormatUtils.getValueAsString(row.getCell(ramalIdx));
+        String sentido = XLSFormatUtils.getValueAsString(row.getCell(sentidoIdx));
+        sentido = sentido.isEmpty() ? "Ambos" : sentido;
 
-	if (tramo.isEmpty() || tipoVia.isEmpty()) {
-	    addLocalizedWarning("Tramo y Tipo Via son campos obligatorios.",
-		    row.getRowNum() + 1, tramo, tipoVia, nombre, pkformatted,
-		    ramal, sentido);
-	    return null;
-	}
+        if (tramo.isEmpty() || tipoVia.isEmpty()) {
+            addLocalizedWarning("Tramo y Tipo Via son campos obligatorios.", row.getRowNum() + 1, tramo, tipoVia,
+                    nombre, pkformatted, ramal, sentido);
+            return null;
+        }
 
-	String query = String
-		.format("select x_utm, y_utm, latitud, longitud from audasa_aplicaciones.incidencias where tipo_via = '%s' and tramo = '%s' ",
-			tipoVia, tramo);
+        String query = String
+                .format("select x_utm, y_utm, latitud, longitud from audasa_aplicaciones.incidencias where tipo_via = '%s' and tramo = '%s' ",
+                        tipoVia, tramo);
 
-	if ((collator.compare(tipoVia, "A. de Descanso") == 0)
-		|| (collator.compare(tipoVia, "A. de Servicio") == 0)
-		|| (collator.compare(tipoVia, "A. de Manto.") == 0)
-		|| (collator.compare(tipoVia, "Enlace") == 0)) {
-	    // ramal is a workaround. table have null in ramal but excel is ''
-	    // but more cases should be checked before a more general solution
-	    query += String
-		    .format(" and nombre = '%s' and ((ramal = '%s') or ((ramal is null) and ('%s' = ''))) and sentido = '%s'",
-			    nombre, ramal, ramal, sentido);
+        if ((collator.compare(tipoVia, "A. de Descanso") == 0) || (collator.compare(tipoVia, "A. de Servicio") == 0)
+                || (collator.compare(tipoVia, "A. de Manto.") == 0) || (collator.compare(tipoVia, "Enlace") == 0)) {
+            // ramal is a workaround. table have null in ramal but excel is ''
+            // but more cases should be checked before a more general solution
+            query += String.format(
+                    " and nombre = '%s' and ((ramal = '%s') or ((ramal is null) and ('%s' = ''))) and sentido = '%s'",
+                    nombre, ramal, ramal, sentido);
 
-	} else if (collator.compare(tipoVia, "Estación de Peaje") == 0) {
-	    query += String.format(" and nombre = '%s' and sentido = '%s'",
-		    nombre, sentido);
+        } else if (collator.compare(tipoVia, "Estación de Peaje") == 0) {
+            query += String.format(" and nombre = '%s' and sentido = '%s'", nombre, sentido);
 
-	} else if (collator.compare(tipoVia, "Intercambiador") == 0) {
-	    if (pkformatted.isEmpty()) {
-		addLocalizedWarning("PK es un campo obligatorio",
-			row.getRowNum() + 1, tramo, tipoVia, nombre,
-			pkformatted, ramal, sentido);
-	    }
-	    query += String.format(
-		    " and nombre = '%s' and abs(pk - %s) < 0.01", nombre,
-		    pkformatted);
-	} else if (collator.compare(tipoVia, "Tronco") == 0) {
-	    if (pkformatted.isEmpty()) {
-		addLocalizedWarning("PK es un campo obligatorio",
-			row.getRowNum() + 1, tramo, tipoVia, nombre,
-			pkformatted, ramal, sentido);
-	    }
-	    query += String.format(
-		    " and sentido = '%s' and abs(pk - %s) < 0.01", sentido,
-		    pkformatted);
-	} else if (collator.compare(tipoVia, "Túnel") == 0) {
-	    if (pkformatted.isEmpty()) {
-		addLocalizedWarning("PK es un campo obligatorio",
-			row.getRowNum() + 1, tramo, tipoVia, nombre,
-			pkformatted, ramal, sentido);
-	    }
-	    query += String
-		    .format(" and nombre = '%s' and sentido = '%s' and abs(pk - %s) < 0.01",
-			    nombre, sentido, pkformatted);
+        } else if (collator.compare(tipoVia, "Intercambiador") == 0) {
+            if (pkformatted.isEmpty()) {
+                addLocalizedWarning("PK es un campo obligatorio", row.getRowNum() + 1, tramo, tipoVia, nombre,
+                        pkformatted, ramal, sentido);
+            }
+            query += String.format(" and nombre = '%s' and abs(pk - %s) < 0.01", nombre, pkformatted);
+        } else if (collator.compare(tipoVia, "Tronco") == 0) {
+            if (pkformatted.isEmpty()) {
+                addLocalizedWarning("PK es un campo obligatorio", row.getRowNum() + 1, tramo, tipoVia, nombre,
+                        pkformatted, ramal, sentido);
+            }
+            query += String.format(" and sentido = '%s' and abs(pk - %s) < 0.01", sentido, pkformatted);
+        } else if (collator.compare(tipoVia, "Túnel") == 0) {
+            if (pkformatted.isEmpty()) {
+                addLocalizedWarning("PK es un campo obligatorio", row.getRowNum() + 1, tramo, tipoVia, nombre,
+                        pkformatted, ramal, sentido);
+            }
+            query += String.format(" and nombre = '%s' and sentido = '%s' and abs(pk - %s) < 0.01", nombre, sentido,
+                    pkformatted);
 
-	}
-	query += " LIMIT 1;";
+        }
+        query += " LIMIT 1;";
 
-	DefaultTableModel results = cw.execute(query);
+        DefaultTableModel results = cw.execute(query);
 
-	if (results.getRowCount() == 0) {
-	    addLocalizedWarning("", row.getRowNum() + 1, tramo, tipoVia,
-		    nombre, pkformatted, ramal, sentido);
-	    return null;
-	}
-	return results;
+        if (results.getRowCount() == 0) {
+            addLocalizedWarning("", row.getRowNum() + 1, tramo, tipoVia, nombre, pkformatted, ramal, sentido);
+            return null;
+        }
+        return results;
     }
 
-    private void addLocalizedWarning(String string, int rowNumber,
-	    String tramo, String tipoVia, String nombre, String pkformatted,
-	    String ramal, String sentido) {
-	tramo = tramo.isEmpty() ? " - " : tramo;
-	tipoVia = tipoVia.isEmpty() ? " - " : tipoVia;
-	nombre = nombre.isEmpty() ? " - " : nombre;
-	pkformatted = pkformatted.isEmpty() ? " - "
-		: SIGAFormatter.formatPkForDisplay(pkformatted);
-	ramal = ramal.isEmpty() ? " - " : ramal;
-	sentido = sentido.isEmpty() ? " - " : sentido;
-	addWarning(String
-		.format("Fila %d no localizada. %s Tramo: %s. Tipo vía: %s. Nombre: %s. PK: %s. Ramal: %s. Sentido: %s",
-			rowNumber, string, tramo, tipoVia, nombre, pkformatted,
-			ramal, sentido));
+    private void addLocalizedWarning(String string, int rowNumber, String tramo, String tipoVia, String nombre,
+            String pkformatted, String ramal, String sentido) {
+        tramo = tramo.isEmpty() ? " - " : tramo;
+        tipoVia = tipoVia.isEmpty() ? " - " : tipoVia;
+        nombre = nombre.isEmpty() ? " - " : nombre;
+        pkformatted = pkformatted.isEmpty() ? " - " : SIGAFormatter.formatPkForDisplay(pkformatted);
+        ramal = ramal.isEmpty() ? " - " : ramal;
+        sentido = sentido.isEmpty() ? " - " : sentido;
+        addWarning(String.format(
+                "Fila %d no localizada. %s Tramo: %s. Tipo vía: %s. Nombre: %s. PK: %s. Ramal: %s. Sentido: %s",
+                rowNumber, string, tramo, tipoVia, nombre, pkformatted, ramal, sentido));
     }
 
     public List<String> getHeader() {
-	return header;
+        return header;
     }
 
     public List<String> getWarnings() {
-	return warnings;
+        return warnings;
     }
 
     // private void applySymbology(FLyrVect layer) {
