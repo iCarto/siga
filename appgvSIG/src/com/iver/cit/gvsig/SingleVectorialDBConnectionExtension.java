@@ -58,7 +58,6 @@ import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.DBConnectionManagerDialog;
 
-
 /**
  * This extension allows the user to access the single connection manager dialog
  *
@@ -74,61 +73,50 @@ public class SingleVectorialDBConnectionExtension extends Extension {
      * This method simply loads the connections stored in gvSIG's persistence file
      * as closed connections
      */
+    @Override
     public void initialize() {
         loadPersistenceConnections();
         registerIcons();
     }
 
-    private void registerIcons(){
-    	PluginServices.getIconTheme().register(
-    			"conn-image",
-    			this.getClass().getClassLoader().getResource("images/conn.png")
-    	);
-    	PluginServices.getIconTheme().register(
-    			"disconn-image",
-    			this.getClass().getClassLoader().getResource("images/disconn.png")
-    	);
+    private void registerIcons() {
+        PluginServices.getIconTheme().register("conn-image",
+                this.getClass().getClassLoader().getResource("images/conn.png"));
+        PluginServices.getIconTheme().register("disconn-image",
+                this.getClass().getClassLoader().getResource("images/disconn.png"));
 
     }
 
-    /**
-     * The only command available is the one to open the connection manager
-     * dialog ("GESTOR_JDBC")
-     */
+    @Override
     public void execute(String actionCommand) {
-        if (actionCommand.compareToIgnoreCase("GESTOR_VECTORIALDB") == 0) {
-            DBConnectionManagerDialog dlg = new DBConnectionManagerDialog();
-            dlg.showDialog();
-//            saveAllToPersistence();
-
-            return;
-        }
+        DBConnectionManagerDialog dlg = new DBConnectionManagerDialog();
+        dlg.showDialog();
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @Override
     public boolean isVisible() {
         return true;
     }
 
     public static void saveAllToPersistence() {
-        SingleVectorialDBConnectionExtension ext=new SingleVectorialDBConnectionExtension();
-    	XMLEntity xml = PluginServices.getPluginServices(ext).getPersistentXML();
-        xml.putProperty("literalDBName",true);
+        SingleVectorialDBConnectionExtension ext = new SingleVectorialDBConnectionExtension();
+        XMLEntity xml = PluginServices.getPluginServices(ext).getPersistentXML();
         xml.remove("db-connections");
 
-        ConnectionWithParams[] all = SingleDBConnectionManager.instance()
-                                                                .getAllConnections();
+        ConnectionWithParams[] all = SingleDBConnectionManager.instance().getAllConnections();
 
         if (all == null) {
-        	PluginServices.getPluginServices(ext).setPersistentXML(xml);
+            PluginServices.getPluginServices(ext).setPersistentXML(xml);
             return;
         }
 
         for (int i = 0; i < all.length; i++) {
-            addToPersistence(all[i],ext);
+            addToPersistence(all[i], ext);
         }
     }
 
@@ -157,18 +145,18 @@ public class SingleVectorialDBConnectionExtension extends Extension {
             old = xml.getStringArrayProperty("db-connections");
         }
 
-        ArrayList oldl = stringArrayToArrayList(old);
+        ArrayList<String> oldl = stringArrayToArrayList(old);
         oldl.add(newstr);
 
-        String[] newarr = (String[]) oldl.toArray(new String[0]);
+        String[] newarr = oldl.toArray(new String[0]);
 
         xml.remove("db-connections");
         xml.putProperty("db-connections", newarr);
         PluginServices.getPluginServices(ext).setPersistentXML(xml);
     }
 
-    private static ArrayList stringArrayToArrayList(String[] arr) {
-        ArrayList resp = new ArrayList();
+    private static ArrayList<String> stringArrayToArrayList(String[] arr) {
+        ArrayList<String> resp = new ArrayList<String>();
 
         if ((arr != null) && (arr.length > 0)) {
             for (int i = 0; i < arr.length; i++) {
@@ -181,15 +169,6 @@ public class SingleVectorialDBConnectionExtension extends Extension {
 
     private void loadPersistenceConnections() {
         XMLEntity xml = PluginServices.getPluginServices(this).getPersistentXML();
-        boolean literalDBNames;
-
-        if (!xml.contains("literalDBName")){
-        	// For back compatibility
-        	literalDBNames = false;
-        }else{
-        	// For back compatibility: Normaly always true
-        	literalDBNames = xml.getBooleanProperty("literalDBName");
-        }
 
         if (xml == null) {
             xml = new XMLEntity();
@@ -205,11 +184,8 @@ public class SingleVectorialDBConnectionExtension extends Extension {
 
         try {
             servers = xml.getStringArrayProperty("db-connections");
-        }
-        catch (NotExistInXMLEntity e) {
-            System.err.println(
-                "Error while getting projects db-connections: " +
-                e.getMessage());
+        } catch (NotExistInXMLEntity e) {
+            System.err.println("Error while getting projects db-connections: " + e.getMessage());
 
             return;
         }
@@ -218,36 +194,34 @@ public class SingleVectorialDBConnectionExtension extends Extension {
             ConnectionSettings cs = new ConnectionSettings();
             boolean params_ok = true;
             try {
-            	cs.setFromString(servers[i]);
-            	// For back compatibility
-            	if (!literalDBNames){
-            		cs.setDb(cs.getDb().toLowerCase());
-            	}
+                cs.setFromString(servers[i]);
+
             } catch (Exception ex) {
-            	logger.error("Found misconfigured connection: " + servers[i]);
-            	params_ok = false;
+                logger.error("Found misconfigured connection: " + servers[i]);
+                params_ok = false;
             }
-            if (params_ok) addDisconnected(cs);
+            if (params_ok) {
+                addDisconnected(cs);
+            }
         }
 
-        PluginServices ps= PluginServices.getPluginServices("com.iver.cit.gvsig.jdbc_spatial");
-        if (ps==null)
-        	return;
-        XMLEntity xmlJDBC =ps.getPersistentXML();
+        PluginServices ps = PluginServices.getPluginServices("com.iver.cit.gvsig.jdbc_spatial");
+        if (ps == null) {
+            return;
+        }
+        XMLEntity xmlJDBC = ps.getPersistentXML();
 
-        if (xmlJDBC==null || !xmlJDBC.contains("jdbc-connections"))
-        	return;
+        if (xmlJDBC == null || !xmlJDBC.contains("jdbc-connections")) {
+            return;
+        }
 
-//      add drivers to connection manager
+        // add drivers to connection manager
         String[] serversOld = null;
 
         try {
             serversOld = xmlJDBC.getStringArrayProperty("jdbc-connections");
-        }
-        catch (NotExistInXMLEntity e) {
-            System.err.println(
-                "Error while getting projects jdbc-connections: " +
-                e.getMessage());
+        } catch (NotExistInXMLEntity e) {
+            System.err.println("Error while getting projects jdbc-connections: " + e.getMessage());
 
             return;
         }
@@ -256,26 +230,24 @@ public class SingleVectorialDBConnectionExtension extends Extension {
             ConnectionSettings cs = new ConnectionSettings();
             boolean params_ok = true;
             try {
-            	cs.setFromString(serversOld[i]);
-            	cs.setDb(cs.getDb().toLowerCase());
+                cs.setFromString(serversOld[i]);
+                cs.setDb(cs.getDb().toLowerCase());
             } catch (Exception ex) {
-            	logger.error("Found misconfigured connection: " + serversOld[i]);
-            	params_ok = false;
+                logger.error("Found misconfigured connection: " + serversOld[i]);
+                params_ok = false;
             }
-            if (params_ok) addDisconnected(cs);
+            if (params_ok) {
+                addDisconnected(cs);
+            }
         }
-
 
     }
 
     private void addDisconnected(ConnectionSettings _cs) {
         try {
-            SingleDBConnectionManager.instance()
-                                       .getConnection(_cs.getDriver(),
-                _cs.getUser(), null, _cs.getName(), _cs.getHost(),
-                _cs.getPort(), _cs.getDb(), _cs.getSchema(), false);
-        }
-        catch (DBException e) {
+            SingleDBConnectionManager.instance().getConnection(_cs.getDriver(), _cs.getUser(), null, _cs.getName(),
+                    _cs.getHost(), _cs.getPort(), _cs.getDb(), _cs.getSchema(), false);
+        } catch (DBException e) {
             System.err.println("While getting connection: " + e.getMessage());
             showConnectionErrorMessage(e.getMessage());
         }
@@ -284,14 +256,12 @@ public class SingleVectorialDBConnectionExtension extends Extension {
     private void showConnectionErrorMessage(String _msg) {
         String msg = (_msg.length() > 300) ? "" : (": " + _msg);
         String title = PluginServices.getText(this, "connection_error");
-        JOptionPane.showMessageDialog(null, title + msg, title,
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, title + msg, title, JOptionPane.ERROR_MESSAGE);
     }
 
+    @Override
     public void terminate() {
-    	saveAllToPersistence();
+        saveAllToPersistence();
         SingleDBConnectionManager.instance().closeAllBeforeTerminate();
     }
 }
-
-// [eiel-gestion-conexiones]

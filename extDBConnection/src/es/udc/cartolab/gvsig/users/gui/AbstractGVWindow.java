@@ -35,170 +35,152 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-public abstract class AbstractGVWindow extends JPanel implements IWindow,
-		ActionListener {
+@SuppressWarnings("serial")
+public abstract class AbstractGVWindow extends JPanel implements IWindow, ActionListener {
 
-	protected static ImageIcon headerImg = null;
-	protected static Color headerBgColor = null;
+    protected ImageIcon headerImg = null;
+    protected Color headerBgColor = null;
 
     protected int height, width;
     protected WindowInfo viewInfo = null;
     private int windowInfoCode;
-	JPanel northPanel = null;
-	JPanel southPanel = null;
-	private JButton okButton;
-	private JButton cancelButton;
+    JPanel northPanel = null;
+    JPanel southPanel = null;
+    private JButton okButton;
+    private JButton cancelButton;
     protected String title = "Abstract window";
 
-	public static void setHeader(ImageIcon headerImage) {
-		headerImg = headerImage;
-	}
+    public AbstractGVWindow(int width, int height) {
+        this.height = height;
+        this.width = width;
+        setWindowInfoCode(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
+        getWindowInfo(); // to avoid a NullPointerException
 
-	public static void setHeaderColor(Color headerColor) {
-		headerBgColor = headerColor;
-	}
+        GridBagLayout layout = new GridBagLayout();
+        setLayout(layout);
 
-	public AbstractGVWindow(int width, int height) {
-		this.height = height;
-		this.width = width;
-	setWindowInfoCode(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE);
-		getWindowInfo(); // to avoid a NullPointerException
+        add(getNorthPanel(), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH,
+                GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-		GridBagLayout layout = new GridBagLayout();
-		setLayout(layout);
+        add(getCenterPanel(), new GridBagConstraints(0, 1, 1, 1, 0, 1, GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-		add(getNorthPanel(), new GridBagConstraints(0, 0, 1, 1, 0, 0,
-				GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(
-						0, 0, 0, 0), 0, 0));
+        add(getSouthPanel(), new GridBagConstraints(0, 2, 1, 1, 10, 0, GridBagConstraints.SOUTH,
+                GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-		add(getCenterPanel(), new GridBagConstraints(0, 1, 1, 1, 0, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
-						0, 0, 0, 0), 0, 0));
-
-		add(getSouthPanel(), new GridBagConstraints(0, 2, 1, 1, 10, 0,
-				GridBagConstraints.SOUTH, GridBagConstraints.BOTH, new Insets(
-						0, 0, 0, 0), 0, 0));
-
-		// enables tabbing navigation
-		setFocusCycleRoot(true);
-	}
-
-	public AbstractGVWindow(int width, int height, ImageIcon headerImg,
-			Color headerBgColor) {
-		this(width, height);
-
-		setHeader(headerImg);
-		setHeaderColor(headerBgColor);
-
-	}
-
-    /**
-     * You should not use this constructor unless you want to make lot of stuff
-     * yourself
-     */
-    public AbstractGVWindow() {
-	super();
+        // enables tabbing navigation
+        setFocusCycleRoot(true);
     }
 
-	public WindowInfo getWindowInfo() {
-		if (viewInfo == null) {
-	    viewInfo = new WindowInfo(windowInfoCode);
-			viewInfo.setTitle(title);
-			viewInfo.setWidth(width);
-			viewInfo.setHeight(height);
-		}
-		return viewInfo;
-	}
+    public AbstractGVWindow(int width, int height, ImageIcon headerImg, Color headerBgColor) {
+        this(width, height);
+        this.headerImg = headerImg;
+        this.headerBgColor = headerBgColor;
+    }
 
-	public Object getWindowProfile() {
-	    /* fpuga: Maybe it should be a DIALOG_PROFILE, but a bug in DockingSkin, makes
-	     * that if we use that the window is not correctly resized when the checkbox of
-	     * advanced option in dbconnectiondialog is pressed
-	     */
-	    
-		return WindowInfo.EDITOR_PROFILE;
-	}
+    @Override
+    public WindowInfo getWindowInfo() {
+        if (viewInfo == null) {
+            viewInfo = new WindowInfo(windowInfoCode);
+            viewInfo.setTitle(title);
+            viewInfo.setWidth(width);
+            viewInfo.setHeight(height);
+        }
+        return viewInfo;
+    }
 
-	protected JPanel getNorthPanel() {
+    @Override
+    public Object getWindowProfile() {
+        /*
+         * fpuga: Maybe it should be a DIALOG_PROFILE, but a bug in DockingSkin, makes
+         * that if we use that the window is not correctly resized when the checkbox of
+         * advanced option in dbconnectiondialog is pressed
+         */
 
-		if (northPanel == null) {
-			northPanel = new JPanel();
-			// Set header if any
-			if (headerImg != null && headerBgColor != null) {
-				northPanel.setBackground(headerBgColor);
-				JLabel icon = new JLabel();
-				icon.setIcon(headerImg);
-				northPanel.add(icon, BorderLayout.WEST);
-				setHeight(height + headerImg.getIconHeight());
-				if (headerImg.getIconWidth() > width) {
-					setWidth(headerImg.getIconWidth());
-				}
-			}
-		}
-		return northPanel;
-	}
+        return WindowInfo.EDITOR_PROFILE;
+    }
 
-	protected JPanel getSouthPanel() {
+    protected JPanel getNorthPanel() {
 
-		if (southPanel == null) {
-			southPanel = new JPanel();
-			FlowLayout layout = new FlowLayout();
-			layout.setAlignment(FlowLayout.RIGHT);
-			southPanel.setLayout(layout);
-			okButton = new JButton(PluginServices.getText(this, "ok"));
-			cancelButton = new JButton(PluginServices.getText(this, "cancel"));
-			okButton.addActionListener(this);
-			cancelButton.addActionListener(this);
-			southPanel.add(okButton);
-			southPanel.add(cancelButton);
-		}
-		return southPanel;
-	}
+        if (northPanel == null) {
+            northPanel = new JPanel();
+            // Set header if any
+            if (headerImg != null && headerBgColor != null) {
+                northPanel.setBackground(headerBgColor);
+                JLabel icon = new JLabel();
+                icon.setIcon(headerImg);
+                northPanel.add(icon, BorderLayout.WEST);
+                setHeight(height + headerImg.getIconHeight());
+                if (headerImg.getIconWidth() > width) {
+                    setWidth(headerImg.getIconWidth());
+                }
+            }
+        }
+        return northPanel;
+    }
 
-	public void closeWindow() {
-		PluginServices.getMDIManager().closeWindow(this);
-	}
+    protected JPanel getSouthPanel() {
 
-	public void openWindow() {
-		PluginServices.getMDIManager().addCentredWindow(this);
-		getRootPane().setDefaultButton(okButton);
-		getRootPane().setFocusTraversalPolicyProvider(true);
-	if (getDefaultFocusComponent() != null) {
-	    getDefaultFocusComponent().requestFocusInWindow();
-	}
-	}
+        if (southPanel == null) {
+            southPanel = new JPanel();
+            FlowLayout layout = new FlowLayout();
+            layout.setAlignment(FlowLayout.RIGHT);
+            southPanel.setLayout(layout);
+            okButton = new JButton(PluginServices.getText(this, "ok"));
+            cancelButton = new JButton(PluginServices.getText(this, "cancel"));
+            okButton.addActionListener(this);
+            cancelButton.addActionListener(this);
+            southPanel.add(okButton);
+            southPanel.add(cancelButton);
+        }
+        return southPanel;
+    }
 
-	protected abstract JPanel getCenterPanel();
+    public void closeWindow() {
+        PluginServices.getMDIManager().closeWindow(this);
+    }
 
-	protected abstract void onOK();
+    public void openWindow() {
+        PluginServices.getMDIManager().addCentredWindow(this);
+        getRootPane().setDefaultButton(okButton);
+        getRootPane().setFocusTraversalPolicyProvider(true);
+        if (getDefaultFocusComponent() != null) {
+            getDefaultFocusComponent().requestFocusInWindow();
+        }
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == okButton) {
-			onOK();
-		}
-		if (e.getSource() == cancelButton) {
-			closeWindow();
-		}
-	}
+    protected abstract JPanel getCenterPanel();
 
-	protected void setHeight(int height) {
-		viewInfo.setHeight(height);
-		this.height = height;
-	}
+    protected abstract void onOK();
 
-	protected void setWidth(int width) {
-		viewInfo.setWidth(width);
-		this.width = width;
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == okButton) {
+            onOK();
+        }
+        if (e.getSource() == cancelButton) {
+            closeWindow();
+        }
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-		viewInfo.setTitle(title);
-	}
+    protected void setHeight(int height) {
+        viewInfo.setHeight(height);
+        this.height = height;
+    }
 
-	protected abstract Component getDefaultFocusComponent();
+    protected void setWidth(int width) {
+        viewInfo.setWidth(width);
+        this.width = width;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        viewInfo.setTitle(title);
+    }
+
+    protected abstract Component getDefaultFocusComponent();
 
     protected void setWindowInfoCode(int code) {
-	windowInfoCode = code;
-	}
+        windowInfoCode = code;
+    }
 }
