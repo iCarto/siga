@@ -450,7 +450,7 @@ public class NewSkin extends Extension implements MDIManager{
 
         centerDialog(dlg);
 
-        dlg.addWindowListener(new DialogWindowListener());
+        // dlg.addWindowListener(new DialogWindowListener());
         dss.pushDialog(dlg);
 
         dlg.setVisible(wis.getWindowInfo(p).isVisible());

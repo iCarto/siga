@@ -41,158 +41,144 @@ public class MapSheetsManipulationExtension extends Extension {
     @Override
     public void execute(String comm) {
 
-	// =============================================================================
-	// =============================================================================
-	if (comm.compareToIgnoreCase("MAP_SHEETS_TO_SHP") == 0) {
+        // =============================================================================
+        // =============================================================================
+        if (comm.compareToIgnoreCase("MAP_SHEETS_TO_SHP") == 0) {
 
-	    try {
-		IWindow w = PluginServices.getMDIManager().getActiveWindow();
+            try {
+                IWindow w = PluginServices.getMDIManager().getActiveWindow();
 
-		if (w instanceof View) {
-		    View v = (View) w;
-		    MapControl mc = v.getMapControl();
-		    MapContext mx = mc.getMapContext();
-		    ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx
-			    .getLayers());
-		    if ((act_lyrs.size() == 1)
-			    && (act_lyrs.get(0) instanceof MapSheetGrid)) {
+                if (w instanceof View) {
+                    View v = (View) w;
+                    MapControl mc = v.getMapControl();
+                    MapContext mx = mc.getMapContext();
+                    ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx.getLayers());
+                    if ((act_lyrs.size() == 1) && (act_lyrs.get(0) instanceof MapSheetGrid)) {
 
-			MapSheetGrid msg = (MapSheetGrid) act_lyrs.get(0);
-			MapSheetsUtils.toSHP(msg, mx);
+                        MapSheetGrid msg = (MapSheetGrid) act_lyrs.get(0);
+                        MapSheetsUtils.toSHP(msg, mx);
 
-		    } else {
-			throw new Exception(
-				"Did not find a MapSheetsGrid layer.");
-		    }
-		}
-	    } catch (Exception ex) {
-		NotificationManager.addError(
-			"While exporting map sheets grid to SHP. ", ex);
-	    }
+                    } else {
+                        throw new Exception("Did not find a MapSheetsGrid layer.");
+                    }
+                }
+            } catch (Exception ex) {
+                NotificationManager.addError("While exporting map sheets grid to SHP. ", ex);
+            }
 
-	}
-	// =============================================================================
-	// =============================================================================
-	if (comm.compareToIgnoreCase("MAP_SHEETS_ADJUST") == 0) {
+        }
+        // =============================================================================
+        // =============================================================================
+        if (comm.compareToIgnoreCase("MAP_SHEETS_ADJUST") == 0) {
 
-	    try {
-		IWindow w = PluginServices.getMDIManager().getActiveWindow();
+            try {
+                IWindow w = PluginServices.getMDIManager().getActiveWindow();
 
-		if (w instanceof View) {
-		    View v = (View) w;
-		    MapControl mc = v.getMapControl();
-		    MapContext mx = mc.getMapContext();
-		    MapSheetGrid msg = MapSheetsUtils.getActiveMapSheetGrid(mx);
-		    if (msg != null) {
-			MapSheetsDragger dragBBhvr = new MapSheetsDragger(v);
-			dragBBhvr.setGrid(msg, false);
-			String back_to_tool = setGridTool(mc, dragBBhvr);
-			dragBBhvr.setPreviousTool(back_to_tool);
-			dragBBhvr.setListener(mx);
+                if (w instanceof View) {
+                    View v = (View) w;
+                    MapControl mc = v.getMapControl();
+                    MapContext mx = mc.getMapContext();
+                    MapSheetGrid msg = MapSheetsUtils.getActiveMapSheetGrid(mx);
+                    if (msg != null) {
+                        MapSheetsDragger dragBBhvr = new MapSheetsDragger(v);
+                        dragBBhvr.setGrid(msg, false);
+                        String back_to_tool = setGridTool(mc, dragBBhvr);
+                        dragBBhvr.setPreviousTool(back_to_tool);
+                        dragBBhvr.setListener(mx);
 
-			mc.drawMap(true);
-		    }
-		} else {
-		    throw new Exception("Windows is not a view");
-		}
-	    } catch (Exception ex) {
-		NotificationManager.addError("While setting adjust tool.", ex);
-	    }
+                        mc.drawMap(true);
+                    }
+                } else {
+                    throw new Exception("Windows is not a view");
+                }
+            } catch (Exception ex) {
+                NotificationManager.addError("While setting adjust tool.", ex);
+            }
 
-	}
-	// =============================================================================
-	// =============================================================================
-	if (comm.compareToIgnoreCase("MAP_SHEETS_TO_TEMPLATE") == 0) {
+        }
+        // =============================================================================
+        // =============================================================================
+        if (comm.compareToIgnoreCase("MAP_SHEETS_TO_TEMPLATE") == 0) {
 
-	    IWindow w = PluginServices.getMDIManager().getActiveWindow();
-	    if (w instanceof View) {
-		View v = (View) w;
-		MapControl mc = v.getMapControl();
-		MapContext mx = mc.getMapContext();
+            IWindow w = PluginServices.getMDIManager().getActiveWindow();
+            if (w instanceof View) {
+                View v = (View) w;
+                MapControl mc = v.getMapControl();
+                MapContext mx = mc.getMapContext();
 
-		MapSheetSelectionDialog dlg = new MapSheetSelectionDialog(mx,
-			null);
+                MapSheetSelectionDialog dlg = new MapSheetSelectionDialog(mx, null);
 
-		Object[] grid_auxlyt = dlg.getSelectedAndAuxLayout();
-		MapSheetGrid msg = (MapSheetGrid) grid_auxlyt[0];
-		Layout auxlayout = (Layout) grid_auxlyt[1];
+                Object[] grid_auxlyt = dlg.getSelectedAndAuxLayout();
+                MapSheetGrid msg = (MapSheetGrid) grid_auxlyt[0];
+                Layout auxlayout = (Layout) grid_auxlyt[1];
 
-		if (msg != null) {
+                if (msg != null) {
 
-		    double left_cm = AudasaPreferences.VIEW_X_POSITION;
-		    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
+                    double left_cm = AudasaPreferences.VIEW_X_POSITION;
+                    double top_cm = AudasaPreferences.VIEW_Y_POSITION;
 
-		    if (MapSheetsSettingsPanel.getSelectedTemplate().contains(
-			    "A4")) {
-			left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
-			top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
-		    }
-		    ArrayList act_flds = dlg.getActiveFieldsList();
-		    ArrayList act_flds_tem = dlg.getActiveFieldsTemplateList();
-		    ArrayList act_flds_idx = dlg.getActiveFieldsIndexList();
+                    if (MapSheetsSettingsPanel.getSelectedTemplate().contains("A4")) {
+                        left_cm = AudasaPreferences.VIEW_X_POSITION_A4;
+                        top_cm = AudasaPreferences.VIEW_Y_POSITION_A4;
+                    }
+                    ArrayList act_flds = dlg.getActiveFieldsList();
+                    ArrayList act_flds_tem = dlg.getActiveFieldsTemplateList();
+                    ArrayList act_flds_idx = dlg.getActiveFieldsIndexList();
 
-		    Project p = v.getModel().getProject();
+                    Project p = v.getModel().getProject();
 
-		    ProjectView _pv = (ProjectView) v.getModel();
-		    MapContext _mc = _pv.getMapContext();
-		    MapContext _omc = _pv.getMapOverViewContext();
+                    ProjectView _pv = (ProjectView) v.getModel();
+                    MapContext _mc = _pv.getMapContext();
+                    MapContext _omc = _pv.getMapOverViewContext();
 
-		    MapContext clo_mc = MapSheetsUtils
-			    .cloneMapContextRemoveGrids(_mc);
-		    MapContext clo_omc = MapSheetsUtils
-			    .cloneMapContextRemoveGrids(_omc);
+                    MapContext clo_mc = MapSheetsUtils.cloneMapContextRemoveGrids(_mc);
+                    MapContext clo_omc = MapSheetsUtils.cloneMapContextRemoveGrids(_omc);
 
-		    Dimension aux_dim = _mc.getViewPort().getImageSize();
-		    clo_mc.getViewPort().setImageSize(aux_dim);
+                    Dimension aux_dim = _mc.getViewPort().getImageSize();
+                    clo_mc.getViewPort().setImageSize(aux_dim);
 
-		    ProjectView cloned_pv = new ProjectView();
+                    ProjectView cloned_pv = new ProjectView();
 
-		    cloned_pv.setName("");
-		    cloned_pv
-		    .setProjectDocumentFactory(new ProjectViewFactory());
-		    cloned_pv.setMapContext(clo_mc);
-		    cloned_pv.setMapOverViewContext(clo_omc);
+                    cloned_pv.setName("");
+                    cloned_pv.setProjectDocumentFactory(new ProjectViewFactory());
+                    cloned_pv.setMapContext(clo_mc);
+                    cloned_pv.setMapOverViewContext(clo_omc);
 
-		    double wh_ratio = 1;
+                    double wh_ratio = 1;
 
-		    try {
-			wh_ratio = MapSheetsUtils.getWHRatio(msg);
-		    } catch (Exception e) {
-			NotificationManager.addError(e);
-		    }
+                    try {
+                        wh_ratio = MapSheetsUtils.getWHRatio(msg);
+                    } catch (Exception e) {
+                        NotificationManager.addError(e);
+                    }
 
-		    MapSheetsUtils.initViewPort(cloned_pv, wh_ratio);
+                    MapSheetsUtils.initViewPort(cloned_pv, wh_ratio);
 
-		    MapSheetsLayoutTemplate mslt = new MapSheetsLayoutTemplate(
-			    msg, cloned_pv, auxlayout, null);
-		    ProjectMap _pmap = ProjectFactory
-			    .createMap("Sheets layout");
+                    MapSheetsLayoutTemplate mslt = new MapSheetsLayoutTemplate(msg, cloned_pv, auxlayout);
+                    ProjectMap _pmap = ProjectFactory.createMap("Sheets layout");
 
-		    MapSheetsProjectMap mspm = new MapSheetsProjectMap();
-		    mspm.setName("Layout Template "
-			    + MapSheetsLayoutTemplate.nextId());
-		    mspm.setProjectDocumentFactory(_pmap
-			    .getProjectDocumentFactory());
+                    MapSheetsProjectMap mspm = new MapSheetsProjectMap();
+                    mspm.setName("Layout Template " + MapSheetsLayoutTemplate.nextId());
+                    mspm.setProjectDocumentFactory(_pmap.getProjectDocumentFactory());
 
-		    mspm.setModel(mslt);
-		    mslt.setProjectMap(mspm);
-		    p.addDocument(mspm);
+                    mspm.setModel(mslt);
+                    mslt.setProjectMap(mspm);
+                    p.addDocument(mspm);
 
-		    mslt.init(act_flds, act_flds_idx, act_flds_tem, left_cm,
-			    top_cm, false);
+                    mslt.init(act_flds, act_flds_idx, act_flds_tem, left_cm, top_cm, false, null);
 
-		    PluginServices.getMDIManager().addWindow(mslt);
-		    try {
-			mslt.update(0);
-		    } catch (Exception e) {
-			NotificationManager.addError(e);
-		    }
-		}
-	    }
+                    PluginServices.getMDIManager().addWindow(mslt);
+                    try {
+                        mslt.update(0);
+                    } catch (Exception e) {
+                        NotificationManager.addError(e);
+                    }
+                }
+            }
 
-	}
-	// =============================================================================
-	// =============================================================================
+        }
+        // =============================================================================
+        // =============================================================================
     }
 
     @Override
@@ -201,42 +187,39 @@ public class MapSheetsManipulationExtension extends Extension {
 
     @Override
     public boolean isEnabled() {
-	try {
-	    IWindow w = PluginServices.getMDIManager().getActiveWindow();
+        try {
+            IWindow w = PluginServices.getMDIManager().getActiveWindow();
 
-	    if (w instanceof View) {
-		View v = (View) w;
-		MapControl mc = v.getMapControl();
-		MapContext mx = mc.getMapContext();
-		ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx
-			.getLayers());
-		return (act_lyrs.size() == 1)
-			&& (act_lyrs.get(0) instanceof MapSheetGrid);
-	    }
-	} catch (Exception ex) {
-	    return false;
-	}
+            if (w instanceof View) {
+                View v = (View) w;
+                MapControl mc = v.getMapControl();
+                MapContext mx = mc.getMapContext();
+                ArrayList act_lyrs = MapSheetsUtils.getActiveLayers(mx.getLayers());
+                return (act_lyrs.size() == 1) && (act_lyrs.get(0) instanceof MapSheetGrid);
+            }
+        } catch (Exception ex) {
+            return false;
+        }
 
-	return false;
+        return false;
     }
 
     @Override
     public boolean isVisible() {
-	return true;
+        return true;
     }
 
     public static String setGridTool(MapControl mc, MapSheetsDragger drag_beha) {
-	if (mc.hasTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID)) {
-	    mc.getNamesMapTools().remove(
-		    MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID);
-	}
+        if (mc.hasTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID)) {
+            mc.getNamesMapTools().remove(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID);
+        }
 
-	Behavior[] behs = { drag_beha };
-	mc.addMapTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID, behs);
-	String resp = mc.getCurrentTool();
-	mc.setTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID);
-	mc.repaint();
-	return resp;
+        Behavior[] behs = { drag_beha };
+        mc.addMapTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID, behs);
+        String resp = mc.getCurrentTool();
+        mc.setTool(MapSheetsDragger.MAP_SERIES_SET_GRID_TOOL_ID);
+        mc.repaint();
+        return resp;
     }
 
 }

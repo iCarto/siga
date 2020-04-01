@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<libraries library-dir="."/>
+	<depends plugin-name="com.iver.cit.gvsig" />
+	<resourceBundle name="text"/>
+	<extensions>
+<!--    		<tool-bar name="MapSheets" position ="94">
+			<action-tool icon="images/mapsheets.png" action-command="EXECUTE" tooltip="Generate_map_series"/>
+			</tool-bar>
+-->		<extension class-name="org.gvsig.mapsheets.print.series.MapSheetsCreationExtension" description="Generate series of maps" active="false">
+			<menu text="Vista/Map_sheets/Generate_grid" action-command="MAP_SHEETS_GENERATE_DIALOG" icon="images/grid.png"/>								
+			<menu text="Vista/Map_sheets/Import_SHP_as_grid" action-command="MAP_SHEETS_FROM_SHP" icon="images/fromshp.png"/>
+		</extension>
+		<extension class-name="org.gvsig.mapsheets.print.series.MapSheetsLoadExtension" description="Generate series of maps" active="true">
+<!--			<menu text="Vista/Map_sheets/Import_grid" action-command="MAP_SHEETS_FROM_FILE" icon="images/fromfile.png"/>
+-->		</extension>
+		<extension class-name="org.gvsig.mapsheets.print.series.MapSheetsSaveExtension" description="Generate series of maps" active="true">
+<!--			<menu text="Vista/Map_sheets/Save_grid" action-command="MAP_SHEETS_TO_FILE" icon="images/tofile.png"/>
+-->		</extension>
+		<extension class-name="org.gvsig.mapsheets.print.series.MapSheetsManipulationExtension" description="Generate series of maps" active="false">
+			<menu text="Vista/Map_sheets/Export_grid_as_SHP" action-command="MAP_SHEETS_TO_SHP" icon="images/toshp.png"/>
+			<menu text="Vista/Map_sheets/Adjust_sheets_in_current_grid" action-command="MAP_SHEETS_ADJUST" icon="images/adjust.png"/>
+			<menu text="Vista/Map_sheets/Configure_layout_template_using_current_grid" action-command="MAP_SHEETS_TO_TEMPLATE" icon="images/configmap.png"/>
+		</extension>
+		<extension class-name="org.gvsig.mapsheets.print.series.MapSheetsPrintExtension" description="Generate series of maps" active="false">
+			<menu text="Mapa/Map_sheets/Print_map_sheets_dots" action-command="MAP_SHEETS_PRINT" icon="images/print.png"/>
+			<menu text="Mapa/Map_sheets/Set_other_grid" action-command="MAP_SHEETS_SET_NEW_GRID" icon="images/change.png"/>
+		</extension>
+	</extensions>
+</plugin-config>
