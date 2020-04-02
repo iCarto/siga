@@ -9,6 +9,7 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerDrawEvent;
@@ -53,14 +54,26 @@ public class PrintReportsObserver implements ActionListener, LayerDrawingListene
             Rectangle2D bbox = getBoundingBox();
             mapContext.zoomToExtent(bbox);
             mapContext.addLayerDrawingListener(this);
-            mapContext.setScaleView(2000);
+
+            // Cuando no hay geometría y la escala ya está en 2000 el listener no salta
+            // por lo que debemos activarlo a mano
+            if (bbox == null && mapContext.getScaleView() == 2000) {
+                afterLayerGraphicDraw(null);
+            } else {
+                mapContext.setScaleView(2000);
+            }
         }
     }
 
     private Rectangle2D getBoundingBox() {
         long currentPosition = dialog.getPosition();
+        int featurePos = Long.valueOf(currentPosition).intValue();
         try {
-            return layer.getSource().getShape(Long.valueOf(currentPosition).intValue()).getBounds2D();
+            IGeometry geom = layer.getSource().getShape(featurePos);
+            if (geom == null) {
+                return null;
+            }
+            return geom.getBounds2D();
         } catch (ExpansionFileReadException e) {
             e.printStackTrace();
             return null;

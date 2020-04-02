@@ -33,6 +33,19 @@ public class ExpropiationsLayerResolver {
         }
     }
 
+    public static String getTramoNameForIdFincaORIdTramo(String id) {
+        /**
+         * Dado un id finca o un id tramo, devuelve el nombre del tramo
+         */
+        String idTramo = id.substring(0, 2);
+        for (Tramos t : Tramos.values()) {
+            if (t.tramoId.equals(idTramo)) {
+                return t.tramo;
+            }
+        }
+        return null;
+    }
+
     public static List<KeyValue> getTramosWithHardcodedOrder() {
         List<KeyValue> result = new ArrayList<KeyValue>();
         for (Tramos t : Tramos.values()) {

@@ -3,6 +3,7 @@ package es.icarto.gvsig.extgex.navtable.decorators.printreports;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
@@ -12,10 +13,10 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
-import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.StringValue;
 import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
@@ -23,12 +24,12 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.vividsolutions.jts.geom.Point;
 
 import es.icarto.gvsig.extgex.forms.expropiations.ExpropiationsLayerResolver;
 import es.icarto.gvsig.extgex.preferences.DBNames;
+import es.icarto.gvsig.siga.models.InfoEmpresa;
 
 public class PrintReportsData implements JRDataSource {
 
@@ -46,7 +47,6 @@ public class PrintReportsData implements JRDataSource {
     private boolean isDataSourceReady = false;
     private int currentPosition = -1;
     private final FLyrVect layer;
-    private Point centroid = null;
 
     private HashMap<String, Object> values;
     private String fincaID = null;
@@ -81,14 +81,16 @@ public class PrintReportsData implements JRDataSource {
     private void prepareDataSource() {
         values = new HashMap<String, Object>();
 
-        // image
-        values.put(JASPER_IMAGEFROMVIEW, getImageFromView());
-        values.put(JASPER_ESCALA, getScaleFromView());
+        Point centroid = getCentroid();
 
-        // values.put(JASPER_COORDENADA_UTM_X, getCoordinateXFromView());
-        // values.put(JASPER_COORDENADA_UTM_Y, getCoordinateYFromView());
-        values.put(JASPER_COORDENADA_UTM_X, getX());
-        values.put(JASPER_COORDENADA_UTM_Y, getY());
+        // image
+        values.put(JASPER_IMAGEFROMVIEW, getImageFromView(centroid));
+        values.put(JASPER_ESCALA, getScaleFromView(centroid));
+
+        // values.put(JASPER_COORDENADA_UTM_X, getCoordinateXFromView(centroid));
+        // values.put(JASPER_COORDENADA_UTM_Y, getCoordinateYFromView(centroid));
+        values.put(JASPER_COORDENADA_UTM_X, getX(centroid));
+        values.put(JASPER_COORDENADA_UTM_Y, getY(centroid));
 
     }
 
@@ -116,30 +118,30 @@ public class PrintReportsData implements JRDataSource {
         }
     }
 
-    private String getCoordinateYFromView() {
+    private String getCoordinateYFromView(Point centroid) {
         if (centroid == null) {
-            centroid = getCentroid();
+            return null;
         }
         return utmFormat.format(centroid.getY());
     }
 
-    private String getCoordinateXFromView() {
+    private String getCoordinateXFromView(Point centroid) {
         if (centroid == null) {
-            centroid = getCentroid();
+            return null;
         }
         return utmFormat.format(centroid.getX());
     }
 
-    private double getX() {
+    private Double getX(Point centroid) {
         if (centroid == null) {
-            centroid = getCentroid();
+            return null;
         }
         return centroid.getX();
     }
 
-    private double getY() {
+    private Double getY(Point centroid) {
         if (centroid == null) {
-            centroid = getCentroid();
+            return null;
         }
         return centroid.getY();
     }
@@ -147,7 +149,11 @@ public class PrintReportsData implements JRDataSource {
     private Point getCentroid() {
         try {
             IFeature feature = layer.getSource().getFeature(currentPosition);
-            return feature.getGeometry().toJTSGeometry().getCentroid();
+            IGeometry geometry = feature.getGeometry();
+            if (geometry == null) {
+                return null;
+            }
+            return geometry.toJTSGeometry().getCentroid();
         } catch (ExpansionFileReadException e) {
             e.printStackTrace();
             return null;
@@ -157,20 +163,21 @@ public class PrintReportsData implements JRDataSource {
         }
     }
 
-    private Object getScaleFromView() {
-        if (PluginServices.getMDIManager().getActiveWindow() instanceof BaseView) {
-            BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-            MapContext mapContext = view.getMapControl().getMapContext();
-            return Double.toString(mapContext.getScaleView());
+    private String getScaleFromView(Point centroid) {
+        BaseView view = getView();
+        if (view == null || centroid == null) {
+            return null;
         }
-        return centroid;
+        MapContext mapContext = view.getMapControl().getMapContext();
+        return Double.toString(mapContext.getScaleView());
     }
 
-    private Object getImageFromView() {
-        if (isGeometryNull()) {
+    private URL getImageFromView(Point centroid) {
+        if (centroid == null) {
             return PluginServices.getPluginServices("es.icarto.gvsig.extgex").getClassLoader()
                     .getResource("images/image-not-available.png");
         }
+
         BufferedImage bufferedImage = calculateImage();
         java.net.URL mapInReport = PluginServices.getPluginServices("es.icarto.gvsig.extgex").getClassLoader()
                 .getResource("images/map-for-report.png");
@@ -189,11 +196,19 @@ public class PrintReportsData implements JRDataSource {
         }
     }
 
-    private BufferedImage calculateImage() {
-        if (!(PluginServices.getMDIManager().getActiveWindow() instanceof BaseView)) {
+    private BaseView getView() {
+        IWindow window = PluginServices.getMDIManager().getActiveWindow();
+        if (!(window instanceof BaseView)) {
             return null;
         }
-        BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
+        return (BaseView) window;
+    }
+
+    private BufferedImage calculateImage() {
+        BaseView view = getView();
+        if (view == null) {
+            return null;
+        }
         MapControl mapControl = view.getMapControl();
 
         ViewPort vp = mapControl.getViewPort();
@@ -202,29 +217,17 @@ public class PrintReportsData implements JRDataSource {
         return mapControl.getImage().getSubimage(x, y, JASPER_IMAGEWIDTH, JASPER_IMAGEHEIGHT);
     }
 
-    private boolean isGeometryNull() {
-        ReadableVectorial source = layer.getSource();
-        try {
-            source.start();
-            IGeometry g = source.getShape(Long.valueOf(currentPosition).intValue());
-            source.stop();
-            if (g == null) {
-                return true;
-            }
-            return false;
-        } catch (InitializeDriverException e) {
-            e.printStackTrace();
-            return true;
-        } catch (ReadDriverException e) {
-            e.printStackTrace();
-            return true;
-        }
+    public String getLogoUrl() {
+        String idTramo = getIDFinca().substring(0, 2);
+        InfoEmpresa infoEmpresa = ExpropiationsLayerResolver.getInfoEmpresa(layer);
+        String logoUrl = infoEmpresa.getReportLogo(idTramo);
+        return logoUrl;
     }
 
-    public String getLogoUrl() {
-        String idFinca = getIDFinca();
-        String idTramo = idFinca.substring(0, 2);
-        String logoPath = ExpropiationsLayerResolver.getInfoEmpresa(layer).getReportLogo(idTramo);
-        return logoPath;
+    public String getReportName() {
+        String idTramo = getIDFinca().substring(0, 2);
+        InfoEmpresa infoEmpresa = ExpropiationsLayerResolver.getInfoEmpresa(layer);
+        String reportName = infoEmpresa.getReportName(idTramo);
+        return reportName;
     }
 }

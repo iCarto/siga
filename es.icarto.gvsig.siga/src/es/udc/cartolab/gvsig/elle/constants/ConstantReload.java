@@ -144,7 +144,7 @@ public class ConstantReload {
             }
         }
 
-        if (l.getName().equalsIgnoreCase("Fincas_Ampliacion")) {
+        if (l.getName().equalsIgnoreCase("Fincas_Autoestradas")) {
             if (StrUtils.isEmptyString(lyrDef.getWhereClause())) {
                 lyrDef.setWhereClause("WHERE tramo IN ('15', '16')");
             } else {

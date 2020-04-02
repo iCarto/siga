@@ -38,100 +38,96 @@ public class AddFincaAction extends AbstractAction implements PositionListener {
     private final StartEditing startEditingExt;
 
     public AddFincaAction(FLyrVect layer, AbstractNavTable nt) {
-	super();
-	this.nt = nt;
-	this.layer = layer;
-	putValue(SHORT_DESCRIPTION, "Añadir finca");
-	ImageIcon icon = new ImageIcon(getClass().getResource("/add_finca.png"));
-	putValue(SMALL_ICON, icon);
-	putValue(ACTION_COMMAND_KEY, "NAVTABLE");
-	// putValue(NAME, "buttonText");
-	setEnabled(false);
-	startEditingExt = (StartEditing) PluginServices
-		.getExtension(StartEditing.class);
-	removeFromToolbar();
-	nt.addPositionListener(this);
+        super();
+        this.nt = nt;
+        this.layer = layer;
+        putValue(SHORT_DESCRIPTION, "Añadir finca");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/add_finca.png"));
+        putValue(SMALL_ICON, icon);
+        putValue(ACTION_COMMAND_KEY, "NAVTABLE");
+
+        onPositionChange(null); // to enable the button if the first feature does not have geom
+        startEditingExt = (StartEditing) PluginServices.getExtension(StartEditing.class);
+        removeFromToolbar();
+        nt.addPositionListener(this);
     }
 
     private void removeFromToolbar() {
-	for (SelectableToolBar foo : PluginServices.getMainFrame()
-		.getToolbars()) {
-	    if (foo.getName().equals(FormExpropiationsExtension.TOOLBAR_NAME)) {
-		for (int i = 0; i < foo.getComponentCount(); i++) {
-		    Component c = foo.getComponent(i);
-		    if (c instanceof JButton) {
-			JButton button = (JButton) c;
-			if (button.getActionCommand().equals("TOOLBAR")) {
-			    foo.remove(c);
-			}
-		    }
-		}
-	    }
-	}
+        for (SelectableToolBar foo : PluginServices.getMainFrame().getToolbars()) {
+            if (foo.getName().equals(FormExpropiationsExtension.TOOLBAR_NAME)) {
+                for (int i = 0; i < foo.getComponentCount(); i++) {
+                    Component c = foo.getComponent(i);
+                    if (c instanceof JButton) {
+                        JButton button = (JButton) c;
+                        if (button.getActionCommand().equals("TOOLBAR")) {
+                            foo.remove(c);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void addToToolbar() {
-	for (SelectableToolBar foo : PluginServices.getMainFrame()
-		.getToolbars()) {
-	    if (foo.getName().equals(FormExpropiationsExtension.TOOLBAR_NAME)) {
-		JButton add = foo.add(this);
-		add.setActionCommand("TOOLBAR");
-	    }
-	}
+        for (SelectableToolBar foo : PluginServices.getMainFrame().getToolbars()) {
+            if (foo.getName().equals(FormExpropiationsExtension.TOOLBAR_NAME)) {
+                JButton add = foo.add(this);
+                add.setActionCommand("TOOLBAR");
+            }
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	if (!e.getActionCommand().equals("TOOLBAR")) {
+        if (!e.getActionCommand().equals("TOOLBAR")) {
 
-	    nt.removePositionListener(this);
+            nt.removePositionListener(this);
 
-	    nt.clearSelection();
-	    nt.selectCurrentFeature();
+            nt.clearSelection();
+            nt.selectCurrentFeature();
 
-	    PluginServices.getMDIManager().closeWindow(nt);
+            PluginServices.getMDIManager().closeWindow(nt);
 
-	    addToToolbar();
+            addToToolbar();
 
-	}
+        }
 
-	IWindow iWindow = PluginServices.getMDIManager().getActiveWindow();
+        IWindow iWindow = PluginServices.getMDIManager().getActiveWindow();
 
-	if (!(iWindow instanceof View)) {
-	    return;
-	}
-	View view = (View) iWindow;
+        if (!(iWindow instanceof View)) {
+            return;
+        }
+        View view = (View) iWindow;
 
-	FLayers layers = view.getMapControl().getMapContext().getLayers();
-	layers.setAllActives(false);
-	layer.setActive(true);
-	if (!layer.isEditing()) {
-	    startEditingExt.startEditing(view, layer);
-	}
+        FLayers layers = view.getMapControl().getMapContext().getLayers();
+        layers.setAllActives(false);
+        layer.setActive(true);
+        if (!layer.isEditing()) {
+            startEditingExt.startEditing(view, layer);
+        }
 
-	CADExtension.setCADTool(AddFincaCADTool.KEY, true);
-	PluginServices.getMainFrame().enableControls();
+        CADExtension.setCADTool(AddFincaCADTool.KEY, true);
+        PluginServices.getMainFrame().enableControls();
 
     }
 
     @Override
     public void onPositionChange(PositionEvent e) {
-	int numReg = (int) nt.getPosition();
-	try {
-	    IGeometry geometry = layer.getSource().getFeature(numReg)
-		    .getGeometry();
-	    setEnabled(geometry == null);
-	} catch (ExpansionFileReadException e1) {
-	    logger.error(e1.getStackTrace(), e1);
-	} catch (ReadDriverException e1) {
-	    logger.error(e1.getStackTrace(), e1);
-	}
+        int numReg = (int) nt.getPosition();
+        try {
+            IGeometry geometry = layer.getSource().getFeature(numReg).getGeometry();
+            setEnabled(geometry == null);
+        } catch (ExpansionFileReadException e1) {
+            logger.error(e1.getStackTrace(), e1);
+        } catch (ReadDriverException e1) {
+            logger.error(e1.getStackTrace(), e1);
+        }
 
     }
 
     @Override
     public void beforePositionChange(PositionEvent e) {
-	//nothing to do here
+        // nothing to do here
     }
 
 }

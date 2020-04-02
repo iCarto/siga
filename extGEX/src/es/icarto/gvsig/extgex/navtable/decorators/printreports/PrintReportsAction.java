@@ -31,6 +31,7 @@ public class PrintReportsAction {
 
             parameters.put("ID_FINCA", data.getIDFinca());
             parameters.put("LOGO_URL", data.getLogoUrl());
+            parameters.put("REPORT_NAME", data.getReportName());
             parameters.put("MAP_URL", data.getValue("image_from_view"));
             parameters.put("COORDENADA_X", data.getValue("coordenada_utm_x"));
             parameters.put("COORDENADA_Y", data.getValue("coordenada_utm_y"));

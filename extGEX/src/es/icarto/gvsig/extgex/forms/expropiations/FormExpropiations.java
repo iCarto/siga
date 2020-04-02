@@ -295,26 +295,26 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
      * El campo superficie_expropiada_total_autocalculado debe actualizarse cuando cambien los
      * datos del subformulario/tabla (añadir, editar o eliminar) Hay varias formas de intentar
      * implementar esto:
-     *
+     * 
      * * Por ejemplo usar NOTIFY en un trigger de bd y en el formulario padre escuchar el canal con LISTEN
      * https://jdbc.postgresql.org/documentation/81/listennotify.html
      * https://tapoueh.org/blog/2018/07/postgresql-listen/notify/
-     *
+     * 
      * * Trigger para calcular en bd e implementando windowClosed en el subformulario más o menos así
      * el problema es que no funciona al borrar una fila porque el form no llega a abrirse
-     *
+     * 
      * @Override
      * public void windowClosed() {
      * super.windowClosed();
-     *
+     * 
      * No llamamos a parentForm.refresh porque ni el reloadRecordset
      * ni el refresGUI por si mismos hacen que se actualice el LayerController
      * de este modo refreshGUI lee los valores de un LayerController que no
      * está actualizado pero onPositionChange si que lo actualiza
-     *
-     *
+     * 
+     * 
      * }
-     *
+     * 
      * Aquí lo implementamos como un listener sobre la propia tabla. Va en fillSpecificValues porqué
      * el TableHandler puede acabar creando un nuevo modelo de datos en este método y esta rara construcción
      * es para tratar de asegurarnos que no quedan listeners pendientes al cambiar de registros y que siempre
@@ -513,9 +513,9 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
     }
 
     private void fillEmpresaLB() {
-        Object tramoValue = tramo.getSelectedItem();
-        empresaLb.setText(infoEmpresa.getTitle(tramoValue));
-        concesionariaLb.setText(infoEmpresa.getSubtitle(tramoValue));
+        String tramoKey = ((KeyValue) tramo.getSelectedItem()).getKey();
+        empresaLb.setText(infoEmpresa.getTitle(tramoKey));
+        concesionariaLb.setText(infoEmpresa.getSubtitle(tramoKey));
     }
 
     @Override
