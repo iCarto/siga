@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.gvsig.mapsheets.print.audasa.AudasaPreferences;
@@ -27,6 +28,7 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.IWindowFilter;
 import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
@@ -154,6 +156,7 @@ public class MapSheetsCreationExtension extends Extension {
         if (comm.compareToIgnoreCase("MAP_SHEETS_FROM_SHP") == 0) {
             executeFromSHP();
         }
+
     }
 
     private void executeGenerateDialog() {
@@ -249,6 +252,41 @@ public class MapSheetsCreationExtension extends Extension {
         } catch (Exception e) {
             NotificationManager.addError(e);
         }
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Layout layout = (Layout) PluginServices.getMDIManager().getAllWindows(new IWindowFilter() {
+
+                    @Override
+                    public boolean filter(IWindow w) {
+                        return w instanceof Layout;
+                    }
+                }).get(0);
+                View view = (View) PluginServices.getMDIManager().getAllWindows(new IWindowFilter() {
+
+                    @Override
+                    public boolean filter(IWindow w) {
+                        return w instanceof View;
+                    }
+                }).get(0);
+
+                int h = view.getWindowInfo().getHeight();
+                int w = view.getWindowInfo().getWidth();
+                // try {
+                // view.setMaximum(false);
+                // } catch (PropertyVetoException e) {
+                // System.out.println(e);
+                // }
+                view.getWindowInfo().setWidth(w / 2);
+                // view.setSize(new Dimension(maximizedSixe.width / 2, maximizedSixe.height));
+                layout.getWindowInfo().setHeight(h);
+                layout.getWindowInfo().setWidth(w / 2);
+                layout.getWindowInfo().setX(w / 2);
+
+                // layout.setSize(new Dimension(maximizedSixe.width / 2, maximizedSixe.height));
+            }
+        });
 
     }
 
