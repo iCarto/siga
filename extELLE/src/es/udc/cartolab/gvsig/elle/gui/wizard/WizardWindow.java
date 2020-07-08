@@ -32,8 +32,10 @@ import javax.swing.JPanel;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 
+import es.icarto.gvsig.commons.gui.AbstractIWindow;
+
 @SuppressWarnings("serial")
-public abstract class WizardWindow extends JPanel implements IWindow,
+public abstract class WizardWindow extends AbstractIWindow implements IWindow,
 	WizardListener, ActionListener {
 
     protected JButton nextButton, prevButton, cancelButton, finishButton;

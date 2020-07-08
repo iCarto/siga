@@ -1,27 +1,23 @@
 package es.udc.cartolab.gvsig.elle.gui.wizard.delete;
 
+import java.awt.Component;
+
+import javax.swing.JButton;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
 
+@SuppressWarnings("serial")
 public class DeleteAllLegendsWizard extends WizardWindow {
-
-    private WindowInfo viewInfo;
 
     public DeleteAllLegendsWizard() {
 	super();
     }
 
     public WindowInfo getWindowInfo() {
-	if (viewInfo == null) {
-	    viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
-		    | WindowInfo.PALETTE);
-	    viewInfo.setTitle(PluginServices.getText(this, "delete_legends"));
-	    viewInfo.setWidth(240);
-	    viewInfo.setHeight(460);
-	}
-	return viewInfo;
+	return super.getWindowInfo();
     }
 
     public Object getWindowProfile() {
@@ -32,5 +28,17 @@ public class DeleteAllLegendsWizard extends WizardWindow {
     protected void addWizardComponents() {
 	views.add(new DeleteAllLegendsWizardComponent(properties));
     }
+
+	@Override
+	protected JButton getDefaultButton() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Component getDefaultFocusComponent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

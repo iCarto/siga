@@ -16,8 +16,11 @@
  */
 package es.udc.cartolab.gvsig.elle.gui.wizard.save;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
@@ -31,6 +34,7 @@ import es.udc.cartolab.gvsig.elle.gui.wizard.WizardException;
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
 import es.udc.cartolab.gvsig.elle.utils.TOCGroupsHandler;
 
+@SuppressWarnings("serial")
 public class SaveLegendsWizard extends WizardWindow {
 
     public final static String PROPERTY_VIEW = "view";
@@ -39,10 +43,7 @@ public class SaveLegendsWizard extends WizardWindow {
     public final static int VISIBLES = 1;
     public final static int ALL = 2;
 
-    private WindowInfo viewInfo;
     private int layersOption;
-    private final int width = 750;
-    private final int height = 500;
 
     public SaveLegendsWizard(View view, int layersOption) {
 	properties.put(SaveMapWizard.PROPERTY_VIEW, view);
@@ -113,18 +114,24 @@ public class SaveLegendsWizard extends WizardWindow {
 
 
     public WindowInfo getWindowInfo() {
-	if (viewInfo == null) {
-	    viewInfo = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
-	    viewInfo.setTitle(PluginServices.getText(this, "Save_legends"));
-	    viewInfo.setWidth(width);
-	    viewInfo.setHeight(height);
-	}
-	return viewInfo;
+	return super.getWindowInfo();
     }
 
 
     public Object getWindowProfile() {
 	return WindowInfo.DIALOG_PROFILE;
     }
+
+	@Override
+	protected JButton getDefaultButton() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Component getDefaultFocusComponent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

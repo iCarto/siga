@@ -16,7 +16,10 @@
  */
 package es.udc.cartolab.gvsig.elle.gui.wizard.load;
 
+import java.awt.Component;
 import java.util.List;
+
+import javax.swing.JButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
@@ -43,14 +46,7 @@ public class SigaLoadMapWizard extends WizardWindow {
 
     @Override
     public WindowInfo getWindowInfo() {
-	if (viewInfo == null) {
-	    viewInfo = new WindowInfo(WindowInfo.MODELESSDIALOG
-		    | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
-	    viewInfo.setTitle(PluginServices.getText(this, "Load_map"));
-	    viewInfo.setWidth(770);
-	    viewInfo.setHeight(775);
-	}
-	return viewInfo;
+	return super.getWindowInfo();
     }
 
     @Override
@@ -63,4 +59,16 @@ public class SigaLoadMapWizard extends WizardWindow {
 	views.add(new SigaLoadMapWizardComponent(properties));
 	views.add(new LoadConstantsWizardComponent(properties));
     }
+
+	@Override
+	protected JButton getDefaultButton() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Component getDefaultFocusComponent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
