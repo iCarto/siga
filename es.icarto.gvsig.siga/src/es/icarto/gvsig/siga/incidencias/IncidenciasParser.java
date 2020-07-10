@@ -159,6 +159,11 @@ public class IncidenciasParser {
             pushMotivo = true;
             setEnumHeaderIdx("Motivo", header.size() - 1);
         }
+        
+        header.add("x_utm");
+        setEnumHeaderIdx("x_utm", header.size() - 1);
+        header.add("y_utm");
+        setEnumHeaderIdx("y_utm", header.size() - 1);
 
         if (tramoIdx == -1) {
             throw new RuntimeException(
@@ -207,7 +212,7 @@ public class IncidenciasParser {
             Value[] values = new Value[header.size()];
             for (int i = 0; i < header.size(); i++) {
                 String str = null;
-                if ((pushMotivo) && (i == header.size() - 1)) {
+                if ((pushMotivo) && (i == header.size() - 3)) {
                     str = "ACCIDENTES";
                 } else {
                     str = XLSFormatUtils.getValueAsString(row.getCell(i));
@@ -223,6 +228,8 @@ public class IncidenciasParser {
             if (results != null) {
                 double x = (Double) results.getValueAt(0, 0);
                 double y = (Double) results.getValueAt(0, 1);
+                values[header.size()-2] = ValueFactory.createValue(String.valueOf(x));
+                values[header.size()-1] = ValueFactory.createValue(String.valueOf(y));
                 IGeometry geom = ShapeFactory.createPoint2D(x, y);
                 featureList.add(new DefaultFeature(geom, values));
 
@@ -392,6 +399,8 @@ public class IncidenciasParser {
         description += kmlAddDescription(atts, Header.ASIST_SANITARIA);
         description += kmlAddDescription(atts, Header.INFORME_ARENA);
         description += kmlAddDescription(atts, Header.INFORME_GCT);
+        description += kmlAddDescription(atts, Header.X_UTM);
+        description += kmlAddDescription(atts, Header.Y_UTM);
 
         description += "</table>";
         // description += "</table>]]>";

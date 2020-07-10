@@ -22,7 +22,9 @@ public enum Header {
     MUERTOS("Muertos", 10),
     ASIST_SANITARIA("Asistencia Sanitaria", 5),
     INFORME_ARENA("Informe Arena", 5),
-    INFORME_GCT("Informe GCT", 5);
+    INFORME_GCT("Informe GCT", 5),
+    X_UTM("X_UTM", 15),
+    Y_UTM("Y_UTM", 15);
 
     private static final Map<String, Header> stringToEnum = new HashMap<String, Header>();
 
