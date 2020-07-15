@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
@@ -249,6 +250,63 @@ public class IncidenciasParser {
         return false;
     }
 
+    
+    public void addUTMCoordsToExcel () {
+    	
+    	Workbook wb = new XSSFWorkbook();
+    	Sheet sheetWithCoords = wb.createSheet(sheet.getSheetName());
+    	
+    	Row headerRow = sheetWithCoords.createRow(0);
+    	
+    	for (int i = 0; i < sheet.getRow(0).getLastCellNum(); i++) {
+    		Cell cell = headerRow.createCell(i);
+    		cell.setCellValue(XLSFormatUtils.getValueAsString(sheet.getRow(0).getCell(i)));
+    	}
+    	
+    	Cell cellXHeader = headerRow.createCell(sheet.getRow(0).getLastCellNum());
+    	cellXHeader.setCellValue("X_UTM");
+    	
+    	Cell cellYHeader = headerRow.createCell(sheet.getRow(0).getLastCellNum() + 1);
+    	cellYHeader.setCellValue("Y_UTM");
+    	
+    	Iterator<Row> rowIterator = sheet.rowIterator();
+        rowIterator.next(); // skip header
+
+        while (rowIterator.hasNext()) {
+        	Row row = rowIterator.next();
+        	Row newRow = sheetWithCoords.createRow(row.getRowNum());
+        	for (int i = 0; i < row.getLastCellNum(); i++) {
+        		Cell cell = newRow.createCell(i);
+        		cell.setCellValue(XLSFormatUtils.getValueAsString(row.getCell(i)));
+        	}
+        	
+        	TableModel results = calculateGeom(row);
+        	if (results != null) {
+        		double x = (Double) results.getValueAt(0, 0);
+        		double y = (Double) results.getValueAt(0, 1);
+        		Cell cellX = newRow.createCell(row.getLastCellNum());
+            	cellX.setCellValue(String.valueOf(x));
+            	Cell cellY = newRow.createCell(row.getLastCellNum());
+            	cellY.setCellValue(String.valueOf(y));
+        	}	
+        }
+    	
+    	try {
+    		String fileUrl = file.getAbsolutePath();
+    		String[] path = fileUrl.split("\\.");
+    		
+			FileOutputStream fileOut = new FileOutputStream(path[0] + "_coordenadas." + path[1]);
+			wb.write(fileOut);
+			fileOut.close();
+			wb.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	    	
+    }
+    
     /**
      * call parse first
      */

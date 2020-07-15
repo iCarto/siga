@@ -81,6 +81,7 @@ public class ImportIncidenciasExtension extends AbstractExtension {
 		    .getResource("incidencias.gvl").getPath();
 	    layer = parser.toFLyrVect(path, true);
 	    kmlWritted = parser.toKml();
+	    parser.addUTMCoordsToExcel();
 
 	} catch (RuntimeException e) {
 	    PluginServices.getMDIManager().restoreCursor();
