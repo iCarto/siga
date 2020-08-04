@@ -20,7 +20,6 @@ import java.awt.Component;
 
 import javax.swing.JButton;
 
-import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
@@ -29,18 +28,10 @@ import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
 @SuppressWarnings("serial")
 public class LoadMapWizard extends WizardWindow {
 
-    private WindowInfo viewInfo;
-
     public LoadMapWizard(View view) {
 	super();
 	properties.put(LoadMapWizardComponent.PROPERTY_VEW, view);
     }
-
-
-    public WindowInfo getWindowInfo() {
-    	return super.getWindowInfo();
-    }
-
 
     public Object getWindowProfile() {
 	return WindowInfo.DIALOG_PROFILE;

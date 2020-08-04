@@ -39,10 +39,6 @@ public class SaveMapWizard extends WizardWindow {
 	properties.put(PROPERTY_VIEW, view);
     }
 
-    public WindowInfo getWindowInfo() {
-	return super.getWindowInfo();
-    }
-
     public Object getWindowProfile() {
 	return WindowInfo.DIALOG_PROFILE;
     }

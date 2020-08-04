@@ -4,7 +4,6 @@ import java.awt.Component;
 
 import javax.swing.JButton;
 
-import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
@@ -14,10 +13,6 @@ public class DeleteAllLegendsWizard extends WizardWindow {
 
     public DeleteAllLegendsWizard() {
 	super();
-    }
-
-    public WindowInfo getWindowInfo() {
-	return super.getWindowInfo();
     }
 
     public Object getWindowProfile() {

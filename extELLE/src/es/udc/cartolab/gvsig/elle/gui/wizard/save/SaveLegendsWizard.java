@@ -113,11 +113,6 @@ public class SaveLegendsWizard extends WizardWindow {
     }
 
 
-    public WindowInfo getWindowInfo() {
-	return super.getWindowInfo();
-    }
-
-
     public Object getWindowProfile() {
 	return WindowInfo.DIALOG_PROFILE;
     }

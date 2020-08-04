@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
@@ -30,8 +29,6 @@ import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
 
 @SuppressWarnings("serial")
 public class SigaLoadMapWizard extends WizardWindow {
-
-    private WindowInfo viewInfo;
 
     public SigaLoadMapWizard(View view, List<WizardComponent> cmps) {
 	super(cmps);
@@ -42,11 +39,6 @@ public class SigaLoadMapWizard extends WizardWindow {
     public SigaLoadMapWizard(View view) {
 	super();
 	properties.put(SigaLoadMapWizardComponent.PROPERTY_VEW, view);
-    }
-
-    @Override
-    public WindowInfo getWindowInfo() {
-	return super.getWindowInfo();
     }
 
     @Override
