@@ -6,9 +6,11 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
@@ -20,6 +22,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
 import es.icarto.gvsig.commons.gui.IWindowClosed;
 import es.icarto.gvsig.commons.gui.PlaceholderTextField;
+import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 @SuppressWarnings("serial")
@@ -32,7 +35,19 @@ DocumentListener {
     private JComboBox inputProj;
     private JTextField inputX;
     private JTextField inputY;
-
+    
+    private JTextField inputLatDegrees;
+    private JTextField inputLatMinutes;
+    private JTextField inputLatSeconds;
+    private JRadioButton selectLatN;
+    private JRadioButton selectLatS;
+    
+    private JTextField inputLonDegrees;
+    private JTextField inputLonMinutes;
+    private JTextField inputLonSeconds;
+    private JRadioButton selectLonE;
+    private JRadioButton selectLonO;
+    
     private JComboBox outputProj;
     private JTextField outputY;
     private JTextField outputX;
@@ -42,7 +57,7 @@ DocumentListener {
     public LocatorByCoordsDialog(LocatorByCoordsModel locatorByCoordsModel) {
 	super();
 	this.model = locatorByCoordsModel;
-	setupUI();
+	setupDecimalUI(null);
 	setWindowTitle("Localizar Coordenadas");
 	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
 	setWindowClosed(new IWindowClosed() {
@@ -53,20 +68,19 @@ DocumentListener {
 	});
     }
 
-    private void setupUI() {
-	// setupMagicField();
-	setupInput();
-	setupOuput();
-	setupZoomBt();
+    private void setupDecimalUI(CoordProvider iProv) {
+	paintDecimalInput(iProv);
+	paintOutput("span 1, growx");
+	paintZoomBt("cell 2 3, growx");
+    }
+    
+    private void setupDmsUI(CoordProvider iProv) {
+    paintInputDMS(iProv);
+    paintOutput("span 5, growx");
+    paintZoomBt("cell 10 3, growx");
     }
 
-    private void setupMagicField() {
-	JTextField input = new PlaceholderTextField(
-		"Pegue o escriba la localización");
-	this.add(input, "wrap, span, growx, pushx");
-    }
-
-    private void setupInput() {
+    private void paintDecimalInput(CoordProvider iProv) {
 	inputX = new PlaceholderTextField("utm X (548076,36) o Long (-8,4062)");
 	// 548202,058 - 23029
 	inputX.setColumns(WIDGET_SIZE);
@@ -79,50 +93,134 @@ DocumentListener {
 	inputY.getDocument().addDocumentListener(this);
 	this.add(inputY, "growx");
 
-	inputProj = new JComboBox();
-	this.add(inputProj, "wrap, growx");
-
-	inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
-		.toArray(new CoordProvider[0])));
-	inputProj.setPrototypeDisplayValue("EPSG:XXXXXXXXX");
-	inputProj.setSelectedItem(model.getDefaultInputProj());
-	inputProj.addActionListener(new ActionListener() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		valueChanged();
-	    }
-	});
+	paintInputCB(iProv);
 
     }
+    
+    private void paintInputDMS(CoordProvider iProv) {
+    
+    inputLonDegrees = new PlaceholderTextField("grados");
+    inputLonDegrees.setColumns(6);
+    inputLonDegrees.getDocument().addDocumentListener(this);
+    this.add(inputLonDegrees, "growx");
+    
+    inputLonMinutes = new PlaceholderTextField("minutos");
+    inputLonMinutes.setColumns(6);
+    inputLonMinutes.getDocument().addDocumentListener(this);
+    this.add(inputLonMinutes, "growx");
+    
+    inputLonSeconds = new PlaceholderTextField("segundos");
+    inputLonSeconds.setColumns(8);
+    inputLonSeconds.getDocument().addDocumentListener(this);
+    this.add(inputLonSeconds, "growx");
+       
+    selectLonE = new JRadioButton("E", false);
+    selectLonO = new JRadioButton("O", true);
+    selectLonE.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        valueChanged();
+        }
+    });
+    selectLonO.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        valueChanged();
+        }
+    });
+    
+    ButtonGroup lonGroup = new ButtonGroup();
+    lonGroup.add(selectLonE);
+    lonGroup.add(selectLonO);
+    this.add(selectLonE, "");
+    this.add(selectLonO, "");
+    
+    inputLatDegrees = new PlaceholderTextField("grados");
+    inputLatDegrees.setColumns(6);
+    inputLatDegrees.getDocument().addDocumentListener(this);
+    this.add(inputLatDegrees, "growx");
+    
+    inputLatMinutes = new PlaceholderTextField("minutos");
+    inputLatMinutes.setColumns(6);
+    inputLatMinutes.getDocument().addDocumentListener(this);
+    this.add(inputLatMinutes, "growx");
+    
+    inputLatSeconds = new PlaceholderTextField("segundos");
+    inputLatSeconds.setColumns(8);
+    inputLatSeconds.getDocument().addDocumentListener(this);
+    this.add(inputLatSeconds, "growx");
+    
+    selectLatN = new JRadioButton("N", true);
+    selectLatS = new JRadioButton("S", false);
+    selectLatN.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        valueChanged();
+        }
+    });
+    selectLatS.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        valueChanged();
+        }
+    });
+    
+    ButtonGroup latGroup = new ButtonGroup();
+    latGroup.add(selectLatN);
+    latGroup.add(selectLatS);
+    this.add(selectLatN, "grow x");
+    this.add(selectLatS, "grow x"); 
+    
+    paintInputCB(iProv);
+    }
+    
+    private void paintInputCB(CoordProvider code) {
+    inputProj = new JComboBox();
+    this.add(inputProj, "wrap, growx");
 
-    private void setupOuput() {
+    inputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
+        .toArray(new CoordProvider[0])));
+    inputProj.setPrototypeDisplayValue("EPSG:XXXXXXXXX");
+    if (code == null) {
+        inputProj.setSelectedItem(model.getDefaultInputProj());
+    }else {
+        inputProj.setSelectedItem(code);
+    }
+    inputProj.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        valueInputCBChanged();
+        }
+    });
+    }
+
+    private void paintOutput(String cellSpan) {
 
 	outputX = new JTextField();
-	outputX.setColumns(WIDGET_SIZE);
 	outputX.setEditable(false);
-	this.add(outputX, "growx");
+	this.add(outputX, cellSpan);
 
 	outputY = new JTextField();
-	outputY.setColumns(WIDGET_SIZE);
 	outputY.setEditable(false);
-	this.add(outputY, "growx");
+	this.add(outputY, cellSpan);
+	
+    outputProj = new JComboBox();
+    this.add(outputProj, "wrap, growx");
 
-	outputProj = new JComboBox();
-	this.add(outputProj, "wrap, growx");
+    outputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
+        .toArray(new CoordProvider[0])));
+    outputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
+    outputProj.setSelectedItem(model.getDefaultOuputProj());
+    outputProj.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        valueChanged();
+        }
+    });
 
-	outputProj.setModel(new DefaultComboBoxModel(model.getProjCodes()
-		.toArray(new CoordProvider[0])));
-	outputProj.setPrototypeDisplayValue("EPSG:XXXXXXX");
-	outputProj.setSelectedItem(model.getDefaultOuputProj());
-	outputProj.addActionListener(new ActionListener() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		valueChanged();
-	    }
-	});
     }
 
-    private void setupZoomBt() {
+    private void paintZoomBt(String cellSpan) {
 	zoomBt = new JButton("Zoom");
 	zoomBt.setEnabled(false);
 	zoomBt.addActionListener(new ActionListener() {
@@ -131,11 +229,19 @@ DocumentListener {
 		ZoomTo zoom = model.getZoomTo();
 		CoordProvider iProv = (CoordProvider) inputProj
 			.getSelectedItem();
-		zoom.zoom(iProv.toGPoint(inputX.getText(), inputY.getText()),
-			true);
+		if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")){
+		    String[] coords = transformDMSCoords(iProv);
+		    CoordProvider iProvOut = (CoordProvider) outputProj
+		            .getSelectedItem();
+		    zoom.zoom(iProvOut.toGPoint(coords[0], coords[1]),
+                    true);
+		}else {
+		    zoom.zoom(iProv.toGPoint(inputX.getText(), inputY.getText()),
+		            true);
+	    }
 	    }
 	});
-	this.add(zoomBt, "cell 2 3, growx");
+	this.add(zoomBt, cellSpan);
     }
 
     @Override
@@ -152,12 +258,128 @@ DocumentListener {
     public void changedUpdate(DocumentEvent e) {
 	// nothing to do here
     }
-
+    
     private void valueChanged() {
-	CoordProvider iProv = (CoordProvider) inputProj.getSelectedItem();
+	CoordProvider iProvInput = (CoordProvider) inputProj.getSelectedItem();
+	CoordProvider iProvOutput = (CoordProvider) outputProj.getSelectedItem();
+	String[] coords = null;
+	        
+	if (iProvInput.toString().equalsIgnoreCase("WGS84 (GMS)")) {
+	    coords = transformDMSCoords(iProvInput);
 
-	final boolean validX = iProv.validX(inputX.getText());
-	final boolean validY = iProv.validY(inputY.getText());
+	}else {
+	    coords = transformDecimalCoords(iProvInput);
+	}
+	    
+	if (coords != null) {
+	    setOutPutAsFormat(iProvOutput, coords);
+	    zoomBt.setEnabled(true);
+	} else {
+	    zoomBt.setEnabled(false);
+	    outputX.setText("");
+	    outputY.setText("");
+	}
+
+    }
+    
+    private void valueInputCBChanged() {
+    
+    CoordProvider iProv = (CoordProvider) inputProj.getSelectedItem();
+    
+    if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")) {
+        this.removeAll();
+        setupDmsUI(iProv);
+    }else {
+        this.removeAll();
+        setupDecimalUI(iProv);
+    }
+    
+    }
+
+    private void setOutPutAsFormat(CoordProvider iProv, String[] coords) {
+    if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")) {
+        outputX.setText(iProv.toDMS(coords[0], "lon"));
+        outputY.setText(iProv.toDMS(coords[1], "lat"));
+    }else {
+        outputX.setText(coords[0]);
+        outputY.setText(coords[1]);
+    }
+    
+    }
+    
+    private String[] transformDMSCoords(CoordProvider iProvInput) {
+    final boolean validLonDegrees = iProvInput.validDMSValue(inputLonDegrees.getText());
+    final boolean validLonMinutes = iProvInput.validDMSValue(inputLonMinutes.getText());
+    final boolean validLonSeconds = iProvInput.validDMSValue(inputLonSeconds.getText());
+    
+    final boolean validLatDegrees = iProvInput.validDMSValue(inputLatDegrees.getText());
+    final boolean validLatMinutes = iProvInput.validDMSValue(inputLatMinutes.getText());
+    final boolean validLatSeconds = iProvInput.validDMSValue(inputLatSeconds.getText());
+    
+    if (validLonDegrees) {
+        inputLonDegrees.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputLonDegrees.setBackground(INVALID_COLOR);
+    }
+    if (validLonMinutes) {
+        inputLonMinutes.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputLonMinutes.setBackground(INVALID_COLOR);
+    }
+    if (validLonSeconds) {
+        inputLonSeconds.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputLonSeconds.setBackground(INVALID_COLOR);
+    }
+    
+    if (validLatDegrees) {
+        inputLatDegrees.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputLatDegrees.setBackground(INVALID_COLOR);
+    }
+    if (validLatMinutes) {
+        inputLatMinutes.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputLatMinutes.setBackground(INVALID_COLOR);
+    }
+    if (validLatSeconds) {
+        inputLatSeconds.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputLatSeconds.setBackground(INVALID_COLOR);
+    }
+    
+    String x = null;
+    if (validLonDegrees && validLonMinutes && validLonSeconds) {
+    String lonZone = (selectLonE.isSelected()?"E":"O");
+    x = iProvInput.dmsToDecimalDegrees(inputLonDegrees.getText(), 
+            inputLonMinutes.getText(), inputLonSeconds.getText(), lonZone);
+    }
+    
+    String y = null;
+    if (validLatDegrees && validLatMinutes && validLatSeconds) {
+    String latZone = (selectLatN.isSelected()?"N":"S");
+    y = iProvInput.dmsToDecimalDegrees(inputLatDegrees.getText(), 
+            inputLatMinutes.getText(), inputLatSeconds.getText(), latZone);
+    }
+  
+    if (x == null || y == null) {
+        return null;
+    }else {
+        final boolean validX = iProvInput.validX(x);
+        final boolean validY = iProvInput.validY(y);
+    
+        if (validX && validY) {
+            return iProvInput.transform(x, y,
+                    outputProj.getSelectedItem());
+        }else {
+            return null;
+        }
+    }
+    }
+
+    private String[] transformDecimalCoords(CoordProvider iProvInput) {
+    final boolean validX = iProvInput.validX(inputX.getText());
+	final boolean validY = iProvInput.validY(inputY.getText());
 
 	if (validX) {
 	    inputX.setBackground(UIManager.getColor("TextField.background"));
@@ -172,15 +394,10 @@ DocumentListener {
 	}
 
 	if (validX && validY) {
-	    String[] o = iProv.transform(inputX.getText(), inputY.getText(),
+	    return iProvInput.transform(inputX.getText(), inputY.getText(),
 		    outputProj.getSelectedItem());
-	    outputX.setText(o[0]);
-	    outputY.setText(o[1]);
-	    zoomBt.setEnabled(true);
 	} else {
-	    zoomBt.setEnabled(false);
-	    outputX.setText("");
-	    outputY.setText("");
+	    return null;
 	}
     }
 

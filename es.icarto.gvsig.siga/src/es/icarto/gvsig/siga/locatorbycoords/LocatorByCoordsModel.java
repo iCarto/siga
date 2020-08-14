@@ -32,6 +32,13 @@ public class LocatorByCoordsModel {
 	epsg4326.setExtent(extent4326);
 	epsg4326.setOuputFormat(SIGAFormatter.latLngFormatter());
 
+	CoordProvider epsg4326dms = new CoordProvider("WGS84 (GMS)", "EPSG:4326");
+	GShape extent4326dms = new GShape(epsg4326.getProj(),
+		new Rectangle2D.Double(Math.abs(-6.734324529), 41.8072541522,
+			Math.abs(-9.29885967 - -6.734324529),
+			43.7924041112 - 41.8072541522));
+	epsg4326dms.setExtent(extent4326);
+	//epsg4326.setOuputFormat(SIGAFormatter.latLngFormatter());
 
 	CoordProvider epsg23029 = new CoordProvider("ED50 UTM29", "EPSG:23029");
 	GShape extent23029 = new GShape(epsg23029.getProj(),
@@ -49,6 +56,7 @@ public class LocatorByCoordsModel {
 	epsg25829.setOuputFormat(SIGAFormatter.utmFormatter());
 
 	projCodes.add(epsg4326);
+	projCodes.add(epsg4326dms);
 	projCodes.add(epsg23029);
 	projCodes.add(epsg25829);
 	defaultInputProj = projCodes.get(0);
