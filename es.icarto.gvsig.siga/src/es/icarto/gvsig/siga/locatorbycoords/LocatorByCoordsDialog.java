@@ -22,14 +22,14 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
 import es.icarto.gvsig.commons.gui.IWindowClosed;
 import es.icarto.gvsig.commons.gui.PlaceholderTextField;
-import es.icarto.gvsig.utils.SIGAFormatter;
 import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 
 @SuppressWarnings("serial")
 public class LocatorByCoordsDialog extends AbstractIWindow implements
 DocumentListener {
 
-    private final static int WIDGET_SIZE = 23;
+    private final static int UTM_WIDGET_SIZE = 23;
+    private final static int WGS84_WIDGET_SIZE = 17;
     private final LocatorByCoordsModel model;
 
     private JComboBox inputProj;
@@ -57,7 +57,7 @@ DocumentListener {
     public LocatorByCoordsDialog(LocatorByCoordsModel locatorByCoordsModel) {
 	super();
 	this.model = locatorByCoordsModel;
-	setupDecimalUI(null);
+	setupWGS84DecimalUI(null);
 	setWindowTitle("Localizar Coordenadas");
 	setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
 	setWindowClosed(new IWindowClosed() {
@@ -67,31 +67,73 @@ DocumentListener {
 	    }
 	});
     }
-
-    private void setupDecimalUI(CoordProvider iProv) {
-	paintDecimalInput(iProv);
-	paintOutput("span 1, growx");
-	paintZoomBt("cell 2 3, growx");
+    
+    private boolean isCBValueWGS84(CoordProvider iProv) {
+    if (iProv.toString().equalsIgnoreCase("WGS84")) {
+        return true;
+    }else {
+        return false;
+    }
     }
     
-    private void setupDmsUI(CoordProvider iProv) {
+    private boolean isCBValueWGS84DMS(CoordProvider iProv) {
+    if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")) {
+        return true;
+    }else {
+        return false;
+    }
+    }
+
+    private void setupWGS84DecimalUI(CoordProvider iProv) {
+	paintDecimalInput(iProv);
+	paintOutput("span 3, growx");
+	paintZoomBt("cell 6 3, growx");
+    }
+    
+    private void setupWGS84DmsUI(CoordProvider iProv) {
     paintInputDMS(iProv);
     paintOutput("span 5, growx");
     paintZoomBt("cell 10 3, growx");
     }
+    
+    private void setupUtmUI(CoordProvider iProv) {
+    paintUtmInput(iProv);
+    paintOutput("span 1, growx");
+    paintZoomBt("cell 2 3, growx");
+    }
 
+    private void paintUtmInput(CoordProvider iProv) {
+    inputX = new PlaceholderTextField("utm X (548076,36)");
+    // 548202,058 - 23029
+    inputX.setColumns(UTM_WIDGET_SIZE);
+    inputX.getDocument().addDocumentListener(this);
+    this.add(inputX, "growx");
+
+    inputY = new PlaceholderTextField("utm Y (4803838,61)");
+    // 4804052,835 - 23029
+    inputY.setColumns(UTM_WIDGET_SIZE);
+    inputY.getDocument().addDocumentListener(this);
+    this.add(inputY, "growx");
+
+    paintInputCB(iProv);
+    }
+    
     private void paintDecimalInput(CoordProvider iProv) {
-	inputX = new PlaceholderTextField("utm X (548076,36) o Long (-8,4062)");
+	inputX = new PlaceholderTextField("Long (8,4062)");
 	// 548202,058 - 23029
-	inputX.setColumns(WIDGET_SIZE);
+	inputX.setColumns(WGS84_WIDGET_SIZE);
 	inputX.getDocument().addDocumentListener(this);
 	this.add(inputX, "growx");
+	
+	paintLonSelect();
 
-	inputY = new PlaceholderTextField("utm Y (4803838,61) o Lat (43,386)");
+	inputY = new PlaceholderTextField("Lat (43,386)");
 	// 4804052,835 - 23029
-	inputY.setColumns(WIDGET_SIZE);
+	inputY.setColumns(WGS84_WIDGET_SIZE);
 	inputY.getDocument().addDocumentListener(this);
 	this.add(inputY, "growx");
+	
+	paintLatSelect();
 
 	paintInputCB(iProv);
 
@@ -114,6 +156,29 @@ DocumentListener {
     inputLonSeconds.getDocument().addDocumentListener(this);
     this.add(inputLonSeconds, "growx");
        
+    paintLonSelect();
+    
+    inputLatDegrees = new PlaceholderTextField("grados");
+    inputLatDegrees.setColumns(6);
+    inputLatDegrees.getDocument().addDocumentListener(this);
+    this.add(inputLatDegrees, "growx");
+    
+    inputLatMinutes = new PlaceholderTextField("minutos");
+    inputLatMinutes.setColumns(6);
+    inputLatMinutes.getDocument().addDocumentListener(this);
+    this.add(inputLatMinutes, "growx");
+    
+    inputLatSeconds = new PlaceholderTextField("segundos");
+    inputLatSeconds.setColumns(8);
+    inputLatSeconds.getDocument().addDocumentListener(this);
+    this.add(inputLatSeconds, "growx");
+    
+    paintLatSelect();
+    
+    paintInputCB(iProv);
+    }
+
+    private void paintLonSelect() {
     selectLonE = new JRadioButton("E", false);
     selectLonO = new JRadioButton("O", true);
     selectLonE.addActionListener(new ActionListener() {
@@ -134,22 +199,9 @@ DocumentListener {
     lonGroup.add(selectLonO);
     this.add(selectLonE, "");
     this.add(selectLonO, "");
-    
-    inputLatDegrees = new PlaceholderTextField("grados");
-    inputLatDegrees.setColumns(6);
-    inputLatDegrees.getDocument().addDocumentListener(this);
-    this.add(inputLatDegrees, "growx");
-    
-    inputLatMinutes = new PlaceholderTextField("minutos");
-    inputLatMinutes.setColumns(6);
-    inputLatMinutes.getDocument().addDocumentListener(this);
-    this.add(inputLatMinutes, "growx");
-    
-    inputLatSeconds = new PlaceholderTextField("segundos");
-    inputLatSeconds.setColumns(8);
-    inputLatSeconds.getDocument().addDocumentListener(this);
-    this.add(inputLatSeconds, "growx");
-    
+    }
+
+    private void paintLatSelect() {
     selectLatN = new JRadioButton("N", true);
     selectLatS = new JRadioButton("S", false);
     selectLatN.addActionListener(new ActionListener() {
@@ -170,8 +222,6 @@ DocumentListener {
     latGroup.add(selectLatS);
     this.add(selectLatN, "grow x");
     this.add(selectLatS, "grow x"); 
-    
-    paintInputCB(iProv);
     }
     
     private void paintInputCB(CoordProvider code) {
@@ -229,11 +279,17 @@ DocumentListener {
 		ZoomTo zoom = model.getZoomTo();
 		CoordProvider iProv = (CoordProvider) inputProj
 			.getSelectedItem();
-		if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")){
-		    String[] coords = transformDMSCoords(iProv);
+		if (isCBValueWGS84DMS(iProv)){
+		    String[] coords = transformWGS84DMSCoords(iProv);
 		    CoordProvider iProvOut = (CoordProvider) outputProj
 		            .getSelectedItem();
 		    zoom.zoom(iProvOut.toGPoint(coords[0], coords[1]),
+                    true);
+		}else if (isCBValueWGS84(iProv)) {
+		    String[] coords = transformWGS84DecimalCoords(iProv);
+            CoordProvider iProvOut = (CoordProvider) outputProj
+                    .getSelectedItem();
+            zoom.zoom(iProvOut.toGPoint(coords[0], coords[1]),
                     true);
 		}else {
 		    zoom.zoom(iProv.toGPoint(inputX.getText(), inputY.getText()),
@@ -264,9 +320,11 @@ DocumentListener {
 	CoordProvider iProvOutput = (CoordProvider) outputProj.getSelectedItem();
 	String[] coords = null;
 	        
-	if (iProvInput.toString().equalsIgnoreCase("WGS84 (GMS)")) {
-	    coords = transformDMSCoords(iProvInput);
+	if (isCBValueWGS84DMS(iProvInput)) {
+	    coords = transformWGS84DMSCoords(iProvInput);
 
+	}else if (isCBValueWGS84(iProvInput)) {
+	    coords = transformWGS84DecimalCoords(iProvInput);
 	}else {
 	    coords = transformDecimalCoords(iProvInput);
 	}
@@ -286,20 +344,26 @@ DocumentListener {
     
     CoordProvider iProv = (CoordProvider) inputProj.getSelectedItem();
     
-    if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")) {
+    if (isCBValueWGS84DMS(iProv)) {
         this.removeAll();
-        setupDmsUI(iProv);
+        setupWGS84DmsUI(iProv);
+    }else if (isCBValueWGS84(iProv)){
+        this.removeAll();
+        setupWGS84DecimalUI(iProv);
     }else {
         this.removeAll();
-        setupDecimalUI(iProv);
+        setupUtmUI(iProv);
     }
     
     }
 
     private void setOutPutAsFormat(CoordProvider iProv, String[] coords) {
-    if (iProv.toString().equalsIgnoreCase("WGS84 (GMS)")) {
-        outputX.setText(iProv.toDMS(coords[0], "lon"));
-        outputY.setText(iProv.toDMS(coords[1], "lat"));
+    if (isCBValueWGS84DMS(iProv)) {
+        outputX.setText(iProv.toWGS84DMS(coords[0], "lon"));
+        outputY.setText(iProv.toWGS84DMS(coords[1], "lat"));
+    }else if (isCBValueWGS84(iProv)) {
+        outputX.setText(iProv.toWGS84(coords[0], "lon"));
+        outputY.setText(iProv.toWGS84(coords[1], "lat"));
     }else {
         outputX.setText(coords[0]);
         outputY.setText(coords[1]);
@@ -307,7 +371,7 @@ DocumentListener {
     
     }
     
-    private String[] transformDMSCoords(CoordProvider iProvInput) {
+    private String[] transformWGS84DMSCoords(CoordProvider iProvInput) {
     final boolean validLonDegrees = iProvInput.validDMSValue(inputLonDegrees.getText());
     final boolean validLonMinutes = iProvInput.validDMSValue(inputLonMinutes.getText());
     final boolean validLonSeconds = iProvInput.validDMSValue(inputLonSeconds.getText());
@@ -375,6 +439,44 @@ DocumentListener {
             return null;
         }
     }
+    }
+    
+    private String[] transformWGS84DecimalCoords(CoordProvider iProvInput) {
+    final boolean validX = iProvInput.validX(inputX.getText()) && iProvInput.numberIsPositive(inputX.getText());
+    final boolean validY = iProvInput.validY(inputY.getText()) && iProvInput.numberIsPositive(inputY.getText());
+
+    if (validX) {
+        inputX.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputX.setBackground(INVALID_COLOR);
+    }
+
+    if (validY) {
+        inputY.setBackground(UIManager.getColor("TextField.background"));
+    } else {
+        inputY.setBackground(INVALID_COLOR);
+    }
+    
+    String lonZone = (selectLonE.isSelected()?"E":"O");
+    String latZone = (selectLatN.isSelected()?"N":"S");
+    
+    String x = inputX.getText();
+    if (lonZone.equalsIgnoreCase("O")) {
+        x = "-" + inputX.getText();
+    }
+    
+    String y = inputY.getText();
+    if (latZone.equalsIgnoreCase("S")) {
+        x = "-" + inputY.getText();
+    }
+    
+    if (validX && validY) {
+        return iProvInput.transform(x, y,
+                outputProj.getSelectedItem());
+    }else {
+        return null;
+    }
+    
     }
 
     private String[] transformDecimalCoords(CoordProvider iProvInput) {

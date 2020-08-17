@@ -101,6 +101,12 @@ public class CoordProvider {
     }
     }
     
+    public boolean numberIsPositive(String value) {
+    Number v = normalize(value);
+    boolean isPositive = (v.doubleValue() >0)?true:false;
+    return isPositive;
+    }
+    
     public String[] transform(String inputX, String inputY, Object selectedItem) {
 	IProjection oProj = null;
 
@@ -154,7 +160,7 @@ public class CoordProvider {
     return format.format(decimal);
     }
     
-    public String toDMS(String value, String type) {
+    public String toWGS84DMS(String value, String type) {
     double decimalDegrees = normalize(value).doubleValue();
     double degrees = (int) decimalDegrees;
     double remaining = Math.abs(decimalDegrees - degrees);
@@ -173,5 +179,20 @@ public class CoordProvider {
     
     return dms + zone;
     
+    }
+    
+    public String toWGS84(String value, String type) {
+    double decimal = normalize(value).doubleValue();
+    String zone = null;
+    if (type.equalsIgnoreCase("lat")) {
+        zone=(decimal>0)?"N":"S";
+    }
+    if (type.equalsIgnoreCase("lon")) {
+        zone=(decimal>0)?"E":"O";
+    }
+    if (decimal < 0) {
+        decimal = decimal * (-1);
+    }
+    return String.valueOf(decimal) + " " + zone;
     }
 }
