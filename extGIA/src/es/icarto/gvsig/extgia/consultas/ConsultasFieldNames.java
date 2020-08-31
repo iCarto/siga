@@ -162,7 +162,7 @@ public class ConsultasFieldNames {
         case Pozos:
             return "gid, tr.item, tv.item, nv.item, pk, denominacion, numero_concesion, fecha_concesion, observaciones";
         case Centros_Mando:
-            return "gid, tr.item,  tv.item,  nv.item, pk, grupo, cups, observaciones";
+            return "gid, tr.item,  tv.item,  nv.item, pk, grupo, cups, numero_farolas, observaciones";
         case Pretiles:
             return "gid, tr.item,  tv.item,  nv.item, pk_inicial, pk_final, tipo, sistema_contencion, longitud, observaciones";
         case Barrera_Metalica:
@@ -553,7 +553,7 @@ public class ConsultasFieldNames {
 
     public static String centrosMandoCSVFieldNames() {
         return "gid as \"ID Centro Mando\"," + localizationCSVFieldNames()
-                + "pk as \"PK\", grupo AS \"Grupo\", cups AS \"CUPS\", observaciones AS \"Observaciones\"";
+                + "pk as \"PK\", grupo AS \"Grupo\", cups AS \"CUPS\", numero_farolas AS \"Nº Farolas\", observaciones AS \"Observaciones\"";
     }
 
     public static String pretilesCSVFieldNames() {

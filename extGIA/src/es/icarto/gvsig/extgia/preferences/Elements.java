@@ -29,6 +29,7 @@ import es.icarto.gvsig.extgia.forms.cunetas.CunetasForm;
 import es.icarto.gvsig.extgia.forms.dren_caz.DrenCazForm;
 import es.icarto.gvsig.extgia.forms.enlaces.EnlacesForm;
 import es.icarto.gvsig.extgia.forms.estructuras.EstructurasForm;
+import es.icarto.gvsig.extgia.forms.farolas.FarolasForm;
 import es.icarto.gvsig.extgia.forms.fibra_optica_derivaciones.FibraOpticaDerivacionesForm;
 import es.icarto.gvsig.extgia.forms.firme.FirmeForm;
 import es.icarto.gvsig.extgia.forms.isletas.IsletasForm;
@@ -173,6 +174,7 @@ public enum Elements {
                                                                                     Help.ignoredGidGeom,
                                                                                     "nombre",
                                                                                     true),
+    Farolas("gid", FarolasForm.class, null, null, null, "null", null, Help.ignoreGeom, null, false),                                                                                
     Fibra_Optica_Derivaciones(
                                                                                             "gid",
                                                                                             FibraOpticaDerivacionesForm.class,

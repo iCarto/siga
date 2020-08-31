@@ -19,7 +19,7 @@ public class CentrosMandoCaracteristicasReport extends PDFCaracteristicasReport 
     @Override
     protected String[] getColumnNames() {
         String[] columnNames = { "ID Centro Mando", "Tramo", "Tipo Vía", "Nombre Vía", "PK", "Grupo", "CUPS",
-                "Observaciones" };
+                "Nº Farolas", "Observaciones" };
         return columnNames;
     }
 
@@ -34,7 +34,8 @@ public class CentrosMandoCaracteristicasReport extends PDFCaracteristicasReport 
         columnsWidth[4] = 65f;
         columnsWidth[5] = 65f;
         columnsWidth[6] = 65f;
-        columnsWidth[7] = 95f;
+        columnsWidth[7] = 65f;
+        columnsWidth[8] = 95f;
 
         return columnsWidth;
     }

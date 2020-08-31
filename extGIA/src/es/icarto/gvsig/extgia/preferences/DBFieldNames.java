@@ -27,6 +27,7 @@ public class DBFieldNames {
 	"Unidad", "Medición", "Observaciones" };
 
     public static final String GIA_SCHEMA = "audasa_extgia";
+    public static final String GIA_SRID = "25829";
     
   //companies
   	public static final String AUDASA_COMPANY = "Audasa";
@@ -47,6 +48,7 @@ public class DBFieldNames {
     public static final String DIRECCION_PI = "direccion_pi";
     public static final String DIRECCION_PF = "direccion_pf";
     public static final String SENTIDO = "sentido";
+    public static final String MUNICIPIO = "municipio";
 
     // TALUDES
     public static final String TALUDES_LAYERNAME = "Taludes";
@@ -89,7 +91,6 @@ public class DBFieldNames {
     // ENLACES
     public static final String ENLACES_LAYERNAME = "Enlaces";
     public static final String ID_ENLACE = "id_enlace";
-    public static final String MUNICIPIO = "municipio";
 
     // BARRERA RIGIDA
     public static final String BARRERA_RIGIDA_LAYERNAME = "Barrera_Rigida";
@@ -228,4 +229,7 @@ public class DBFieldNames {
     
     // TUNELES
     public static final String ID_TUNELES = "gid";
+    
+    // FAROLAS
+    public static final String CENTRO_MANDO = "centro_mando";
 }

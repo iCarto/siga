@@ -29,5 +29,6 @@
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/poi-ooxml-schemas-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

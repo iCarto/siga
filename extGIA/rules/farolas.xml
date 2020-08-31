@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LAYER alias="farolas">
+	<TABLENAME>farolas</TABLENAME>
+	<PRIMARYKEY>
+		<PKELEMENT>gid</PKELEMENT>
+	</PRIMARYKEY>
+	<RECORDSET>
+
+		<!-- LOCATION WIDGETS START -->
+    <FIELD>
+        <FIELDNAME>gid</FIELDNAME>
+        <VALIDATIONRULE>INTEGER_POSITIVE</VALIDATIONRULE>
+    </FIELD>
+    
+
+    
+    <FIELD>
+        <FIELDNAME>centro_mando</FIELDNAME>
+        <VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
+        <!-- <DOMAINREADER>
+            <DRTYPE>db</DRTYPE>
+            <DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
+            <DRDBTABLE>municipio</DRDBTABLE>
+            <DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+            <DRDBCOLUMNVALUE>id</DRDBCOLUMNVALUE>
+            <DRDBFOREIGNKEY>id_bc</DRDBFOREIGNKEY>
+            <DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
+            <DRADDVOIDVALUE>true</DRADDVOIDVALUE>
+        </DOMAINREADER> -->
+    </FIELD>
+    
+
+    
+
+	</RECORDSET>
+</LAYER>
