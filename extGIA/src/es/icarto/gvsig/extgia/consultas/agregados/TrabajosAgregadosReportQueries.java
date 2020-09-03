@@ -14,7 +14,7 @@ public class TrabajosAgregadosReportQueries {
 
     private enum Vegetacion {
 	TALUDES("taludes", "id_talud"), ISLETAS("isletas", "id_isleta"), BARRERA_RIGIDA(
-		"barrera_rigida", "id_barrera_rigida");
+		"barrera_rigida", "id_barrera_rigida"), VALLA_CIERRE("valla_cierre", "id_valla");
 
 	private final String table;
 	private final String id;
@@ -58,7 +58,14 @@ public class TrabajosAgregadosReportQueries {
 	if (element.equalsIgnoreCase("vegetacion")) {
 	    String elementQuery = "";
 	    for (Vegetacion eVeg : Vegetacion.values()) {
-		elementQuery += String.format(query , eVeg.id, eVeg.table, eVeg.table, eVeg.id, eVeg.id, unidad).replace(" ORDER BY 2, 5, 1", " UNION ALL ");
+	        if (eVeg.name().compareToIgnoreCase("VALLA_CIERRE") == 0) {
+	        /* VALLA_CIERRE is the only element of vegetation that
+	         * it has a SERIAL and not a VARCHAR as PK */
+	        query = query.replaceFirst("el.%s", "CAST(el.id_valla AS Varchar)");
+	        elementQuery += String.format(query, eVeg.table, eVeg.table, eVeg.id, eVeg.id, unidad).replace(" ORDER BY 2, 5, 1", " UNION ALL ");
+	        }else {
+	        elementQuery += String.format(query, eVeg.id, eVeg.table, eVeg.table, eVeg.id, eVeg.id, unidad).replace(" ORDER BY 2, 5, 1", " UNION ALL ");
+	        }
 	    }
 	    return elementQuery.replaceFirst(" UNION ALL $", " ORDER BY 2, 5, 1");
 	}
@@ -96,11 +103,14 @@ public class TrabajosAgregadosReportQueries {
 	    String queryIsletas = String.format("(SELECT  " + partialQuery
 		    + ") + ", a.table, a.table, a.id, a.id, where);
 	    a = Vegetacion.BARRERA_RIGIDA;
-	    String queryBR = String.format("(SELECT  " + partialQuery + ")",
-		    a.table, a.table, a.id, a.id, where);
+	    String queryBR = String.format("(SELECT  " + partialQuery
+	        + ") + ", a.table, a.table, a.id, a.id, where);
+	    a = Vegetacion.VALLA_CIERRE;
+        String queryVC = String.format("(SELECT  " + partialQuery + ")",
+            a.table, a.table, a.id, a.id, where);
 
 	    String query = String.format("SELECT " + queryTalud + queryIsletas
-		    + queryBR);
+		    + queryBR + queryVC);
 	    return query;
 	}
 

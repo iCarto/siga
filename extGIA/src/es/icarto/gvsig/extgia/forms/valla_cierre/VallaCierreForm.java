@@ -28,7 +28,8 @@ public class VallaCierreForm extends AbstractFormWithLocationWidgets {
 	// int[] trabajoColumnsSize = { 1, 30, 90, 70, 200 };
 	addTableHandler(new GIAAlphanumericTableHandler(
 		getTrabajosDBTableName(), getWidgets(), getElementID(),
-		DBFieldNames.trabajosColNames, DBFieldNames.trabajosColAlias,
+		DBFieldNames.trabajosVegetacionColNames, 
+		DBFieldNames.trabajosVegetacionColAlias,
 		DBFieldNames.trabajosColWidths, this));
 
 	addTableHandler(new GIAAlphanumericTableHandler(
