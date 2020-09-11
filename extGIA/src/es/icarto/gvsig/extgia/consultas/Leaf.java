@@ -188,9 +188,8 @@ public class Leaf implements Component {
 	    query = CaracteristicasQueries.getReconocimientosTrabajosQuery(
 		    element, filters, fields, elementId, tipoConsulta.getKey());
 
-	    if (tipo == QueryType.TRABAJOS || tipo == QueryType.TRABAJOS_FIRME) {
-		query += filters.getWhereClauseByDates("fecha_certificado");
-	    } else if (tipo == QueryType.TRABAJOS_VEGETACION) {
+	    if (tipo == QueryType.TRABAJOS || tipo == QueryType.TRABAJOS_FIRME
+	            || tipo == QueryType.TRABAJOS_VEGETACION) {
 		query += filters.getWhereClauseByDates("fecha");
 	    } else {
 		query += filters.getWhereClauseByDates("fecha_inspeccion");

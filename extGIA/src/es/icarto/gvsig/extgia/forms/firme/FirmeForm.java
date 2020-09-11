@@ -29,10 +29,10 @@ public class FirmeForm extends AbstractFormWithLocationWidgets {
     CalculateComponentValue firmeid;
 
     public static String[] firmeTrabajoColNames = { "id_trabajo",
-	"fecha_certificado", "pk_inicial", "pk_final", "sentido",
+	"fecha", "pk_inicial", "pk_final", "sentido",
     "descripcion" };
 
-    public static String[] firmeTrabajoColAlias = { "ID", "Fecha cert",
+    public static String[] firmeTrabajoColAlias = { "ID", "Fecha",
 	"PK inicio", "PK fin", "Sentido", "Descripción" };
 
     public FirmeForm(FLyrVect layer) {

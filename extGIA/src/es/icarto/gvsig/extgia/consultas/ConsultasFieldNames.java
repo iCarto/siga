@@ -46,8 +46,8 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 public class ConsultasFieldNames {
 
     public static String getTrabajosFieldNames(String elementId) {
-        return "sub." + elementId + ", sub.fecha, sub.unidad, sub.medicion_contratista, sub.medicion_audasa, "
-                + "sub.observaciones, sub.fecha_certificado";
+        return "sub." + elementId + ", sub.fecha, sub.unidad, sub.medicion, "
+                + "sub.observaciones";
     }
 
     public static String getTrabajosVegetacionFieldNames(String elementId) {
@@ -56,7 +56,7 @@ public class ConsultasFieldNames {
 
     public static String getFirmeTrabajosFieldNames(String elementId) {
         return "sub." + elementId + ", sub.fecha, sub.pk_inicial, sub.pk_final, sub.sentido, "
-                + "sub.descripcion, sub.fecha_certificado";
+                + "sub.descripcion";
     }
 
     public static String getReconocimientosFieldNames(String element) {

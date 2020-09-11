@@ -19,7 +19,7 @@ public class FirmeTrabajosReport extends TrabajosReport {
     @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Elemento", "Fecha", "PK inicio",
-		"PK final", "Sentido", "Descripción", "Fecha Certificado" };
+		"PK final", "Sentido", "Descripción" };
 	return columnNames;
     }
 
@@ -33,7 +33,6 @@ public class FirmeTrabajosReport extends TrabajosReport {
 	columnsWidth[3] = 60f;
 	columnsWidth[4] = 60f;
 	columnsWidth[5] = 198f;
-	columnsWidth[6] = 70f;
 
 	return columnsWidth;
     }

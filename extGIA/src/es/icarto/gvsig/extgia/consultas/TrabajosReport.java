@@ -19,8 +19,7 @@ public class TrabajosReport extends PDFReport {
     @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Elemento", "Fecha", "Unidad",
-		"Medición Contratista", "Medición AUDASA", "Observaciones",
-		"Fecha Certificado" };
+		"Medición", "Observaciones" };
 	return columnNames;
     }
 
@@ -32,9 +31,7 @@ public class TrabajosReport extends PDFReport {
 	columnsWidth[1] = 60f;
 	columnsWidth[2] = 100f;
 	columnsWidth[3] = 63f;
-	columnsWidth[4] = 60f;
-	columnsWidth[5] = 155f;
-	columnsWidth[6] = 70f;
+	columnsWidth[4] = 155f;
 
 	return columnsWidth;
     }

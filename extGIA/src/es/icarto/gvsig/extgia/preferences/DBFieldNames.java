@@ -14,10 +14,10 @@ public class DBFieldNames {
 	"Revisor", "Fecha Inspección", "Índice Estado" };
 
     public static String[] trabajosColNames = { "id_trabajo",
-	"fecha_certificado", "unidad", "medicion_audasa", "observaciones" };
+	"fecha", "unidad", "medicion", "observaciones" };
 
-    public static String[] trabajosColAlias = { "ID", "Fecha cert", "Unidad",
-	"Medición AUDASA", "Observaciones" };
+    public static String[] trabajosColAlias = { "ID", "Fecha", "Unidad",
+	"Medición", "Observaciones" };
     public static int[] trabajosColWidths = { 10, 45, 90, 75, 190 };
 
     public static String[] trabajosVegetacionColNames = { "id_trabajo",
