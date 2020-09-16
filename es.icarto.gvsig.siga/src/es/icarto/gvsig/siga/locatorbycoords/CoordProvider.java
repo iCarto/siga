@@ -94,7 +94,7 @@ public class CoordProvider {
 
     public boolean validDMSValue(String value) {
     Number v = normalize(value);
-    if (v == null) {
+    if (v == null || !numberIsPositive(value)) {
         return false;
     }else {
         return true;
@@ -193,6 +193,6 @@ public class CoordProvider {
     if (decimal < 0) {
         decimal = decimal * (-1);
     }
-    return String.valueOf(decimal) + " " + zone;
+    return String.valueOf(format.format(decimal)) + " " + zone;
     }
 }
