@@ -49,6 +49,8 @@ import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
 import es.icarto.gvsig.commons.datasources.FieldDescriptionFactory;
 import es.icarto.gvsig.commons.datasources.SHPFactory;
 import es.icarto.gvsig.commons.db.ConnectionWrapper;
+import es.icarto.gvsig.commons.format.FormatPool;
+import es.icarto.gvsig.commons.format.IFormat;
 import es.icarto.gvsig.commons.utils.FileNameUtils;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.DataSource;
 import es.icarto.gvsig.siga.incidencias.KMZPackager.FileDataSource;
@@ -162,9 +164,9 @@ public class IncidenciasParser {
         }
         
         header.add("x_utm");
-        setEnumHeaderIdx("x_utm", header.size() - 1);
+        setEnumHeaderIdx("x ETRS89 utm29", header.size() - 1);
         header.add("y_utm");
-        setEnumHeaderIdx("y_utm", header.size() - 1);
+        setEnumHeaderIdx("y ETRS89 utm29", header.size() - 1);
 
         if (tramoIdx == -1) {
             throw new RuntimeException(
@@ -229,8 +231,13 @@ public class IncidenciasParser {
             if (results != null) {
                 double x = (Double) results.getValueAt(0, 0);
                 double y = (Double) results.getValueAt(0, 1);
-                values[header.size()-2] = ValueFactory.createValue(String.valueOf(x));
-                values[header.size()-1] = ValueFactory.createValue(String.valueOf(y));
+                
+                IFormat formatter = FormatPool.instance();
+                
+                values[header.size()-2] = ValueFactory.createValue(
+                        ((SIGAFormatter) formatter).utmFormatter().format(x));
+                values[header.size()-1] = ValueFactory.createValue(
+                        ((SIGAFormatter) formatter).utmFormatter().format(y));
                 IGeometry geom = ShapeFactory.createPoint2D(x, y);
                 featureList.add(new DefaultFeature(geom, values));
 
@@ -264,10 +271,10 @@ public class IncidenciasParser {
     	}
     	
     	Cell cellXHeader = headerRow.createCell(sheet.getRow(0).getLastCellNum());
-    	cellXHeader.setCellValue("X_UTM");
+    	cellXHeader.setCellValue(Header.X_UTM.toString());
     	
     	Cell cellYHeader = headerRow.createCell(sheet.getRow(0).getLastCellNum() + 1);
-    	cellYHeader.setCellValue("Y_UTM");
+    	cellYHeader.setCellValue(Header.Y_UTM.toString());
     	
     	Iterator<Row> rowIterator = sheet.rowIterator();
         rowIterator.next(); // skip header
@@ -282,12 +289,15 @@ public class IncidenciasParser {
         	
         	TableModel results = calculateGeom(row);
         	if (results != null) {
+        	    IFormat formatter = FormatPool.instance();
+        	    
         		double x = (Double) results.getValueAt(0, 0);
         		double y = (Double) results.getValueAt(0, 1);
-        		Cell cellX = newRow.createCell(row.getLastCellNum());
-            	cellX.setCellValue(String.valueOf(x));
-            	Cell cellY = newRow.createCell(row.getLastCellNum());
-            	cellY.setCellValue(String.valueOf(y));
+        		
+        		Cell cellX = newRow.createCell(sheet.getRow(0).getLastCellNum());
+            	cellX.setCellValue(((SIGAFormatter) formatter).utmFormatter().format(x));
+            	Cell cellY = newRow.createCell(sheet.getRow(0).getLastCellNum() + 1);
+            	cellY.setCellValue(((SIGAFormatter) formatter).utmFormatter().format(y));
         	}	
         }
     	
