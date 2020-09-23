@@ -28,7 +28,7 @@ import es.udc.cartolab.gvsig.elle.constants.ZoomTo;
 public class LocatorByCoordsDialog extends AbstractIWindow implements
 DocumentListener {
 
-    private final static int UTM_WIDGET_SIZE = 23;
+    private final static int UTM_WIDGET_SIZE = 26;
     private final static int WGS84_WIDGET_SIZE = 17;
     private final LocatorByCoordsModel model;
 
