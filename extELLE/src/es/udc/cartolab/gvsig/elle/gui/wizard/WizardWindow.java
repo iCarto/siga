@@ -18,6 +18,7 @@ package es.udc.cartolab.gvsig.elle.gui.wizard;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import javax.swing.JPanel;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
 
@@ -191,5 +193,15 @@ public abstract class WizardWindow extends AbstractIWindow implements IWindow,
 
     public void remove(WizardComponent component) {
 	views.remove(component);
+    }
+    
+    @Override
+    protected JButton getDefaultButton() {
+        return null;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+        return null;
     }
 }

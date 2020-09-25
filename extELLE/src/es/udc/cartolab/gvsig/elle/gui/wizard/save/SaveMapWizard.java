@@ -16,9 +16,6 @@
  */
 package es.udc.cartolab.gvsig.elle.gui.wizard.save;
 
-import java.awt.Component;
-
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import com.iver.andami.PluginServices;
@@ -35,12 +32,10 @@ public class SaveMapWizard extends WizardWindow {
     public final static String PROPERTY_VIEW = "view";
 
     public SaveMapWizard(View view) {
-	super();
-	properties.put(PROPERTY_VIEW, view);
-    }
-
-    public Object getWindowProfile() {
-	return WindowInfo.DIALOG_PROFILE;
+	    super();
+	    properties.put(PROPERTY_VIEW, view);
+	    setWindowTitle(PluginServices.getText(this, "save_map"));
+        setWindowInfoProperties(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
     }
 
     protected void addWizardComponents() {
@@ -80,17 +75,4 @@ public class SaveMapWizard extends WizardWindow {
 	    close();
 	}
     }
-
-	@Override
-	protected JButton getDefaultButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Component getDefaultFocusComponent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

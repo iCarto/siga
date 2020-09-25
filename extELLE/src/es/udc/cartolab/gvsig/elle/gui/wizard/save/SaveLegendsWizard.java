@@ -16,11 +16,8 @@
  */
 package es.udc.cartolab.gvsig.elle.gui.wizard.save;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JButton;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
@@ -46,11 +43,11 @@ public class SaveLegendsWizard extends WizardWindow {
     private int layersOption;
 
     public SaveLegendsWizard(View view, int layersOption) {
-	properties.put(SaveMapWizard.PROPERTY_VIEW, view);
-
-	this.layersOption = layersOption;
-	setLayersProperties();
-
+	    properties.put(SaveMapWizard.PROPERTY_VIEW, view);
+	    this.layersOption = layersOption;
+	    setLayersProperties();
+	    setWindowTitle(PluginServices.getText(this, "Save_legends"));
+        setWindowInfoProperties(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
     }
 
     protected void addWizardComponents() {
@@ -111,22 +108,5 @@ public class SaveLegendsWizard extends WizardWindow {
 	return list;
 
     }
-
-
-    public Object getWindowProfile() {
-	return WindowInfo.DIALOG_PROFILE;
-    }
-
-	@Override
-	protected JButton getDefaultButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Component getDefaultFocusComponent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

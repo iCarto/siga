@@ -17,22 +17,16 @@
 package es.udc.cartolab.gvsig.elle.gui.wizard.load;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
+@SuppressWarnings("serial")
 public class LoadLegendWizard extends LoadMapWizard {
 
     public LoadLegendWizard(View view) {
-	super(view);
-
+	    super(view);
+	    setWindowTitle(PluginServices.getText(this, "load_legends"));
     }
 
-    public WindowInfo getWindowInfo() {
-	WindowInfo wi = super.getWindowInfo();
-	wi.setHeight(300);
-	wi.setTitle(PluginServices.getText(this, "load_legends"));
-	return wi;
-    }
 
     protected void addWizardComponents() {
 	views.add(new LoadLegendWizardComponent(properties));

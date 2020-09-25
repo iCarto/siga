@@ -16,11 +16,9 @@
  */
 package es.udc.cartolab.gvsig.elle.gui.wizard.load;
 
-import java.awt.Component;
 import java.util.List;
 
-import javax.swing.JButton;
-
+import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
@@ -31,19 +29,17 @@ import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
 public class SigaLoadMapWizard extends WizardWindow {
 
     public SigaLoadMapWizard(View view, List<WizardComponent> cmps) {
-	super(cmps);
-	properties.put(SigaLoadMapWizardComponent.PROPERTY_VEW, view);
-
+	    super(cmps);
+	    properties.put(SigaLoadMapWizardComponent.PROPERTY_VEW, view);
+	    setWindowTitle(PluginServices.getText(this, "Load_map"));
+        setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
     }
 
     public SigaLoadMapWizard(View view) {
-	super();
-	properties.put(SigaLoadMapWizardComponent.PROPERTY_VEW, view);
-    }
-
-    @Override
-    public Object getWindowProfile() {
-	return WindowInfo.DIALOG_PROFILE;
+	    super();
+	    properties.put(SigaLoadMapWizardComponent.PROPERTY_VEW, view);
+	    setWindowTitle(PluginServices.getText(this, "Load_map"));
+        setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
     }
 
     @Override
@@ -51,16 +47,4 @@ public class SigaLoadMapWizard extends WizardWindow {
 	views.add(new SigaLoadMapWizardComponent(properties));
 	views.add(new LoadConstantsWizardComponent(properties));
     }
-
-	@Override
-	protected JButton getDefaultButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Component getDefaultFocusComponent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -16,10 +16,7 @@
  */
 package es.udc.cartolab.gvsig.elle.gui.wizard.load;
 
-import java.awt.Component;
-
-import javax.swing.JButton;
-
+import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 
@@ -29,31 +26,14 @@ import es.udc.cartolab.gvsig.elle.gui.wizard.WizardWindow;
 public class LoadMapWizard extends WizardWindow {
 
     public LoadMapWizard(View view) {
-	super();
-	properties.put(LoadMapWizardComponent.PROPERTY_VEW, view);
-    }
-
-    public Object getWindowProfile() {
-	return WindowInfo.DIALOG_PROFILE;
+	    super();
+	    properties.put(LoadMapWizardComponent.PROPERTY_VEW, view);
+	    setWindowTitle(PluginServices.getText(this, "Load_map"));
+        setWindowInfoProperties(WindowInfo.MODELESSDIALOG | WindowInfo.PALETTE | WindowInfo.RESIZABLE);
     }
 
     protected void addWizardComponents() {
 	views.add(new LoadMapWizardComponent(properties));
 	views.add(new LoadLegendWizardComponent(properties));
     }
-
-
-	@Override
-	protected JButton getDefaultButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	protected Component getDefaultFocusComponent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
