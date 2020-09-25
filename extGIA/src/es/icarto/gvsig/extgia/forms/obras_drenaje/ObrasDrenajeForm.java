@@ -21,6 +21,7 @@ public class ObrasDrenajeForm extends AbstractFormWithLocationWidgets {
 
     JTextField obraDrenajeIDWidget;
     CalculateComponentValue obraDrenajeid;
+    CalculateComponentValue obraDrenajeCodigo;
 
     public ObrasDrenajeForm(FLyrVect layer) {
 	super(layer);
@@ -40,6 +41,8 @@ public class ObrasDrenajeForm extends AbstractFormWithLocationWidgets {
 		    getWidgetComponents(), getElementID(), getElementID());
 	    obraDrenajeid.setValue(true);
 	}
+	
+	
     }
 
     @Override
@@ -48,6 +51,9 @@ public class ObrasDrenajeForm extends AbstractFormWithLocationWidgets {
 	Map<String, JComponent> widgets = getWidgets();
 
 	obraDrenajeIDWidget = (JTextField) widgets.get(getElementID());
+	obraDrenajeCodigo = new ObrasDrenajeCalculateCodigo(this, getWidgetComponents(),
+            DBFieldNames.CODIGO, DBFieldNames.PK, DBFieldNames.MATERIAL, DBFieldNames.SECCION);
+	obraDrenajeCodigo.setListeners();
     }
 
     @Override

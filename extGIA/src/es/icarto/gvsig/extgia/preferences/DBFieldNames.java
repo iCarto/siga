@@ -232,4 +232,8 @@ public class DBFieldNames {
     
     // FAROLAS
     public static final String CENTRO_MANDO = "centro_mando";
+    
+    // OBRAS DRENAJE
+    public static final String SECCION = "seccion";
+    public static final String MATERIAL = "material";
 }
