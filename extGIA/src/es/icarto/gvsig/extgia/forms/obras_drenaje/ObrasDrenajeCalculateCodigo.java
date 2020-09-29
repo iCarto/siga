@@ -22,10 +22,13 @@ public class ObrasDrenajeCalculateCodigo extends CalculateComponentValue {
 
     @Override
     public void setValue(boolean validate) {
-    String materialCode = "";
+    String pk = "--";
+    String materialCode = "--";
+    String seccion = "--";
     String codigo = "";
     
     if (validate) {
+        JComboBox tramoWidget = (JComboBox) operatorComponents.get(DBFieldNames.TRAMO);
         JTextField pkWidget = (JTextField) operatorComponents.get(DBFieldNames.PK);
         JComboBox materialWidget = (JComboBox) operatorComponents.get(DBFieldNames.MATERIAL);
         JTextField seccionWidget = (JTextField)operatorComponents.get(DBFieldNames.SECCION);
@@ -44,9 +47,16 @@ public class ObrasDrenajeCalculateCodigo extends CalculateComponentValue {
             }
         }
         
-        if (!pkWidget.getText().isEmpty() && !materialCode.isEmpty() && !seccionWidget.getText().isEmpty()) {
-        codigo = pkWidget.getText() + " " + materialCode + " " + seccionWidget.getText(); 
+        if (!pkWidget.getText().isEmpty()) {
+            pk = pkWidget.getText();
         }
+        
+        if (!seccionWidget.getText().isEmpty()) {
+            seccion = seccionWidget.getText();
+        }
+        
+        codigo = ((KeyValue) tramoWidget.getSelectedItem()).getValue() + " " 
+                + pk + " " + materialCode + " " + seccion; 
         
     }
     

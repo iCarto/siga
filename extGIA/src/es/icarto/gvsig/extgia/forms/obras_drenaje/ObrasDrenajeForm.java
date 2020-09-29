@@ -52,7 +52,8 @@ public class ObrasDrenajeForm extends AbstractFormWithLocationWidgets {
 
 	obraDrenajeIDWidget = (JTextField) widgets.get(getElementID());
 	obraDrenajeCodigo = new ObrasDrenajeCalculateCodigo(this, getWidgetComponents(),
-            DBFieldNames.CODIGO, DBFieldNames.PK, DBFieldNames.MATERIAL, DBFieldNames.SECCION);
+            DBFieldNames.CODIGO, DBFieldNames.TRAMO, DBFieldNames.PK, 
+            DBFieldNames.MATERIAL, DBFieldNames.SECCION);
 	obraDrenajeCodigo.setListeners();
     }
 
