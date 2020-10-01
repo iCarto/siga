@@ -284,7 +284,9 @@ public class IncidenciasParser {
         	Row newRow = sheetWithCoords.createRow(row.getRowNum());
         	for (int i = 0; i < row.getLastCellNum(); i++) {
         		Cell cell = newRow.createCell(i);
-        		cell.setCellValue(XLSFormatUtils.getValueAsString(row.getCell(i)));
+        		if (row.getCell(i) != null) {
+        		XLSFormatUtils.copyCellValue(row.getCell(i), cell);
+        		}
         	}
         	
         	TableModel results = calculateGeom(row);

@@ -40,6 +40,25 @@ public class XLSFormatUtils {
 	default:
 	    return "";
 	}
+	}
+	
+	public static void copyCellValue(Cell inCell, Cell outCell) {
+	switch (inCell.getCellType()) {
+    case Cell.CELL_TYPE_STRING:
+        outCell.setCellValue(inCell.getStringCellValue());
+        break;
+    case Cell.CELL_TYPE_NUMERIC:
+        outCell.setCellValue(inCell.getNumericCellValue());
+        break;
+    case Cell.CELL_TYPE_BOOLEAN:
+        outCell.setCellValue(inCell.getBooleanCellValue());
+        break;
+    case Cell.CELL_TYPE_FORMULA:
+        outCell.setCellValue(inCell.getCellFormula());
+        break;
+    case Cell.CELL_TYPE_BLANK:
+        break;
+	}
     }
 
 }
