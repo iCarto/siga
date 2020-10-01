@@ -85,6 +85,7 @@ public class IncidenciasParser {
     private final List<String> warnings = new ArrayList<String>();
     private final List<IFeature> featureList = new ArrayList<IFeature>();
     private final List<double[]> coordList = new ArrayList<double[]>();
+    private final List<double[]> utmCoordList = new ArrayList<double[]>();
 
     public IncidenciasParser(View view, File file) throws IOException, InvalidFormatException {
         this.view = view;
@@ -245,6 +246,9 @@ public class IncidenciasParser {
                 double lon = (Double) results.getValueAt(0, 3);
 
                 coordList.add(new double[] { lon, lat });
+                utmCoordList.add(new double[] { x, y });
+            }else {
+                utmCoordList.add(new double[] {0, 0});
             }
         }
     }
@@ -285,23 +289,19 @@ public class IncidenciasParser {
         	for (int i = 0; i < row.getLastCellNum(); i++) {
         		Cell cell = newRow.createCell(i);
         		if (row.getCell(i) != null) {
-        		XLSFormatUtils.copyCellValue(row.getCell(i), cell);
+        		XLSFormatUtils.copyCellValue(wb, row.getCell(i), cell);
         		}
         	}
-        	
-        	TableModel results = calculateGeom(row);
-        	if (results != null) {
-        	    IFormat formatter = FormatPool.instance();
-        	    
-        		double x = (Double) results.getValueAt(0, 0);
-        		double y = (Double) results.getValueAt(0, 1);
-        		
+
+        	if (utmCoordList != null) {   
+        	    double[] coord = utmCoordList.get(row.getRowNum() - 1);
+
         		Cell cellX = newRow.createCell(sheet.getRow(0).getLastCellNum());
-            	cellX.setCellValue(((SIGAFormatter) formatter).utmFormatter().format(x));
+            	cellX.setCellValue(coord[0]);
             	Cell cellY = newRow.createCell(sheet.getRow(0).getLastCellNum() + 1);
-            	cellY.setCellValue(((SIGAFormatter) formatter).utmFormatter().format(y));
+            	cellY.setCellValue(coord[1]);
         	}	
-        }
+        }  
     	
     	try {
     		String fileUrl = file.getAbsolutePath();

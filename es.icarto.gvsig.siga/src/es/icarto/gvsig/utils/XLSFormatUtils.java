@@ -1,14 +1,22 @@
 package es.icarto.gvsig.utils;
 
+import java.util.Date;
+
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Workbook;
 
+import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
 
 public class XLSFormatUtils {
     
     private static final DataFormatter dataFormatter = new DataFormatter();
+    private static final String PATTERN = DateFormatNT.getDateFormat()
+            .toPattern();
     
     public XLSFormatUtils() {
 	throw new AssertionError("Non instantiable class");
@@ -42,13 +50,24 @@ public class XLSFormatUtils {
 	}
 	}
 	
-	public static void copyCellValue(Cell inCell, Cell outCell) {
+	public static void copyCellValue(Workbook wb, Cell inCell, Cell outCell) {
 	switch (inCell.getCellType()) {
     case Cell.CELL_TYPE_STRING:
         outCell.setCellValue(inCell.getStringCellValue());
         break;
     case Cell.CELL_TYPE_NUMERIC:
-        outCell.setCellValue(inCell.getNumericCellValue());
+        if (DateUtil.isCellDateFormatted(inCell)) {
+            
+            CellStyle cellStyle = wb.createCellStyle();
+            CreationHelper creationHelper = wb.getCreationHelper();
+            cellStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+            cellStyle.setDataFormat(creationHelper.createDataFormat()
+                .getFormat(PATTERN));
+            wb.getSheetAt(0).setDefaultColumnStyle(outCell.getColumnIndex(), cellStyle);
+            outCell.setCellValue(dataFormatter.formatCellValue(inCell));
+        }else {
+            outCell.setCellValue(inCell.getNumericCellValue());
+        }
         break;
     case Cell.CELL_TYPE_BOOLEAN:
         outCell.setCellValue(inCell.getBooleanCellValue());
