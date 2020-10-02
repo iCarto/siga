@@ -103,7 +103,7 @@ public class CoordProvider {
     
     public boolean numberIsPositive(String value) {
     Number v = normalize(value);
-    boolean isPositive = (v.doubleValue() >0)?true:false;
+    boolean isPositive = (v.doubleValue() >= 0)?true:false;
     return isPositive;
     }
     
