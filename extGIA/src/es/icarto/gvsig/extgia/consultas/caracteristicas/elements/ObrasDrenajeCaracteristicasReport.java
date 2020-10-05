@@ -20,7 +20,7 @@ public class ObrasDrenajeCaracteristicasReport extends PDFCaracteristicasReport 
     @Override
     protected String[] getColumnNames() {
 	String[] columnNames = { "ID Obra Drenaje", "Tramo", "Tipo Vía",
-		"Nombre Vía", "PK", "Tipología", "Material", "Objeto",
+		"Nombre Vía", "PK", "Código", "Tipología", "Material", "Objeto",
 		"Fecha construcción", "Nº elementos", "Sección (cm)",
 		"Longitud (m)", "Observaciones" };
 	return columnNames;
@@ -42,7 +42,8 @@ public class ObrasDrenajeCaracteristicasReport extends PDFCaracteristicasReport 
 	columnsWidth[9] = 60f;
 	columnsWidth[10] = 60f;
 	columnsWidth[11] = 60f;
-	columnsWidth[12] = 120f;
+	columnsWidth[12] = 60f;
+	columnsWidth[13] = 120f;
 
 	return columnsWidth;
     }

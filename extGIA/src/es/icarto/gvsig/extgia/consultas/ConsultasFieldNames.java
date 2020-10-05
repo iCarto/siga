@@ -124,7 +124,7 @@ public class ConsultasFieldNames {
                     + "tipo_estructura, tipologia, longitud, anchura, altura,"
             + "galibo_v_c, galibo_v_d, observaciones";
         case Obras_Drenaje:
-            return "id_obra_drenaje, tr.item, tv.item, nv.item, pk, tipologia, material, "
+            return "id_obra_drenaje, tr.item, tv.item, nv.item, pk, codigo, tipologia, material, "
                     + "objeto, fecha_construccion, n_elementos, seccion, longitud, observaciones";
         case Muros:
             return "id_muro, tr.item, tv.item, nv.item, pk_inicial, pk_final, material, longitud, "
@@ -441,7 +441,7 @@ public class ConsultasFieldNames {
         return "gid, " + "el.id_obra_drenaje as \"ID Obra Drenaje\","
                 + "fecha_actualizacion as \"Fecha Actualización\"," + localizationCSVFieldNames() + "pk as \"PK\","
                 + "ramal as \"Ramal\"," + "st.item as \"Sentido\"," + "direccion as \"Dirección\","
-                + "mu.item as \"Municipio\"," + "tipologia as \"Tipología\"," + "material as \"Material\","
+                + "mu.item as \"Municipio\"," + "codigo as \"Código\"," +  "tipologia as \"Tipología\"," + "material as \"Material\","
                 + "objeto as \"Objeto\"," + "fecha_construccion as \"Fecha construcción\","
                 + "n_elementos as \"Nº elementos\"," + "seccion as \"Sección (cm)\","
                 + "longitud as \"Longitud (m)\"," + "observaciones as \"Observaciones\"";
