@@ -11,6 +11,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
 import es.icarto.gvsig.extgia.forms.CalculateComponentValue;
 import es.icarto.gvsig.extgia.forms.GIAAlphanumericTableHandler;
+import es.icarto.gvsig.extgia.forms.barrera_rigida.BarreraRigidaReconocimientosSubForm;
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
 
@@ -28,6 +29,10 @@ public class EstructurasForm extends AbstractFormWithLocationWidgets {
 
         addTableHandler(new GIAAlphanumericTableHandler(getTrabajosDBTableName(), getWidgets(), getElementID(),
                 DBFieldNames.trabajosColNames, DBFieldNames.trabajosColAlias, DBFieldNames.trabajosColWidths, this));
+        
+        addTableHandler(new GIAAlphanumericTableHandler(getReconocimientosDBTableName(), getWidgets(), getElementID(),
+                DBFieldNames.reconocimientosEstructurasColNames, DBFieldNames.reconocimientosEstructurasColAlias, null, this,
+                EstructurasReconocimientosSubForm.class));
 
         codigoXopa = new CodigoXopa(formBody, tramoCB);
         codigoXopa.setForm(this);

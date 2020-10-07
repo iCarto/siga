@@ -163,14 +163,14 @@ public enum Elements {
                                                                             Help.ignoredGidGeom,
                                                                             "nombre",
                                                                             true),
-                                                                            Estructuras(
+   Estructuras(
                                                                                     "id_estructura",
                                                                                     EstructurasForm.class,
                                                                                     BatchAbstractSubForm.class,
                                                                                     "estructuras_trabajos",
                                                                                     "estructuras_trabajos",
                                                                                     "estructuras_imagenes",
-                                                                                    null,
+                                                                                    "estructuras_reconocimientos",
                                                                                     Help.ignoredGidGeom,
                                                                                     "nombre",
                                                                                     true),

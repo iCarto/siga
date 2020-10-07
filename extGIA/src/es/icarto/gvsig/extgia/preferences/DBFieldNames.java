@@ -12,6 +12,11 @@ public class DBFieldNames {
 	"nombre_revisor", "fecha_inspeccion", "indice_estado" };
     public static final String[] reconocimientosColAlias = { "Nº Inspección",
 	"Revisor", "Fecha Inspección", "Índice Estado" };
+    
+    public static final String[] reconocimientosEstructurasColNames = { "n_inspeccion",
+    "nombre_revisor", "fecha_inspeccion", "tipo_inspeccion", "resultado" };
+    public static final String[] reconocimientosEstructurasColAlias = { "Nº Inspección",
+    "Revisor", "Fecha Inspección", "Tipo Inspección", "Resultado" };
 
     public static String[] trabajosColNames = { "id_trabajo",
 	"fecha", "unidad", "medicion", "observaciones" };
@@ -236,4 +241,11 @@ public class DBFieldNames {
     // OBRAS DRENAJE
     public static final String SECCION = "seccion";
     public static final String MATERIAL = "material";
+    
+    // ESTRUCTURAS RECONOCIMIENTOS
+    public static final String RESULTADO_BASICA = "resultado_basica";
+    public static final String RESULTADO = "resultado";
+    public static final String ESTRUCTURAS_LAYERNAME = "Estructuras";
+    public static final String ID_ESTRUCTURA = "id_estructura";
+    
 }

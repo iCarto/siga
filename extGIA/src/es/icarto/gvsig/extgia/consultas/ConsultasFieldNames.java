@@ -70,6 +70,9 @@ public class ConsultasFieldNames {
         case Firme:
             return "sub." + elementId + ", sub.tipo_inspeccion, sub.nombre_revisor, sub.aparato_medicion,"
                     + "sub.fecha_inspeccion, sub.observaciones";
+        case Estructuras:
+            return "sub." + elementId + ", sub.nombre_revisor, sub.fecha_inspeccion,"
+                    + " sub.tipo_inspeccion, sub.resultado, sub.observaciones";
         default:
             return "sub." + elementId
                     + ", sub.nombre_revisor, sub.fecha_inspeccion, sub.indice_estado, sub.observaciones";

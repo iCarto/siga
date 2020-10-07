@@ -15,6 +15,7 @@ import es.icarto.gvsig.extgia.batch.reconocimientos.BatchAreasPeajeReconocimient
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchAreasServicioReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchBarreraRigidaReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchEnlacesReconocimientos;
+import es.icarto.gvsig.extgia.batch.reconocimientos.BatchEstructurasReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchFirmeReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchIsletasReconocimientos;
 import es.icarto.gvsig.extgia.batch.reconocimientos.BatchJuntasReconocimientos;
@@ -214,6 +215,10 @@ public class LaunchGIAForms {
 	    subform = new BatchVallaCierreReconocimientos(formFileName,
 		    dbTableName);
 	    break;
+	case Estructuras:
+        subform = new BatchEstructurasReconocimientos(formFileName,
+            dbTableName);
+        break;
 	default:
 	    subform = null;
 	}

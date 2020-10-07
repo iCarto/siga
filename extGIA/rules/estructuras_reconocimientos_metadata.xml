@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LAYER alias="estructuras_reconocimientos">
+
+	<FIELD>
+		<FIELDNAME>fecha_inspeccion</FIELDNAME>
+		<VALIDATIONRULE>DATE</VALIDATIONRULE>
+	</FIELD>
+
+	<FIELD>
+		<FIELDNAME>tipo_inspeccion</FIELDNAME>
+		<DOMAINREADER>
+			<DRTYPE>db</DRTYPE>
+			<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
+			<DRDBTABLE>tipo_inspeccion_estructura</DRDBTABLE>
+			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+		</DOMAINREADER>
+	</FIELD>
+
+	<FIELD>
+		<FIELDNAME>resultado_basica</FIELDNAME>
+		<DOMAINREADER>
+			<DRTYPE>db</DRTYPE>
+			<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
+			<DRDBTABLE>resultado_basica</DRDBTABLE>
+			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+		</DOMAINREADER>
+		<ENABLEIF>
+			<CONDITION>
+			<COMPONENT>tipo_inspeccion</COMPONENT>
+			<VALUE>Básica</VALUE>
+			</CONDITION>
+		</ENABLEIF>
+	</FIELD>
+	
+	<FIELD>
+		<FIELDNAME>resultado</FIELDNAME>
+		<ENABLEIF>
+			<CONDITION>
+			<COMPONENT>tipo_inspeccion</COMPONENT>
+			<VALUE>Principal</VALUE>
+			</CONDITION>
+		</ENABLEIF>
+	</FIELD>
+
+</LAYER>

@@ -30,6 +30,12 @@ public class ReconocimientosReport extends PDFReport {
 		    "Nombre Revisor", "Aparato Medición", "Fecha Inspección",
 		    "Observaciones" };
 	}
+	
+	if (getElementID().equalsIgnoreCase("estructuras")) {
+        return new String[] { "ID Elemento", "Nombre Revisor",
+            "Fecha Inspección", "Tipo Inspección", "Resultado",  
+            "Observaciones" };
+    }
 
 	if (!ConsultasFieldNames
 		.hasIndiceFieldOnReconocimientos(getElementID())) {
@@ -54,6 +60,18 @@ public class ReconocimientosReport extends PDFReport {
 
 	    return columnsWidth;
 	}
+	
+	if (getElementID().equalsIgnoreCase("estructuras")) {
+
+        columnsWidth[0] = 60f;
+        columnsWidth[1] = 60f;
+        columnsWidth[2] = 60f;
+        columnsWidth[3] = 60f;
+        columnsWidth[4] = 100f;
+        columnsWidth[5] = 258f;
+
+        return columnsWidth;
+    }
 
 	if (!ConsultasFieldNames
 		.hasIndiceFieldOnReconocimientos(getElementID())) {
