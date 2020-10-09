@@ -21,6 +21,7 @@ import java.awt.Color;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
@@ -54,6 +55,9 @@ public class ValidatorComponent {
         if (c instanceof JTextField) {
             name = c.getName();
             value = ((JTextField) c).getText();
+        } else if (c instanceof JTextArea) {
+            name = c.getName();
+            value = ((JTextArea) c).getText();
         } else if (c instanceof JComboBox) {
             if (((JComboBox) c).getSelectedItem() != null) {
                 name = c.getName();

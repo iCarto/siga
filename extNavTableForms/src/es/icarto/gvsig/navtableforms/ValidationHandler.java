@@ -122,6 +122,14 @@ public class ValidationHandler {
 	    } else if (c instanceof JTextArea) {
 		((JTextArea) c)
 			.addKeyListener(validationHandlerForTextAreas);
+		((JTextArea) c)
+        .addFocusListener(validationHandlerForTextAreas);
+		ValidatorDomain dv = ormlite.getAppDomain()
+	            .getDomainValidatorForComponent(c.getName());
+	        if (dv != null) {
+	            ValidatorComponent cv = new ValidatorComponent(c, dv);
+	            validatorForm.addComponentValidator(cv);
+	        }
 	    }  else if (c instanceof JDateChooser) {
 		((JDateChooser) c).addPropertyChangeListener("date", validationHandlerForJDateChooser);
 		ValidatorDomain dv = ormlite.getAppDomain()
