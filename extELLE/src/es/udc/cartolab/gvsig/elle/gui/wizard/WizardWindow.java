@@ -45,6 +45,8 @@ public abstract class WizardWindow extends AbstractIWindow implements IWindow,
     protected List<WizardComponent> views = new ArrayList<WizardComponent>();
     protected int currentPos;
     protected Map<String, Object> properties = new HashMap<String, Object>();
+    
+    private boolean windowInfoCreated = false;
 
     public WizardWindow() {
 	nextButton = new JButton(PluginServices.getText(this, "next"));
@@ -203,5 +205,22 @@ public abstract class WizardWindow extends AbstractIWindow implements IWindow,
     @Override
     protected Component getDefaultFocusComponent() {
         return null;
+    }
+    
+    @Override
+    /*
+     * Por algún motivo en el panel de cargar constantes en Windows aparece un
+     * scrollbar vertical. Este método está para darle un poco más de ancho. La
+     * primera vez le damos más ancho y las siguientes llamamos directamente al
+     * método padre que tiene la instancia como una variable. El +40 está
+     * sacado por prueba y error. 
+     */
+    public WindowInfo getWindowInfo() {
+        if (!windowInfoCreated) {
+            windowInfoCreated = true;
+            WindowInfo wi = super.getWindowInfo();
+            wi.setWidth(wi.getWidth() + 15);            
+        }
+        return super.getWindowInfo();
     }
 }
