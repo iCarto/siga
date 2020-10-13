@@ -24,7 +24,7 @@
     </at>
     <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
    </super>
-   <at name="id">D:\SIGA\gvSIG_SIGA_20200401\bin\gvSIG\extensiones\es.udc.cartolab.gvsig.users\forms\dbConnection.xml</at>
+   <at name="id">D:\SIGA\gvSIG_SIGA_20200925\bin\gvSIG\extensiones\es.udc.cartolab.gvsig.users\forms\dbConnection.xml</at>
    <at name="rowspecs">CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE</at>
    <at name="colspecs">FILL:5PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:15PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:5PX:NONE,FILL:15PX:NONE,FILL:DEFAULT:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE,FILL:5PX:NONE</at>
    <at name="components">
@@ -634,7 +634,7 @@
          </at>
          <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
         </super>
-        <at name="id">embedded.637720534</at>
+        <at name="id">embedded.1141793554</at>
         <at name="rowspecs">CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:20PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE</at>
         <at name="colspecs">FILL:5PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE</at>
         <at name="components">
@@ -749,7 +749,7 @@
                  <at name="actionCommand">Central</at>
                  <at name="name">server_seixurra</at>
                  <at name="width">71</at>
-                 <at name="text">Seixurra</at>
+                 <at name="text">Áreas</at>
                  <at name="font">
                   <object classname="com.jeta.forms.store.properties.FontProperty">
                    <at name="family">Arial</at>
@@ -888,7 +888,7 @@
          </at>
          <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
         </super>
-        <at name="id">embedded.982685774</at>
+        <at name="id">embedded.1925309738</at>
         <at name="rowspecs">CENTER:5PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:20PX:NONE,CENTER:5PX:NONE,CENTER:5PX:NONE</at>
         <at name="colspecs">FILL:5PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:5PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:15PX:NONE,FILL:5PX:NONE</at>
         <at name="components">
