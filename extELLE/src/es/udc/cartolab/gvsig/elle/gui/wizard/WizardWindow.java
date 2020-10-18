@@ -212,14 +212,14 @@ public abstract class WizardWindow extends AbstractIWindow implements IWindow,
      * Por algún motivo en el panel de cargar constantes en Windows aparece un
      * scrollbar vertical. Este método está para darle un poco más de ancho. La
      * primera vez le damos más ancho y las siguientes llamamos directamente al
-     * método padre que tiene la instancia como una variable. El +40 está
+     * método padre que tiene la instancia como una variable. El +30 está
      * sacado por prueba y error. 
      */
     public WindowInfo getWindowInfo() {
         if (!windowInfoCreated) {
             windowInfoCreated = true;
             WindowInfo wi = super.getWindowInfo();
-            wi.setWidth(wi.getWidth() + 15);            
+            wi.setWidth(wi.getWidth() + 30);            
         }
         return super.getWindowInfo();
     }
