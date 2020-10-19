@@ -55,6 +55,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 final class Help {
     public static final List<String> ignoreGeom = Arrays.asList(new String[] { "the_geom", "geom" });
     public static final List<String> ignoredGidGeom = Arrays.asList(new String[] { "gid", "the_geom", "geom" });
+    public static final List<String> ignoredFieldsEstructuras = Arrays.asList(new String[] { "the_geom", "geom", "resultado_basica" });
 }
 
 public enum Elements {
@@ -171,7 +172,7 @@ public enum Elements {
                                                                                     "estructuras_trabajos",
                                                                                     "estructuras_imagenes",
                                                                                     "estructuras_reconocimientos",
-                                                                                    Help.ignoredGidGeom,
+                                                                                    Help.ignoredFieldsEstructuras,
                                                                                     "nombre",
                                                                                     true),
     Farolas("gid", FarolasForm.class, null, null, null, "null", null, Help.ignoreGeom, null, false),                                                                                

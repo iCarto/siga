@@ -16,7 +16,8 @@ public class DBFieldNames {
     public static final String[] reconocimientosEstructurasColNames = { "n_inspeccion",
     "nombre_revisor", "fecha_inspeccion", "tipo_inspeccion", "resultado" };
     public static final String[] reconocimientosEstructurasColAlias = { "Nº Inspección",
-    "Revisor", "Fecha Inspección", "Tipo Inspección", "Resultado" };
+    "Revisor", "Fecha Inspección", "Tipo", "Resultado" };
+    public static int[] reconocimientosEstructurasColWidths = {65, 75, 90, 45, 150};
 
     public static String[] trabajosColNames = { "id_trabajo",
 	"fecha", "unidad", "medicion", "observaciones" };

@@ -197,10 +197,11 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
         customiceDialog.addDestinationElements(columns2);
         }
         if (selTipoConsulta.equals("Inspecciones")) {
-            List<Field> columns2 = Utils.getFields(resource.getPath(), "audasa_extgia", selElementKey.toLowerCase() + "_reconocimientos");
-            setAsFirstItem(columns2, "n_inspeccion");
-            customiceDialog.clearDestinationListModel();
-            customiceDialog.addDestinationElements(columns2);
+        List<Field> columns2 = Utils.getFields(resource.getPath(), "audasa_extgia", 
+        selElementKey.toLowerCase() + "_reconocimientos", reserved);
+        setAsFirstItem(columns2, "n_inspeccion");
+        customiceDialog.clearDestinationListModel();
+        customiceDialog.addDestinationElements(columns2);
         }
 
         return customiceDialog;

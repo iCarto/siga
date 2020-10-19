@@ -31,8 +31,8 @@ public class EstructurasForm extends AbstractFormWithLocationWidgets {
                 DBFieldNames.trabajosColNames, DBFieldNames.trabajosColAlias, DBFieldNames.trabajosColWidths, this));
         
         addTableHandler(new GIAAlphanumericTableHandler(getReconocimientosDBTableName(), getWidgets(), getElementID(),
-                DBFieldNames.reconocimientosEstructurasColNames, DBFieldNames.reconocimientosEstructurasColAlias, null, this,
-                EstructurasReconocimientosSubForm.class));
+                DBFieldNames.reconocimientosEstructurasColNames, DBFieldNames.reconocimientosEstructurasColAlias,
+                DBFieldNames.reconocimientosEstructurasColWidths, this, EstructurasReconocimientosSubForm.class));
 
         codigoXopa = new CodigoXopa(formBody, tramoCB);
         codigoXopa.setForm(this);
