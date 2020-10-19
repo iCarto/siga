@@ -49,8 +49,8 @@ public class AreasDescansoForm extends AbstractFormWithLocationWidgets {
 
 	addTableHandler(new GIAAlphanumericTableHandler(
 		getReconocimientosDBTableName(), getWidgets(), getElementID(),
-		DBFieldNames.reconocimientosWhitoutIndexColNames,
-		DBFieldNames.reconocimientosWhitoutIndexColAlias, null, this,
+		DBFieldNames.reconocimientosColNames,
+		DBFieldNames.reconocimientosColAlias, null, this,
 		AreasDescansoReconocimientosSubForm.class));
 
 	addTableHandler(new VectorialTableHandler(RamalesForm.TABLENAME,
