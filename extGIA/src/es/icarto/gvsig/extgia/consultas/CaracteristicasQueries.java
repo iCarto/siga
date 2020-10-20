@@ -7,15 +7,31 @@ import es.icarto.gvsig.extgia.preferences.Elements;
 public class CaracteristicasQueries {
 
     public static String getPDFCaracteristicasQuery(String element, ConsultasFilters<Field> filters) {
-        switch (Elements.valueOf(element)) {
+    String query = "";    
+    switch (Elements.valueOf(element)) {
         case Senhalizacion_Vertical:
-            return "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
-                    + CaracteristicasQueries.getFromClauseCaracteristicas(element)
-                    + filters.getWhereClauseByLocationWidgets() + " ORDER BY el.id_elemento_senhalizacion";
+            query = "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
+                    + CaracteristicasQueries.getFromClauseCaracteristicas(element);
+            if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
+            query = query + filters.getWhereClauseByLocationWidgets();
+            }
+            if (!filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk);
+            query = query.replace("sub.", "");
+            }
+            return query + " ORDER BY el.id_elemento_senhalizacion";
+        
         default:
-            return "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
-                    + CaracteristicasQueries.getFromClauseCaracteristicas(element)
-                    + filters.getWhereClauseByLocationWidgets() + " ORDER BY gid";
+            query = "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
+            + CaracteristicasQueries.getFromClauseCaracteristicas(element);
+            if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
+            query = query + filters.getWhereClauseByLocationWidgets();
+            }
+            if (!filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk);
+            query = query.replace("sub.", "");
+            }
+            return query + " ORDER BY gid";
 
         }
     }
@@ -33,7 +49,11 @@ public class CaracteristicasQueries {
             query = query + " WHERE el." + elementId + " IN (SELECT " + elementId + " FROM " + DBFieldNames.GIA_SCHEMA
                     + "." + element + filters.getWhereClauseByLocationWidgets();
         }
-
+        
+        if (!filters.getWhereClauseBySelectedRecordsOnly(elementId).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly(elementId);
+        }
+        
         return query;
     }
 

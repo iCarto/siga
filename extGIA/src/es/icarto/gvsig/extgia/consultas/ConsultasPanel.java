@@ -19,13 +19,22 @@ import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
+import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.toedter.calendar.JDateChooser;
 
 import es.icarto.gvsig.commons.queries.Component;
@@ -35,11 +44,12 @@ import es.icarto.gvsig.commons.queries.ValidatableForm;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
+import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
-public class ConsultasPanel extends ValidatableForm implements ActionListener {
+public class ConsultasPanel extends ValidatableForm implements ActionListener, ChangeListener {
 
     private static final KeyValue ALL_ITEMS = new KeyValue("todos",
 	    "00   TODOS   00");
@@ -47,6 +57,11 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 
     private JComboBox elemento;
 
+    private JCheckBox seleccionados;
+    private JComboBox area;
+    private JComboBox baseContratista;
+    private JComboBox tramo;
+    private JCheckBox ultimos;
     private final JDateChooser fechaInicio;
     private final JDateChooser fechaFin;
     private JRadioButton pdfRadioButton;
@@ -64,6 +79,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	super();
 	setWindowTitle("Consultas Inventario");
 	Calendar calendar = Calendar.getInstance();
+
 	fechaInicio = (JDateChooser) formPanel
 		.getComponentByName("fecha_inicio");
 	fechaFin = (JDateChooser) formPanel.getComponentByName("fecha_fin");
@@ -82,7 +98,17 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	elemento = (JComboBox) getWidgets().get("elemento");
 
 	queriesWidget = new QueriesWidgetCombo(formPanel, "tipo_consulta");
-
+	
+	seleccionados = (JCheckBox) formPanel.getComponentByName("seleccionados");
+	seleccionados.setEnabled(false);
+	area = (JComboBox) formPanel.getComponentByName(AREA_MANTENIMIENTO);
+	baseContratista = (JComboBox) formPanel.getComponentByName(BASE_CONTRATISTA);
+	tramo = (JComboBox) formPanel.getComponentByName(TRAMO);
+	
+	ultimos = (JCheckBox) formPanel.getComponentByName("ultimos");
+	
+	ultimos.setEnabled(false);
+	
 	pdfRadioButton = (JRadioButton) formPanel.getComponentByName("pdf");
 	pdfRadioButton.setSelected(true);
 
@@ -103,6 +129,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	reportTypeListener = new ReportTypeListener();
 	elemento.addActionListener(reportTypeListener);
 	queriesWidget.addActionListener(reportTypeListener);
+	seleccionados.addChangeListener(this);
 	launchButton.addActionListener(this);
 	customButton.addActionListener(this);
 	customButton.setEnabled(false);
@@ -113,7 +140,8 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	consultasFilters = new ConsultasFilters<Field>(
 		getFilterValue(AREA_MANTENIMIENTO),
 		getFilterValue(BASE_CONTRATISTA), getFilterValue(TRAMO),
-		fechaInicio.getDate(), fechaFin.getDate());
+		fechaInicio.getDate(), fechaFin.getDate(), seleccionados.isSelected(),
+		getSelectedRecordsFromElement());
 
 	KeyValue selElement = (KeyValue) elemento.getSelectedItem();
 	KeyValue selTipoConsulta = queriesWidget.getQuery();
@@ -316,6 +344,16 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    customButton.setEnabled(caracSelected() && todosNoSelected());
+	    if (todosNoSelected()) {
+	        KeyValue selElement = (KeyValue) elemento.getSelectedItem();
+	        if (seleccionadosCheckBoxHasToBeEnabled(selElement.getKey())) {
+	        seleccionados.setEnabled(true);    
+	        } else {
+	        seleccionados.setEnabled(false);
+	        }
+	    } else {
+	        seleccionados.setEnabled(false);
+	    }
 	}
     }
 
@@ -324,4 +362,59 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener {
 	return "consultas_inventario";
     }
     
+    
+    private boolean seleccionadosCheckBoxHasToBeEnabled(String element) {
+    IWindow iWindow = PluginServices.getMDIManager().getActiveWindow();
+    TOCLayerManager toc = new TOCLayerManager();
+    FLyrVect layer = toc.getLayerByName(element);
+    if (layer == null) {
+        return false;
+    }
+    int recordsSelected = 0;
+    try {
+        recordsSelected = layer.getRecordset().getSelection().cardinality();
+    } catch (ReadDriverException e) {
+        e.printStackTrace();
+    }
+    if (iWindow instanceof View && recordsSelected >= 1)  {
+    return true;
+    }
+    return false;
+    }
+    
+    public ArrayList<String> getSelectedRecordsFromElement() {
+    ArrayList<String> selectedElementsID = new ArrayList<String>();
+    if (seleccionados.isEnabled()) {
+    TOCLayerManager toc = new TOCLayerManager();
+    FLyrVect layer = toc.getLayerByName(((KeyValue)elemento.getSelectedItem()).getKey());
+    try {
+        String idFieldName = Elements.valueOf(layer.getName()).pk;
+        SelectableDataSource recordset = layer.getRecordset();
+        int idFieldNameIndex = recordset.getFieldIndexByName(idFieldName);
+        for (int i = 0; i < recordset.getRowCount(); i++) {
+            if (recordset.isSelected(i)) {
+            Value value = recordset.getFieldValue(i, idFieldNameIndex);
+            selectedElementsID.add(value.toString());
+            }
+        }   
+    } catch (ReadDriverException e1) {
+        e1.printStackTrace();
+    }
+    }
+    return selectedElementsID;
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+    if (seleccionados.isSelected()) {
+    area.setEnabled(false);
+    baseContratista.setEnabled(false);
+    tramo.setEnabled(false);
+    } else {
+    area.setEnabled(true);
+    baseContratista.setEnabled(true);
+    tramo.setEnabled(true);
+    }
+    
+    }
 }
