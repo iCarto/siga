@@ -18,6 +18,8 @@ public class ConsultasFilters<E> implements QueryFiltersI {
     private KeyValue tramo;
     private Date fechaInicio;
     private Date fechaFin;
+    private boolean seleccionados;
+    private ArrayList<String> selectedRecords;
 
     private final DateFormat dateFormat = DateFormatNT.getDateFormat();
     private String queryType = "";
@@ -25,12 +27,15 @@ public class ConsultasFilters<E> implements QueryFiltersI {
     private List<E> orderBy;
 
     public ConsultasFilters(KeyValue area, KeyValue baseContratista,
-	    KeyValue tramo, Date fechaInicio, Date fechaFin) {
+	    KeyValue tramo, Date fechaInicio, Date fechaFin, boolean seleccionados, 
+	    ArrayList<String> selectedRecords) {
 	this.area = area;
 	this.baseContratista = baseContratista;
 	this.tramo = tramo;
 	this.fechaInicio = fechaInicio;
 	this.fechaFin = fechaFin;
+	this.seleccionados = seleccionados;
+	this.selectedRecords = selectedRecords;
     }
 
     public KeyValue getArea() {
@@ -95,6 +100,9 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 
     public String getWhereClauseByLocationWidgets() {
 	String query = "";
+	if (this.seleccionados) {
+	    return query;
+	}
 	if (area != null) {
 	    query = " WHERE area_mantenimiento =  '" + area.getKey() + "'";
 	}
@@ -119,7 +127,10 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 
     public String getWhereClauseByDates(String dateField) {
 	String query = "";
-	if (!getWhereClauseByLocationWidgets().isEmpty()) {
+	if (this.seleccionados) {
+	    query = " AND " + dateField + " BETWEEN '" + fechaInicio
+	            + "' AND '" + fechaFin + "'";
+	} else if (!getWhereClauseByLocationWidgets().isEmpty()) {
 	    query = " ) AND " + dateField + " BETWEEN '" + fechaInicio
 		    + "' AND '" + fechaFin + "'";
 	} else {
@@ -127,6 +138,19 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 		    + "' AND '" + fechaFin + "'";
 	}
 	return query;
+    }
+    
+    public String getWhereClauseBySelectedRecordsOnly(String idField) {
+    String query = "";
+    if (!seleccionados) {
+        return query;
+    }
+    query = "WHERE sub." + idField + " IN (";
+    for (int i = 0; i < this.selectedRecords.size(); i++) {
+        query = query + "'" + this.selectedRecords.get(i) + "', ";
+    }
+    query = query.substring(0, query.length() - 2);
+    return query + ")";
     }
 
     public String getFechaInicioFormatted() {
