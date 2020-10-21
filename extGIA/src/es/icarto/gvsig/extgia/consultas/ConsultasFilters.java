@@ -140,12 +140,12 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 	return query;
     }
     
-    public String getWhereClauseBySelectedRecordsOnly(String idField) {
+    public String getWhereClauseBySelectedRecordsOnly(String prefix, String idField) {
     String query = "";
     if (!seleccionados) {
         return query;
     }
-    query = "WHERE sub." + idField + " IN (";
+    query = "WHERE " + prefix + "." + idField + " IN (";
     for (int i = 0; i < this.selectedRecords.size(); i++) {
         query = query + "'" + this.selectedRecords.get(i) + "', ";
     }

@@ -15,8 +15,8 @@ public class CaracteristicasQueries {
             if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
             query = query + filters.getWhereClauseByLocationWidgets();
             }
-            if (!filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk).isEmpty()) {
-            query = query + filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk);
+            if (!filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk);
             query = query.replace("sub.", "");
             }
             return query + " ORDER BY el.id_elemento_senhalizacion";
@@ -27,8 +27,8 @@ public class CaracteristicasQueries {
             if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
             query = query + filters.getWhereClauseByLocationWidgets();
             }
-            if (!filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk).isEmpty()) {
-            query = query + filters.getWhereClauseBySelectedRecordsOnly(Elements.valueOf(element).pk);
+            if (!filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk);
             query = query.replace("sub.", "");
             }
             return query + " ORDER BY gid";
@@ -50,8 +50,8 @@ public class CaracteristicasQueries {
                     + "." + element + filters.getWhereClauseByLocationWidgets();
         }
         
-        if (!filters.getWhereClauseBySelectedRecordsOnly(elementId).isEmpty()) {
-            query = query + filters.getWhereClauseBySelectedRecordsOnly(elementId);
+        if (!filters.getWhereClauseBySelectedRecordsOnly("sub", elementId).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly("sub", elementId);
         }
         
         return query;
@@ -160,9 +160,15 @@ public class CaracteristicasQueries {
             query = ConsultasFieldNames.enlacesCSVFieldNames();
             break;
         case Senhalizacion_Vertical:
-            return "SELECT " + ConsultasFieldNames.senhalizacionCSVFieldNames()
-                    + getFromClauseCaracteristicas(element) + filters.getWhereClauseByLocationWidgets()
-                    + " ORDER BY el.id_elemento_senhalizacion";
+            query = "SELECT " + ConsultasFieldNames.senhalizacionCSVFieldNames() 
+                    + getFromClauseCaracteristicas(element);
+            if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
+            query = query + filters.getWhereClauseByLocationWidgets();    
+            }
+            if (!filters.getWhereClauseBySelectedRecordsOnly("el", Elements.valueOf(element).pk).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly("el", Elements.valueOf(element).pk);
+            }
+            return query + " ORDER BY el.id_elemento_senhalizacion";
         case Firme:
             query = ConsultasFieldNames.firmeCSVFieldNames();
             break;
@@ -248,8 +254,14 @@ public class CaracteristicasQueries {
             query = ConsultasFieldNames.fibraOpticaDerivacionesCSVFieldNames();
             break;
         }
-        return "SELECT " + query + getFromClauseCaracteristicas(element) + filters.getWhereClauseByLocationWidgets()
-                + " ORDER BY gid";
+        query = "SELECT " + query + getFromClauseCaracteristicas(element);
+        if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
+        query = query + filters.getWhereClauseByLocationWidgets();    
+        }
+        if (!filters.getWhereClauseBySelectedRecordsOnly("el", Elements.valueOf(element).pk).isEmpty()) {
+        query = query + filters.getWhereClauseBySelectedRecordsOnly("el", Elements.valueOf(element).pk);
+        }
+        return query + " ORDER BY gid";
 
     }
 
