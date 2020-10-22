@@ -19,6 +19,7 @@ public class ConsultasFilters<E> implements QueryFiltersI {
     private Date fechaInicio;
     private Date fechaFin;
     private boolean seleccionados;
+    private boolean ultimos;
     private ArrayList<String> selectedRecords;
 
     private final DateFormat dateFormat = DateFormatNT.getDateFormat();
@@ -28,7 +29,7 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 
     public ConsultasFilters(KeyValue area, KeyValue baseContratista,
 	    KeyValue tramo, Date fechaInicio, Date fechaFin, boolean seleccionados, 
-	    ArrayList<String> selectedRecords) {
+	    ArrayList<String> selectedRecords, boolean ultimos) {
 	this.area = area;
 	this.baseContratista = baseContratista;
 	this.tramo = tramo;
@@ -36,6 +37,7 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 	this.fechaFin = fechaFin;
 	this.seleccionados = seleccionados;
 	this.selectedRecords = selectedRecords;
+	this.ultimos = ultimos;
     }
 
     public KeyValue getArea() {
@@ -60,6 +62,14 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 
     public void setTramo(KeyValue tramo) {
 	this.tramo = tramo;
+    }
+    
+    public boolean getSeleccionados() {
+    return this.seleccionados;
+    }
+    
+    public boolean getUltimos() {
+    return this.ultimos;
     }
 
     public Date getFechaInicio() {
@@ -122,6 +132,9 @@ public class ConsultasFilters<E> implements QueryFiltersI {
 		query = " WHERE tramo =  '" + tramo.getKey() + "'";
 	    }
 	}
+	if (!this.seleccionados && this.ultimos) {
+	    return query + ")";
+	}
 	return query;
     }
 
@@ -142,15 +155,24 @@ public class ConsultasFilters<E> implements QueryFiltersI {
     
     public String getWhereClauseBySelectedRecordsOnly(String prefix, String idField) {
     String query = "";
-    if (!seleccionados) {
+    if (!this.seleccionados) {
         return query;
     }
-    query = "WHERE " + prefix + "." + idField + " IN (";
+    if (this.ultimos) {
+        query = " AND ";
+    } else {
+        query = "WHERE ";
+    }
+    query = query + prefix + "." + idField + " IN (";
     for (int i = 0; i < this.selectedRecords.size(); i++) {
         query = query + "'" + this.selectedRecords.get(i) + "', ";
     }
     query = query.substring(0, query.length() - 2);
-    return query + ")";
+    if (this.seleccionados && !this.ultimos) {
+        return query + ")";
+    }
+    //return query + ")";
+    return query;
     }
 
     public String getFechaInicioFormatted() {

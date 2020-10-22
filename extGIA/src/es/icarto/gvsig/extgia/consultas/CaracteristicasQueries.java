@@ -40,13 +40,18 @@ public class CaracteristicasQueries {
             String fields, String elementId, String tipoConsulta) {
         String query = "";
         if (element.equalsIgnoreCase("senhalizacion_vertical")) {
-            query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta);
+            query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta, filters);
         } else {
-            query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta);
+            query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta, filters);
         }
 
         if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
-            query = query + " WHERE el." + elementId + " IN (SELECT " + elementId + " FROM " + DBFieldNames.GIA_SCHEMA
+            if (filters.getUltimos()) {
+            query = query + " AND ";    
+            }else {
+            query = query + " WHERE ";    
+            }
+            query = query + "el." + elementId + " IN (SELECT " + elementId + " FROM " + DBFieldNames.GIA_SCHEMA
                     + "." + element + filters.getWhereClauseByLocationWidgets();
         }
         
@@ -57,10 +62,12 @@ public class CaracteristicasQueries {
         return query;
     }
 
-    public static String getFromClauseReconocimientosTrabajos(String element, String elementId, String tipoConsulta) {
+    public static String getFromClauseReconocimientosTrabajos(String element, String elementId, String tipoConsulta, 
+            ConsultasFilters<Field> filters) {
+        String query = "";
         switch (Elements.valueOf(element)) {
         case Senhalizacion_Vertical:
-            return " FROM "
+            query = " FROM "
             + DBFieldNames.GIA_SCHEMA
             + "."
             + element
@@ -76,12 +83,35 @@ public class CaracteristicasQueries {
             + elementId
             + " LEFT OUTER JOIN audasa_extgia.senhalizacion_vertical_senhales se ON (el.id_elemento_senhalizacion = se.id_elemento_senhalizacion) "
             + CaracteristicasQueries.get(element);
+            if (filters.getUltimos()) {
+            query = query + getLastReconocimientosTrabajos(element, elementId,
+                    tipoConsulta);
+            return query;
+            }
         default:
-            return " FROM " + DBFieldNames.GIA_SCHEMA + "." + element + "_" + tipoConsulta + " AS sub JOIN "
+            query = " FROM " + DBFieldNames.GIA_SCHEMA + "." + element + "_" + tipoConsulta + " AS sub JOIN "
             + DBFieldNames.GIA_SCHEMA + "." + element + " AS el ON sub." + elementId + "= el." + elementId
             + CaracteristicasQueries.get(element);
+            if (filters.getUltimos()) {
+            query = query + getLastReconocimientosTrabajos(element, elementId,
+                    tipoConsulta);
+            }
+            return query;
         }
 
+    }
+
+    private static String getLastReconocimientosTrabajos(String element,
+            String elementId, String tipoConsulta) {
+    String dateField = "";
+    if (tipoConsulta.equals("reconocimientos")) {
+        dateField = "fecha_inspeccion";
+    }else {
+        dateField = "fecha";
+    }
+    return " LEFT OUTER JOIN audasa_extgia." + element + "_" + tipoConsulta + " AS sub2 ON (sub." 
+            + elementId + " = sub2." + elementId + " AND sub2." + dateField + " >  sub." 
+            +dateField + ") " + "WHERE sub2 is NULL";
     }
 
     public static String getFromClauseCaracteristicas(String element) {
