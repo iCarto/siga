@@ -188,11 +188,15 @@ public class Leaf implements Component {
 	    query = CaracteristicasQueries.getReconocimientosTrabajosQuery(
 		    element, filters, fields, elementId, tipoConsulta.getKey());
 
-	    if (tipo == QueryType.TRABAJOS || tipo == QueryType.TRABAJOS_FIRME
-	            || tipo == QueryType.TRABAJOS_VEGETACION) {
-		query += filters.getWhereClauseByDates("fecha");
-	    } else {
-		query += filters.getWhereClauseByDates("fecha_inspeccion");
+	    if (!filters.getUltimos()) {
+	        if (tipo == QueryType.TRABAJOS || tipo == QueryType.TRABAJOS_FIRME
+	                || tipo == QueryType.TRABAJOS_VEGETACION) { 
+	            query += filters.getWhereClauseByDates("fecha");
+	        } else {
+	            query += filters.getWhereClauseByDates("fecha_inspeccion");
+	        }
+	    } else if (filters.getSeleccionados()) {
+	        query = query + ")";
 	    }
 	    if (filters.getQueryType().equals("CUSTOM")) {
 		query = CaracteristicasQueries.buildOrderBy(filters, query);

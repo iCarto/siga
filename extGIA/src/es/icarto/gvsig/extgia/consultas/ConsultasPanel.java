@@ -107,7 +107,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
 	
 	ultimos = (JCheckBox) formPanel.getComponentByName("ultimos");
 	
-	ultimos.setEnabled(false);
+	//ultimos.setEnabled(false);
 	
 	pdfRadioButton = (JRadioButton) formPanel.getComponentByName("pdf");
 	pdfRadioButton.setSelected(true);
@@ -130,6 +130,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
 	elemento.addActionListener(reportTypeListener);
 	queriesWidget.addActionListener(reportTypeListener);
 	seleccionados.addChangeListener(this);
+	ultimos.addChangeListener(this);
 	launchButton.addActionListener(this);
 	customButton.addActionListener(this);
 	customButton.setEnabled(false);
@@ -141,7 +142,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
 		getFilterValue(AREA_MANTENIMIENTO),
 		getFilterValue(BASE_CONTRATISTA), getFilterValue(TRAMO),
 		fechaInicio.getDate(), fechaFin.getDate(), seleccionados.isSelected(),
-		getSelectedRecordsFromElement());
+		getSelectedRecordsFromElement(), ultimos.isSelected());
 
 	KeyValue selElement = (KeyValue) elemento.getSelectedItem();
 	KeyValue selTipoConsulta = queriesWidget.getQuery();
@@ -414,6 +415,14 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
     area.setEnabled(true);
     baseContratista.setEnabled(true);
     tramo.setEnabled(true);
+    }
+    
+    if (ultimos.isSelected()) {
+    fechaInicio.setEnabled(false);
+    fechaFin.setEnabled(false);
+    }else {
+    fechaInicio.setEnabled(true);
+    fechaFin.setEnabled(true);
     }
     
     }
