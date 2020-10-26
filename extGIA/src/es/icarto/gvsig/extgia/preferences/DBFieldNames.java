@@ -174,8 +174,6 @@ public class DBFieldNames {
     public static final String SENHALIZACION_VERTICAL_E = "visibilidad_nocturna";
 
     // VALLA CIERRE
-    public static final String VALLA_CIERRE_LAYERNAME = "Valla_Cierre";
-    public static final String ID_VALLA_CIERRE = "id_valla";
     public static final String VALLA_CIERRE_INDEX = "indice_estado";
     public static final String VALLA_CIERRE_A = "deterioro_superficial_oxido";
     public static final String VALLA_CIERRE_B = "cimiento_soporte_anclaje";

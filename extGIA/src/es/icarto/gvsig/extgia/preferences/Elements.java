@@ -337,14 +337,14 @@ public enum Elements {
                                                                                                                                                                                                     true),
                                                                                                                                                                                                     Tuneles("gid", TunelesForm.class, null, null, null, "tuneles_imagenes", null, Help.ignoreGeom, "nombre", true),
     Valla_Cierre(
-                                                                                                                                                                                                            "id_valla",
+                                                                                                                                                                                                            "gid",
                                                                                                                                                                                                             VallaCierreForm.class,
                                                                                                                                                                                                             BatchAbstractSubForm.class,
                                                                                                                                                                                                             "valla_cierre_trabajos",
                                                                                                                                                                                                             "valla_cierre_trabajos",
                                                                                                                                                                                                             "valla_cierre_imagenes",
                                                                                                                                                                                                             "valla_cierre_reconocimientos",
-                                                                                                                                                                                                            Help.ignoredGidGeom,
+                                                                                                                                                                                                            Help.ignoreGeom,
                                                                                                                                                                                                             null,
                                                                                                                                                                                                             true);
 

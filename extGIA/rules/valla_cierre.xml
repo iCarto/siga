@@ -2,13 +2,9 @@
 <LAYER alias="valla_cierre">
 	<TABLENAME>valla_cierre</TABLENAME>
 	<PRIMARYKEY>
-		<PKELEMENT>id_valla</PKELEMENT>
+		<PKELEMENT>gid</PKELEMENT>
 	</PRIMARYKEY>
 	<RECORDSET>
-		<FIELD>
-			<FIELDNAME>id_valla</FIELDNAME>
-			<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
-		</FIELD>
 
 		<!-- LOCATION WIDGETS START -->
 	<FIELD>
@@ -66,20 +62,7 @@
 			</DOMAINREADER>
 		</FIELD>
 
-		<FIELD>
-			<FIELDNAME>tipo_via_pf</FIELDNAME>
-			<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
-			<DOMAINREADER>
-				<DRTYPE>db</DRTYPE>
-				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-				<DRDBTABLE>tipo_via</DRDBTABLE>
-				<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-				<DRDBCOLUMNVALUE>id</DRDBCOLUMNVALUE>
-				<DRDBFOREIGNKEY>id_bc</DRDBFOREIGNKEY>
-				<DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
-				<DRADDVOIDVALUE>true</DRADDVOIDVALUE>
-			</DOMAINREADER>
-		</FIELD>
+		
 
 		<FIELD>
 			<FIELDNAME>nombre_via</FIELDNAME>
@@ -125,49 +108,6 @@
 			</ENABLEIF>
 		</FIELD>
 
-		<FIELD>
-			<FIELDNAME>nombre_via_pf</FIELDNAME>
-			<DOMAINREADER>
-				<DRTYPE>db</DRTYPE>
-				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-				<DRDBTABLE>nombre_via</DRDBTABLE>
-				<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-				<DRDBCOLUMNVALUE>id</DRDBCOLUMNVALUE>
-				<DRDBFOREIGNKEY>id_bc</DRDBFOREIGNKEY>
-				<DRDBFOREIGNKEY>id_tramo</DRDBFOREIGNKEY>
-				<DRDBFOREIGNKEY>id_tv</DRDBFOREIGNKEY>
-			</DOMAINREADER>
-			<ENABLEIF>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Área de descanso</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Área de servicio</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Área de mantenimiento</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Enlace</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Estación de peaje</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Intercambiador</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Túnel</VALUE>
-				</CONDITION>
-			</ENABLEIF>
-		</FIELD>
 
 		<FIELD>
 			<FIELDNAME>pk_inicial</FIELDNAME>
@@ -198,7 +138,7 @@
 		</FIELD>
 
 		<FIELD>
-			<FIELDNAME>ramal_pi</FIELDNAME>
+			<FIELDNAME>ramal</FIELDNAME>
 			<DOMAINREADER>
 				<DRTYPE>db</DRTYPE>
 				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
@@ -208,19 +148,9 @@
 			</DOMAINREADER>
 		</FIELD>
 
-		<FIELD>
-			<FIELDNAME>ramal_pf</FIELDNAME>
-			<DOMAINREADER>
-				<DRTYPE>db</DRTYPE>
-				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-				<DRDBTABLE>ramal</DRDBTABLE>
-				<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-				<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
-			</DOMAINREADER>
-		</FIELD>
 
 		<FIELD>
-			<FIELDNAME>direccion_pi</FIELDNAME>
+			<FIELDNAME>direccion</FIELDNAME>
 			<DOMAINREADER>
 				<DRTYPE>db</DRTYPE>
 				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
@@ -249,35 +179,6 @@
 			</ENABLEIF>
 		</FIELD>
 
-		<FIELD>
-			<FIELDNAME>direccion_pf</FIELDNAME>
-			<DOMAINREADER>
-				<DRTYPE>db</DRTYPE>
-				<DRDBSCHEMA>audasa_extgia_dominios</DRDBSCHEMA>
-				<DRDBTABLE>direccion</DRDBTABLE>
-				<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
-				<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
-				<DRDBFOREIGNKEY>id_tv</DRDBFOREIGNKEY>
-			</DOMAINREADER>
-			<ENABLEIF>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Intercambiador</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Enlace</VALUE>
-				</CONDITION>
-				<CONDITION>
-				<COMPONENT>tipo_via_pf</COMPONENT>
-				<VALUE>Área de Servicio</VALUE>
-				</CONDITION>
-				<CONDITION>
-					<COMPONENT>tipo_via_pf</COMPONENT>
-					<VALUE>Área de mantenimiento</VALUE>
-				</CONDITION>
-			</ENABLEIF>
-		</FIELD>
 
 		<FIELD>
 			<FIELDNAME>sentido</FIELDNAME>

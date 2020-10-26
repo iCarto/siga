@@ -2,7 +2,7 @@ package es.icarto.gvsig.extgia.batch.reconocimientos;
 
 import es.icarto.gvsig.extgia.batch.BatchAbstractSubForm;
 import es.icarto.gvsig.extgia.forms.valla_cierre.VallaCierreCalculateIndiceEstado;
-import es.icarto.gvsig.extgia.preferences.DBFieldNames;
+import es.icarto.gvsig.extgia.forms.valla_cierre.VallaCierreForm;
 
 @SuppressWarnings("serial")
 public class BatchVallaCierreReconocimientos extends BatchAbstractSubForm {
@@ -14,11 +14,11 @@ public class BatchVallaCierreReconocimientos extends BatchAbstractSubForm {
 
     @Override
     public String getLayerName() {
-	return DBFieldNames.VALLA_CIERRE_LAYERNAME;
+	return VallaCierreForm.LAYERNAME;
     }
 
     @Override
     public String getIdFieldName() {
-	return DBFieldNames.ID_VALLA_CIERRE;
+	return VallaCierreForm.PK;
     }
 }
