@@ -95,4 +95,10 @@ public class QueryFilters implements QueryFiltersI {
         return whereC;
     }
 
+    @Override
+    public boolean getSeleccionados() {
+    // TODO Auto-generated method stub
+    return false;
+    }
+
 }

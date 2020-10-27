@@ -15,20 +15,30 @@ public class XLSDatedReport extends XLSReport {
 	super(outputFile, table, filters);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void writeFilters() {
 	super.writeFilters();
 
 	if (filters instanceof ConsultasFilters) {
-	    ConsultasFilters<Field> cfilters = (ConsultasFilters<Field>) filters;
-	    int n = filters.getLocation().size();
-	    Row row = sheet.createRow(n);
-	    row.createCell(0).setCellValue("Desde: ");
-	    row.createCell(1).setCellValue(cfilters.getFechaInicioFormatted());
-
-	    row = sheet.createRow(n + 1);
-	    row.createCell(0).setCellValue("Hasta: ");
-	    row.createCell(1).setCellValue(cfilters.getFechaFinFormatted());
+	    if (!((ConsultasFilters<Field>) filters).getUltimos()) {
+	        ConsultasFilters<Field> cfilters = (ConsultasFilters<Field>) filters;
+	        int n;
+            if (!filters.getSeleccionados()) {
+                n = filters.getLocation().size();
+                colNamesRowIdx = 7;
+            } else {
+                n = 0;
+                colNamesRowIdx = 3;
+            }
+            Row row = sheet.createRow(n);
+            row.createCell(0).setCellValue("Desde: ");
+            row.createCell(1).setCellValue(cfilters.getFechaInicioFormatted());
+    
+            row = sheet.createRow(n + 1);
+            row.createCell(0).setCellValue("Hasta: ");
+            row.createCell(1).setCellValue(cfilters.getFechaFinFormatted());
+	    } 
 	}
     }
 }

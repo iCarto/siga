@@ -18,6 +18,7 @@ import org.apache.poi.ss.util.WorkbookUtil;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
+import es.icarto.gvsig.commons.queries.QueryFiltersI;
 
 public class XLSReport {
 
@@ -26,7 +27,7 @@ public class XLSReport {
     private final Workbook wb;
     protected final Sheet sheet;
     protected final QueryFiltersI filters;
-    private final int colNamesRowIdx;
+    protected int colNamesRowIdx;
     private final boolean[] columnsStyles;
 
     public XLSReport(String outputFile, DefaultTableModel table,
@@ -34,7 +35,11 @@ public class XLSReport {
 	this.filters = filters;
 	columnsStyles = new boolean[table.getColumnCount()];
 	Arrays.fill(columnsStyles, false);
-	colNamesRowIdx = filters.getLocation().size() + 4;
+	if (!filters.getSeleccionados()) {
+	    colNamesRowIdx = filters.getLocation().size() + 1;
+	} else {
+	    colNamesRowIdx = 0;
+	}
 	if (outputFile == null) {
 	    wb = null;
 	    sheet = null;
@@ -44,29 +49,30 @@ public class XLSReport {
 	String safeName = WorkbookUtil.createSafeSheetName("Listado");
 	sheet = wb.createSheet(safeName);
 
-	sheet.setAutoFilter(new CellRangeAddress(colNamesRowIdx,
-		colNamesRowIdx, 0, table.getColumnCount() - 1));
-
 	writeFilters();
 	writeTable(table);
-
+	
+	sheet.setAutoFilter(new CellRangeAddress(colNamesRowIdx,
+	        colNamesRowIdx, 0, table.getColumnCount() - 1));
 	try {
 	    writeToDisk(outputFile);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
     }
-
+    
     protected void writeFilters() {
-	short rowIdx = 0;
-
-	for (Field l : filters.getLocation()) {
-	    Row row = sheet.createRow(rowIdx++);
-	    String longName = l.getLongName().trim();
-	    longName = longName.endsWith(":") ? longName.substring(0, longName.length() - 1) : longName;
-	    row.createCell(0).setCellValue(longName);
-	    row.createCell(1).setCellValue(l.getValue().toString());
-	}
+    if (!filters.getSeleccionados()) {
+        short rowIdx = 0;
+        
+        for (Field l : filters.getLocation()) {
+            Row row = sheet.createRow(rowIdx++);
+            String longName = l.getLongName().trim();
+            longName = longName.endsWith(":") ? longName.substring(0, longName.length() - 1) : longName;
+            row.createCell(0).setCellValue(longName);
+            row.createCell(1).setCellValue(l.getValue().toString());
+        }
+    } 
     }
 
     private void writeTable(DefaultTableModel table) {

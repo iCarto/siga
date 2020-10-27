@@ -32,8 +32,10 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.toedter.calendar.JDateChooser;
 
@@ -45,6 +47,7 @@ import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
+import es.icarto.gvsig.navtableforms.utils.TOCTableManager;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -351,6 +354,9 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
 	        seleccionados.setEnabled(true);    
 	        } else {
 	        seleccionados.setEnabled(false);
+	        if (seleccionados.isSelected()) {
+	            seleccionados.setSelected(false);
+	        }
 	        }
 	    } else {
 	        seleccionados.setEnabled(false);
@@ -365,19 +371,40 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
     
     
     private boolean seleccionadosCheckBoxHasToBeEnabled(String element) {
-    IWindow iWindow = PluginServices.getMDIManager().getActiveWindow();
-    TOCLayerManager toc = new TOCLayerManager();
-    FLyrVect layer = toc.getLayerByName(element);
-    if (layer == null) {
+    if (queriesWidget
+            .isQueryIdSelected(QueriesWidgetCombo.TRABAJOS_AGRUPADOS)) {
         return false;
     }
+    
     int recordsSelected = 0;
-    try {
-        recordsSelected = layer.getRecordset().getSelection().cardinality();
-    } catch (ReadDriverException e) {
-        e.printStackTrace();
+    IWindow iWindow = PluginServices.getMDIManager().getActiveWindow();
+    
+    if (iWindow instanceof Table) {
+        TOCTableManager toc = new TOCTableManager();
+        IEditableSource tableModel = toc.getTableModelByName("Tabla de atributos: " + element);
+        if (tableModel ==  null) {
+            return false;
+        }
+        try {
+            recordsSelected = tableModel.getRecordset().getSelection().cardinality();
+        } catch (ReadDriverException e) {
+            e.printStackTrace();
+        }  
+    
+    } else if (iWindow instanceof View) {
+        TOCLayerManager toc = new TOCLayerManager();
+        FLyrVect layer = toc.getLayerByName(element);
+        if (layer == null) {
+            return false;
+        }
+        try {
+            recordsSelected = layer.getRecordset().getSelection().cardinality();
+        } catch (ReadDriverException e) {
+            e.printStackTrace();
+        }
     }
-    if (iWindow instanceof View && recordsSelected >= 1)  {
+
+    if (recordsSelected >= 1)  {
     return true;
     }
     return false;
@@ -420,7 +447,8 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
     if (ultimos.isSelected()) {
     fechaInicio.setEnabled(false);
     fechaFin.setEnabled(false);
-    }else {
+    }else if(!queriesWidget
+            .isQueryIdSelected(QueriesWidgetCombo.CARACTERISTICAS)){
     fechaInicio.setEnabled(true);
     fechaFin.setEnabled(true);
     }

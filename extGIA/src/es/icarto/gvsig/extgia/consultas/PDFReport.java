@@ -107,35 +107,42 @@ public abstract class PDFReport {
 
     private void writeFilters(Document document, ConsultasFilters<Field> filters) {
 	try {
-	    Paragraph amP = null;
-	    if (filters.getArea() == null) {
-		amP = new Paragraph("Área Mantenimiento: -", bodyBoldStyle);
+	    
+	    if (filters.getSeleccionados()) {
+	        document.add(new Paragraph("Listando sólo los elementos seleccionados", bodyBoldStyle));
+	        writeDatesRange(document, filters);
+            document.add(Chunk.NEWLINE);
 	    } else {
-		amP = new Paragraph("Área Mantenimiento: "
-			+ filters.getArea().getValue(), bodyBoldStyle);
+	        Paragraph amP = null;
+    	    if (filters.getArea() == null) {
+    		amP = new Paragraph("Área Mantenimiento: -", bodyBoldStyle);
+    	    } else {
+    		amP = new Paragraph("Área Mantenimiento: "
+    			+ filters.getArea().getValue(), bodyBoldStyle);
+    	    }
+    	    document.add(amP);
+    
+    	    Paragraph bcP = null;
+    	    if (filters.getBaseContratista() == null) {
+    		bcP = new Paragraph("Base Contratista: -", bodyBoldStyle);
+    	    } else {
+    		bcP = new Paragraph("Base Contratista: "
+    			+ filters.getBaseContratista().getValue(),
+    			bodyBoldStyle);
+    	    }
+    	    document.add(bcP);
+    
+    	    Paragraph tramoP = null;
+    	    if (filters.getTramo() == null) {
+    		tramoP = new Paragraph("Tramo: -", bodyBoldStyle);
+    	    } else {
+    		tramoP = new Paragraph("Tramo: "
+    			+ filters.getTramo().getValue(), bodyBoldStyle);
+        	    }
+    	    document.add(tramoP);
+    	    writeDatesRange(document, filters);
+    	    document.add(Chunk.NEWLINE);
 	    }
-	    document.add(amP);
-
-	    Paragraph bcP = null;
-	    if (filters.getBaseContratista() == null) {
-		bcP = new Paragraph("Base Contratista: -", bodyBoldStyle);
-	    } else {
-		bcP = new Paragraph("Base Contratista: "
-			+ filters.getBaseContratista().getValue(),
-			bodyBoldStyle);
-	    }
-	    document.add(bcP);
-
-	    Paragraph tramoP = null;
-	    if (filters.getTramo() == null) {
-		tramoP = new Paragraph("Tramo: -", bodyBoldStyle);
-	    } else {
-		tramoP = new Paragraph("Tramo: "
-			+ filters.getTramo().getValue(), bodyBoldStyle);
-	    }
-	    document.add(tramoP);
-	    writeDatesRange(document, filters);
-	    document.add(Chunk.NEWLINE);
 	} catch (DocumentException e) {
 	    e.printStackTrace();
 	}
@@ -143,12 +150,17 @@ public abstract class PDFReport {
 
     protected void writeDatesRange(Document document,
 	    ConsultasFilters<Field> filters) throws DocumentException {
-	Paragraph mesP = new Paragraph("Desde: "
-		+ filters.getFechaInicioFormatted(), bodyBoldStyle);
-	document.add(mesP);
-	Paragraph anhoP = new Paragraph("Hasta: "
-		+ filters.getFechaFinFormatted(), bodyBoldStyle);
-	document.add(anhoP);
+    if (filters.getUltimos()) {
+        document.add(new Paragraph("Listando sólo el más reciente para cada elemento", 
+                bodyBoldStyle));
+    } else {
+        Paragraph mesP = new Paragraph("Desde: "
+                + filters.getFechaInicioFormatted(), bodyBoldStyle);
+        document.add(mesP);
+        Paragraph anhoP = new Paragraph("Hasta: "
+                + filters.getFechaFinFormatted(), bodyBoldStyle);
+        document.add(anhoP);
+    }
     }
 
     private void writeTitleAndSubtitle(Document document, String title,
