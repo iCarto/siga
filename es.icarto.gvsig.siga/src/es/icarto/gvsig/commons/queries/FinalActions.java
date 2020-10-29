@@ -14,18 +14,18 @@ public class FinalActions {
 
     private static final Logger logger = Logger.getLogger(FinalActions.class);
 
-    private final boolean emptyQuery;
     private final File output;
+    private final ReportValidationResult reportValidationResult;
 
-    public FinalActions(boolean emptyQuery, File output) {
-	this.emptyQuery = emptyQuery;
-	this.output = output;
+
+    public FinalActions(File outputFile, ReportValidationResult reportValidationResult) {
+        this.output = outputFile;
+        this.reportValidationResult = reportValidationResult;
     }
 
     public void showMessages() {
-	if (emptyQuery) {
-	    JOptionPane.showMessageDialog(null,
-		    PluginServices.getText(this, "queryWithoutResults_msg"));
+	if (reportValidationResult.isError()) {
+	    JOptionPane.showMessageDialog(null, reportValidationResult.getMsg());
 	} else {
 	    JOptionPane.showMessageDialog(
 		    null,
@@ -36,9 +36,8 @@ public class FinalActions {
     }
 
     public void openReport() {
-	if (emptyQuery) {
-	    JOptionPane.showMessageDialog(null,
-		    PluginServices.getText(this, "queryWithoutResults_msg"));
+        if (reportValidationResult.isError()) {
+            JOptionPane.showMessageDialog(null, reportValidationResult.getMsg());
 	} else {
 	    showOpenReportDialog("openReport");
 	}
@@ -65,13 +64,11 @@ public class FinalActions {
     }
 
     public void openFolder() {
-	if (emptyQuery) {
-	    JOptionPane.showMessageDialog(null,
-		    PluginServices.getText(this, "queryWithoutResults_msg"));
-	} else {
-	    showOpenReportDialog("openFolder");
-	}
-
+        if (reportValidationResult.isError()) {
+            JOptionPane.showMessageDialog(null, reportValidationResult.getMsg());
+        } else {
+            showOpenReportDialog("openFolder");    
+        }
     }
 
 }

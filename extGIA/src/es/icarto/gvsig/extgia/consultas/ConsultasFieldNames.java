@@ -1,8 +1,5 @@
 package es.icarto.gvsig.extgia.consultas;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -41,7 +38,6 @@ import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.Transformadores
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.TunelesCaracteristicasReport;
 import es.icarto.gvsig.extgia.consultas.caracteristicas.elements.VallaCierreCaracteristicasReport;
 import es.icarto.gvsig.extgia.preferences.Elements;
-import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ConsultasFieldNames {
 
@@ -115,7 +111,7 @@ public class ConsultasFieldNames {
                     + "codigo_senhal, leyenda, panel_complementario, codigo_panel, texto_panel, "
                     + "fecha_fabricacion, fecha_instalacion, fecha_reposicion, tipo_sustentacion ";
         case Valla_Cierre:
-            return "id_valla, tr.item, pk_inicial, pk_final, tipo_valla, longitud, "
+            return "gid, tr.item, pk_inicial, pk_final, tipo_valla, longitud, "
                     + "altura, n_panhos, n_puertas, n_postes_simples, n_postes_tripode, pastor_electrico, "
                     + "observaciones";
         case Firme:
@@ -393,11 +389,9 @@ public class ConsultasFieldNames {
     }
 
     public static String vallaCierreCSVFieldNames() {
-        return "gid, " + "el.id_valla as \"ID Valla\"," + "fecha_actualizacion as \"Fecha Actualización\","
-                + localizationCSVFieldNames() + "tvf.item as \"Tipo Vía PF\"," + "nvf.item as \"Nombre Vía PF\","
-                + "pk_inicial as \"PK Inicial\"," + "pk_final as \"PK Final\"," + "ramal_pi as \"Ramal\","
-                + "ramal_pf as \"Ramal PF\"," + "direccion_pi as \"Dirección\"," + "direccion_pf as \"Dirección PF\","
-                + "st.item as \"Sentido\"," + "margen as \"Margen\"," + "mu.item as \"Municipio\","
+        return "gid as \"ID Valla\"," + "fecha_actualizacion as \"Fecha Actualización\","
+                + localizationCSVFieldNames() + "pk_inicial as \"PK Inicial\"," + "pk_final as \"PK Final\"," + "ramal as \"Ramal\","
+                + "direccion as \"Dirección\"," + "st.item as \"Sentido\"," + "margen as \"Margen\"," + "mu.item as \"Municipio\","
                 + "tipo_valla as \"Tipo Valla\"," + "longitud as \"Longitud\"," + "altura as \"Altura\","
                 + "n_panhos as \"Nº Paños\"," + "n_puertas as \"Nº Puertas\","
                 + "n_postes_simples as \"Nº Postes Simples\"," + "n_postes_tripode as \"Nº Postes Trípode\","
@@ -685,19 +679,10 @@ public class ConsultasFieldNames {
     }
 
     public static String getElementId(String element) {
-        PreparedStatement statement;
-        String query = "SELECT id_fieldname FROM audasa_extgia_dominios.elemento " + "WHERE id ILIKE '" + element
-                + "';";
-        try {
-            statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query);
-            statement.execute();
-            ResultSet rs = statement.getResultSet();
-            rs.next();
-            return rs.getString(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (element.equalsIgnoreCase("vegetacion")) {
+            return "null";
         }
-        return null;
+        return Elements.valueOf(element).pk;
     }
 
     public static boolean hasIndiceFieldOnReconocimientos(String element) {
@@ -713,14 +698,5 @@ public class ConsultasFieldNames {
             return true;
         }
     }
-
-    // private static String getFieldCountRamales(String element) {
-    // String table = element.toLowerCase();
-    // String elementId = ConsultasFieldNames.getElementId(element);
-    // String query =
-    // "SELECT count(a.gid) FROM audasa_extgia.%s a JOIN audasa_extgia.ramales b ON a.tramo = b.tramo AND a.tipo_via = b.tipo_via AND a.nombre_via = b.nombre_via  WHERE %s = '%s';";
-    // query = String.format(query, table, elementId, id);
-    // return query;
-    // }
 
 }

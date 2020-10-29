@@ -7,43 +7,26 @@ import es.icarto.gvsig.extgia.preferences.Elements;
 public class CaracteristicasQueries {
 
     public static String getPDFCaracteristicasQuery(String element, ConsultasFilters<Field> filters) {
-    String query = "";    
-    switch (Elements.valueOf(element)) {
-        case Senhalizacion_Vertical:
-            query = "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
-                    + CaracteristicasQueries.getFromClauseCaracteristicas(element);
-            if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
+        String query = "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
+                + CaracteristicasQueries.getFromClauseCaracteristicas(element);
+        if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
             query = query + filters.getWhereClauseByLocationWidgets();
-            }
-            if (!filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk).isEmpty()) {
-            query = query + filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk);
-            query = query.replace("sub.", "");
-            }
-            return query + " ORDER BY el.id_elemento_senhalizacion";
-        
-        default:
-            query = "SELECT gid, " + ConsultasFieldNames.getPDFCaracteristicasFieldNames(element)
-            + CaracteristicasQueries.getFromClauseCaracteristicas(element);
-            if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
-            query = query + filters.getWhereClauseByLocationWidgets();
-            }
-            if (!filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk).isEmpty()) {
-            query = query + filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk);
-            query = query.replace("sub.", "");
-            }
-            return query + " ORDER BY gid";
-
         }
+        if (!filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk).isEmpty()) {
+            query = query + filters.getWhereClauseBySelectedRecordsOnly("sub", Elements.valueOf(element).pk);
+            query = query.replace("sub.", "");
+        }
+        if (Elements.valueOf(element).equals(Elements.Senhalizacion_Vertical)) {
+            query += " ORDER BY el.id_elemento_senhalizacion";
+        } else {
+            query += " ORDER BY gid";
+        }
+        return query;
     }
 
     public static String getReconocimientosTrabajosQuery(String element, ConsultasFilters<Field> filters,
             String fields, String elementId, String tipoConsulta) {
-        String query = "";
-        if (element.equalsIgnoreCase("senhalizacion_vertical")) {
-            query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta, filters);
-        } else {
-            query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta, filters);
-        }
+        String query = "SELECT " + fields + getFromClauseReconocimientosTrabajos(element, elementId, tipoConsulta, filters);
 
         if (!filters.getWhereClauseByLocationWidgets().isEmpty()) {
             if (filters.getUltimos()) {
@@ -150,12 +133,12 @@ public class CaracteristicasQueries {
         case Centros_Mando:
         case Pretiles:
         case Barrera_Metalica:
+        case Valla_Cierre:
             return getLocalizationTablesWithSentido();
 
         case Firme:
             return getFirmeLocalizationTables();
 
-        case Valla_Cierre:
         case Taludes:
         case Muros:
         case Lineas_Suministro:

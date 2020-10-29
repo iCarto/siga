@@ -21,6 +21,7 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 
 import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.queries.FinalActions;
+import es.icarto.gvsig.commons.queries.ReportValidationResult;
 import es.icarto.gvsig.siga.PreferencesPage;
 import es.icarto.gvsig.siga.forms.reports.PrintReportAction;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
@@ -150,7 +151,7 @@ public class PrintSVReportObserver implements ActionListener {
 			    logger.error(e.getStackTrace(), e);
 			}
 		    }
-		    FinalActions fa = new FinalActions(false, selectedFile);
+		    FinalActions fa = new FinalActions(selectedFile, new ReportValidationResult(""));
 		    fa.openFolder();
 		}
 	    }

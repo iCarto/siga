@@ -18,12 +18,13 @@ import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.queries.CustomiceDialog;
 import es.icarto.gvsig.commons.queries.FinalActions;
 import es.icarto.gvsig.commons.queries.QueriesWidget;
+import es.icarto.gvsig.commons.queries.ReportValidation;
+import es.icarto.gvsig.commons.queries.ReportValidationResult;
 import es.icarto.gvsig.commons.queries.Utils;
 import es.icarto.gvsig.commons.queries.ValidatableForm;
 import es.icarto.gvsig.commons.utils.Field;
@@ -167,13 +168,11 @@ public class QueriesPanel extends ValidatableForm implements ActionListener {
         ResultTableModel result = new ResultTableModel(queryCode, queryDescription, queryTitle, querySubtitle);
         result.setQueryFilters(queryFilters);
         con.execute(query, result);
+        ReportValidationResult reportValidationResult = new ReportValidation().afterGetResults(result);
 
         File file = queriesOuputWidget.to(result, queryFilters);
-        if (file != null) {
-            FinalActions finalActions = new FinalActions(result.getRowCount() == 0, file);
-            finalActions.openReport();
-        }
-
+        FinalActions finalActions = new FinalActions(file, reportValidationResult);
+        finalActions.openReport();
     }
 
     private void popToDestination(List<Field> fields, String key, CustomiceDialog<Field> customiceDialog) {

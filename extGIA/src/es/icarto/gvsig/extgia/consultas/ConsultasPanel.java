@@ -31,7 +31,6 @@ import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
@@ -222,7 +221,7 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
         if (selTipoConsulta.equals("Trabajos")) {
         List<Field> columns2 = Utils.getFields(resource.getPath(),
             "audasa_extgia", selElementKey.toLowerCase()
-                + "_trabajos");
+                + "_trabajos", reserved);
         setAsFirstItem(columns2, "id_trabajo");
 
         customiceDialog.clearDestinationListModel();

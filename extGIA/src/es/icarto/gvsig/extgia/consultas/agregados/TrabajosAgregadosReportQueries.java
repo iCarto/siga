@@ -4,6 +4,7 @@ import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.CaracteristicasQueries;
 import es.icarto.gvsig.extgia.consultas.ConsultasFieldNames;
 import es.icarto.gvsig.extgia.consultas.ConsultasFilters;
+import es.icarto.gvsig.extgia.preferences.Elements;
 
 public class TrabajosAgregadosReportQueries {
 
@@ -13,13 +14,14 @@ public class TrabajosAgregadosReportQueries {
     private final String partialQuery;
 
     private enum Vegetacion {
-	TALUDES("taludes", "id_talud"), ISLETAS("isletas", "id_isleta"), BARRERA_RIGIDA(
-		"barrera_rigida", "id_barrera_rigida"), VALLA_CIERRE("valla_cierre", "id_valla");
+	TALUDES("taludes", Elements.Taludes.pk), ISLETAS("isletas", Elements.Isletas.pk), BARRERA_RIGIDA(
+		"barrera_rigida", Elements.Barrera_Rigida.pk), VALLA_CIERRE("valla_cierre",  Elements.Valla_Cierre.pk);
 
 	private final String table;
 	private final String id;
 
 	private Vegetacion(String table, String id) {
+	   
 	    this.table = table;
 	    this.id = id;
 	}
@@ -61,7 +63,7 @@ public class TrabajosAgregadosReportQueries {
 	        if (eVeg.name().compareToIgnoreCase("VALLA_CIERRE") == 0) {
 	        /* VALLA_CIERRE is the only element of vegetation that
 	         * it has a SERIAL and not a VARCHAR as PK */
-	        query = query.replaceFirst("el.%s", "CAST(el.id_valla AS Varchar)");
+	        query = query.replaceFirst("el.%s", "CAST(el.gid AS Varchar)");
 	        elementQuery += String.format(query, eVeg.table, eVeg.table, eVeg.id, eVeg.id, unidad).replace(" ORDER BY 2, 5, 1", " UNION ALL ");
 	        }else {
 	        elementQuery += String.format(query, eVeg.id, eVeg.table, eVeg.table, eVeg.id, eVeg.id, unidad).replace(" ORDER BY 2, 5, 1", " UNION ALL ");

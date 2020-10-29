@@ -10,6 +10,8 @@ import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.gui.SaveFileDialog;
 import es.icarto.gvsig.commons.queries.Component;
 import es.icarto.gvsig.commons.queries.FinalActions;
+import es.icarto.gvsig.commons.queries.ReportValidation;
+import es.icarto.gvsig.commons.queries.ReportValidationResult;
 import es.icarto.gvsig.commons.queries.XLSReport;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.extgia.consultas.agregados.TrabajosAgregadosReport;
@@ -20,13 +22,18 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class Leaf implements Component {
 
+    
+    
     private final String[] element;
     private final ConsultasFilters<Field> consultasFilters;
     private final KeyValue tipoConsulta;
     private final boolean pdf;
 
     private File outputFile;
-    private boolean emptyQuery = false;
+
+
+    private final ReportValidation reportValidation;
+    private ReportValidationResult reportValidationResult;
 
     public Leaf(String[] element, ConsultasFilters<Field> consultasFilters,
 	    KeyValue tipoConsulta, boolean pdf) {
@@ -35,6 +42,7 @@ public class Leaf implements Component {
 	this.outputFile = new File("./" + element[0]);
 	this.tipoConsulta = tipoConsulta;
 	this.pdf = pdf;
+	this.reportValidation = new ReportValidation();
     }
 
     @Override
@@ -82,10 +90,12 @@ public class Leaf implements Component {
 	    ConnectionWrapper con = new ConnectionWrapper(DBSession
 		    .getCurrentSession().getJavaConnection());
 	    DefaultTableModel table = con.execute(query);
-	    if (table.getRowCount() == 0) {
-		emptyQuery = true;
-		return;
+	    
+	    reportValidationResult = reportValidation.afterGetResults(table);
+	    if (reportValidationResult.isError()) {
+	        return;
 	    }
+	    
 
 	    if (pdf) {
 		createPdfReport(tipo, outputFile.getAbsolutePath(), element,
@@ -241,7 +251,7 @@ public class Leaf implements Component {
 
     @Override
     public void finalActions() {
-	FinalActions finalActions = new FinalActions(emptyQuery, outputFile);
+	FinalActions finalActions = new FinalActions(outputFile, reportValidationResult);
 	finalActions.openReport();
     }
 

@@ -56,6 +56,7 @@ final class Help {
     public static final List<String> ignoreGeom = Arrays.asList(new String[] { "the_geom", "geom" });
     public static final List<String> ignoredGidGeom = Arrays.asList(new String[] { "gid", "the_geom", "geom" });
     public static final List<String> ignoredFieldsEstructuras = Arrays.asList(new String[] { "the_geom", "geom", "resultado_basica" });
+    public static final List<String> ignoredFieldsVallaCierre = Arrays.asList(new String[] { "the_geom", "id_trabajo_old", "geom", "id_valla_old", "gid_old" });
 }
 
 public enum Elements {
@@ -344,7 +345,7 @@ public enum Elements {
                                                                                                                                                                                                             "valla_cierre_trabajos",
                                                                                                                                                                                                             "valla_cierre_imagenes",
                                                                                                                                                                                                             "valla_cierre_reconocimientos",
-                                                                                                                                                                                                            Help.ignoreGeom,
+                                                                                                                                                                                                            Help.ignoredFieldsVallaCierre,
                                                                                                                                                                                                             null,
                                                                                                                                                                                                             true);
 
