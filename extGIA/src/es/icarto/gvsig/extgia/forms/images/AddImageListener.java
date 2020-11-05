@@ -19,10 +19,6 @@ import com.jeta.forms.components.image.ImageComponent;
 
 import es.icarto.gvsig.commons.utils.FileUtils;
 import es.icarto.gvsig.commons.utils.ImageUtils;
-import es.icarto.gvsig.extgia.forms.AbstractFormWithLocationWidgets;
-import es.icarto.gvsig.extgia.forms.FilesLinkDataImp;
-import es.icarto.gvsig.siga.models.InfoEmpresa;
-import es.icarto.gvsig.siga.models.InfoEmpresaGIA;
 
 public class AddImageListener implements ActionListener {
 
@@ -33,30 +29,23 @@ public class AddImageListener implements ActionListener {
     private final JButton addImageButton;
     private final JButton saveImageButton;
     private final JButton deleteImageButton;
-    private final Object tramo;
 
     private String pkValue;
-
-    private AbstractFormWithLocationWidgets form;
-
-    public void setPkValue(String pkValue) {
-        this.pkValue = pkValue;
-    }
+    private String destFolder;
 
     public AddImageListener(ImageComponent imageComponent, JButton addImageButton, ImagesDAO dao,
-            JButton saveImageButton, JButton deleteImageButton, Object tramo) {
+            JButton saveImageButton, JButton deleteImageButton) {
         this.imageComponent = imageComponent;
         this.addImageButton = addImageButton;
         this.saveImageButton = saveImageButton;
         this.deleteImageButton = deleteImageButton;
         this.dao = dao;
-        this.tramo = tramo;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        WorkFlow wf = new WorkFlow(dao, pkValue, getDestFolder());
+        
+		WorkFlow wf = new WorkFlow(dao, pkValue, destFolder);
         if (wf.abort()) {
             return;
         }
@@ -74,9 +63,9 @@ public class AddImageListener implements ActionListener {
             return;
         }
 
-        if (this.form != null) {
-            destFile = getDestFolder() + File.separator + fileImage.getName();
-            File destFolderFile = new File(getDestFolder());
+        if (this.destFolder != null) {
+            destFile = destFolder + File.separator + fileImage.getName();
+            File destFolderFile = new File(destFolder);
             if (!destFolderFile.exists()) {
                 if (!destFolderFile.mkdirs()) {
                     showWarning(PluginServices.getText(this, "image_msg_error"));
@@ -123,17 +112,13 @@ public class AddImageListener implements ActionListener {
         JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(), msg, "Aviso",
                 JOptionPane.WARNING_MESSAGE);
     }
-
-    public void setForm(AbstractFormWithLocationWidgets form) {
-        this.form = form;
+    
+    public void setPkValue(String pkValue) {
+        this.pkValue = pkValue;
+    }
+    
+    public void setDestFolder(String destFolder) {
+    	this.destFolder = destFolder;
     }
 
-    public String getDestFolder() {
-        if (form != null) {
-        	InfoEmpresaGIA infoEmpresa = new InfoEmpresaGIA();
-            FilesLinkDataImp data = new FilesLinkDataImp(form.getElement(), infoEmpresa.getCompany(tramo));
-            return data.getFolder(form);
-        }
-        return null;
-    }
 }

@@ -126,7 +126,6 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
             addChained(MUNICIPIO, BASE_CONTRATISTA, TRAMO);
         }
         imagesInForms = new ImagesInForms(formBody, DBFieldNames.GIA_SCHEMA, getImagesDBTableName(), getElementID());
-        imagesInForms.setForm(this);
 
         SIGAConfigExtension ext = (SIGAConfigExtension) PluginServices.getExtension(SIGAConfigExtension.class);
         infoEmpresa = ext.getInfoEmpresa();
@@ -159,7 +158,7 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
     @Override
     protected void setListeners() {
         super.setListeners();
-        imagesInForms.setListeners(tramoCB.getSelectedItem());
+        imagesInForms.setListeners();
 
         if (SqlUtils.elementHasType(dataName, "inspecciones")) {
             if (addReconocimientosBatchButton == null) {
@@ -338,13 +337,14 @@ public abstract class AbstractFormWithLocationWidgets extends BasicAbstractForm 
     @Override
     protected void fillSpecificValues() {
         super.fillSpecificValues();
-        imagesInForms.fillSpecificValues(getPrimaryKeyValue());
+        final FilesLinkDataImp filesLinkDataImp = new FilesLinkDataImp(getElement(), infoEmpresa.getCompany(tramoCB.getSelectedItem()));
+        imagesInForms.fillSpecificValues(getPrimaryKeyValue(), filesLinkDataImp.getFolder(this));
         fillEmpresaLB();
         
         for (ActionListener filesButtonActionListener: filesLinkButton.getActionListeners()) {
         	filesLinkButton.removeActionListener(filesButtonActionListener);
         }
-        filesLinkButton.addActionListener(new FilesLinkListener(this, new FilesLinkDataImp(getElement(), infoEmpresa.getCompany(tramoCB.getSelectedItem()))));
+		filesLinkButton.addActionListener(new FilesLinkListener(this, filesLinkDataImp));
        
         fillSentidoInRamalesTable();
     }

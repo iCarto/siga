@@ -5,9 +5,12 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
 
+import es.icarto.gvsig.commons.queries.Utils;
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.AbstractForm;
@@ -17,6 +20,9 @@ import es.icarto.gvsig.siga.models.InfoEmpresa;
 import es.icarto.gvsig.utils.DesktopApi;
 
 public class FilesLinkDataImp implements FilesLinkData {
+	
+	private static final Logger logger = Logger.getLogger(Utils.class);
+	
     private final Elements element;
     private final String empresaName;
 
@@ -40,7 +46,7 @@ public class FilesLinkDataImp implements FilesLinkData {
 		baseDirectory = PreferencesPage.getAGInventoryBaseDirectory();
 		}
 	} catch (Exception e) {
-
+		logger.error(e.getMessage(), e);
 	}
 	
 	if (baseDirectory.isEmpty()) {

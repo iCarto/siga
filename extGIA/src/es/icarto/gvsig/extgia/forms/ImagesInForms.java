@@ -13,6 +13,7 @@ import es.icarto.gvsig.extgia.forms.images.DeleteImageListener;
 import es.icarto.gvsig.extgia.forms.images.ImagesDAO;
 import es.icarto.gvsig.extgia.forms.images.SaveImageListener;
 import es.icarto.gvsig.extgia.forms.images.ShowImageAction;
+import es.icarto.gvsig.siga.models.InfoEmpresa;
 
 public class ImagesInForms {
 
@@ -31,8 +32,6 @@ public class ImagesInForms {
 
     private final ImagesDAO dao;
 
-    private AbstractFormWithLocationWidgets form;
-
     public ImagesInForms(FormPanel formPanel, String schema, String tablename, String fk) {
         this.formPanel = formPanel;
         Connection connection = DBFacade.getConnection();
@@ -46,7 +45,7 @@ public class ImagesInForms {
         this.deleteImageButtonName = deleteImageButtonName;
     }
 
-    public void setListeners(Object tramo) {
+    public void setListeners() {
         imageComponent = (ImageComponent) formPanel.getComponentByName("element_image");
         addImageButton = (JButton) formPanel.getComponentByName("add_image_button");
 
@@ -64,10 +63,7 @@ public class ImagesInForms {
 
         if (addImageListener == null) {
             addImageListener = new AddImageListener(imageComponent, addImageButton, dao, saveImageButton,
-                    deleteImageButton, tramo);
-            if (this.form != null) {
-                addImageListener.setForm(this.form);
-            }
+                    deleteImageButton);
             addImageButton.addActionListener(addImageListener);
         }
 
@@ -84,9 +80,10 @@ public class ImagesInForms {
         }
     }
 
-    public void fillSpecificValues(String fkValue) {
+    public void fillSpecificValues(String fkValue, String destFolder) {
         if (addImageListener != null) {
             addImageListener.setPkValue(fkValue);
+            addImageListener.setDestFolder(destFolder);
         }
 
         if (deleteImageListener != null) {
@@ -101,10 +98,6 @@ public class ImagesInForms {
         ShowImageAction showImage = new ShowImageAction(imageComponent, addImageButton, dao, fkValue);
         showImage.resetEnability(saveImageButton, deleteImageButton);
 
-    }
-
-    public void setForm(AbstractFormWithLocationWidgets abstractFormWithLocationWidgets) {
-        this.form = abstractFormWithLocationWidgets;
     }
 
 }
