@@ -4,6 +4,8 @@ import static es.icarto.gvsig.extgia.preferences.DBFieldNames.AREA_MANTENIMIENTO
 import static es.icarto.gvsig.extgia.preferences.DBFieldNames.BASE_CONTRATISTA;
 import static es.icarto.gvsig.extgia.preferences.DBFieldNames.TRAMO;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -11,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -48,6 +51,7 @@ import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.icarto.gvsig.navtableforms.utils.TOCTableManager;
 import es.icarto.gvsig.siga.PreferencesPage;
+import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
@@ -449,8 +453,22 @@ public class ConsultasPanel extends ValidatableForm implements ActionListener, C
     }else if(!queriesWidget
             .isQueryIdSelected(QueriesWidgetCombo.CARACTERISTICAS)){
     fechaInicio.setEnabled(true);
+    initDateChooser(fechaInicio);
     fechaFin.setEnabled(true);
+    initDateChooser(fechaFin);
     }
     
     }
+    
+    // TODO: Change to WidgetFactory.enableComponent
+    private void initDateChooser(JDateChooser c) {
+    	SimpleDateFormat dateFormat = DateFormatNT.getDateFormat();
+    	c.setDateFormatString(dateFormat.toPattern());
+    	c.getDateEditor().setEnabled(false);
+    	c.getDateEditor().getUiComponent()
+    	.setBackground(new Color(255, 255, 255));
+    	c.getDateEditor().getUiComponent()
+    	.setFont(new Font("Arial", Font.PLAIN, 11));
+    	c.getDateEditor().getUiComponent().setToolTipText(null);
+        }
 }

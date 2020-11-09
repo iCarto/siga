@@ -159,6 +159,7 @@ public class EnabledComponentBasedOnWidgets implements ActionListener {
 	}
     }
     
+    // TODO: Change to WidgetFactory.enableComponent
     private void initDateChooser(JDateChooser c) {
 	SimpleDateFormat dateFormat = DateFormatNT.getDateFormat();
 	c.setDateFormatString(dateFormat.toPattern());
