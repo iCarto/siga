@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import es.icarto.gvsig.commons.gui.WidgetFactory;
 import es.icarto.gvsig.navtableforms.IValidatableForm;
 import es.udc.cartolab.gvsig.navtable.format.DateFormatNT;
 
@@ -147,8 +148,7 @@ public class EnabledComponentBasedOnWidgets implements ActionListener {
 			((JCheckBox) component).doClick();
 	    } 
 		
-	    
-	    component.setEnabled(enabled);
+	    WidgetFactory.enableComponent(component, enabled);
 	    
 	    if ((component instanceof JDateChooser) && enabled) {
 		initDateChooser((JDateChooser) component);
