@@ -75,6 +75,7 @@ public class Leaf implements Component {
     @Override
     public void generateReportFile() {
 	QueryType tipo = getTipo();
+	reportValidationResult = new ReportValidationResult("");
 	if (tipo == QueryType.TRABAJOS_AGREGADOS) {
 	    if (pdf) {
 		createPdfReportAgregados(outputFile.getAbsolutePath(), element,
