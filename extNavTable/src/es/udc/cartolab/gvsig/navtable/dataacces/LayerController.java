@@ -63,6 +63,11 @@ public class LayerController implements IController {
     public long create(HashMap<String, String> newValues) throws Exception {
 	throw new NotImplementedException();
     }
+	@Override
+	public long create(HashMap<String, String> newValues, boolean closeEdition)
+			throws Exception {
+		throw new NotImplementedException();
+	}
 
     @Override
     public void read(long position) throws ReadDriverException {
@@ -196,4 +201,5 @@ public class LayerController implements IController {
     public LayerController clone() {
 	return new LayerController(layer);
     }
+
 }

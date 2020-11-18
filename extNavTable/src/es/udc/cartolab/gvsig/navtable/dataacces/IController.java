@@ -11,6 +11,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 public interface IController extends Cloneable {
 
     public long create(HashMap<String, String> newValues) throws Exception;
+    public long create(HashMap<String, String> newValues, boolean closeEdition) throws Exception;
     
     public abstract void read(long position) throws ReadDriverException;
 

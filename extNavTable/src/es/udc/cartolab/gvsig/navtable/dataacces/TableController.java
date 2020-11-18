@@ -88,8 +88,17 @@ public class TableController implements IController {
 	    clearAll();
 	}
     }
-
+    
     public long create(HashMap<String, String> newValues) throws Exception {
+    	return create(newValues, true);
+    }
+
+    /**
+     * By default we want create to open and close the edition itself. But there are cases, like
+     * when creating multiple register at once (batch) where this is slow, and it's better
+     * handle the edition from the caller.
+     */
+    public long create(HashMap<String, String> newValues, boolean closeEdition) throws Exception {
 
 	initMetadata();
 	Value[] vals = createValuesFromHashMap(newValues);
@@ -103,7 +112,9 @@ public class TableController implements IController {
 	    IRow row = new DefaultRow(vals);
 	    newPosition = model.doAddRow(row, EditionEvent.ALPHANUMERIC);
 	}
-	te.stopEditing(model);
+	if (closeEdition) {
+		te.stopEditing(model);		
+	}
 	read(newPosition);
 	return newPosition;
     }

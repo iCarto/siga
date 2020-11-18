@@ -7,6 +7,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
@@ -27,6 +29,11 @@ public class MockController implements IController {
     public long create(HashMap<String, String> newValues) throws Exception {
 	return 0;
     }
+    @Override
+	public long create(HashMap<String, String> newValues, boolean closeEdition)
+			throws Exception {
+		return 0;
+	}
 
     @Override
     public void read(long position) throws ReadDriverException {

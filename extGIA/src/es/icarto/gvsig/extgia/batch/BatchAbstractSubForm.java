@@ -9,8 +9,10 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
@@ -19,6 +21,7 @@ import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.navtableforms.gui.tables.handler.BaseTableHandler;
 import es.icarto.gvsig.navtableforms.gui.tables.model.AlphanumericTableModel;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
+import es.udc.cartolab.gvsig.navtable.ToggleEditing;
 import es.udc.cartolab.gvsig.navtable.dataacces.IController;
 import es.udc.cartolab.gvsig.navtable.format.ValueFormatNT;
 
@@ -90,72 +93,91 @@ public class BatchAbstractSubForm extends GIASubForm {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-	    HashMap<String, String> values = new HashMap<String, String>();
+	    HashMap<String, String> values = getValuesToBeWritten();
 
-	    // controller values must be cloned to avoid bugs
-	    for (Entry<String, String> f : iController.getValues().entrySet()) {
-		values.put(f.getKey(), f.getValue());
-	    }
-
-	    final TOCLayerManager toc = new TOCLayerManager();
-	    FLyrVect layer = toc.getLayerByName(getLayerName());
-
-	    SelectableDataSource recordset;
 	    try {
-		recordset = layer.getRecordset();
-		int selectedElements = 0;
-		int idFieldIndex = recordset
-			.getFieldIndexByName(getIdFieldName());
-		if (recordset.getSelection().isEmpty()) {
+	    SelectableDataSource recordset = getParentTableRecordset();
+		 
+		
+		final FBitSet selection = recordset.getSelection();
+		int selectionCount = selection.cardinality();
+		if (selection.isEmpty()) {
 		    logger.warn("No record selected");
 		    return;
 		}
-		selectedElements = recordset.getSelection().cardinality();
 
+		int m = askUserBeforeContinue(selectionCount);
+		if (m != JOptionPane.OK_OPTION) {
+			return;
+		}
+		
+		int idFieldIndex = recordset.getFieldIndexByName(getIdFieldName());
+		ToggleEditing te = new ToggleEditing();
+		if (!model.getSource().isEditing()) {
+		    te.startEditing(model.getSource());
+		}
+		for (int i = selection.nextSetBit(0); i >= 0; i = selection.nextSetBit(i+1)) {
+			values.put(getIdFieldName(), recordset.getFieldValue(i, idFieldIndex).getStringValue(WRITER));
+		    values.remove(primaryKey);
+		    iController.create(values, false);
+		}
+	    te.stopEditing(model.getSource());
+	    showInfoMsgToUser(selectionCount);
+		model.dataChanged();
+	    } catch (Exception e) {
+		iController.clearAll();
+		position = -1;
+		logger.error(e.getStackTrace());
+	    } finally {
+	    	PluginServices.getMDIManager().closeWindow(iWindow);	    	
+	    }
+	}
+
+	private void showInfoMsgToUser(int selectionCount) {
+		JOptionPane.showMessageDialog(
+		    null,
+		    PluginServices.getText(this, "addedInfo_msg_I")
+		    + selectionCount
+		    + " "
+		    + PluginServices.getText(this,
+			    "addedInfo_msg_II"));
+	}
+
+	
+
+	private SelectableDataSource getParentTableRecordset()
+			throws ReadDriverException {
+		final TOCLayerManager toc = new TOCLayerManager();
+		FLyrVect layer = toc.getLayerByName(getLayerName());
+		SelectableDataSource recordset = layer.getRecordset();
+		return recordset;
+	}
+
+	// controller values must be cloned to avoid bugs
+	private HashMap<String, String> getValuesToBeWritten() {
+		HashMap<String, String> values = new HashMap<String, String>();
+	    for (Entry<String, String> f : iController.getValues().entrySet()) {
+		values.put(f.getKey(), f.getValue());
+	    }
+		return values;
+	}
+    }
+    
+    private int askUserBeforeContinue(int selectionCount) {
 		Object[] options = {
 			PluginServices.getText(this, "optionPane_yes"),
 			PluginServices.getText(this, "optionPane_no") };
 		int m = JOptionPane.showOptionDialog(
 			null,
 			PluginServices.getText(this, "addInfo_msg_I")
-			+ selectedElements
+			+ selectionCount
 			+ " "
 			+ PluginServices
 			.getText(this, "addInfo_msg_II"), null,
 			JOptionPane.YES_NO_CANCEL_OPTION,
 			JOptionPane.INFORMATION_MESSAGE, null, options,
 			options[1]);
-		if (m == JOptionPane.OK_OPTION) {
-		    // TODO: fpuga. 04/02/2014. Istead of this use
-		    // selection.nextSetBit. it will performs fast
-		    for (int i = 0; i < recordset.getRowCount(); i++) {
-			if (recordset.isSelected(i)) {
-			    values.put(getIdFieldName(), recordset
-				    .getFieldValue(i, idFieldIndex)
-				    .getStringValue(WRITER));
-
-			    values.remove(primaryKey);
-			    iController.create(values);
-
-			}
-		    }
-		    JOptionPane.showMessageDialog(
-			    null,
-			    PluginServices.getText(this, "addedInfo_msg_I")
-			    + selectedElements
-			    + " "
-			    + PluginServices.getText(this,
-				    "addedInfo_msg_II"));
-
-		}
-		model.dataChanged();
-	    } catch (Exception e) {
-		iController.clearAll();
-		position = -1;
-		logger.error(e.getStackTrace());
-	    }
-	    PluginServices.getMDIManager().closeWindow(iWindow);
+		return m;
 	}
-    }
 
 }
