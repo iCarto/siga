@@ -21,8 +21,8 @@
 	<!-- DON'T TOUCH BELOW THIS LINE -->
 	
 	<!-- Overrides source and target compile versions of appgvSIG/build.xml -->
-	<property name="JavaSourceVersion" value="1.6"/>
-	<property name="JavaTargetVersion" value="1.6"/>
+	<property name="JavaSourceVersion" value="1.7"/>
+	<property name="JavaTargetVersion" value="1.7"/>
 	
 	<import file="../appgvSIG/build.xml"/>
 	
