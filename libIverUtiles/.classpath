@@ -3,8 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/libFMap/lib/mysql-connector-java-3.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/postgis-jdbc-driver.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/postgresql-74.213.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/commons-collections-3.1.zip"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/commons-dbcp-1.0-dev-20020806.zip"/>

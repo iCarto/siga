@@ -11,11 +11,11 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.commons.image.ImageWindow;
-import es.icarto.gvsig.extgia.forms.images.DBFacade;
 import es.icarto.gvsig.extgia.forms.images.ImagesDAO;
 import es.icarto.gvsig.extgia.preferences.DBFieldNames;
 import es.icarto.gvsig.extgia.preferences.Elements;
 import es.icarto.gvsig.siga.PreferencesPage;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ImagesInView {
 
@@ -30,8 +30,11 @@ public class ImagesInView {
             }
         }
         String table = element.imagenesTableName;
-        Connection connection = DBFacade.getConnection();
+        
 
+        // TODO: Probably all insert image methods should be in core gvSIG classes, now that 
+        // the drivers are updated
+        Connection connection = DBSession.getCurrentSession().getJavaConnection();
         ImagesDAO dao = new ImagesDAO(connection, DBFieldNames.GIA_SCHEMA, table, element.pk);
 
         AbstractFormWithLocationWidgets form = (AbstractFormWithLocationWidgets) LaunchGIAForms

@@ -196,7 +196,7 @@ IFieldManager {
 
 	public void postProcess() throws StopWriterVisitorException {
 		try {
-			((ConnectionJDBC) conex).getConnection().setAutoCommit(true);
+			((ConnectionJDBC) conex).getConnection().commit();
 		} catch (SQLException e) {
 			throw new StopWriterVisitorException(getName(), e);
 		}

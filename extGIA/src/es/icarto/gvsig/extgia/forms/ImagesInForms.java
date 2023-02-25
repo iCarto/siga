@@ -8,12 +8,12 @@ import com.jeta.forms.components.image.ImageComponent;
 import com.jeta.forms.components.panel.FormPanel;
 
 import es.icarto.gvsig.extgia.forms.images.AddImageListener;
-import es.icarto.gvsig.extgia.forms.images.DBFacade;
 import es.icarto.gvsig.extgia.forms.images.DeleteImageListener;
 import es.icarto.gvsig.extgia.forms.images.ImagesDAO;
 import es.icarto.gvsig.extgia.forms.images.SaveImageListener;
 import es.icarto.gvsig.extgia.forms.images.ShowImageAction;
 import es.icarto.gvsig.siga.models.InfoEmpresa;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ImagesInForms {
 
@@ -34,7 +34,10 @@ public class ImagesInForms {
 
     public ImagesInForms(FormPanel formPanel, String schema, String tablename, String fk) {
         this.formPanel = formPanel;
-        Connection connection = DBFacade.getConnection();
+        
+        // TODO: Probably all insert image methods should be in core gvSIG classes, now that 
+        // the drivers are updated
+        Connection connection = DBSession.getCurrentSession().getJavaConnection();
         this.dao = new ImagesDAO(connection, schema, tablename, fk);
     }
 

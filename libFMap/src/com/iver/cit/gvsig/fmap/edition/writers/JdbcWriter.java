@@ -26,7 +26,6 @@ public class JdbcWriter extends AbstractWriter {
 	Connection conn;
 	ResultSet rs;
 	Value[] record;
-	int numRecord;
 
 	private boolean bCreateTable;
 
@@ -43,8 +42,7 @@ public class JdbcWriter extends AbstractWriter {
 		System.out.println("INICIO CONEXIÓN DE ESCRITURA");
 	}
 	public void preProcess() throws StartWriterVisitorException {
-			try {
-				numRecord = 0;				
+			try {			
 				conn.setAutoCommit(false);
 				rowsToDelete = new ArrayList<Integer>();
 			} catch (SQLException e) {
@@ -54,20 +52,6 @@ public class JdbcWriter extends AbstractWriter {
 					throw new StartWriterVisitorException(getName(),e);
 				}
 			}
-			/* Statement st = conn.createStatement();
-
-			if (bCreateTable) {
-				try {
-					st.execute("DROP TABLE " + lyrDef.getTableName() + ";");
-				} catch (SQLException e1) {
-					// Si no existe la tabla, no hay que borrarla.
-				}
-
-				String sqlCreate = PostGIS.getSqlCreateSpatialTable(lyrDef,
-						lyrDef.getFieldsDesc(), true);
-				System.out.println("sqlCreate =" + sqlCreate);
-				st.execute(sqlCreate);
-			} */
 
 	}
 
@@ -75,8 +59,7 @@ public class JdbcWriter extends AbstractWriter {
 		IRow row = editedRow.getLinkedRow();
 
 		try {
-			System.out.println("Intento escribir el registro " +
-					numRecord + " de la capa " + metaData.getTableName(1));
+			System.out.println("Intento escribir el registro de la capa " + metaData.getTableName(1));
 			switch (editedRow.getStatus())
 			{
     		case IRowEdited.STATUS_ADDED:
@@ -107,8 +90,6 @@ public class JdbcWriter extends AbstractWriter {
     			rowsToDelete.add(editedRow.getIndex()+1);
     			break;
 			}
-			numRecord++;
-			rs.next();
 
 		} catch (SQLException e) {
 			System.out.println(e.getSQLState() + " " + e.getMessage());

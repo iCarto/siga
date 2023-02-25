@@ -19,7 +19,6 @@ import org.postgis.MultiPolygon;
 import org.postgis.PGgeometry;
 import org.postgis.Point;
 import org.postgis.Polygon;
-import org.postgresql.PGConnection;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -137,8 +136,9 @@ public class PostGISDriver implements SpatialDBDriver {
         }
 
         Connection c = DriverManager.getConnection(connectionString);
-        ((PGConnection) c).addDataType("geometry", "org.postgis.PGgeometry");
-        ((PGConnection) c).addDataType("box3d", "org.postgis.PGbox3d");
+        // https://postgis.net/docs/ch07.html#idm3091
+        ((org.postgresql.PGConnection)c).addDataType("geometry", "org.postgis.PGgeometry");
+        ((org.postgresql.PGConnection)c).addDataType("box3d", "org.postgis.PGbox3d");
 
         return c;
     }

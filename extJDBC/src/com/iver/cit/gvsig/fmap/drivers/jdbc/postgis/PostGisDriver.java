@@ -45,8 +45,6 @@ package com.iver.cit.gvsig.fmap.drivers.jdbc.postgis;
 
 import java.awt.geom.Rectangle2D;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,20 +54,13 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Random;
-
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.postgis.PGbox2d;
 import org.postgis.PGbox3d;
-import org.postgresql.util.PSQLException;
-import org.postgresql.util.PSQLState;
-
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.edition.DataWare;
@@ -146,31 +137,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	private String cursorName;
 
-	private static final BigInteger _nbase = new BigInteger("10000");
-
-	private static final BigInteger _nbasePow2 = _nbase.pow(2);
-
-	private static final BigInteger _nbasePow4 = _nbase.pow(4);
-
-	private static final long nbaseLong = _nbase.longValue();
-
-	private static final long nbaseLongPow2 = nbaseLong * nbaseLong;
-
-	private static final int nbaseInt = (int) nbaseLong;
-
 	public static final String NAME = "PostGIS JDBC Driver";
-
-	protected static BigInteger getNBase() {
-		return _nbase;
-	}
-
-	protected static BigInteger getNBasePow2() {
-		return _nbasePow2;
-	}
-
-	protected static BigInteger getNBasePow4() {
-		return _nbasePow4;
-	}
 
 	static {
 		try {
@@ -495,7 +462,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		if (byteBuf == null) {
 		    return ValueFactory.createNullValue();
 		} else {
-			ByteBuffer buf = ByteBuffer.wrap(byteBuf);
+			
 			if (metaData.getColumnType(fieldId) == Types.VARCHAR) {
 			    return ValueFactory.createValue(aRs.getString(fieldId));
 			}
@@ -508,22 +475,22 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 				}
 			}
 			if (metaData.getColumnType(fieldId) == Types.FLOAT) {
-			    return ValueFactory.createValue(buf.getFloat());
+			    return ValueFactory.createValue(aRs.getFloat(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.DOUBLE) {
-			    return ValueFactory.createValue(buf.getDouble());
+			    return ValueFactory.createValue(aRs.getDouble(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.REAL) {
-			    return ValueFactory.createValue(buf.getFloat());
+			    return ValueFactory.createValue(aRs.getFloat(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.INTEGER) {
-			    return ValueFactory.createValue(buf.getInt());
+			    return ValueFactory.createValue(aRs.getInt(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.SMALLINT) {
-			    return ValueFactory.createValue(buf.getShort());
+			    return ValueFactory.createValue(aRs.getShort(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.BIGINT) {
-			    return ValueFactory.createValue(buf.getLong());
+			    return ValueFactory.createValue(aRs.getLong(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.BIT) {
 			    return ValueFactory.createValue((byteBuf[0] == 1));
@@ -532,13 +499,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			    return ValueFactory.createValue(aRs.getBoolean(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.DATE) {
-				long daysAfter2000 = buf.getInt();
-				DateTime year2000 = new DateTime(2000, 1,1,0,0,0);
-				DateTime dt = year2000.plusDays((int)daysAfter2000);
-				Calendar cal = GregorianCalendar.getInstance();
-				cal.set(dt.getYear(), dt.getMonthOfYear()-1, dt.getDayOfMonth());
-//				System.out.println(dt + " convertido:" + cal.getTime());
-				return ValueFactory.createValue(cal.getTime());
+				return ValueFactory.createValue(aRs.getDate(fieldId));
 			}
 			if (metaData.getColumnType(fieldId) == Types.TIME) {
 				// TODO:
@@ -546,151 +507,20 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 				return ValueFactory.createValue("NOT IMPLEMENTED YET");
 			}
 			if (metaData.getColumnType(fieldId) == Types.TIMESTAMP) {
-				double segsReferredTo2000 = buf.getDouble();
+				double segsReferredTo2000 = aRs.getDouble(fieldId);
 				long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000 * 1000);
 				Timestamp valTimeStamp = new Timestamp(real_msecs);
 				return ValueFactory.createValue(valTimeStamp);
 			}
 
 			if (metaData.getColumnType(fieldId) == Types.NUMERIC) {
-				// System.out.println(metaData.getColumnName(fieldId) + " "
-				// + metaData.getColumnClassName(fieldId));
-				// short ndigits = buf.getShort();
-				// short weight = buf.getShort();
-				// short sign = buf.getShort();
-				// short dscale = buf.getShort();
-				// String strAux;
-				// if (sign == 0)
-				// strAux = "+";
-				// else
-				// strAux = "-";
-				//
-				// for (int iDigit = 0; iDigit < ndigits; iDigit++) {
-				// short digit = buf.getShort();
-				// strAux = strAux + digit;
-				// if (iDigit == weight)
-				// strAux = strAux + ".";
-				//
-				// }
-				// strAux = strAux + "0";
-
-				BigDecimal dec;
-				dec = getBigDecimal(buf.array());
-				// dec = new BigDecimal(strAux);
-				// System.out.println(ndigits + "_" + weight + "_" + dscale
-				// + "_" + strAux);
-				// System.out.println(strAux + " Big= " + dec);
+				BigDecimal dec = aRs.getBigDecimal(fieldId);
 				return ValueFactory.createValue(dec.doubleValue());
 			}
 
 		}
 
 		return ValueFactory.createNullValue();
-
-	}
-
-	private static BigDecimal getBigDecimal(byte[] number) throws SQLException {
-
-		short ndigits = (short) (((number[0] & 0xff) << 8) | (number[1] & 0xff));
-		short weight = (short) (((number[2] & 0xff) << 8) | (number[3] & 0xff));
-		short sign = (short) (((number[4] & 0xff) << 8) | (number[5] & 0xff));
-		short dscale = (short) (((number[6] & 0xff) << 8) | (number[7] & 0xff));
-
-		if (sign == (short) 0xC000) {
-			// Numeric NaN - BigDecimal doesn't support this
-			throw new PSQLException(
-					"The numeric value is NaN - can't convert to BigDecimal",
-					PSQLState.NUMERIC_VALUE_OUT_OF_RANGE);
-		}
-
-		final int bigDecimalSign = sign == 0x4000 ? -1 : 1;
-
-		// System.out.println("ndigits=" + ndigits
-		// +",\n wieght=" + weight
-		// +",\n sign=" + sign
-		// +",\n dscale=" + dscale);
-		// // for (int i=8; i < number.length; i++) {
-		// System.out.println("numer[i]=" + (int) (number[i] & 0xff));
-		// }
-
-		int tail = ndigits % 4;
-		int bytesToParse = (ndigits - tail) * 2 + 8;
-		// System.out.println("numberParseLength="+numberParseLength);
-		int i;
-		BigInteger unscaledValue = BigInteger.ZERO;
-		final BigInteger nbase = getNBase();
-		final BigInteger nbasePow2 = getNBasePow2();
-		final BigInteger nbasePow4 = getNBasePow4();
-
-
-		byte[] buffer = new byte[8];
-
-		// System.out.println("tail = " + tail + " bytesToParse = " +
-		// bytesToParse);
-
-		for (i = 8; i < bytesToParse; i += 8) {
-			// This Hi and Lo aren't bytes Hi Li, but decimal Hi Lo!! (Big &
-			// Small)
-			long valHi = (((number[i] & 0xff) << 8) | (number[i + 1] & 0xff))
-					* 10000
-					+ (((number[i + 2] & 0xff) << 8) | (number[i + 3] & 0xff));
-			long valLo = (((number[i + 4] & 0xff) << 8) | (number[i + 5] & 0xff))
-					* 10000
-					+ (((number[i + 6] & 0xff) << 8) | (number[i + 7] & 0xff));
-			long val = valHi * nbaseLongPow2 + valLo;
-			buffer[0] = (byte) (val >>> 56);
-			buffer[1] = (byte) (val >>> 48);
-			buffer[2] = (byte) (val >>> 40);
-			buffer[3] = (byte) (val >>> 32);
-			buffer[4] = (byte) (val >>> 24);
-			buffer[5] = (byte) (val >>> 16);
-			buffer[6] = (byte) (val >>> 8);
-			buffer[7] = (byte) (val >>> 0);
-
-			BigInteger valBigInteger = new BigInteger(bigDecimalSign, buffer);
-			unscaledValue = unscaledValue.multiply(nbasePow4)
-					.add(valBigInteger);
-		}
-		tail = tail % 2;
-		bytesToParse = (ndigits - tail) * 2 + 8;
-		// System.out.println("tail = " + tail + " bytesToParse = " +
-		// bytesToParse);
-
-		buffer = new byte[4];
-		for (; i < bytesToParse; i += 4) {
-			int val = (((number[i] & 0xff) << 8) | (number[i + 1] & 0xff))
-					* nbaseInt
-					+ (((number[i + 2] & 0xff) << 8) | (number[i + 3] & 0xff));
-			buffer[0] = (byte) (val >>> 24);
-			buffer[1] = (byte) (val >>> 16);
-			buffer[2] = (byte) (val >>> 8);
-			buffer[3] = (byte) val;
-			BigInteger valBigInteger = new BigInteger(bigDecimalSign, buffer);
-			unscaledValue = unscaledValue.multiply(nbasePow2)
-					.add(valBigInteger);
-		}
-
-		// Add the rest of number
-		if (tail % 2 == 1) {
-			buffer = new byte[2];
-			buffer[0] = number[number.length - 2];
-			buffer[1] = number[number.length - 1];
-			BigInteger valBigInteger = new BigInteger(bigDecimalSign, buffer);
-			unscaledValue = unscaledValue.multiply(nbase).add(valBigInteger);
-			// System.out.println("Value (2)  unscaled =" + unscaledValue
-			// +", valBI = "+ valBigInteger);
-		}
-
-
-		// Calculate scale offset
-		final int databaseScale = (ndigits - weight - 1) * 4; // Number of
-																// digits in
-																// nbase
-		// TODO This number of digits should be calculeted depending on nbase
-		// (getNbase());
-
-		BigDecimal result = new BigDecimal(unscaledValue, databaseScale);
-		return result;
 
 	}
 
