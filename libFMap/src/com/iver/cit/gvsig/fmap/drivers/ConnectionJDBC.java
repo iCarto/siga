@@ -45,6 +45,7 @@ package com.iver.cit.gvsig.fmap.drivers;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -68,13 +69,24 @@ public class ConnectionJDBC implements IConnection {
 	public ConnectionJDBC() {
 
 	}
+	
+	private Connection getConnectionWrapper(String connectionStr2, String user2, String _pw2) throws SQLException {
+		Properties props = new Properties();
+		props.setProperty("user", user2);
+		props.setProperty("password",  _pw2);
+		props.setProperty("sslmode", "disable");
+		Connection _con = DriverManager.getConnection(connectionStr2, props);
+		_con.setAutoCommit(false);
+		return _con;
+	}
 
 	public Connection getConnection() {
 		try {
 			// try to getConnection if is closed
 			if (connection != null && connection.isClosed()){
 				Connection tmpCon = null;
-				tmpCon = DriverManager.getConnection(connectionStr, user, _pw);
+				
+				tmpCon = getConnectionWrapper(connectionStr, user, _pw);
 				if (tmpCon != null && !tmpCon.isClosed()){
 					connection = tmpCon;
 					connection.setAutoCommit(false);
@@ -130,8 +142,7 @@ public class ConnectionJDBC implements IConnection {
 
 	public void setDataConnection(String connectionStr, String user, String _pw) throws DBException {
 		try {
-			connection = DriverManager.getConnection(connectionStr, user, _pw);
-			connection.setAutoCommit(false);
+			connection = getConnectionWrapper(connectionStr, user, _pw);
 			this.connectionStr = connectionStr;
 			this.user = user;
 			this._pw = _pw;
