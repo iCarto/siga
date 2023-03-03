@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import sun.jdbc.odbc.JdbcOdbcConnection;
+
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessWriterVisitorException;
@@ -46,11 +46,12 @@ public class JdbcWriter extends AbstractWriter {
 				conn.setAutoCommit(false);
 				rowsToDelete = new ArrayList<Integer>();
 			} catch (SQLException e) {
-				if (conn instanceof JdbcOdbcConnection) {
-					logger.warn("Driver does not allow autocommit method: " + conn.getClass().getName());
-				} else {
-					throw new StartWriterVisitorException(getName(),e);
-				}
+				// https://community.yellowfinbi.com/knowledge-base/article/moving-the-jdbc-odbc-bridge-from-java-7-to-java-8
+				// https://support.migration-center.com/hc/en-us/articles/360012716534-How-to-enable-JDBC-ODBC-bridge-for-Java-8-
+				// if (conn instanceof sun.jdbc.odbc.JdbcOdbcConnection) {
+				// 	logger.warn("Driver does not allow autocommit method: " + conn.getClass().getName());
+				// }
+				throw new StartWriterVisitorException(getName(),e);
 			}
 
 	}
