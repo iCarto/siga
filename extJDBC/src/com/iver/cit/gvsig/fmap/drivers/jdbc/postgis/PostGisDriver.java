@@ -458,67 +458,70 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	static Value getFieldValue(ResultSet aRs, int fieldId) throws SQLException {
 		ResultSetMetaData metaData = aRs.getMetaData();
-		byte[] byteBuf = aRs.getBytes(fieldId);
-		if (byteBuf == null) {
+		
+		if (aRs.getBytes(fieldId) == null) {
 		    return ValueFactory.createNullValue();
-		} else {
-			
-			if (metaData.getColumnType(fieldId) == Types.VARCHAR) {
-			    return ValueFactory.createValue(aRs.getString(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.CHAR){
-				String character = aRs.getString(fieldId);
-				if (character != null){
-					return ValueFactory.createValue(character.trim());
-				}else{
-					return ValueFactory.createValue(character);
-				}
-			}
-			if (metaData.getColumnType(fieldId) == Types.FLOAT) {
-			    return ValueFactory.createValue(aRs.getFloat(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.DOUBLE) {
-			    return ValueFactory.createValue(aRs.getDouble(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.REAL) {
-			    return ValueFactory.createValue(aRs.getFloat(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.INTEGER) {
-			    return ValueFactory.createValue(aRs.getInt(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.SMALLINT) {
-			    return ValueFactory.createValue(aRs.getShort(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.BIGINT) {
-			    return ValueFactory.createValue(aRs.getLong(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.BIT) {
-			    return ValueFactory.createValue((byteBuf[0] == 1));
-			}
-			if (metaData.getColumnType(fieldId) == Types.BOOLEAN) {
-			    return ValueFactory.createValue(aRs.getBoolean(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.DATE) {
-				return ValueFactory.createValue(aRs.getDate(fieldId));
-			}
-			if (metaData.getColumnType(fieldId) == Types.TIME) {
-				// TODO:
-				// throw new RuntimeException("TIME type not implemented yet");
-				return ValueFactory.createValue("NOT IMPLEMENTED YET");
-			}
-			if (metaData.getColumnType(fieldId) == Types.TIMESTAMP) {
-				double segsReferredTo2000 = aRs.getDouble(fieldId);
-				long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000 * 1000);
-				Timestamp valTimeStamp = new Timestamp(real_msecs);
-				return ValueFactory.createValue(valTimeStamp);
-			}
-
-			if (metaData.getColumnType(fieldId) == Types.NUMERIC) {
-				BigDecimal dec = aRs.getBigDecimal(fieldId);
-				return ValueFactory.createValue(dec.doubleValue());
-			}
-
 		}
+			
+		final int columnType = metaData.getColumnType(fieldId);
+		
+		if (columnType == Types.VARCHAR) {
+		    return ValueFactory.createValue(aRs.getString(fieldId));
+		}
+		if (columnType == Types.CHAR){
+			String character = aRs.getString(fieldId);
+			if (character != null){
+				return ValueFactory.createValue(character.trim());
+			}else{
+				return ValueFactory.createValue(character);
+			}
+		}
+		if (columnType == Types.FLOAT) {
+		    return ValueFactory.createValue(aRs.getFloat(fieldId));
+		}
+		if (columnType == Types.DOUBLE) {
+		    return ValueFactory.createValue(aRs.getDouble(fieldId));
+		}
+		if (columnType == Types.REAL) {
+		    return ValueFactory.createValue(aRs.getFloat(fieldId));
+		}
+		if (columnType == Types.INTEGER) {
+		    return ValueFactory.createValue(aRs.getInt(fieldId));
+		}
+		if (columnType == Types.SMALLINT) {
+		    return ValueFactory.createValue(aRs.getShort(fieldId));
+		}
+		if (columnType == Types.BIGINT) {
+		    return ValueFactory.createValue(aRs.getLong(fieldId));
+		}
+		
+		if (columnType == Types.BIT) {
+		    return ValueFactory.createValue(aRs.getBoolean(fieldId));
+		}
+		if (columnType == Types.BOOLEAN) {
+		    return ValueFactory.createValue(aRs.getBoolean(fieldId));
+		}
+		if (columnType == Types.DATE) {
+			return ValueFactory.createValue(aRs.getDate(fieldId));
+		}
+		if (columnType == Types.TIME) {
+			// TODO:
+			// throw new RuntimeException("TIME type not implemented yet");
+			return ValueFactory.createValue("NOT IMPLEMENTED YET");
+		}
+		if (columnType == Types.TIMESTAMP) {
+			double segsReferredTo2000 = aRs.getDouble(fieldId);
+			long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000 * 1000);
+			Timestamp valTimeStamp = new Timestamp(real_msecs);
+			return ValueFactory.createValue(valTimeStamp);
+		}
+
+		if (columnType == Types.NUMERIC) {
+			BigDecimal dec = aRs.getBigDecimal(fieldId);
+			return ValueFactory.createValue(dec.doubleValue());
+		}
+
+		
 
 		return ValueFactory.createNullValue();
 
