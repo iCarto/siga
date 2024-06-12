@@ -1,6 +1,4 @@
 /*
- * Created on 04-mar-2005
- *
  * gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -18,28 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- * For more information, contact:
- *
- *  Generalitat Valenciana
- *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
- *   46010 VALENCIA
- *   SPAIN
- *
- *      +34 963862235
- *   gvsig@gva.es
- *      www.gvsig.gva.es
- *
- *    or
- *
- *   IVER T.I. S.A
- *   Salamanca 50
- *   46005 Valencia
- *   Spain
- *
- *   +34 963163400
- *   dac@iver.es
  */
 package com.iver.cit.gvsig.fmap.drivers.jdbc.postgis;
 
@@ -83,9 +59,7 @@ import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 
-/**
- * @author FJP
- */
+
 public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		IWriteable {
 
@@ -94,14 +68,6 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			.getName());
 
 	private static int FETCH_SIZE = 5000;
-
-	// To avoid problems when using wkb_cursor with same layer.
-	// I mean, when you add twice or more the same layer using
-	// the same connection
-
-//	private static int CURSOR_ID = 0;
-
-//	private int myCursorId;
 
 	private PostGISWriter writer = new PostGISWriter();
 
@@ -147,40 +113,20 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		}
 	}
 
-	/**
-	 *
-	 */
 	public PostGisDriver() {
-		// To avoid problems when using wkb_cursor with same layer.
-		// I mean, when you add twice or more the same layer using
-		// the same connection
-//		CURSOR_ID++;
-//		myCursorId = CURSOR_ID;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
-	 */
+
 	public DriverAttributes getDriverAttributes() {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.hardcode.driverManager.Driver#getName()
-	 */
+
 	public String getName() {
 		return NAME;
 	}
 
-	/**
-	 * @throws ReadDriverException
-	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getShape(int)
-	 */
+
 	public IGeometry getShape(int index) throws ReadDriverException {
 		IGeometry geom = null;
 		try {
@@ -292,9 +238,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		}
 	}
 
-	/**
-	 * @see com.iver.cit.gvsig.fmap.layers.ReadableVectorial#getFullExtent()
-	 */
+
 	public Rectangle2D getFullExtent() throws ReadDriverException {
 		if (fullExtent == null) {
 			try {
@@ -337,13 +281,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		return fullExtent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator
-	 * (java.lang.String)
-	 */
+
 	public IFeatureIterator getFeatureIterator(String sql)
 			throws ReadDriverException {
 		PostGisFeatureIterator geomIterator = null;
@@ -426,19 +364,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		return sqlAux;
 	}
 
-	/**
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getConnectionStringBeginning()
-	 */
+
 	public String getConnectionStringBeginning() {
 		return "jdbc:postgresql:";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#getFieldValue(long,
-	 * int)
-	 */
+
 	@Override
 	public Value getFieldValue(long rowIndex, int idField)
 	throws ReadDriverException {
@@ -591,41 +522,26 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	}
 
-	/**
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getGeometryField(java.lang.String)
-	 */
+
 	public String getGeometryField(String fieldName) {
 	    return "ST_AsEWKB(\"" + fieldName + "\", 'XDR')";
 	}
 
-	/**
-	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#getPrimaryKeys()
-	 */
+
 	public int[] getPrimaryKeys() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/**
-	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialJDBCDriver#getDefaultPort()
-	 */
+
 	public int getDefaultPort() {
 		return 5432;
 	}
 
-	/**
-	 * @see com.hardcode.gdbms.engine.data.driver.ObjectDriver#write(com.hardcode.gdbms.engine.data.edition.DataWare)
-	 */
-	public void write(DataWare arg0) {
-		// TODO Auto-generated method stub
 
+	public void write(DataWare arg0) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.core.ICanReproject#getSourceProjection()
-	 */
+
 	public String getSourceProjection(IConnection conn, DBLayerDefinition dbld) {
 		if (originalEPSG == null) {
 		    getTableEPSG_and_shapeType(conn, dbld);
@@ -704,42 +620,23 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.core.ICanReproject#getDestProjection()
-	 */
+
 	public String getDestProjection() {
 		return strEPSG;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.iver.cit.gvsig.fmap.core.ICanReproject#setDestProjection(java.lang
-	 * .String)
-	 */
+
 	public void setDestProjection(String toEPSG) {
 		this.strEPSG = toEPSG;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.iver.cit.gvsig.fmap.core.ICanReproject#canReproject(java.lang.String)
-	 */
+
 	public boolean canReproject(String toEPSGdestinyProjection) {
 		// TODO POR AHORA, REPROYECTA SIEMPRE gvSIG.
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#doRelateID_FID()
-	 */
+
 	protected void doRelateID_FID() throws DBException {
 		hashRelate = new Hashtable();
 		try {
@@ -772,10 +669,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 				Value aux = ValueFactory.createValue(gid);
 				hashRelate.put(aux, new Integer(id));
-				// System.out.println("ASOCIANDO CLAVE " + aux + " CON VALOR " +
-				// id);
 				id++;
-				// System.out.println("Row " + id + ":" + strAux);
 			}
 			s.close();
 			numReg = id;
@@ -808,18 +702,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		return sqlTotal;
 	}
 
-	/**
-	 * @return Returns the completeWhere.
-	 */
+
 	public String getCompleteWhere() {
 		return completeWhere;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#close()
-	 */
+
 	public void close() {
 		super.close();
 		/*
@@ -832,13 +720,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator
-	 * (java.awt.geom.Rectangle2D, java.lang.String, java.lang.String[])
-	 */
+
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
 			String[] alphaNumericFieldsNeeded) throws ReadDriverException {
 		String sqlAux = null;
@@ -999,26 +881,6 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		return (String[]) list.toArray(new String[0]);
 	}
 
-	// public String[] getTableFields(IConnection conex, String table) throws
-	// DBException {
-	// try{
-	// Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
-	// // ResultSet rs = dbmd.getTables(catalog, null,
-	// dbLayerDefinition.getTable(), null);
-	// ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
-	// ResultSetMetaData rsmd = rs.getMetaData();
-	//
-	// String[] ret = new String[rsmd.getColumnCount()];
-	//
-	// for (int i = 0; i < ret.length; i++) {
-	// ret[i] = rsmd.getColumnName(i+1);
-	// }
-	//
-	// return ret;
-	// }catch (SQLException e) {
-	// throw new DBException(e);
-	// }
-	// }
 
 	private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef) {
 		DBLayerDefinition clonedLyrDef = new DBLayerDefinition();
@@ -1486,7 +1348,3 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			}
 		}
 }
-
-// [eiel-gestion-conexiones]
-// [eiel-postgis-3d]
-
