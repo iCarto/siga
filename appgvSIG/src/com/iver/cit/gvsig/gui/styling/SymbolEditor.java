@@ -196,8 +196,6 @@ import com.iver.utiles.XMLEntity;
  * Creates the panel that is used to control the properties of a symbol in
  * order to modify or check them and to create a new one.
  *
- * @author jaume dominguez faus - jaume.dominguez@iver.es
- *
  */
 public class SymbolEditor extends JPanel implements IWindow {
 
@@ -222,18 +220,12 @@ public class SymbolEditor extends JPanel implements IWindow {
 	private SymbolLayerManager layerManager;
 	private boolean replacing = false;
 	private JComboBoxUnitsReferenceSystem cmbUnitsReferenceSystem;
-	/**
-	 * Constructor method
-	 *
-	 * @param symbol ISymbol
-	 * @param shapeType int
-	 */
+	
+
 	public SymbolEditor(ISymbol symbol, int shapeType) {
-//////////	/-------------------------------------
 		if (shapeType == FShape.TEXT) {
 			this.symbol = symbol == null ? new SimpleTextSymbol(): symbol;
 		} else {
-//////////	/-------------------------------------
 
 			if (!(symbol instanceof IMultiLayerSymbol)) {
 				// this is a simple symbol (or null one); it will be
@@ -321,12 +313,9 @@ public class SymbolEditor extends JPanel implements IWindow {
 				if (!(o1 instanceof AbstractTypeSymbolEditor || o1 instanceof AbstractTypeSymbolEditor))
 					throw new IllegalArgumentException(PluginServices.getText(
 							this, "trying_to_add_a_non_TypeSymbolEditor_panel"));
-				AbstractTypeSymbolEditor pnl1 = (
-						AbstractTypeSymbolEditor) o1, pnl2 = (AbstractTypeSymbolEditor) o2;
+				AbstractTypeSymbolEditor pnl1 = (AbstractTypeSymbolEditor) o1;
+				AbstractTypeSymbolEditor pnl2 = (AbstractTypeSymbolEditor) o2;
 				int result = pnl1.getName().compareTo(pnl2.getName());
-				if (result == 0)
-					throw new IllegalArgumentException(PluginServices.getText(
-							this, "two_panels_with_the_same_name"));
 				return result;
 			}
 		};

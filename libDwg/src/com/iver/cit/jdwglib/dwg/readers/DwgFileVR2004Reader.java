@@ -1926,6 +1926,9 @@ public class DwgFileVR2004Reader implements IDwgFileReader {
 		Comparator cmp = new Comparator(){
 
 			public int compare(Object arg0, Object arg1) {
+				if (arg0 == arg1) {
+					return 0;
+				}
 				if (((Section)arg0).getStartOffset() > ((Section)arg1).getStartOffset()) {
 					return 1;
                 }
