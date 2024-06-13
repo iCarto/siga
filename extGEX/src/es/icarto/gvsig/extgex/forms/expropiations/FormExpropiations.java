@@ -455,7 +455,7 @@ public class FormExpropiations extends BasicAbstractForm implements TableModelLi
             String query = "SELECT " + DBNames.FIELD_NUMPM_FINCAS_PM + " " + "FROM " + DBNames.PM_SCHEMA + "."
                     + DBNames.TABLE_FINCAS_PM + " " + "WHERE " + DBNames.FIELD_IDFINCA_FINCAS_PM + " = '"
                     + getIDFinca() + "';";
-            statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query);
+            statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             statement.execute();
             ResultSet rs = statement.getResultSet();
             if (rs.next()) {

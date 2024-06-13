@@ -203,7 +203,7 @@ public class TrabajosAgregadosReport extends PDFReport {
 	PreparedStatement statement;
 	try {
 	    statement = DBSession.getCurrentSession().getJavaConnection()
-		    .prepareStatement(query);
+		    .prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	    statement.execute();
 	    ResultSet rs = statement.getResultSet();
 	    return rs;

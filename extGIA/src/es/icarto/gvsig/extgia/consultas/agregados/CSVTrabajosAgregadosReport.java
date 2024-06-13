@@ -101,7 +101,7 @@ public class CSVTrabajosAgregadosReport {
 	    String totalQuery) {
 	PreparedStatement statement;
 	try {
-	    statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query);
+	    statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	    statement.execute();
 	    ResultSet rs = statement.getResultSet();
 	    if (rs.next()) {
@@ -138,7 +138,7 @@ public class CSVTrabajosAgregadosReport {
     private void writeTotal(FileWriter writer, String title, String query) {
 	PreparedStatement statement;
 	try {
-	    statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query);
+	    statement = DBSession.getCurrentSession().getJavaConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	    statement.execute();
 	    ResultSet rs = statement.getResultSet();
 	    rs.next();
