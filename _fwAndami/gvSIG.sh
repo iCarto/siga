@@ -21,7 +21,7 @@ export JAVA_HOME="../jre"
 ###################################################################
 
 # gvSIG native libraries location 
-GVSIG_NATIVE_LIBS=${GVSIG_HOME}/native:${HOME}/.depman/lib
+GVSIG_NATIVE_LIBS=${GVSIG_HOME}/native
 
 # Proj4 data files
 export PROJ_LIB="${GVSIG_HOME}/gvSIG/extensiones/org.gvsig.crs.extension/data"
@@ -56,9 +56,9 @@ GVSIG_CLASSPATH=$LIBRARIES
 ########################
 
 # Initial gvSIG memory (M=Megabytes, G=Gigabytes)
-GVSIG_INITIAL_MEM=256M
+GVSIG_INITIAL_MEM=512M
 # Maximum gvSIG memory (M=Megabytes, G=Gigabytes)
-GVSIG_MAX_MEM=1024M
+GVSIG_MAX_MEM=1500M
 # Maximum permanent memory size: needed to load classes and statics
 GVSIG_MAX_PERM_SIZE=96M
 

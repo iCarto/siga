@@ -71,12 +71,6 @@
 		<delete dir="${dist}"/>
 	</target>
 
-	<target name="run-tests" depends="batch-build">
-		<!--
-		<antcall target="generic-run-tests">
-			<param name="TestSuite.Name" value="org.cresques.cts.AllTests"/>
-		</antcall>
-		-->
-	</target>
+	
 </project>
 

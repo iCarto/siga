@@ -40,7 +40,7 @@ public class TestConsultas {
 
 	    mockFilters = new ConsultasFilters<Field>(
 		    new KeyValue("1", "Norte"), new KeyValue("1", "Norte"),
-		    new KeyValue("1", "AP-9"), firstDate, lastDate);
+		    new KeyValue("1", "AP-9"), firstDate, lastDate, false, null, false);
 
 	} catch (ParseException e1) {
 	    e1.printStackTrace();
@@ -89,7 +89,7 @@ public class TestConsultas {
 	    Date lastDate = sdf.parse("01/07/2013");
 
 	    mockFilters = new ConsultasFilters<Field>(null, null, null,
-		    firstDate, lastDate);
+		    firstDate, lastDate, false, null, false);
 
 	    testCaracteristicasPDFReportsQueries();
 	} catch (ParseException e) {
@@ -256,7 +256,7 @@ public class TestConsultas {
 	    Date lastDate = sdf.parse("01/07/2013");
 
 	    mockFilters = new ConsultasFilters<Field>(null, null, null,
-		    firstDate, lastDate);
+		    firstDate, lastDate, false, null, false);
 
 	    testTrabajosAgregadosReportsQueries();
 	} catch (ParseException e) {
@@ -423,7 +423,7 @@ public class TestConsultas {
 	    Date lastDate = sdf.parse("01/07/2013");
 
 	    mockFilters = new ConsultasFilters<Field>(null, null, null,
-		    firstDate, lastDate);
+		    firstDate, lastDate, false, null, false);
 
 	    testCSVCaracteristicas();
 	} catch (ParseException e) {
@@ -564,7 +564,7 @@ public class TestConsultas {
 	    Date lastDate = sdf.parse("01/07/2013");
 
 	    mockFilters = new ConsultasFilters<Field>(null, null, null,
-		    firstDate, lastDate);
+		    firstDate, lastDate, false, null, false);
 
 	    testCaracteristicasPDFReportSenhalizacionVerticalQuery();
 	} catch (ParseException e) {

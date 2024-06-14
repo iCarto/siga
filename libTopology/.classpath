@@ -13,7 +13,6 @@
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/geoapi-2.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="/libFMap/lib/units-0.01.jar"/>
 	<classpathentry kind="lib" path="lib/jump-api-1.2-alpha4.jar"/>
 	<classpathentry kind="lib" path="lib/jump-workbench.jar"/>
@@ -23,5 +22,6 @@
 	<classpathentry kind="lib" path="lib/jai_core.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/geoutils.jar"/>
 	<classpathentry kind="lib" path="lib/roadmatcher-1.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
