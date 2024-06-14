@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/gvsig-i18n.jar" sourcepath="/libInternationalization/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
@@ -10,5 +9,6 @@
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.tools.swing.api-3.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/slf4j-api-1.5.5.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.tools.lib-3.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

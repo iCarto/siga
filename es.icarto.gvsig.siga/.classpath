@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="src" path="/_fwAndami"/>
 	<classpathentry kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
@@ -42,5 +41,6 @@
 	<classpathentry kind="src" path="/extGeoProcessing"/>
 	<classpathentry kind="src" path="/libTopology"/>
 	<classpathentry kind="lib" path="/es.icarto.gvsig.commons/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
