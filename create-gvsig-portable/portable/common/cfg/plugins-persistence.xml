@@ -40,10 +40,10 @@
     </xml-tag>
 
     <xml-tag>
-        <property key="AGInventoryFolder" value="T:\General\02_AUTOESTRADAS\15_INVENTARIO\SIGA\"/>
-        <property key="APInventoryFolder" value="T:\General\01_AUDASA\15_INVENTARIO\SIGA\"/>
-        <property key="AGExpropiationsFolder" value="T:\General\02_AUTOESTRADAS\05_EXPROPIACIONES\SIGA\"/>
-        <property key="APExpropiationsFolder" value="T:\General\01_AUDASA\05_EXPROPIACIONES\SIGA\"/>
+        <property key="AGInventoryFolder" value="T:\General\02_Infraestructura\AP_INVENTARIO\SIGA\"/>
+        <property key="APInventoryFolder" value="T:\General\02_Infraestructura\AG_INVENTARIO\SIGA\"/>
+        <property key="AGExpropiationsFolder" value="T:\General\00_ExpropiacionesExplot\AG_EXPROP\SIGA\"/>
+        <property key="APExpropiationsFolder" value="T:\General\00_ExpropiacionesExplot\AP_EXPROP\SIGA\"/>
         <property key="com.iver.andami.pluginName" value="es.icarto.gvsig.siga"/>
     </xml-tag>
 
